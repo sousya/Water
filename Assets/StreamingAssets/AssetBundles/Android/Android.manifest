@@ -1,0 +1,55 @@
+ManifestFileVersion: 0
+CRC: 4160404412
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: fontall_asset
+      Dependencies:
+        Dependency_0: fontextra_asset
+    Info_1:
+      Name: fontextra_asset
+      Dependencies: {}
+    Info_2:
+      Name: uibegin_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_3:
+      Name: uiclear_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+        Dependency_1: font
+    Info_4:
+      Name: uiset_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_5:
+      Name: uibuy_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_6:
+      Name: font
+      Dependencies: {}
+    Info_7:
+      Name: uicakes_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_8:
+      Name: uijudge_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_9:
+      Name: uirank_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_10:
+      Name: uirankclear_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_11:
+      Name: uidefeat_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_12:
+      Name: uitips_prefab
+      Dependencies:
+        Dependency_0: fontall_asset

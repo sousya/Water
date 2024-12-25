@@ -1,5 +1,4 @@
 using QFramework;
-using QFramework.Example;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -80,7 +79,6 @@ public class GameMainArc : Architecture<GameMainArc>
         AnalyticsManager analyticsManager = AnalyticsManager.Instance;
         //LevelManager.Instance.BeginGame();
         TopOnADManager.Instance.LoadAD();
-        LevelManager.Instance.CheckBegin();
         TenjinManager.Instance.Init();
         //UIKit.OpenPanel<UIBegin>(UILevel.Common, null, "uibegin_prefab", "UIBegin");
 

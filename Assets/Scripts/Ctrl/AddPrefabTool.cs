@@ -1,5 +1,4 @@
-#if UNITY_EDITOR
-using QFramework.Example;
+ï»¿#if UNITY_EDITOR
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,10 +20,10 @@ public class AddPrefabTool : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("ÅúÁ¿ÏòÄ£ĞÍÌí¼ÓÄÚÈİ", EditorStyles.boldLabel);
-        _filePath = EditorGUILayout.TextField("±»Ìí¼ÓµÄÎïÌåÂ·¾¶", _filePath);
-        _prefab = (GameObject)EditorGUILayout.ObjectField("Ìí¼ÓµÄÎïÌå", _prefab, typeof(GameObject), true);
-        if (GUILayout.Button("Ìí¼Ó"))
+        GUILayout.Label("æ‰¹é‡å‘æ¨¡å‹æ·»åŠ å†…å®¹", EditorStyles.boldLabel);
+        _filePath = EditorGUILayout.TextField("è¢«æ·»åŠ çš„ç‰©ä½“è·¯å¾„", _filePath);
+        _prefab = (GameObject)EditorGUILayout.ObjectField("æ·»åŠ çš„ç‰©ä½“", _prefab, typeof(GameObject), true);
+        if (GUILayout.Button("æ·»åŠ "))
         {
             AddPrefab();
         }
@@ -32,15 +31,14 @@ public class AddPrefabTool : EditorWindow
 
     private void AddPrefab()
     {
-        // ²éÕÒÖ¸¶¨ÎÄ¼ş¼ĞÖĞµÄËùÓĞÔ¤ÖÆÌå
+        // æŸ¥æ‰¾æŒ‡å®šæ–‡ä»¶å¤¹ä¸­çš„æ‰€æœ‰é¢„åˆ¶ä½“
         string[] guids = AssetDatabase.FindAssets("UIRankClear t:Prefab", new[] { _filePath });
         string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
-        // ´ò¿ªÔ¤ÖÆÌå½øĞĞ±à¼­
+        // æ‰“å¼€é¢„åˆ¶ä½“è¿›è¡Œç¼–è¾‘
         GameObject prefabInstance = PrefabUtility.LoadPrefabContents(assetPath);
 
-        // ÊµÀı»¯Ô¤ÖÆÌå
+        // å®ä¾‹åŒ–é¢„åˆ¶ä½“
         GameObject instantiate = PrefabUtility.InstantiatePrefab(_prefab) as GameObject;
-        UIRankClear panel = instantiate.GetComponent<UIRankClear>();
 
 
         List<string> nameList = new List<string>();
@@ -56,11 +54,6 @@ public class AddPrefabTool : EditorWindow
             nameList.Add(textPair[0].Trim());
             starList.Add(textPair[1].Trim());
         }
-        foreach (var item in panel.rankItemCtrls)
-        {
-
-            //item.GetText();
-        }
         //for(int i = 0; i < panel.rankNode.childCount; i++)
         //{
         //    var item = panel.rankNode.GetChild(i).GetComponent<RankItemCtrl>();
@@ -68,13 +61,13 @@ public class AddPrefabTool : EditorWindow
         //    //item.GetText(i, nameList[i], starList[i]);
         //}
         //prefabInstance = instantiate;
-        // ±£´æ¶ÔÔ¤ÖÆÌåµÄĞŞ¸Ä
+        // ä¿å­˜å¯¹é¢„åˆ¶ä½“çš„ä¿®æ”¹
         PrefabUtility.SaveAsPrefabAsset(prefabInstance, assetPath);
-        // Ğ¶ÔØÔ¤ÖÆÌåÄÚÈİ
+        // å¸è½½é¢„åˆ¶ä½“å†…å®¹
         PrefabUtility.UnloadPrefabContents(prefabInstance);
         AssetDatabase.Refresh();
 
-        // Ë¢ĞÂ×Ê²úÊı¾İ¿â
+        // åˆ·æ–°èµ„äº§æ•°æ®åº“
         AssetDatabase.Refresh();
     }
 }

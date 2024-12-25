@@ -9,9 +9,21 @@ public class OnFrameEnd : MonoBehaviour
     public Vector3 pos;
     public float xMin, xMax, yMin, yMax;
     public Vector3 localPos;
+    public float CheckTime;
+
+    public void StartCheckTime()
+    {
+        CheckTime = Time.time;
+    }
+
+    public void EndCheckTime()
+    {
+        Debug.Log("¶¯»­Ê±¼ä " + (Time.time - CheckTime));
+    }
+
+
     public void OnChangeEnd()
     {
-        LevelManager.Instance.ChangeEnd = true;
     }
 
     public void HideFx()
@@ -53,11 +65,6 @@ public class OnFrameEnd : MonoBehaviour
     public void SetLocalOriginPosition(Vector3 position)
     {
         localPos = position;
-    }
-
-    public void WaitStart()
-    {
-        LevelManager.Instance.WaitStart();
     }
 
     private void Start()

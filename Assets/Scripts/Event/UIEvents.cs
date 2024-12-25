@@ -71,7 +71,7 @@ public struct CakeUnlock
 {
     public int keyType;
 
-    public CakeCtrl from;
+    public BottleCtrl from;
 
     public int idx;
 }

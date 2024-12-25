@@ -12,7 +12,7 @@ public class SaveDataUtility : IUtility
     public void SaveLevel(int level)
     {
         //Debug.Log("LevelBefore " + Convert.ToString(clearLevel, 2) + " clearNowLevel " + clearNowLevel + " LevelNow " + Convert.ToString((clearLevel | clearNowLevel), 2));
-        PlayerPrefs.SetInt("g_ClearCakeLevel", level);
+        PlayerPrefs.SetInt("g_ClearBottleLevel", level);
 
     }
     public int GetLevelClear()

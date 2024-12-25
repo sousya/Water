@@ -102,8 +102,8 @@ public class ShopManager : MonoBehaviour, IDetailedStoreListener, ICanGetUtility
         //Retrieve the purchased product
         var product = args.purchasedProduct;
 
-        LevelManager.Instance.NoAD = true;
-        this.GetUtility<SaveDataUtility>().SaveNoAD(true);
+        //LevelManager.Instance.NoAD = true;
+        //this.GetUtility<SaveDataUtility>().SaveNoAD(true);
 
         //We return Complete, informing IAP that the processing on our side is done and the transaction can be closed.
         return PurchaseProcessingResult.Complete;

@@ -6,8 +6,8 @@ using UnityEngine;
 public class GameCtrl : MonoBehaviour, ICanSendEvent
 {
 
-    public CakeCtrl FirstCake, FirstCake1;
-    public CakeCtrl SecondCake;
+    public BottleCtrl FirstBottle, FirstCake1;
+    public BottleCtrl SecondBottle;
     public static GameCtrl Instance;
     [SerializeField] List<Sprite> sprites;
     public bool control = false;
@@ -25,6 +25,56 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
 
     }
 
+    public void OnSelect(BottleCtrl bottle)
+    {
+        if(!control)
+        {
+
+            if (FirstBottle == null)
+            {
+                if (bottle.OnSelect())
+                {
+                    FirstBottle = bottle;
+                }
+
+            }
+            else if (SecondBottle == null)
+            {
+
+                if (bottle != FirstBottle && bottle.OnSelect())
+                {
+                    SecondBottle = bottle;
+                }
+                else
+                {
+                    FirstBottle.OnCancelSelect();
+                    FirstBottle = null;
+                }
+            }
+
+            if (FirstBottle != null && SecondBottle != null)
+            {
+                control = true;
+                if (FirstBottle.CheckMoveOut() && SecondBottle.CheckMoveIn(FirstBottle.GetMoveOutTop()))
+                {
+                    //Debug.Log("ÒÆ¶¯ " + FirstCake.gameObject.name + "->" + SecondCake.gameObject.name);
+                    FirstBottle.MoveTo(SecondBottle);
+                    FirstBottle = null;
+                    SecondBottle = null;
+                    LevelManager.Instance.AddMoveNum();
+                    this.SendEvent<MoveCakeEvent>();
+                }
+                else
+                {
+                    control = false;
+                    FirstBottle.OnCancelSelect();
+                    FirstBottle = null;
+                    SecondBottle = null;
+                }
+            }
+        }
+    }
+
     // Update is called once per frame
     void LateUpdate()
     {
@@ -36,66 +86,9 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
             RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
 
 
-            if (hit.collider != null && hit.collider.GetComponent<CakeCtrl>() != null)
+            if (hit.collider != null && hit.collider.GetComponent<BottleCtrl>() != null)
             {
-                var cake = hit.collider.GetComponent<CakeCtrl>();
-
-                if (!cake.isFinish)
-                {
-                    if (FirstCake == null)
-                    {
-                        if (cake.OnSelect())
-                        {
-                            FirstCake = cake;
-
-                            if (LevelManager.Instance.levelId == 1)
-                            {
-                                var e = new TeachEvent()
-                                {
-                                    step = 2
-                                };
-                                this.SendEvent<TeachEvent>(e);
-                            }
-                        }
-                        
-                    }
-                    else if (SecondCake == null)
-                    {
-                        SecondCake = cake;
-                    }
-
-                    if (FirstCake != null && SecondCake != null)
-                    {
-                        control = true;
-                        if (FirstCake.MoveCake(SecondCake))
-                        {
-                            //Debug.Log("ÒÆ¶¯ " + FirstCake.gameObject.name + "->" + SecondCake.gameObject.name);
-                            FirstCake.OnCancelSelect();
-                            FirstCake.CheckConnect();
-                            SecondCake.CheckConnect();
-                            FirstCake = null;
-                            SecondCake = null;
-                            LevelManager.Instance.moveNum++;
-                            this.SendEvent<MoveCakeEvent>();
-                        }
-                        else
-                        {
-                            control = false;
-                            FirstCake.OnCancelSelect();
-                            FirstCake = null;
-                            SecondCake = null;
-                        }
-                    }
-                }
-               
-               
-
             }
-            else
-            {
-                //Debug.Log("Nothing");
-            }
-
         }
 
 

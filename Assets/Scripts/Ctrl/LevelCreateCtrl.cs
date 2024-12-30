@@ -17,7 +17,7 @@ public class LevelCreateCtrl : ScriptableObject
         public List<WaterItem> waterItem = new List<WaterItem>();
         public int numCake;
         public int lockType;
-        public bool isClearHide, isNearHide;
+        public bool isClearHide, isNearHide, isFreeze;
     }
     public List<int> clearList;
 
@@ -29,4 +29,7 @@ public class LevelCreateCtrl : ScriptableObject
 
     public float timeCountDown;
 
+    public int topNum;
+
+    public int bottomNum;
 }

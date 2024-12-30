@@ -4,10 +4,7 @@ using QFramework;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Purchasing;
 using UnityEngine.UI;
 using static LevelCreateCtrl;
 
@@ -18,7 +15,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         return GameMainArc.Interface;
     }
 
-    public bool isFinish, isFreeze, isClearHide, isNearHide, isPlayAnim;
+    public bool isFinish, isFreeze, isClearHide, isNearHide, isPlayAnim, isSelect;
     public List<int> waters = new List<int>();
     public List<bool> hideWaters = new List<bool>();
     public List<WaterItem> waterItems = new List<WaterItem>();
@@ -52,6 +49,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         if(!isPlayAnim)
         {
             GameCtrl.Instance.OnSelect(this);
+     
         }
     }
 
@@ -74,6 +72,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         waterItems = new List<WaterItem>(property.waterItem);
         isClearHide = property.isClearHide;
         isNearHide = property.isNearHide;
+        isFreeze = property.isFreeze;
         unlockClear = property.lockType;
         bottleIdx = idx;
 
@@ -106,7 +105,10 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                 LevelManager.Instance.cantChangeColorList.Add(unlockClear);
             }
         }
-
+        if (topIdx < 0)
+        {
+            spineGo.gameObject.SetActive(false);
+        }
         SetBottleColor();
         int spinePosIdx = topIdx + 1;
         //while (spinePosIdx > 0 && waters[spinePosIdx - 1] > 1000)
@@ -211,20 +213,24 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     /// 判断是否能选中 如果能 则选中
     /// </summary>
     /// <returns></returns>
-    public bool OnSelect()
+    public bool OnSelect(bool needUp)
     {
         ////判断是否被冰冻,隐藏或者完成
         if (isFreeze || isClearHide || isNearHide || isFinish)
         {
             return false;
         }
-
+        if (needUp)
+        {
+            modelGo.transform.localPosition += Vector3.up * 100;
+        }
         return true;
     }
 
     public void OnCancelSelect()
     {
-
+        modelGo.transform.localPosition = Vector3.zero;
+        isSelect = false;
     }
 
     public bool CheckMoveOut()
@@ -732,7 +738,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
         else
         {
-            spineGo.gameObject.SetActive(false);
+            //spineGo.gameObject.SetActive(false);
         }
     }
 
@@ -774,7 +780,13 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         int startIdx = useIdx;
         SetNowSpinePos(startIdx + 1);
         Debug.Log("移动终点  " + useIdx + " " + num);
-        spineGo.DOLocalMove(spineNode[useIdx + 1 - num].localPosition, fillAlltime).SetEase(Ease.Linear);
+        spineGo.DOLocalMove(spineNode[useIdx + 1 - num].localPosition, fillAlltime).SetEase(Ease.Linear).OnComplete(() =>
+        {
+            if(topIdx < 0)
+            {
+                spineGo.gameObject.SetActive(false);
+            }
+        });
         PlaySpineWaitAnim(useColor);
 
         float fillTime = fillAlltime / num;

@@ -31,49 +31,10 @@ namespace QAssetBundle
         public const string BundleName = "uibegin_prefab";
         public const string UIBegin = "UIBegin";
     }
-    public class Uibuy_prefab
-    {
-        public const string BundleName = "uibuy_prefab";
-        public const string UIBuy = "UIBuy";
-    }
-    public class Uicakes_prefab
-    {
-        public const string BundleName = "uicakes_prefab";
-        public const string UICakes = "UICakes";
-    }
-    public class Uiclear_prefab
-    {
-        public const string BundleName = "uiclear_prefab";
-        public const string UIClear = "UIClear";
-    }
     public class Uidefeat_prefab
     {
         public const string BundleName = "uidefeat_prefab";
         public const string UIDefeat = "UIDefeat";
-    }
-    public class Uijudge_prefab
-    {
-        public const string BundleName = "uijudge_prefab";
-        public const string UIJudge = "UIJudge";
-    }
-    public class Uirank_prefab
-    {
-        public const string BundleName = "uirank_prefab";
-        public const string UIRank = "UIRank";
-    }
-    public class Uirankclear_prefab
-    {
-        public const string BundleName = "uirankclear_prefab";
-        public const string UIRankClear = "UIRankClear";
-    }
-    public class Uiset_prefab
-    {
-        public const string BundleName = "uiset_prefab";
-        public const string UISet = "UISet";
-    }
-    public class Uitips_prefab
-    {
-        public const string BundleName = "uitips_prefab";
-        public const string UITips = "UITips";
+        public const string UIInfo = "UIInfo";
     }
 }

@@ -32633,6 +32633,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: deb48e34e1ef50347aa3700352d73d99, type: 2}
   - {fileID: 11400000, guid: a3bf39f7328a53d4bbfaf230f528e068, type: 2}
   - {fileID: 11400000, guid: 9f0c2c722c6e11d459f427a8e1238ed7, type: 2}
+  - {fileID: 11400000, guid: 024343941e4463144a41e38e47c496cb, type: 2}
+  - {fileID: 11400000, guid: 1c485022d1cb1224191b0f855d70dbfd, type: 2}
+  - {fileID: 11400000, guid: 4da7e0d76f53e7146bac191f684cb93f, type: 2}
+  - {fileID: 11400000, guid: a531fbb8de7faf94fa86cddcbeba02b8, type: 2}
+  - {fileID: 11400000, guid: 32ad706a0dcf80d41889a1518c7ea36f, type: 2}
+  - {fileID: 11400000, guid: 949ec71907addb144b0fca42c7dec1c4, type: 2}
+  - {fileID: 11400000, guid: 40471afd171c0744c9bbe9466f2796e0, type: 2}
+  - {fileID: 11400000, guid: 5f9efac44e8205f4385514e743db5fa2, type: 2}
+  - {fileID: 11400000, guid: 309959f3b2074bf4ab59dc321299db99, type: 2}
   clearList: 
   cantClearColorList: 
   cantChangeColorList: 
@@ -32648,6 +32657,24 @@ MonoBehaviour:
   - {fileID: 1240283460}
   - {fileID: 1363943769}
   - {fileID: 1201305361}
+  - {fileID: 1094742157}
+  - {fileID: 883262345}
+  - {fileID: 1005958839}
+  - {fileID: 1065823105}
+  - {fileID: 167742975}
+  - {fileID: 1014392099}
+  - {fileID: 110124248}
+  - {fileID: 872438214}
+  topBottle:
+  - {fileID: 2021720499}
+  - {fileID: 262944524}
+  - {fileID: 791358598}
+  - {fileID: 534638771}
+  - {fileID: 191614174}
+  - {fileID: 1240283460}
+  - {fileID: 1363943769}
+  - {fileID: 1201305361}
+  bottomBottle:
   - {fileID: 1094742157}
   - {fileID: 883262345}
   - {fileID: 1005958839}
@@ -32695,6 +32722,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 178628f9c0d9ad84b895711e734f89fb, type: 3}
   - {fileID: 21300000, guid: 56209813df2bbf2489cabd4021741a0f, type: 3}
   VictoryBottle: 0
+  moreBottle: 0
   emptyBottle:
     waterSet: 
     isHide: 
@@ -32703,6 +32731,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   gameCanvas: {fileID: 1628571911}
   nowLevel: {fileID: 11400000, guid: e638b503c9949a442a5c67235b00a70a, type: 2}
   levelBgSprite: {fileID: 1765978270}

@@ -61,3 +61,5 @@ MonoBehaviour:
   bombNum: 0
   countDownNum: 0
   timeCountDown: 0
+  topNum: 6
+  bottomNum: 0

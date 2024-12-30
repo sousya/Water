@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 4160404412
+CRC: 4192228768
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -14,42 +14,9 @@ AssetBundleManifest:
       Dependencies:
         Dependency_0: fontall_asset
     Info_3:
-      Name: uiclear_prefab
-      Dependencies:
-        Dependency_0: fontall_asset
-        Dependency_1: font
-    Info_4:
-      Name: uiset_prefab
-      Dependencies:
-        Dependency_0: fontall_asset
-    Info_5:
-      Name: uibuy_prefab
-      Dependencies:
-        Dependency_0: fontall_asset
-    Info_6:
       Name: font
       Dependencies: {}
-    Info_7:
-      Name: uicakes_prefab
-      Dependencies:
-        Dependency_0: fontall_asset
-    Info_8:
-      Name: uijudge_prefab
-      Dependencies:
-        Dependency_0: fontall_asset
-    Info_9:
-      Name: uirank_prefab
-      Dependencies:
-        Dependency_0: fontall_asset
-    Info_10:
-      Name: uirankclear_prefab
-      Dependencies:
-        Dependency_0: fontall_asset
-    Info_11:
+    Info_4:
       Name: uidefeat_prefab
-      Dependencies:
-        Dependency_0: fontall_asset
-    Info_12:
-      Name: uitips_prefab
       Dependencies:
         Dependency_0: fontall_asset

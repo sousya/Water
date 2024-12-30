@@ -29,11 +29,13 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public List<BottleCtrl> tempBottles = new List<BottleCtrl>();
     public List<BottleCtrl> iceBottles = new List<BottleCtrl>();
     public List<BottleCtrl> bottles = new List<BottleCtrl>();
+    public List<BottleCtrl> topBottle = new List<BottleCtrl>();
+    public List<BottleCtrl> bottomBottle = new List<BottleCtrl>();
     public List<int> hideColor = new List<int>();
     public List<Color> waterColor = new List<Color>();
     public List<Sprite> waterTopSp;
     public List<Sprite> waterSp;
-    public int VictoryBottle;
+    public int VictoryBottle, moreBottle;
     public BottleProperty emptyBottle =  new BottleProperty();
     public Transform gameCanvas;
 
@@ -74,7 +76,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();
 
         UIKit.OpenPanel<UIBegin>();
-        StartGame(21);
     }
 
     public void UseItem(int itemId)
@@ -163,7 +164,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             this.GetUtility<SaveDataUtility>().SaveLevel(levelId); 
         }
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(4);
         if (clearList.Count == 0)
         {
             //VictoryBottle = idx;
@@ -307,139 +308,180 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
     public void AddBottle()
     {
-        ShowBottleGo(nowBottles.Count + 1);
+        moreBottle++;
+        ShowBottleGo();
+        //ShowBottleGo(nowBottles.Count + 1);
         MoveAndAddBottle();
     }
 
     public void SetBottle(LevelCreateCtrl levelInfo)
     {
-        ShowBottleGo(levelInfo.bottles.Count);
+        //ShowBottleGo(levelInfo.bottles.Count);
+        ShowBottleGo();
         InitBottle(levelInfo);
     }
 
-    public void ShowBottleGo(int num)
+    //public void ShowBottleGo(int num)
+    public void ShowBottleGo()
     {
         tempBottles = new List<BottleCtrl>(nowBottles);
         nowBottles.Clear();
-        //var num = levelInfo.bottles.Count;
-        if (num <= 6)
-        {
-            for (int i = 0; i < bottles.Count; i++)
-            {
-                var useBottle = bottles[i];
-                useBottle.gameObject.SetActive(i < num);
-                if(i < num)
-                {
-                    nowBottles.Add(useBottle);
-                }
-            }
-        }
-        else if (num == 7)
-        {
-            for (int i = 0; i < 8; i++)
-            {
-                var useBottle = bottles[i];
-                useBottle.gameObject.SetActive(i < 4);
-                if(i < 4)
-                {
-                    nowBottles.Add(useBottle);
-                }
-            }
-            for (int i = 8; i < 16; i++)
-            {
-                var useBottle = bottles[i];
-                useBottle.gameObject.SetActive(i < 11);
-                if (i < 11)
-                {
-                    nowBottles.Add(useBottle);
-                }
-            }
-        }
-        else if (num == 8)
-        {
-            for (int i = 0; i < 8; i++)
-            {
-                var useBottle = bottles[i];
-                useBottle.gameObject.SetActive(i < 4);
 
-                if (i < 4)
-                {
-                    nowBottles.Add(useBottle);
-                }
-            }
-            for (int i = 8; i < 16; i++)
-            {
-                var useBottle = bottles[i];
-                useBottle.gameObject.SetActive(i < 12);
-                if (i < 12)
-                {
-                    nowBottles.Add(useBottle);
-                }
-            }
-        }
-        else if (num == 9)
+        int topAdd = 0;
+        int bottomAdd = 0;
+        
+        for(int i = 0; i < moreBottle; i++)
         {
-            for (int i = 0; i < 8; i++)
+            if (nowLevel.topNum < nowLevel.bottomNum)
             {
-                var useBottle = bottles[i];
-                useBottle.gameObject.SetActive(i < 5);
-                if (i < 5)
-                {
-                    nowBottles.Add(useBottle);
-                }
+                topAdd += 1;
             }
-            for (int i = 8; i < 16; i++)
+            else if (nowLevel.topNum > nowLevel.bottomNum)
             {
-                var useBottle = bottles[i];
-                useBottle.gameObject.SetActive(i < 12);
-                if (i < 12)
-                {
-                    nowBottles.Add(useBottle);
-                }
+                bottomAdd += 1;
             }
         }
-        else if (num == 10)
+
+        for(int i = 0; i < topBottle.Count; i++)
         {
-            for (int i = 0; i < 8; i++)
+            var useBottle = topBottle[i];
+            var num = (topAdd + nowLevel.topNum);
+            useBottle.gameObject.SetActive(i < num);
+            if(i < num)
             {
-                var useBottle = bottles[i];
-                useBottle.gameObject.SetActive(i < 5);
-                if (i < 5)
-                {
-                    nowBottles.Add(useBottle);
-                }
-            }
-            for (int i = 8; i < 16; i++)
-            {
-                var useBottle = bottles[i];
-                useBottle.gameObject.SetActive(i < 13);
-                if (i < 13)
-                {
-                    nowBottles.Add(useBottle);
-                }
+                nowBottles.Add(useBottle);
             }
         }
-        else if (num == 11)
+
+        for(int i = 0; i < bottomBottle.Count; i++)
         {
-            for (int i = 0; i < 8; i++)
+            var useBottle = bottomBottle[i];
+            var num = (bottomAdd + nowLevel.bottomNum);
+            useBottle.gameObject.SetActive(i < num);
+            if (i < num)
             {
-                var useBottle = bottles[i];
-                useBottle.gameObject.SetActive(i < 6);
-                if (i < 6)
-                {
-                    nowBottles.Add(useBottle);
-                }
-            }
-            for (int i = 8; i < 16; i++)
-            {
-                var useBottle = bottles[i];
-                useBottle.gameObject.SetActive(i < 13);
-                if (i < 13)
-                {
-                    nowBottles.Add(useBottle);
-                }
+                nowBottles.Add(useBottle);
             }
         }
+        //var num = levelInfo.bottles.Count;
+        //if (num <= 6)
+        //{
+        //    for (int i = 0; i < bottles.Count; i++)
+        //    {
+        //        var useBottle = bottles[i];
+        //        useBottle.gameObject.SetActive(i < num);
+        //        if(i < num)
+        //        {
+        //            nowBottles.Add(useBottle);
+        //        }
+        //    }
+        //}
+        //else if (num == 7)
+        //{
+        //    for (int i = 0; i < 8; i++)
+        //    {
+        //        var useBottle = bottles[i];
+        //        useBottle.gameObject.SetActive(i < 4);
+        //        if(i < 4)
+        //        {
+        //            nowBottles.Add(useBottle);
+        //        }
+        //    }
+        //    for (int i = 8; i < 16; i++)
+        //    {
+        //        var useBottle = bottles[i];
+        //        useBottle.gameObject.SetActive(i < 11);
+        //        if (i < 11)
+        //        {
+        //            nowBottles.Add(useBottle);
+        //        }
+        //    }
+        //}
+        //else if (num == 8)
+        //{
+        //    for (int i = 0; i < 8; i++)
+        //    {
+        //        var useBottle = bottles[i];
+        //        useBottle.gameObject.SetActive(i < 4);
+
+        //        if (i < 4)
+        //        {
+        //            nowBottles.Add(useBottle);
+        //        }
+        //    }
+        //    for (int i = 8; i < 16; i++)
+        //    {
+        //        var useBottle = bottles[i];
+        //        useBottle.gameObject.SetActive(i < 12);
+        //        if (i < 12)
+        //        {
+        //            nowBottles.Add(useBottle);
+        //        }
+        //    }
+        //}
+        //else if (num == 9)
+        //{
+        //    for (int i = 0; i < 8; i++)
+        //    {
+        //        var useBottle = bottles[i];
+        //        useBottle.gameObject.SetActive(i < 5);
+        //        if (i < 5)
+        //        {
+        //            nowBottles.Add(useBottle);
+        //        }
+        //    }
+        //    for (int i = 8; i < 16; i++)
+        //    {
+        //        var useBottle = bottles[i];
+        //        useBottle.gameObject.SetActive(i < 12);
+        //        if (i < 12)
+        //        {
+        //            nowBottles.Add(useBottle);
+        //        }
+        //    }
+        //}
+        //else if (num == 10)
+        //{
+        //    for (int i = 0; i < 8; i++)
+        //    {
+        //        var useBottle = bottles[i];
+        //        useBottle.gameObject.SetActive(i < 5);
+        //        if (i < 5)
+        //        {
+        //            nowBottles.Add(useBottle);
+        //        }
+        //    }
+        //    for (int i = 8; i < 16; i++)
+        //    {
+        //        var useBottle = bottles[i];
+        //        useBottle.gameObject.SetActive(i < 13);
+        //        if (i < 13)
+        //        {
+        //            nowBottles.Add(useBottle);
+        //        }
+        //    }
+        //}
+        //else if (num == 11)
+        //{
+        //    for (int i = 0; i < 8; i++)
+        //    {
+        //        var useBottle = bottles[i];
+        //        useBottle.gameObject.SetActive(i < 6);
+        //        if (i < 6)
+        //        {
+        //            nowBottles.Add(useBottle);
+        //        }
+        //    }
+        //    for (int i = 8; i < 16; i++)
+        //    {
+        //        var useBottle = bottles[i];
+        //        useBottle.gameObject.SetActive(i < 13);
+        //        if (i < 13)
+        //        {
+        //            nowBottles.Add(useBottle);
+        //        }
+        //    }
+        //}
 
     }
 
@@ -455,7 +497,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public void MoveAndAddBottle()
     {
         var num = nowBottles.Count;
-        for (int i = 0; i< tempBottles.Count; i++)
+        for (int i = 0; i < tempBottles.Count; i++)
         {
             nowBottles[i].MoveBottle(tempBottles[i]);            
         }
@@ -466,7 +508,9 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public void RefreshLevel()
     {
         clearList = new List<int>(nowLevel.clearList);
-        ShowBottleGo(nowBottles.Count);
+        hideColor = new List<int>(nowLevel.hideList);
+        //ShowBottleGo(nowBottles.Count);
+        ShowBottleGo();
         InitBottle(nowLevel);
     }
 

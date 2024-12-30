@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1568961339
+CRC: 615428925
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7039d918770245ed8e9411cd4f68903a
+    Hash: 397ef0af5c7bc25bfcbd5f6c83e99416
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 80bea4d93ff770f7cd179114a7d508af
+    Hash: 161e85453ed1ccf17644fc8bd2e7a1ff
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 7039d918770245ed8e9411cd4f68903a
+    Hash: 397ef0af5c7bc25bfcbd5f6c83e99416
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,11 +23,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: eed394d0447f9c8409e8e3dcc6ee12be, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 8c5f61f2524591948b7a517246615b8e, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 115
@@ -57,5 +57,6 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.SpriteState
 Assets:
 - Assets/Art/UIPrefab/UIDefeat.prefab
+- Assets/Art/UIPrefab/UIInfo.prefab
 Dependencies:
-- E:/Cake/AssetBundles/Android/fontall_asset
+- E:/Water/AssetBundles/Android/fontall_asset

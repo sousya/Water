@@ -32,7 +32,7 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
 
             if (FirstBottle == null)
             {
-                if (bottle.OnSelect())
+                if (bottle.OnSelect(true))
                 {
                     FirstBottle = bottle;
                 }
@@ -41,7 +41,7 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
             else if (SecondBottle == null)
             {
 
-                if (bottle != FirstBottle && bottle.OnSelect())
+                if (bottle != FirstBottle && bottle.OnSelect(false))
                 {
                     SecondBottle = bottle;
                 }

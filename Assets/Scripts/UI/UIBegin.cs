@@ -14,7 +14,7 @@ namespace QFramework.Example
             return GameMainArc.Interface;
         }
 
-		public GameObject SceneNode1, SceneNode2, SceneNode3;
+		public GameObject BeginNode, LevelNode, SceneNode1, SceneNode2, SceneNode3;
 
         protected override void OnInit(IUIData uiData = null)
 		{
@@ -24,7 +24,9 @@ namespace QFramework.Example
 		
 		protected override void OnOpen(IUIData uiData = null)
 		{
-		}
+            TxtLevel.font.material.shader = Shader.Find(TxtLevel.font.material.shader.name);
+
+        }
 
         void BindBtn()
         {
@@ -39,6 +41,13 @@ namespace QFramework.Example
 			BtnAddBottle.onClick.AddListener(() =>
             {
                 LevelManager.Instance.AddBottle();
+            });
+
+            BtnStart.onClick.AddListener(() =>
+            {
+                LevelManager.Instance.StartGame(1);
+				LevelNode.SetActive(true);
+                BeginNode.SetActive(false);
             });
         }
 

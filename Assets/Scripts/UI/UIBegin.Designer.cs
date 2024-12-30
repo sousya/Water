@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:2e031f9d-9220-4388-b943-57ec3acb639d
+	// Generate Id:401134b0-e212-42e3-a527-f125c5b00a62
 	public partial class UIBegin
 	{
 		public const string Name = "UIBegin";
@@ -20,6 +20,10 @@ namespace QFramework.Example
 		public TMPro.TextMeshProUGUI TxtAddBottleNum;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtLevel;
+		[SerializeField]
+		public UnityEngine.UI.Button BtnStart;
+		[SerializeField]
+		public TMPro.TextMeshProUGUI TxtStart;
 		
 		private UIBeginData mPrivateData = null;
 		
@@ -30,6 +34,8 @@ namespace QFramework.Example
 			BtnAddBottle = null;
 			TxtAddBottleNum = null;
 			TxtLevel = null;
+			BtnStart = null;
+			TxtStart = null;
 			
 			mData = null;
 		}

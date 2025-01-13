@@ -32676,6 +32676,41 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 98dfc84f3e5230a46bdadcb2476d4769, type: 2}
   - {fileID: 11400000, guid: 52813220cc16b6b4dbe9f763a66cea2f, type: 2}
   - {fileID: 11400000, guid: 07fa983f761c7c74181fef12e8126a2f, type: 2}
+  - {fileID: 11400000, guid: 054ccb74fca386742bf7695513f333ae, type: 2}
+  - {fileID: 11400000, guid: 4cbc06351813f4e4ba8105a18b209fbd, type: 2}
+  - {fileID: 11400000, guid: 51f639cbd7db6514198b764970bdaa7d, type: 2}
+  - {fileID: 11400000, guid: 8d5a95bdd00892341a54666d1a6355f7, type: 2}
+  - {fileID: 11400000, guid: 7b461e1ec65c9c944834aea20b6cb6ec, type: 2}
+  - {fileID: 11400000, guid: 8b0a4c97611aa6648bffdcf8ea5a8acd, type: 2}
+  - {fileID: 11400000, guid: 2e1b303f99679054f903debfbe676bc2, type: 2}
+  - {fileID: 11400000, guid: f9a7f2ac299f65c43ba1be0f7515d7d5, type: 2}
+  - {fileID: 11400000, guid: 497ab3af03c4e3949a1437f6266e84e9, type: 2}
+  - {fileID: 11400000, guid: a9862f1f2d803764f8e668f41e7d918f, type: 2}
+  - {fileID: 11400000, guid: d975d8a28cc4bfe458038445ce8f4a21, type: 2}
+  - {fileID: 11400000, guid: 1bf547b5dd605574bbb3a77ae756a189, type: 2}
+  - {fileID: 11400000, guid: 71ac42159a47d43499b0e1bdb75e34ba, type: 2}
+  - {fileID: 11400000, guid: 973b88440636da54f8c8228b9b210c31, type: 2}
+  - {fileID: 11400000, guid: d233d27ffb688c74cbb77dfce04b25a0, type: 2}
+  - {fileID: 11400000, guid: c054c65f3a774284c9e32b494b3b5d59, type: 2}
+  - {fileID: 11400000, guid: 8c68330b76c60ab448c69fe266e05458, type: 2}
+  - {fileID: 11400000, guid: c95bb1bfdf6893440816950ce526b28a, type: 2}
+  - {fileID: 11400000, guid: 28c794c83a5bc70418b3aeb7124dfae4, type: 2}
+  - {fileID: 11400000, guid: a2321bbd8b4db6443b1523c97efa2740, type: 2}
+  - {fileID: 11400000, guid: a221110448748f84dbfb65ac83ca0455, type: 2}
+  - {fileID: 11400000, guid: 4123541faaf1b9d4a8a6109e80962870, type: 2}
+  - {fileID: 11400000, guid: bad1ba5dad24a8649964d331f7d06e87, type: 2}
+  - {fileID: 11400000, guid: 8acf16ce598648141b19a45c85fe562c, type: 2}
+  - {fileID: 11400000, guid: 675d878122f892c49a344352fa520419, type: 2}
+  - {fileID: 11400000, guid: 1290d7da8233e1b4d8729253f0ad58a0, type: 2}
+  - {fileID: 11400000, guid: b637a86c3a549874080f915cc2dbe275, type: 2}
+  - {fileID: 11400000, guid: 6e82e34776951a54ba94d2a7fceed7e7, type: 2}
+  - {fileID: 11400000, guid: d66a8441ae71a3741afabef295621c76, type: 2}
+  - {fileID: 11400000, guid: f39f2eaee290149469f034db0085ecf8, type: 2}
+  - {fileID: 11400000, guid: 7b461e1ec65c9c944834aea20b6cb6ec, type: 2}
+  - {fileID: 11400000, guid: 07fa983f761c7c74181fef12e8126a2f, type: 2}
+  - {fileID: 11400000, guid: 07fa983f761c7c74181fef12e8126a2f, type: 2}
+  - {fileID: 11400000, guid: 07fa983f761c7c74181fef12e8126a2f, type: 2}
+  - {fileID: 11400000, guid: 07fa983f761c7c74181fef12e8126a2f, type: 2}
   clearList: 
   cantClearColorList: 
   cantChangeColorList: 
@@ -32762,6 +32797,7 @@ MonoBehaviour:
     isHide: 
     waterItem: 
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0

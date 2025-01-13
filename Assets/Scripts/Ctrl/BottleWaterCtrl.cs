@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class BottleWaterCtrl : MonoBehaviour
 {
-    public SkeletonGraphic spine, broomSpine, createSpine, changeSpine;
-    public GameObject spineGo, HideGo, broomItemGo, createItemGo, changeItemGo;
+    public SkeletonGraphic spine, broomSpine, createSpine, changeSpine, magnetSpine;
+    public GameObject spineGo, HideGo, broomItemGo, createItemGo, changeItemGo, magnetItemGo;
     public Animator anim;
     public Image waterImg;
     public int waterColor;

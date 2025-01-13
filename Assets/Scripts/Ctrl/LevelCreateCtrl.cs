@@ -17,6 +17,7 @@ public class LevelCreateCtrl : ScriptableObject
         public List<bool> isHide = new List<bool>();
         public List<WaterItem> waterItem = new List<WaterItem>();
         public int numCake;
+        public int limitColor;
         public int lockType;
         public bool isClearHide, isNearHide, isFreeze;
     }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96fc202634f853d4ca15a2647d0c4b82, type: 3}
-  m_Name: Level83
+  m_Name: Level83 1
   m_EditorClassIdentifier: 
   bottles:
   - waterSet: 05000000040000000c00000005000000
@@ -34,7 +34,7 @@ MonoBehaviour:
     waterItem: 00000000000000000000000000000000
     numCake: 0
     lockType: 2
-    isClearHide: 1
+    isClearHide: 0
     isNearHide: 0
     isFreeze: 0
   - waterSet: 040000000c0000000c000000d2070000
@@ -42,7 +42,7 @@ MonoBehaviour:
     waterItem: 00000000000000000000000000000000
     numCake: 0
     lockType: 6
-    isClearHide: 1
+    isClearHide: 0
     isNearHide: 0
     isFreeze: 0
   - waterSet: 0c000000020000000600000006000000
@@ -62,7 +62,7 @@ MonoBehaviour:
     isNearHide: 0
     isFreeze: 0
   - waterSet: 02000000010000000600000002000000
-    isHide: 00000000
+    isHide: 01010000
     waterItem: 00000000000000000000000000000000
     numCake: 0
     lockType: 0
@@ -77,17 +77,17 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 03000000010000000300000004000000
-    isHide: 00000000
-    waterItem: 00000000000000000000000000000000
+  - waterSet: 030000000100000003000000
+    isHide: 010100
+    waterItem: 000000000000000000000000
     numCake: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 
-    isHide: 
-    waterItem: 
+  - waterSet: eb03000004000000eb030000
+    isHide: 000000
+    waterItem: 000000000000000000000000
     numCake: 0
     lockType: 0
     isClearHide: 0

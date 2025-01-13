@@ -215,7 +215,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 break;
         }
     }
-
     public void FinishClear(int clearColor, int idx)
     {
         clearList.Remove(clearColor);
@@ -592,6 +591,12 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public void Update()
     {
         TimeCountDown();
+
+
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            ShareManager.Instance.ShareScreen();
+        }
     }
 
     public void OnDefeat()

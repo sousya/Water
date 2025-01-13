@@ -24,7 +24,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public Transform spineGo, modelGo, leftMovePlace;
     public Animator bottleAnim, fillWaterGoAnim;
     public SkeletonGraphic spine;
-    public int maxNum = 4;
+    public int maxNum = 4, limitColor = 0;
     public Image ImgWaterTop, ImgWaterDown, ImgClearHide;
     public SkeletonGraphic nearHide;
     public int topIdx
@@ -74,6 +74,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         isNearHide = property.isNearHide;
         isFreeze = property.isFreeze;
         unlockClear = property.lockType;
+        limitColor = property.limitColor;
         bottleIdx = idx;
 
         nearHide.gameObject.SetActive(isNearHide);
@@ -275,7 +276,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public bool CheckMoveIn(int color)
     {
         var top = GetMoveOutTop();
-        if(isClearHide || isNearHide || isFinish || GetLeftEmpty() == 0)
+        if(isClearHide || isNearHide || isFinish || GetLeftEmpty() == 0 || (limitColor != 0 && limitColor != color))
         {
             return false;
         }
@@ -514,6 +515,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             var useColor = waters[i] - 1;
             if(useColor < 1000)
             {
+                Debug.Log("UseColor " + useColor);
                 waterImg[i].color = LevelManager.Instance.waterColor[useColor];
                 waterImg[i].broomItemGo.SetActive(false);
                 waterImg[i].createItemGo.SetActive(false);
@@ -535,7 +537,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                         waterImg[i].broomItemGo.SetActive(false);
                         waterImg[i].createItemGo.SetActive(true);
                         waterImg[i].changeItemGo.SetActive(false);
-                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle", false);
+                        waterImg[i].createSpine.AnimationState.SetAnimation(0, "idle", false);
 
                         waterImg[i].color = new Color(1, 1, 1, 0);
                         break;
@@ -544,6 +546,14 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                         waterImg[i].createItemGo.SetActive(false);
                         waterImg[i].changeItemGo.SetActive(true);
                         waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_cl", false);
+
+                        //waterImg[i].color = new Color(1, 1, 1, 0);
+                        break;
+                    case (int)ItemType.ChangeOrange:
+                        waterImg[i].broomItemGo.SetActive(false);
+                        waterImg[i].createItemGo.SetActive(false);
+                        waterImg[i].changeItemGo.SetActive(true);
+                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_jh", false);
 
                         //waterImg[i].color = new Color(1, 1, 1, 0);
                         break;

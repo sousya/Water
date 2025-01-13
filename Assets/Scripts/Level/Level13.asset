@@ -20,6 +20,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 0a0000000b0000000b0000000a000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -27,6 +28,7 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 1
     isNearHide: 0
+    isFreeze: 0
   - waterSet: e9030000
     isHide: 00
     waterItem: 00000000
@@ -34,6 +36,7 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 070000000a0000000a00000002000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -41,6 +44,7 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 1
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 03000000060000000400000006000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -48,6 +52,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 02000000020000000200000003000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -55,6 +60,7 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 1
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 01000000010000000600000003000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -62,6 +68,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: e9030000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -69,6 +76,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 04000000060000000700000007000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -76,6 +84,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 030000000a000000070000000a000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -83,8 +92,9 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 1
     isNearHide: 0
+    isFreeze: 0
   gameType: 0
-  clearList: 02000000
+  clearList: 0100000002000000030000000400000006000000070000000a0000000b000000
   hideList: 
   bombNum: 0
   countDownNum: 0

@@ -16,10 +16,11 @@ MonoBehaviour:
   - waterSet: 
     isHide: 
     waterItem: 
-    numCake: 0
+    numCake: 4
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 03000000ec0300000600000004000000
     isHide: 01000100
     waterItem: 00000000000000000000000000000000
@@ -27,6 +28,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 03000000ec0300000600000004000000
     isHide: 01000100
     waterItem: 00000000000000000000000000000000
@@ -34,6 +36,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 0100000007000000
     isHide: 0000
     waterItem: 0000000000000000
@@ -41,6 +44,7 @@ MonoBehaviour:
     lockType: 6
     isClearHide: 1
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 070000000a000000
     isHide: 0000
     waterItem: 0000000000000000
@@ -48,6 +52,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 
     isHide: 
     waterItem: 
@@ -55,6 +60,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 0400000001000000060000000a000000
     isHide: 01000100
     waterItem: 00000000000000000000000000000000
@@ -62,6 +68,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 0a000000010000000600000006000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -69,6 +76,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 07000000
     isHide: 00
     waterItem: 00000000
@@ -76,6 +84,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 03000000
     isHide: 00
     waterItem: 00000000
@@ -83,6 +92,7 @@ MonoBehaviour:
     lockType: 0
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   gameType: 0
   clearList: 01000000030000000400000006000000070000000a000000
   hideList: 0700000003000000010000000a000000
@@ -91,3 +101,4 @@ MonoBehaviour:
   timeCountDown: 0
   topNum: 5
   bottomNum: 5
+  changeList: []

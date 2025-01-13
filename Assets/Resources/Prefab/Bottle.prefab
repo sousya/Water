@@ -129,8 +129,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 108.952}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 18.3, y: -307}
-  m_SizeDelta: {x: 48, y: 555}
+  m_AnchoredPosition: {x: -2.79, y: -307}
+  m_SizeDelta: {x: 31.21, y: 555}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6670301217496650390
 CanvasRenderer:
@@ -489,7 +489,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &683314579313635812
 RectTransform:
   m_ObjectHideFlags: 0
@@ -817,7 +817,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5038792662536659247
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1025,6 +1025,7 @@ MonoBehaviour:
   isClearHide: 0
   isNearHide: 0
   isPlayAnim: 0
+  isSelect: 0
   waters: 
   hideWaters: 
   waterItems: 
@@ -1080,7 +1081,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6746710069191605381}
   m_LocalRotation: {x: -0, y: -0, z: -5.893164e-20, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1088,8 +1089,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 108.952}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0}
-  m_SizeDelta: {x: 84, y: 64}
+  m_AnchoredPosition: {x: -14.69, y: -0}
+  m_SizeDelta: {x: 54.62, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9073847761378529306
 CanvasRenderer:

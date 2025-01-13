@@ -33,9 +33,14 @@ namespace GameDefine
     public enum ItemType
     {
         ClearItem = 1001,
-        ChangeColorItem = 1002,
-        MagnetItem = 1003, 
-        MakeColorItem = 1004,
+        MagnetItem = 1002, 
+        MakeColorItem = 1003,
+        ChangeGreen = 2001,
+        ChangeOrange = 2002,
+        ChangePink = 2003,
+        ChangePurple = 2004,
+        ChangeYellow = 2005,
+        ChangeDarkBlue = 2006,
     }
     public enum LanguageType
     {

@@ -5505,6 +5505,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bottle (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5863203414289781505, guid: 5c0746996e1124049bc7344d3ee3530d, type: 3}
+      propertyPath: startingAnimation
+      value: ruchanghuangdong_cl
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22635,7 +22639,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -32642,6 +32646,36 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 40471afd171c0744c9bbe9466f2796e0, type: 2}
   - {fileID: 11400000, guid: 5f9efac44e8205f4385514e743db5fa2, type: 2}
   - {fileID: 11400000, guid: 309959f3b2074bf4ab59dc321299db99, type: 2}
+  - {fileID: 11400000, guid: 6d9b11392068e534db0a99af40c203cd, type: 2}
+  - {fileID: 11400000, guid: b9d8bbb9e76c33749855a72089e19894, type: 2}
+  - {fileID: 11400000, guid: 92bee243a3966694e9d97377ba461595, type: 2}
+  - {fileID: 11400000, guid: 97f0957596caeb843aebb343c2f6d99e, type: 2}
+  - {fileID: 11400000, guid: 5015d19166c8ada449a506dfaac539da, type: 2}
+  - {fileID: 11400000, guid: 42bde93a57dad9b4f9e097d3046f7a5b, type: 2}
+  - {fileID: 11400000, guid: ce5abfc0efed3d148acc84f1ed4429a7, type: 2}
+  - {fileID: 11400000, guid: a6006b0aa91b44f4884f0930ae744e8b, type: 2}
+  - {fileID: 11400000, guid: a6a88f670e031344e89d2410b417f830, type: 2}
+  - {fileID: 11400000, guid: da7cb1a28753a2f4482e8c22c5f7abec, type: 2}
+  - {fileID: 11400000, guid: 6b58b31165a8485439bff910b0c4888f, type: 2}
+  - {fileID: 11400000, guid: 30f6296bd09b223499e76bee4f1e0c6b, type: 2}
+  - {fileID: 11400000, guid: feae057a64507784a8a0cf81ccc0e2a1, type: 2}
+  - {fileID: 11400000, guid: 3e1f48501f84c4e4a8f232a16d9aa543, type: 2}
+  - {fileID: 11400000, guid: e98deff4d0f110146a95f71f38f0ea88, type: 2}
+  - {fileID: 11400000, guid: c154227ed9313fa49bcf88dcfc21501e, type: 2}
+  - {fileID: 11400000, guid: 7e394a2455e4f1048a0b5f849f5ec872, type: 2}
+  - {fileID: 11400000, guid: 155147850ec1b1f4c99f8d578a5d4e2b, type: 2}
+  - {fileID: 11400000, guid: 567182c26af35a74dbacf2debb7bb3b4, type: 2}
+  - {fileID: 11400000, guid: e955d4a75672d814b84a2435258dc60a, type: 2}
+  - {fileID: 11400000, guid: fa56d3fca51284346aa18bd1e70183bd, type: 2}
+  - {fileID: 11400000, guid: e8f84335bb06d414394fc90d8daa9b45, type: 2}
+  - {fileID: 11400000, guid: ed6f2bfabc5293444a4baf461d55d1cd, type: 2}
+  - {fileID: 11400000, guid: bda7849c1fa5a294683bc80be08498aa, type: 2}
+  - {fileID: 11400000, guid: 111c5d56c93217147b5bf63a6dc264ce, type: 2}
+  - {fileID: 11400000, guid: 4156084e9b34dd640814f8ebe5a140d2, type: 2}
+  - {fileID: 11400000, guid: ce5f6fb2de278cd40a4935e2879917d8, type: 2}
+  - {fileID: 11400000, guid: 98dfc84f3e5230a46bdadcb2476d4769, type: 2}
+  - {fileID: 11400000, guid: 52813220cc16b6b4dbe9f763a66cea2f, type: 2}
+  - {fileID: 11400000, guid: 07fa983f761c7c74181fef12e8126a2f, type: 2}
   clearList: 
   cantClearColorList: 
   cantChangeColorList: 

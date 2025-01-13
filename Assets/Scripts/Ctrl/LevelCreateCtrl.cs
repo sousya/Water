@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GameDefine;
+using System;
 
 [CreateAssetMenu(fileName = "Level", menuName = "Levels")]
 public class LevelCreateCtrl : ScriptableObject
@@ -32,4 +33,13 @@ public class LevelCreateCtrl : ScriptableObject
     public int topNum;
 
     public int bottomNum;
+
+    public List<ChangePair> changeList;
+}
+
+[Serializable]
+public class ChangePair
+{
+    public ItemType item;
+    public int NeedChangeColor;
 }

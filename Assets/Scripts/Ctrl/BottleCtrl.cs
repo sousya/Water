@@ -104,7 +104,18 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             {
                 LevelManager.Instance.cantChangeColorList.Add(unlockClear);
             }
+
+            foreach(var color in waters)
+            {
+                if (!LevelManager.Instance.cantChangeColorList.Contains(color))
+                {
+                    LevelManager.Instance.cantChangeColorList.Add(color);
+                }
+            }
+          
         }
+
+
         if (topIdx < 0)
         {
             spineGo.gameObject.SetActive(false);
@@ -345,7 +356,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
         for (int i = topIdx - 1; i >= 0; i--)
         {
-            if (waters[i] == GetMoveOutTop())
+            if (waters[i] == GetMoveOutTop() && waterItems[i] != WaterItem.Ice)
             {
                 sameNum++;
             }
@@ -401,9 +412,10 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             var topColor = waters[topIdx];
             if (topIdx == maxNum - 1)
             {
-                foreach (var water in waters)
+                for(int i = 3; i >=0; i--)
                 {
-                    if (water != topColor)
+                    var water = waters[i];
+                    if (water != topColor || waterItems[i] == WaterItem.Ice)
                     {
                         return;
                     }
@@ -442,6 +454,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             if (waterItems[i] == WaterItem.Ice)
             {
                 waterItems[i] = WaterItem.None;
+                CheckFinish();
                 break;
             }
         }
@@ -503,14 +516,70 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             {
                 waterImg[i].color = LevelManager.Instance.waterColor[useColor];
                 waterImg[i].broomItemGo.SetActive(false);
+                waterImg[i].createItemGo.SetActive(false);
+                waterImg[i].changeItemGo.SetActive(false);
             }
             else
             {
-                var checkColor = LevelManager.Instance.waterColor[useColor - 1000];
-                waterImg[i].broomItemGo.SetActive(true);
-                waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_cl", false);
+                switch(waters[i])
+                {
+                    case (int)ItemType.ClearItem:
+                        waterImg[i].broomItemGo.SetActive(true);
+                        waterImg[i].createItemGo.SetActive(false);
+                        waterImg[i].changeItemGo.SetActive(false);
+                        waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_cl", false);
 
-                waterImg[i].color = new Color(checkColor.r, checkColor.g, checkColor.b, 0);
+                        waterImg[i].color = new Color(1, 1, 1, 0);
+                        break;
+                    case (int)ItemType.MakeColorItem:
+                        waterImg[i].broomItemGo.SetActive(false);
+                        waterImg[i].createItemGo.SetActive(true);
+                        waterImg[i].changeItemGo.SetActive(false);
+                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle", false);
+
+                        waterImg[i].color = new Color(1, 1, 1, 0);
+                        break;
+                    case (int)ItemType.ChangeGreen:
+                        waterImg[i].broomItemGo.SetActive(false);
+                        waterImg[i].createItemGo.SetActive(false);
+                        waterImg[i].changeItemGo.SetActive(true);
+                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_cl", false);
+
+                        //waterImg[i].color = new Color(1, 1, 1, 0);
+                        break;
+                    case (int)ItemType.ChangePink:
+                        waterImg[i].broomItemGo.SetActive(false);
+                        waterImg[i].createItemGo.SetActive(false);
+                        waterImg[i].changeItemGo.SetActive(true);
+                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_fs", false);
+
+                        //waterImg[i].color = new Color(1, 1, 1, 0);
+                        break;
+                    case (int)ItemType.ChangePurple:
+                        waterImg[i].broomItemGo.SetActive(false);
+                        waterImg[i].createItemGo.SetActive(false);
+                        waterImg[i].changeItemGo.SetActive(true);
+                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_zs", false);
+
+                        break;
+                    case (int)ItemType.ChangeYellow:
+                        waterImg[i].broomItemGo.SetActive(false);
+                        waterImg[i].createItemGo.SetActive(false);
+                        waterImg[i].changeItemGo.SetActive(true);
+                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_hs", false);
+
+                        break;
+                    case (int)ItemType.ChangeDarkBlue:
+                        waterImg[i].broomItemGo.SetActive(false);
+                        waterImg[i].createItemGo.SetActive(false);
+                        waterImg[i].changeItemGo.SetActive(true);
+                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_sl", false);
+
+                        break;
+                }
+                //var checkColor = LevelManager.Instance.waterColor[useColor - 1000];
+                waterImg[i].color = new Color(1, 1, 1, 0);
+
             }
 
             if (hideWaters.Count > 0)
@@ -635,9 +704,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             case 8:
                 spineAnimName = "daoshui_lh";
                 break;
-            //case 9:
-            //    spineAnimName = "daoshui_mh";
-                //break;
             case 9:
                 spineAnimName = "daoshui_sl";
                 break;
@@ -647,6 +713,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             case 11:
                 spineAnimName = "daoshui_zs";
                 break;
+            case 12:
+                spineAnimName = "daoshui_mh";
+                break;  
         }
 
         if(color < 1000)
@@ -705,9 +774,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                 case 8:
                     spineAnimName = "ruchanghuangdong_lh";
                     break;
-                //case 9:
-                //    spineAnimName = "ruchanghuangdong_mh";
-                //    break;
                 case 9:
                     spineAnimName = "ruchanghuangdong_sl";
                     break;
@@ -716,6 +782,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     break;
                 case 11:
                     spineAnimName = "ruchanghuangdong_zs";
+                    break;
+                case 12:
+                    spineAnimName = "ruchanghuangdong_mh";
                     break;
             }
             if (color > 0)
@@ -868,12 +937,35 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                 }
                 else
                 {
-                    if(itemId == waterColor && i - itemPlace == 1)
+                    switch (waters[i])
                     {
-                        items.Add(waters[i]);
-                        waterImg[i - 1].PlayUseBroom();
-                        waters[i] = 0;
-                        waters[itemPlace] = 0;
+                        case (int)ItemType.ClearItem:
+                            if (itemId == waterColor && i - itemPlace == 1)
+                            {
+                                items.Add(waters[i]);
+                                waterImg[i - 1].PlayUseBroom();
+                                waters[i] = 0;
+                                waters[itemPlace] = 0;
+                            }
+                            break;
+                        case (int)ItemType.MakeColorItem:
+                            if (itemId == waterColor && i - itemPlace == 1)
+                            {
+                                items.Add(waters[i]);
+                                waterImg[i - 1].PlayUseBroom();
+                                waters[i] = 0;
+                                waters[itemPlace] = 0;
+                            }
+                            break;
+                        default:
+                            if (itemId == waterColor && i - itemPlace == 1)
+                            {
+                                items.Add(waters[i]);
+                                waterImg[i - 1].PlayUseChange();
+                                waters[i] = 0;
+                                waters[itemPlace] = 0;
+                            }
+                            break;
                     }
 
                     itemId = 0;

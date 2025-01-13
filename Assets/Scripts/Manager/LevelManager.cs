@@ -91,17 +91,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 ClearColor(clearColor);
 
                 break;
-            case ItemType.ChangeColorItem:
-                ////////随机色块
-                var changeColorlist = CheckCanClearList();
-                int changeColorFromIdx = UnityEngine.Random.Range(0, changeColorlist.Count);
-                int changeColorFrom = changeColorlist[changeColorFromIdx];
-                changeColorlist.RemoveAt(changeColorFromIdx);
-                int changeColorToIdx = UnityEngine.Random.Range(0, changeColorlist.Count);
-                int changeColorTo = changeColorlist[changeColorToIdx];
-                ////////更换色块
-                ChangeColor(changeColorFrom, changeColorTo);
-                break;
             case ItemType.MagnetItem:
                 foreach(var bottle in nowBottles)
                 {
@@ -137,6 +126,92 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                         item.waterImg.fillAmount = 1;
                     }
                 }
+                break;
+
+            case ItemType.ChangeGreen:
+                int changeGreenColorFrom = 0;
+                foreach (var pair in nowLevel.changeList)
+                {
+                    if(pair.item == ItemType.ChangeGreen)
+                    {
+                        changeGreenColorFrom = pair.NeedChangeColor;
+                    }
+                }
+
+                int changeGreenColorTo = 1;
+                ////////更换色块
+                ChangeColor(changeGreenColorFrom, changeGreenColorTo);
+                break;
+
+            case ItemType.ChangeOrange:
+                int changeOrangeColorFrom = 0;
+                foreach (var pair in nowLevel.changeList)
+                {
+                    if(pair.item == ItemType.ChangeOrange)
+                    {
+                        changeOrangeColorFrom = pair.NeedChangeColor;
+                    }
+                }
+
+                int changeOrangeColorTo = 7;
+                ////////更换色块
+                ChangeColor(changeOrangeColorFrom, changeOrangeColorTo);
+                break;
+            case ItemType.ChangePink:
+                int changePinkColorFrom = 0;
+                foreach (var pair in nowLevel.changeList)
+                {
+                    if(pair.item == ItemType.ChangePink)
+                    {
+                        changePinkColorFrom = pair.NeedChangeColor;
+                    }
+                }
+
+                int changePinkColorTo = 3;
+                ////////更换色块
+                ChangeColor(changePinkColorFrom, changePinkColorTo);
+                break;
+            case ItemType.ChangeYellow:
+                int changeYellowColorFrom = 0;
+                foreach (var pair in nowLevel.changeList)
+                {
+                    if(pair.item == ItemType.ChangeYellow)
+                    {
+                        changeYellowColorFrom = pair.NeedChangeColor;
+                    }
+                }
+
+                int changeYellowColorTo = 6;
+                ////////更换色块
+                ChangeColor(changeYellowColorFrom, changeYellowColorTo);
+                break;
+            case ItemType.ChangePurple:
+                int changePurpleColorFrom = 0;
+                foreach (var pair in nowLevel.changeList)
+                {
+                    if(pair.item == ItemType.ChangePurple)
+                    {
+                        changePurpleColorFrom = pair.NeedChangeColor;
+                    }
+                }
+
+                int changePurpleColorTo = 3;
+                ////////更换色块
+                ChangeColor(changePurpleColorFrom, changePurpleColorTo);
+                break;
+            case ItemType.ChangeDarkBlue:
+                int changeDarkBlueColorFrom = 0;
+                foreach (var pair in nowLevel.changeList)
+                {
+                    if(pair.item == ItemType.ChangeDarkBlue)
+                    {
+                        changePurpleColorFrom = pair.NeedChangeColor;
+                    }
+                }
+
+                int changeDarkBlueColorTo = 3;
+                ////////更换色块
+                ChangeColor(changeDarkBlueColorFrom, changeDarkBlueColorTo);
                 break;
         }
     }

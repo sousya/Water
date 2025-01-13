@@ -20,6 +20,7 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 1
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 0a00000003000000030000000a000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -27,6 +28,7 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 1
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 04000000060000000600000004000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -34,6 +36,7 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 1
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 06000000040000000400000006000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -41,6 +44,7 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 1
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 020000000b0000000b00000002000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -48,6 +52,7 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 1
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 0b00000002000000020000000b000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -55,6 +60,7 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 1
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 01000000070000000700000001000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -62,13 +68,15 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 0
     isNearHide: 0
-  - waterSet: ea030000
+    isFreeze: 0
+  - waterSet: d1070000
     isHide: 00
     waterItem: 00000000
     numCake: 4
     lockType: 6
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 
     isHide: 
     waterItem: 
@@ -76,13 +84,15 @@ MonoBehaviour:
     lockType: 6
     isClearHide: 0
     isNearHide: 0
-  - waterSet: ea030000
+    isFreeze: 0
+  - waterSet: d1070000
     isHide: 00
     waterItem: 00000000
     numCake: 4
     lockType: 1
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   - waterSet: 02000000070000000700000002000000
     isHide: 01010100
     waterItem: 00000000000000000000000000000000
@@ -90,6 +100,7 @@ MonoBehaviour:
     lockType: 1
     isClearHide: 0
     isNearHide: 0
+    isFreeze: 0
   gameType: 0
   clearList: 0100000002000000030000000400000006000000070000000a0000000b000000
   hideList: 
@@ -98,3 +109,6 @@ MonoBehaviour:
   timeCountDown: 0
   topNum: 6
   bottomNum: 5
+  changeList:
+  - item: 2001
+    NeedChangeColor: 7

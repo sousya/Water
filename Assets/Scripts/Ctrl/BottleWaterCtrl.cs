@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class BottleWaterCtrl : MonoBehaviour
 {
-    public SkeletonGraphic spine, broomSpine;
-    public GameObject spineGo, HideGo, broomItemGo;
+    public SkeletonGraphic spine, broomSpine, createSpine, changeSpine;
+    public GameObject spineGo, HideGo, broomItemGo, createItemGo, changeItemGo;
     public Animator anim;
     public Image waterImg;
     public int waterColor;
@@ -49,6 +49,8 @@ public class BottleWaterCtrl : MonoBehaviour
         //StartCoroutine(CoroutinePlayFillAnim());
 
         broomItemGo.SetActive(false);
+        createItemGo.SetActive(false);
+        changeItemGo.SetActive(false);
         waterImg.fillAmount = 1;
         waterImg.DOFillAmount(0, time).SetEase(Ease.Linear).OnComplete(() =>
         {
@@ -60,6 +62,8 @@ public class BottleWaterCtrl : MonoBehaviour
     {
         StartCoroutine(CoroutinePlayUseBroom());
     }
+    
+
 
     IEnumerator CoroutinePlayUseBroom()
     {
@@ -78,7 +82,30 @@ public class BottleWaterCtrl : MonoBehaviour
         isPlayItemAnim = false;
         gameObject.SetActive(false);
         Destroy(go);
+    }
 
+    public void PlayUseChange()
+    {
+        StartCoroutine(CoroutinePlayUseChange());
+    }
+
+    IEnumerator CoroutinePlayUseChange()
+    {
+        isPlayItemAnim = true;
+        //broomItemGo.SetActive(true);
+        var go = Instantiate(changeItemGo);
+        go.transform.parent = changeItemGo.transform.parent;
+        go.transform.localScale = new Vector3(1, 1, 1);
+        go.transform.localPosition = changeItemGo.transform.localPosition;
+        go.transform.parent = LevelManager.Instance.gameCanvas;
+        var useSpine = go.GetComponent<SkeletonGraphic>();
+        changeItemGo.SetActive(false);
+        yield return new WaitForEndOfFrame();
+        useSpine.AnimationState.SetAnimation(0, "combine", false);
+        yield return new WaitForSeconds(1f);
+        isPlayItemAnim = false;
+        gameObject.SetActive(false);
+        Destroy(go);
     }
 
     public void PlayFillAnimConnect()
@@ -97,25 +124,6 @@ public class BottleWaterCtrl : MonoBehaviour
         anim.Play("WaterFillConnect");
         spine.AnimationState.SetAnimation(0, spineAnimName, false);
         //StartCoroutine(CoroutinePlayFillAnim());
-    }
-
-    IEnumerator CoroutinePlayFillAnim()
-    {
-        string spineAnimName = "";
-        switch (waterColor)
-        {
-            case 0:
-                spineAnimName = "daoshui_dh";
-                break;
-            case 1:
-                spineAnimName = "daoshui_cl";
-                break;
-        }
-        spineGo.SetActive(true);
-        anim.Play("WaterFill");
-        //spine.Initialize(true);
-        yield return new WaitForSeconds(0.6f);
-        spine.AnimationState.SetAnimation(0, spineAnimName, false);
     }
 
     public void PlayEmptyAnim()

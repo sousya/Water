@@ -17,6 +17,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -25,6 +26,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -33,6 +35,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -41,14 +44,16 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
-    isNearHide: 0
+    isNearHide: 1
     isFreeze: 0
   - waterSet: 
     isHide: 
     waterItem: 
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -57,14 +62,16 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
-    isNearHide: 0
+    isNearHide: 1
     isFreeze: 0
   - waterSet: 02000000060000000600000004000000
     isHide: 01010100
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -73,6 +80,7 @@ MonoBehaviour:
     isHide: 01010100
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -81,6 +89,7 @@ MonoBehaviour:
     isHide: 01010100
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -89,6 +98,7 @@ MonoBehaviour:
     isHide: 
     waterItem: 
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -97,6 +107,7 @@ MonoBehaviour:
     isHide: 
     waterItem: 
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -108,5 +119,5 @@ MonoBehaviour:
   countDownNum: 0
   timeCountDown: 0
   topNum: 6
-  bottomNum: 4
+  bottomNum: 5
   changeList: []

@@ -4,8 +4,13 @@ using System.Diagnostics.SymbolStore;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameDefine 
+namespace GameDefine
 {
+    public static class GameConst
+    {
+        public const int MaxVitality = 5;
+        public const int RecoveryTime = 1800;
+    }
     public enum GameType
     {
         Normal = 0,
@@ -41,6 +46,13 @@ namespace GameDefine
         ChangePurple = 2004,
         ChangeYellow = 2005,
         ChangeDarkBlue = 2006,
+        ClearPink = 3001,
+        ClearOrange = 3002,
+        ClearBlue = 3003,
+        ClearYellow = 3004,
+        ClearDarkGreen = 3005,
+        ClearRed = 3006,
+        ClearGreen = 3007,
     }
     public enum LanguageType
     {

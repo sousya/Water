@@ -78,7 +78,7 @@ public class GameMainArc : Architecture<GameMainArc>
         ShareManager shareManager = ShareManager.Instance;
         AnalyticsManager analyticsManager = AnalyticsManager.Instance;
         //LevelManager.Instance.BeginGame();
-        TopOnADManager.Instance.LoadAD();
+        //TopOnADManager.Instance.LoadAD();
         TenjinManager.Instance.Init();
         //UIKit.OpenPanel<UIBegin>(UILevel.Common, null, "uibegin_prefab", "UIBegin");
 

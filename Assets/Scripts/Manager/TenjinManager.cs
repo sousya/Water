@@ -16,7 +16,6 @@ public class TenjinManager: MonoBehaviour
     }
     public void Init()
     {
-
         Debug.Log("TenjinTime " + Time.time);
 
 

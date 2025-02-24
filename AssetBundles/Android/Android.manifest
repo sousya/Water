@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 4192228768
+CRC: 3040504359
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -20,3 +20,10 @@ AssetBundleManifest:
       Name: uidefeat_prefab
       Dependencies:
         Dependency_0: fontall_asset
+    Info_5:
+      Name: uimorelife_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_6:
+      Name: coinfx_prefab
+      Dependencies: {}

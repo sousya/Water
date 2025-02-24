@@ -46,4 +46,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Resources/Font/FontAll.asset
 Dependencies:
-- E:/Cake/AssetBundles/Android/fontextra_asset
+- E:/Water/AssetBundles/Android/fontextra_asset

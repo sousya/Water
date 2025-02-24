@@ -17,6 +17,7 @@ MonoBehaviour:
     isHide: 00
     waterItem: 02000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -25,6 +26,7 @@ MonoBehaviour:
     isHide: 0000
     waterItem: 0200000002000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -33,22 +35,34 @@ MonoBehaviour:
     isHide: 000000
     waterItem: 020000000200000002000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: e9030000080000000700000001000000
+  - waterSet: be0b0000080000000700000001000000
     isHide: 00000000
     waterItem: 00000000020000000200000002000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: e9030000d3070000e903000008000000
+  - waterSet: bb0b0000d30700000800000007000000
     isHide: 00000000
-    waterItem: 00000000000000000000000000000000
+    waterItem: 00000000000000000200000002000000
     numCake: 0
+    limitColor: 0
+    lockType: 0
+    isClearHide: 0
+    isNearHide: 0
+    isFreeze: 0
+  - waterSet: bb0b0000d3070000be0b000008000000
+    isHide: 00000000
+    waterItem: 00000000000000000000000002000000
+    numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -57,14 +71,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000010000000100000001000000
     numCake: 0
-    lockType: 0
-    isClearHide: 0
-    isNearHide: 0
-    isFreeze: 0
-  - waterSet: 02000000040000000500000003000000
-    isHide: 00000000
-    waterItem: 00000000000000000100000001000000
-    numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -73,6 +80,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000100000001000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -81,6 +89,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 01000000000000000000000001000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -89,6 +98,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 01000000010000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -97,6 +107,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 01000000010000000100000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0

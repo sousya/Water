@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 615428925
+CRC: 2291364550
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 397ef0af5c7bc25bfcbd5f6c83e99416
+    Hash: 639ccfc99260cabf967336ba2e362431
   TypeTreeHash:
     serializedVersion: 2
     Hash: 161e85453ed1ccf17644fc8bd2e7a1ff
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 397ef0af5c7bc25bfcbd5f6c83e99416
+    Hash: 639ccfc99260cabf967336ba2e362431
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -56,6 +56,7 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 Assets:
+- Assets/Art/UIPrefab/UIVictory.prefab
 - Assets/Art/UIPrefab/UIDefeat.prefab
 - Assets/Art/UIPrefab/UIInfo.prefab
 Dependencies:

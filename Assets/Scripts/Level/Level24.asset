@@ -17,6 +17,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -25,6 +26,7 @@ MonoBehaviour:
     isHide: 000000
     waterItem: 000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -33,6 +35,7 @@ MonoBehaviour:
     isHide: 
     waterItem: 
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -41,6 +44,7 @@ MonoBehaviour:
     isHide: 000000
     waterItem: 000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -49,6 +53,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -57,14 +62,16 @@ MonoBehaviour:
     isHide: 0000
     waterItem: 0000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 1
-  - waterSet: 0300000001000000ec03000001000000
+  - waterSet: 0300000001000000eb03000001000000
     isHide: 00000000
-    waterItem: 
+    waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -73,14 +80,16 @@ MonoBehaviour:
     isHide: 
     waterItem: 
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 0700000007000000ec03000004000000
+  - waterSet: 0700000007000000eb03000004000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -89,6 +98,7 @@ MonoBehaviour:
     isHide: 0000
     waterItem: 0000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -101,3 +111,4 @@ MonoBehaviour:
   timeCountDown: 0
   topNum: 5
   bottomNum: 5
+  changeList: []

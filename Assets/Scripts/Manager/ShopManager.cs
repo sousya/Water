@@ -1,4 +1,4 @@
-using QFramework;
+ï»¿using QFramework;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -40,22 +40,22 @@ public class ShopManager : MonoBehaviour, IDetailedStoreListener, ICanGetUtility
         var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
         
         //Add products that will be purchasable and indicate its type.
-        //³õÊ¼»¯²úÆ·ÁĞ±í£¬ÕâÀïÒª¸úIOSºÍGoogleºóÌ¨µÄ²úÆ·ÁĞ±íÒ»ÖÂ
+        //åˆå§‹åŒ–äº§å“åˆ—è¡¨ï¼Œè¿™é‡Œè¦è·ŸIOSå’ŒGoogleåå°çš„äº§å“åˆ—è¡¨ä¸€è‡´
         builder.AddProduct("noads", ProductType.NonConsumable);
         Debug.Log("BeginInitialized");
 
         UnityPurchasing.Initialize(this, builder);
     }
-    //²âÊÔÓÃµÄ£¬ÕıÊ½´úÂë¿ÉÉ¾³ı
+    //æµ‹è¯•ç”¨çš„ï¼Œæ­£å¼ä»£ç å¯åˆ é™¤
     public void BuyNoAD()
     {
         BuyProduct("noads");
     }
 
-    //¹ºÂòÊ±µ÷ÓÃµÄ½Ó¿Ú£¬Íâ²¿Ö»Ğèµ÷ÓÃÕâÒ»¸ö½Ó¿Ú¼´¿É
+    //è´­ä¹°æ—¶è°ƒç”¨çš„æ¥å£ï¼Œå¤–éƒ¨åªéœ€è°ƒç”¨è¿™ä¸€ä¸ªæ¥å£å³å¯
     public void BuyProduct(string pruductid)
     {
-        //¿ªÊ¼¹ºÂò
+        //å¼€å§‹è´­ä¹°
         m_StoreController.InitiatePurchase(m_StoreController.products.WithID(pruductid));
 
         
@@ -63,7 +63,7 @@ public class ShopManager : MonoBehaviour, IDetailedStoreListener, ICanGetUtility
 
     public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
     {
-        //³õÊ¼»¯³É¹¦
+        //åˆå§‹åŒ–æˆåŠŸ
         Debug.Log("In-App Purchasing successfully initialized");
         m_StoreController = controller;
         //StartCoroutine(CheckReceipt());
@@ -80,13 +80,13 @@ public class ShopManager : MonoBehaviour, IDetailedStoreListener, ICanGetUtility
 
     public void OnInitializeFailed(InitializationFailureReason error)
     {
-        //³õÊ¼»¯Ê§°Ü
+        //åˆå§‹åŒ–å¤±è´¥
         OnInitializeFailed(error, null);
     }
 
     public void OnInitializeFailed(InitializationFailureReason error, string message)
     {
-        //³õÊ¼»¯Ê§°Ü
+        //åˆå§‹åŒ–å¤±è´¥
         var errorMessage = $"Purchasing failed to initialize. Reason: {error}.";
 
         if (message != null)
@@ -111,18 +111,18 @@ public class ShopManager : MonoBehaviour, IDetailedStoreListener, ICanGetUtility
 
     public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
     {
-        //¸¶¿îÊ§°Ü
+        //ä»˜æ¬¾å¤±è´¥
         Debug.Log($"Purchase failed - Product: '{product.definition.id}', PurchaseFailureReason: {failureReason}");
     }
 
     public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
     {
-        //¸¶¿îÊ§°Ü
+        //ä»˜æ¬¾å¤±è´¥
         Debug.Log($"Purchase failed - Product: '{product.definition.id}'," +
             $" Purchase failure reason: {failureDescription.reason}," +
             $" Purchase failure details: {failureDescription.message}");
     }
-    //¼ì²é¹È¸è¶©ÔÄ×´Ì¬µÄ·½·¨£¬¸Ã·½·¨ĞèÒªÍ¬Ê±µ¼ÈëÁíÍâÒ»¸ö½Å±¾GooglePurchaseData ½âÎö¹È¸èÖ§¸¶µÄreceipt
+    //æ£€æŸ¥è°·æ­Œè®¢é˜…çŠ¶æ€çš„æ–¹æ³•ï¼Œè¯¥æ–¹æ³•éœ€è¦åŒæ—¶å¯¼å…¥å¦å¤–ä¸€ä¸ªè„šæœ¬GooglePurchaseData è§£æè°·æ­Œæ”¯ä»˜çš„receipt
     public void CheckSubscribeReceiptAndorid()
     {
         if(m_StoreController.products != null)

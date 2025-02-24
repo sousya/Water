@@ -11,6 +11,11 @@
 namespace QAssetBundle
 {
     
+    public class Coinfx_prefab
+    {
+        public const string BundleName = "coinfx_prefab";
+        public const string CoinFx = "CoinFx";
+    }
     public class Font
     {
         public const string BundleName = "font";
@@ -36,5 +41,11 @@ namespace QAssetBundle
         public const string BundleName = "uidefeat_prefab";
         public const string UIDefeat = "UIDefeat";
         public const string UIInfo = "UIInfo";
+        public const string UIVictory = "UIVictory";
+    }
+    public class Uimorelife_prefab
+    {
+        public const string BundleName = "uimorelife_prefab";
+        public const string UIMoreLife = "UIMoreLife";
     }
 }

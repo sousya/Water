@@ -17,6 +17,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 4
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -25,14 +26,16 @@ MonoBehaviour:
     isHide: 0000
     waterItem: 0000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: ec030000
+  - waterSet: eb030000
     isHide: 00
     waterItem: 00000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -41,6 +44,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -49,14 +53,16 @@ MonoBehaviour:
     isHide: 0000
     waterItem: 0000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: ec030000
+  - waterSet: eb030000
     isHide: 00
     waterItem: 00000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0

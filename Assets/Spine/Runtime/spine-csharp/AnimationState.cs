@@ -75,7 +75,7 @@ namespace Spine {
 
 		internal const int Setup = 1, Current = 2;
 
-		protected AnimationStateData data;
+		public AnimationStateData data;
 		private readonly ExposedList<TrackEntry> tracks = new ExposedList<TrackEntry>();
 		private readonly ExposedList<Event> events = new ExposedList<Event>();
 		// difference to libgdx reference: delegates are used for event callbacks instead of 'final SnapshotArray<AnimationStateListener> listeners'.
@@ -822,7 +822,7 @@ namespace Spine {
 			queue.Drain();
 		}
 
-		private TrackEntry ExpandToIndex (int index) {
+		public TrackEntry ExpandToIndex (int index) {
 			if (index < tracks.Count) return tracks.Items[index];
 			tracks.Resize(index + 1);
 			return null;

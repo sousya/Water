@@ -17,14 +17,16 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000200000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 00000000070000000100000000000000
+  - waterSet: 0c00000007000000010000000c000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -33,6 +35,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 01000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -41,22 +44,25 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 01000000020000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 00000000050000000300000001000000
+  - waterSet: 0c000000050000000300000001000000
     isHide: 00000000
     waterItem: 01000000010000000200000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 06000000000000000300000003000000
+  - waterSet: 060000000c0000000300000003000000
     isHide: 00000000
     waterItem: 02000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -65,6 +71,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -73,6 +80,7 @@ MonoBehaviour:
     isHide: 
     waterItem: 
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -81,12 +89,13 @@ MonoBehaviour:
     isHide: 
     waterItem: 
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
   gameType: 0
-  clearList: 03000000
+  clearList: 0100000002000000030000000500000006000000070000000c000000
   hideList: 
   bombNum: 0
   countDownNum: 0

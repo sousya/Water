@@ -58,6 +58,8 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
                 if (FirstBottle.CheckMoveOut() && SecondBottle.CheckMoveIn(FirstBottle.GetMoveOutTop()))
                 {
                     //Debug.Log("ÒÆ¶¯ " + FirstCake.gameObject.name + "->" + SecondCake.gameObject.name);
+                    LevelManager.Instance.RecordLast();
+
                     FirstBottle.MoveTo(SecondBottle);
                     FirstBottle = null;
                     SecondBottle = null;

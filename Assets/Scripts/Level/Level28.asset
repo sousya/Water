@@ -17,14 +17,16 @@ MonoBehaviour:
     isHide: 01010100
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: ec0300000100000006000000
+  - waterSet: eb0300000100000006000000
     isHide: 000100
     waterItem: 000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -33,14 +35,16 @@ MonoBehaviour:
     isHide: 00
     waterItem: 00000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 1
-  - waterSet: ec0300000100000006000000
-    isHide: 000100
+  - waterSet: eb0300000100000006000000
+    isHide: 000000
     waterItem: 000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -49,6 +53,7 @@ MonoBehaviour:
     isHide: 01010100
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -57,6 +62,7 @@ MonoBehaviour:
     isHide: 0100
     waterItem: 0000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -65,6 +71,7 @@ MonoBehaviour:
     isHide: 000100
     waterItem: 000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -73,6 +80,7 @@ MonoBehaviour:
     isHide: 00
     waterItem: 00000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -81,6 +89,7 @@ MonoBehaviour:
     isHide: 000100
     waterItem: 000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -89,6 +98,7 @@ MonoBehaviour:
     isHide: 0100
     waterItem: 0000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -101,3 +111,4 @@ MonoBehaviour:
   timeCountDown: 0
   topNum: 5
   bottomNum: 5
+  changeList: []

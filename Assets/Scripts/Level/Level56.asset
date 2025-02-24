@@ -17,6 +17,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 01000000010000000100000001000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -25,14 +26,16 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 02000000020000000200000002000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 00000000030000000000000006000000
+  - waterSet: 0c000000030000000c00000006000000
     isHide: 00000000
     waterItem: 01000000010000000100000001000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -41,22 +44,25 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 02000000020000000200000002000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 06000000020000000200000000000000
+  - waterSet: 0600000002000000020000000c000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 03000000020000000500000000000000
+  - waterSet: 0300000002000000050000000c000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -65,6 +71,7 @@ MonoBehaviour:
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -73,6 +80,7 @@ MonoBehaviour:
     isHide: 
     waterItem: 
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -81,6 +89,7 @@ MonoBehaviour:
     isHide: 
     waterItem: 
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
@@ -89,12 +98,13 @@ MonoBehaviour:
     isHide: 
     waterItem: 
     numCake: 0
+    limitColor: 0
     lockType: 0
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
   gameType: 0
-  clearList: 03000000
+  clearList: 0100000002000000030000000500000006000000070000000c000000
   hideList: 
   bombNum: 0
   countDownNum: 0

@@ -75,3 +75,16 @@ public struct CakeUnlock
 
     public int idx;
 }
+
+public struct CoinChangeEvent
+{
+}
+
+public struct VitalityChangeEvent
+{
+}
+
+public struct VitalityTimeChangeEvent
+{
+    public long timeOffset;
+}

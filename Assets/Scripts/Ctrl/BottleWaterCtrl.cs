@@ -29,6 +29,11 @@ public class BottleWaterCtrl : MonoBehaviour
         set
         {
             waterImg.color = value;
+            var waterRenderUpdater = waterImg.gameObject.GetComponent<WaterRenderUpdater>();
+            if (waterRenderUpdater != null)
+            {
+                waterRenderUpdater.WaterColor = value;
+            }
         }
     }
     // Start is called before the first frame update

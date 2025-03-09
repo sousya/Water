@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class WaterRenderUpdater : MonoBehaviour
 {
-    private const float HALF_WATAER_WIDTH = 1.43f * 0.5f;
+    private static readonly int MainColor = Shader.PropertyToID("_Color");
+    private const float HALF_WATAER_WIDTH = 2.0f * 0.5f;
     public Transform[] waterSurface;
     public bool bBottom = false;
     private Mesh _mesh;
@@ -16,8 +17,8 @@ public class WaterRenderUpdater : MonoBehaviour
     
     public Color WaterColor
     {
-        get => _material.color;
-        set => _material.color = value;
+        get => _material.GetColor(MainColor);
+        set => _material.SetColor(MainColor, value);
     }
     
     public float FillAmount
@@ -35,7 +36,7 @@ public class WaterRenderUpdater : MonoBehaviour
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
         _mesh = new Mesh();
-        _material = _meshRenderer.sharedMaterial;
+        _material = _meshRenderer.material;
         _image = GetComponent<Image>();
     }
 

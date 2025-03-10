@@ -46,7 +46,6 @@ Shader "Water/2D/Sprite-Lit-Default_StencilMask"
             struct Attributes
             {
                 float3 positionOS   : POSITION;
-                float4 color        : COLOR;
                 float2  uv          : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -54,7 +53,6 @@ Shader "Water/2D/Sprite-Lit-Default_StencilMask"
             struct Varyings
             {
                 float4  positionCS  : SV_POSITION;
-                half4   color       : COLOR;
                 float2  uv          : TEXCOORD0;
             };
 
@@ -77,7 +75,6 @@ Shader "Water/2D/Sprite-Lit-Default_StencilMask"
 
                 o.positionCS = TransformObjectToHClip(v.positionOS);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.color = v.color * _Color * _RendererColor;
                 return o;
             }
 
@@ -85,7 +82,7 @@ Shader "Water/2D/Sprite-Lit-Default_StencilMask"
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
-                const half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                const half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 clip(main.r < 0.5);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
                 SurfaceData2D surfaceData;
@@ -112,7 +109,6 @@ Shader "Water/2D/Sprite-Lit-Default_StencilMask"
             struct Attributes
             {
                 float3 positionOS   : POSITION;
-                float4 color        : COLOR;
                 float2 uv           : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -120,7 +116,6 @@ Shader "Water/2D/Sprite-Lit-Default_StencilMask"
             struct Varyings
             {
                 float4  positionCS      : SV_POSITION;
-                float4  color           : COLOR;
                 float2  uv              : TEXCOORD0;
             };
 
@@ -137,13 +132,12 @@ Shader "Water/2D/Sprite-Lit-Default_StencilMask"
 
                 o.positionCS = TransformObjectToHClip(attributes.positionOS);
                 o.uv = TRANSFORM_TEX(attributes.uv, _MainTex);
-                o.color = attributes.color * _Color * _RendererColor;
                 return o;
             }
 
             float4 UnlitFragment(Varyings i) : SV_Target
             {
-                float4 mainTex = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 clip(mainTex.r < 0.5);
                 return mainTex;
             }

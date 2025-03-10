@@ -40,7 +40,6 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
             struct Attributes
             {
                 float3 positionOS   : POSITION;
-                float4 color        : COLOR;
                 float2  uv          : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -48,7 +47,6 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
             struct Varyings
             {
                 float4  positionCS  : SV_POSITION;
-                half4   color       : COLOR;
                 float2  uv          : TEXCOORD0;
                 float3  positionWS  : TEXCOORD1;
             };
@@ -72,8 +70,6 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
                 o.positionCS = TransformWorldToHClip(v.positionOS);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.positionWS = v.positionOS;
-
-                o.color = v.color * _Color;
                 return o;
             }
 
@@ -81,16 +77,9 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
-                clip(i.positionWS.y - _FillHeight);
-                const half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
-                SurfaceData2D surfaceData;
-                InputData2D inputData;
-
-                InitializeSurfaceData(main.rgb, main.a, mask, surfaceData);
-                InitializeInputData(i.uv, float2(0, 0), inputData);
-
-                return CombinedShapeLightShared(surfaceData, inputData);
+                //clip(_FillHeight - i.positionWS.y);
+                const half4 main = _Color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                return main;
             }
             ENDHLSL
         }
@@ -108,7 +97,6 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
             struct Attributes
             {
                 float3 positionOS   : POSITION;
-                float4 color        : COLOR;
                 float2 uv           : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -116,7 +104,6 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
             struct Varyings
             {
                 float4  positionCS      : SV_POSITION;
-                float4  color           : COLOR;
                 float2  uv              : TEXCOORD0;
                 float3  positionWS      : TEXCOORD1;
             };
@@ -135,15 +122,14 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
 
                 o.positionCS = TransformWorldToHClip(attributes.positionOS);
                 o.uv = TRANSFORM_TEX(attributes.uv, _MainTex);
-                o.color = attributes.color * _Color;
                 o.positionWS = attributes.positionOS;
                 return o;
             }
 
             float4 UnlitFragment(Varyings i) : SV_Target
             {
-                clip(i.positionWS.y - _FillHeight);
-                float4 mainTex = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                //clip(_FillHeight - i.positionWS.y);
+                float4 mainTex = _Color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 return mainTex;
             }
             ENDHLSL

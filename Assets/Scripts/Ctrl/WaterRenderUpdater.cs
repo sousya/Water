@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,11 @@ public class WaterRenderUpdater : MonoBehaviour
 {
     private static readonly int MainColor = Shader.PropertyToID("_Color");
     private const float HALF_WATAER_WIDTH = 2.0f * 0.5f;
+    private const float CORRECT_WATER_SURFACE = 0.4f;
     public Transform[] waterSurface;
     public bool bBottom = false;
+    public Transform bottleTransform;
+    public int bottleIndex; // 作为stencil标记使用，从1开始。
     private Mesh _mesh;
     private MeshRenderer _meshRenderer;
     private MeshFilter _meshFilter;
@@ -30,6 +34,15 @@ public class WaterRenderUpdater : MonoBehaviour
             _material.SetFloat("_FillHeight", fillHeight);
         }
     }
+
+    public float Stencil
+    {
+        get => _material.GetFloat("_StencilRef");
+        set
+        {
+            _material.SetFloat("_StencilRef", value);
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -41,7 +54,7 @@ public class WaterRenderUpdater : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         if (waterSurface.Length < 2)
         {
@@ -49,16 +62,21 @@ public class WaterRenderUpdater : MonoBehaviour
             return;
         }
 
-        Vector3 topCenter = waterSurface[1].position;
-        Vector3 bottomCenter = waterSurface[0].position;
-        var rotation = transform.rotation;
+        var rotation = bottleTransform.rotation;
+        // var bottleTransformRotation = bottleTransform.rotation;
         rotation.ToAngleAxis(out float angle, out _);
         var oneDivCos = 1.0f / Mathf.Max(Mathf.Cos(angle * Mathf.Deg2Rad), 0.001f);
+
+        Vector3 topCenter = waterSurface[1].position;
+        topCenter.y += CORRECT_WATER_SURFACE * Mathf.Sin(angle * Mathf.Deg2Rad);
+        Vector3 bottomCenter = waterSurface[0].position;
+
+
         var halfWaterWidth = HALF_WATAER_WIDTH * oneDivCos;
         if (bBottom)
         {
             Vector3 bottomRight = bottomCenter + transform.right * HALF_WATAER_WIDTH;
-            bottomCenter = bottomRight - new Vector3(halfWaterWidth, 0, 0);
+            bottomCenter = new Vector3(bottomCenter.x, bottomRight.y, 0);//bottomRight - new Vector3(halfWaterWidth, 0, 0);
         }
 
         var verts = new Vector3[4];

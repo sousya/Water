@@ -44,7 +44,7 @@ public class WaterRenderUpdater : MonoBehaviour
         }
     }
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();

@@ -797,7 +797,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 1
-  m_FillAmount: 0.783
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -876,6 +876,9 @@ MonoBehaviour:
   - {fileID: 3606237531755926730}
   - {fileID: 7907491378796847055}
   - {fileID: 6253749928212587048}
+  Brooms:
+  - {fileID: 4990215115986177835}
+  - {fileID: 4653142634317416119}
   bottleIndex: 1
 --- !u!1 &2371459531811465258
 GameObject:
@@ -1862,7 +1865,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2224691207524176525}
   - component: {fileID: 4039034358888970832}
-  - component: {fileID: 962726126149109501}
   m_Layer: 5
   m_Name: BottleModel
   m_TagString: Untagged
@@ -1921,20 +1923,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &962726126149109501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5066566713079409490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd7a3c1dede74e2e8f26e358e0256de3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waterRenders: []
-  bottleIndex: 1
 --- !u!1 &5095061869517350580
 GameObject:
   m_ObjectHideFlags: 0
@@ -3957,3 +3945,25 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3084713888303800123, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}
   m_PrefabInstance: {fileID: 7674689166958311451}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4653142634317416119 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3031680869076156076, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}
+  m_PrefabInstance: {fileID: 7674689166958311451}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d85b887af7e6c3f45a2e2d2920d641bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4990215115986177835 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3441092166425950000, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}
+  m_PrefabInstance: {fileID: 7674689166958311451}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d85b887af7e6c3f45a2e2d2920d641bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

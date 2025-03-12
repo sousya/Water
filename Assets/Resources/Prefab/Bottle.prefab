@@ -879,6 +879,7 @@ MonoBehaviour:
   Brooms:
   - {fileID: 4990215115986177835}
   - {fileID: 4653142634317416119}
+  WaterSpine: {fileID: 1763664728081231311}
   bottleIndex: 1
 --- !u!1 &2371459531811465258
 GameObject:
@@ -3389,6 +3390,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3763177170642793450, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4355095650671116126, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}

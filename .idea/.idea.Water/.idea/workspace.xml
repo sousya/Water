@@ -5,15 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d16bfc2-d8cc-4ba7-9c18-603db2cfaed9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Water/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Water/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Water/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Water/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefab/Bottle.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Prefab/Bottle.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleCtrl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleCtrl.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleRenderUpdate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleRenderUpdate.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Ctrl/WaterRenderUpdater.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Ctrl/WaterRenderUpdater.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Spine/Runtime/spine-unity/Materials/SkeletonGraphic-PMATexture/SkeletonGraphicDefault.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Spine/Runtime/spine-unity/Materials/SkeletonGraphic-PMATexture/SkeletonGraphicDefault.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +102,7 @@
       <option name="presentableId" value="Default" />
       <updated>1741795084269</updated>
       <workItem from="1741795086831" duration="2870000" />
-      <workItem from="1741851547239" duration="9918000" />
+      <workItem from="1741851547239" duration="11896000" />
     </task>
     <servers />
   </component>
@@ -130,22 +124,29 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleRenderUpdate.cs</url>
-          <line>36</line>
-          <properties documentPath="E:\ChunLei\Water\Assets\Scripts\Ctrl\BottleRenderUpdate.cs" containingFunctionPresentation="Method 'Start'" />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleRenderUpdate.cs</url>
           <line>63</line>
           <properties documentPath="E:\ChunLei\Water\Assets\Scripts\Ctrl\BottleRenderUpdate.cs" initialLine="63" containingFunctionPresentation="Method 'SetMoveBottleRenderState'">
             <startOffsets>
-              <option value="2389" />
+              <option value="2391" />
             </startOffsets>
             <endOffsets>
-              <option value="2439" />
+              <option value="2441" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleCtrl.cs</url>
+          <line>1273</line>
+          <properties documentPath="E:\ChunLei\Water\Assets\Scripts\Ctrl\BottleCtrl.cs" initialLine="1273" containingFunctionPresentation="Method 'MoveToOtherAnim'">
+            <startOffsets>
+              <option value="39051" />
+            </startOffsets>
+            <endOffsets>
+              <option value="39091" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

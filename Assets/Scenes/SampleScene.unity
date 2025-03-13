@@ -36637,6 +36637,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8260953106072036788, guid: 5c0746996e1124049bc7344d3ee3530d, type: 3}
+      propertyPath: bottleIndex
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 8745763228853523323, guid: 5c0746996e1124049bc7344d3ee3530d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

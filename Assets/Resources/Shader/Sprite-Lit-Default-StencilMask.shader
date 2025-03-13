@@ -83,7 +83,7 @@ Shader "Water/2D/Sprite-Lit-Default_StencilMask"
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
                 const half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                clip(main.r < 0.5);
+                clip(main.r < 0.5 ? 1.0 : -1.0);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
                 SurfaceData2D surfaceData;
                 InputData2D inputData;

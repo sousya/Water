@@ -43,6 +43,13 @@ public class WaterRenderUpdater : MonoBehaviour
             _material.SetFloat("_StencilRef", value);
         }
     }
+    
+    public int RenderQueue
+    {
+        get => _material.renderQueue;
+        set => _material.renderQueue = value;
+    }
+    
     // Start is called before the first frame update
     void OnEnable()
     {

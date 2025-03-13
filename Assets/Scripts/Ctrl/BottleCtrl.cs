@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using GameDefine;
 using QFramework;
 using Spine.Unity;
@@ -1272,6 +1273,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     {
         LevelManager.Instance.isPlayAnim = true;
 
+        var bottleRenderUpdate = bottleAnim.GetComponent<BottleRenderUpdate>();
+        bottleRenderUpdate.SetMoveBottleRenderState(true);
         if(useColor < 1000)
         {
             bottleAnim.Play("BottleOut");
@@ -1293,6 +1296,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         LevelManager.Instance.isPlayAnim = false;
+                        bottleRenderUpdate.SetMoveBottleRenderState(false);
                     });
                 });
             }
@@ -1303,6 +1307,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         LevelManager.Instance.isPlayAnim = false;
+                        bottleRenderUpdate.SetMoveBottleRenderState(false);
                     });
                 });
             }
@@ -1588,5 +1593,10 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
         moveRecords.Remove(record);
         finishGo.SetActive(isFinish);
+    }
+
+    private void LateUpdate()
+    {
+        fillWaterGoAnim.transform.localRotation = Quaternion.Inverse(fillWaterGoAnim.transform.parent.rotation);
     }
 }

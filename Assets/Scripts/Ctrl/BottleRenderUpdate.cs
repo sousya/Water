@@ -9,6 +9,8 @@ public class BottleRenderUpdate : MonoBehaviour
     public WaterRenderUpdater[] waterRenders;
     public SkeletonGraphic[] Brooms;
     public Transform WaterSpine;
+    public Image BotteImage;
+    public Image MaskImage;
 
     public int bottleIndex = 1;
 
@@ -16,9 +18,9 @@ public class BottleRenderUpdate : MonoBehaviour
     private Vector3 _waterScale;
     public void Start()
     {
-        _material = new Material(GetComponent<Image>().material);
+        _material = new Material(MaskImage.material);
         _material.SetFloat("_StencilRef", bottleIndex);
-        GetComponent<Image>().material = _material;
+        MaskImage.material = _material;
         
         foreach (var waterRenderUpdater in waterRenders)
         {
@@ -50,13 +52,24 @@ public class BottleRenderUpdate : MonoBehaviour
 
     public void Update()
     {
-        // foreach (var waterSurface in waterSurfaces)
-        // {
-        //     waterSurface.localRotation = Quaternion.Inverse(_bottleTransform.rotation);
-        // }
-        WaterSpine.localRotation = Quaternion.Inverse(transform.rotation);
+        WaterSpine.rotation = Quaternion.identity;
         transform.rotation.ToAngleAxis(out float angle, out _);
         var oneDivCos = 1.0f / Mathf.Max(Mathf.Cos(angle * Mathf.Deg2Rad), 0.001f);
         WaterSpine.localScale = new Vector3(oneDivCos *_waterScale.x, _waterScale.y, _waterScale.z);
+    }
+
+    // 移动的瓶子，最后渲染
+    public void SetMoveBottleRenderState(bool isMove)
+    {
+        var transparentRenderQueue = isMove ? 3100 : 3000;
+
+        foreach (var waterRenderUpdater in waterRenders)
+        {
+            waterRenderUpdater.RenderQueue = transparentRenderQueue;
+        }
+
+        _material.renderQueue = transparentRenderQueue - 1;
+        WaterSpine.GetComponent<SkeletonGraphic>().material.renderQueue = transparentRenderQueue;
+        BotteImage.material.renderQueue = transparentRenderQueue + 1;
     }
 }

@@ -13,6 +13,7 @@ public class BottleRenderUpdate : MonoBehaviour
     public Image MaskImage;
 
     public int bottleIndex = 1;
+    public GameObject waterTopSurface;
 
     private Material _material;
     private Vector3 _waterScale;
@@ -50,12 +51,18 @@ public class BottleRenderUpdate : MonoBehaviour
         WaterSpine.GetComponent<SkeletonGraphic>().material = waterSpineMaterial;
     }
 
-    public void Update()
+    public void LateUpdate()
     {
         WaterSpine.rotation = Quaternion.identity;
         transform.rotation.ToAngleAxis(out float angle, out _);
-        var oneDivCos = 1.0f / Mathf.Max(Mathf.Cos(angle * Mathf.Deg2Rad), 0.001f);
+        var oneDivCos = 1.0f / Mathf.Max(Mathf.Cos(angle * Mathf.Deg2Rad), 0.1f);
         WaterSpine.localScale = new Vector3(oneDivCos *_waterScale.x, _waterScale.y, _waterScale.z);
+
+        var waterHeightClip = waterTopSurface.transform.position.y;
+        foreach (var waterRenderUpdater in waterRenders)
+        {
+            waterRenderUpdater.FillHeightClip = waterHeightClip;
+        }
     }
 
     // 移动的瓶子，最后渲染

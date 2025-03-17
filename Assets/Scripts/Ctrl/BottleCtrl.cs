@@ -33,6 +33,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public SkeletonGraphic nearHide, clearHide, thunder;
     public bool isUp;
     public GameObject finishGo;
+    public GameObject waterTopSurface;// 倒水的过程中，水面的最高高度不会超过这个线。
 
     public List<BottleRecord> moveRecords = new List<BottleRecord>();
     public int topIdx
@@ -42,6 +43,32 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             return waters.Count - 1;
         }
     }
+
+    // 把顶部的水到出之后剩余的水。这里用于确定选择使用哪个倒水动画。
+    public int leftWaterAfterTops
+    {
+        get
+        {
+            var localTopIdx = topIdx;
+            if (localTopIdx <= 1)
+            {
+                return 0;
+            }
+
+            localTopIdx--;
+            
+            while (localTopIdx >= 0)
+            {
+                if (waters[localTopIdx] != waters[topIdx])
+                {
+                    break;
+                }
+                localTopIdx--;
+            }
+            return localTopIdx + 1;
+        }
+    }
+
 
     public int bottleIdx;
     public int unlockClear = 0;
@@ -61,12 +88,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             GameCtrl.Instance.OnSelect(this);
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    
 
     public void Init(BottleProperty property, int idx)
     {
@@ -592,7 +614,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
 
         var color = GetMoveOutTop();
-        MoveToOtherAnim(other, color);
+        MoveToOtherAnim(other, leftWaterAfterTops, color);
         PlayOutAnim(moveNum, topIdx, color);
 
         for (int i = 0; i < moveNum; i++)
@@ -1269,7 +1291,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     }
 
-    public void MoveToOtherAnim(BottleCtrl other, int useColor = -1)
+    public void MoveToOtherAnim(BottleCtrl other, int leftWater, int useColor = -1)
     {
         LevelManager.Instance.isPlayAnim = true;
 
@@ -1277,7 +1299,22 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         bottleRenderUpdate.SetMoveBottleRenderState(true);
         if(useColor < 1000)
         {
-            bottleAnim.Play("BottleOut");
+            switch (leftWater)
+            {
+                case 1:
+                    bottleAnim.Play("BottleOut1");
+                    break;
+                case 2:
+                    bottleAnim.Play("BottleOut2");
+                    break;
+                case 3:
+                    bottleAnim.Play("BottleOut3");
+                    break;
+                default:
+                    bottleAnim.Play("BottleOut");
+                    break;
+            }
+            
         }
         else
         {

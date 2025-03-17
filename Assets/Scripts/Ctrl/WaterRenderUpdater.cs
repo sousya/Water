@@ -25,13 +25,11 @@ public class WaterRenderUpdater : MonoBehaviour
         set => _material.SetColor(MainColor, value);
     }
     
-    public float FillAmount
+    public float FillHeightClip
     {
         set
         {
-            float waterHeight = waterSurface[1].position.y - waterSurface[0].position.y;
-            float fillHeight = waterHeight * value + waterSurface[0].position.y;
-            _material.SetFloat("_FillHeight", fillHeight);
+            _material.SetFloat("_FillHeight", value);
         }
     }
 
@@ -106,10 +104,10 @@ public class WaterRenderUpdater : MonoBehaviour
         _mesh.UploadMeshData(false);
         _meshFilter.mesh = _mesh;
         
-        // fillAmount
-        if (_image != null)
-        {
-            this.FillAmount = _image.fillAmount;
-        }
+        // // fillAmount
+        // if (_image != null)
+        // {
+        //     this.FillAmount = _image.fillAmount;
+        // }
     }
 }

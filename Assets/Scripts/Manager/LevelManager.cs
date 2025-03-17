@@ -293,6 +293,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         StopCoroutine(WaitCheckFinish());
         StartCoroutine(WaitCheckFinish(clearColor));
+        
     }
 
     public IEnumerator WaitCheckFinish(int clearColor = 0)

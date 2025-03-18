@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d16bfc2-d8cc-4ba7-9c18-603db2cfaed9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Water/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Water/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Water/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Water/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Anim/BottleIn.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Anim/BottleIn.anim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Anim/BottleModel.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Anim/BottleModel.controller" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Anim/BottleOut3.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Anim/BottleOut3.anim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleCtrl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleCtrl.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Ctrl/Data.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Ctrl/Data.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
-    </list>
+    <list default="true" id="0d16bfc2-d8cc-4ba7-9c18-603db2cfaed9" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -108,7 +97,7 @@
       <workItem from="1741940535715" duration="113000" />
       <workItem from="1741940826792" duration="1493000" />
       <workItem from="1742286599673" duration="3923000" />
-      <workItem from="1742310193843" duration="2149000" />
+      <workItem from="1742310193843" duration="2755000" />
     </task>
     <servers />
   </component>

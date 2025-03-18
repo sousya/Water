@@ -10,7 +10,7 @@ using UnityEngine.UI;
 using static LevelCreateCtrl;
 using static UnityEngine.GraphicsBuffer;
 
-public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegisterEvent
+public partial class BottleCtrl : IController, ICanSendEvent, ICanRegisterEvent
 {
     public IArchitecture GetArchitecture()
     {
@@ -74,11 +74,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public Button bottle;
 
     BottleProperty originProperty;
-    // Start is called before the first frame update
-    void Start()
-    {
-        bottle.onClick.AddListener(OnSelected);
-    }
 
     private void OnSelected()
     {
@@ -484,46 +479,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     {
         isClearHideAnim = true;
         yield return new WaitForSeconds(1.5f);
-        switch (unlockClear)
-        {
-            case 1:
-                clearHide.AnimationState.SetAnimation(0, "disapear_cl", false);
-                break;
-            case 2:
-                clearHide.AnimationState.SetAnimation(0, "disapear_dh", false);
-                break;
-            case 3:
-                clearHide.AnimationState.SetAnimation(0, "disapear_fh", false);
-                break;
-            case 4:
-                clearHide.AnimationState.SetAnimation(0, "disapear_gl", false);
-                break;
-            case 5:
-                clearHide.AnimationState.SetAnimation(0, "disapear_hl", false);
-                break;
-            case 6:
-                clearHide.AnimationState.SetAnimation(0, "disapear_hs", false);
-                break;
-            case 7:
-                clearHide.AnimationState.SetAnimation(0, "disapear_jh", false);
-                break;
-            case 8:
-                clearHide.AnimationState.SetAnimation(0, "disapear_lh", false);
-                break;
-            case 9:
-                clearHide.AnimationState.SetAnimation(0, "disapear_sl", false);
-                break;
-            case 10:
-                clearHide.AnimationState.SetAnimation(0, "disapear_ze", false);
-                break;
-            case 11:
-                clearHide.AnimationState.SetAnimation(0, "disapear_zs", false);
-                break;
-            case 12:
-                clearHide.AnimationState.SetAnimation(0, "disapear_mh", false);
-                break;
-
-        }
+        var animName = DATA.GetDescription<EDisappearAnim>((EDisappearAnim)unlockClear);
+        clearHide.AnimationState.SetAnimation(0, animName, false);
+        
         isClearHide = false;
         CheckFinish();
 
@@ -540,47 +498,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             //ImgClearHide.gameObject.SetActive(isClearHide);
             if (isClearHide)
             {
-                var animName = "";
-                switch (unlockClear)
-                {
-                    case 1:
-                        clearHide.AnimationState.SetAnimation(0, "idle_cl", false);
-                        break;
-                    case 2:
-                        clearHide.AnimationState.SetAnimation(0, "idle_dh", false);
-                        break;
-                    case 3:
-                        clearHide.AnimationState.SetAnimation(0, "idle_fh", false);
-                        break;
-                    case 4:
-                        clearHide.AnimationState.SetAnimation(0, "idle_gl", false);
-                        break;
-                    case 5:
-                        clearHide.AnimationState.SetAnimation(0, "idle_hl", false);
-                        break;
-                    case 6:
-                        clearHide.AnimationState.SetAnimation(0, "idle_hs", false);
-                        break;
-                    case 7:
-                        clearHide.AnimationState.SetAnimation(0, "idle_jh", false);
-                        break;
-                    case 8:
-                        clearHide.AnimationState.SetAnimation(0, "idle_lh", false);
-                        break;
-                    case 9:
-                        clearHide.AnimationState.SetAnimation(0, "idle_sl", false);
-                        break;
-                    case 10:
-                        clearHide.AnimationState.SetAnimation(0, "idle_ze", false);
-                        break;
-                    case 11:
-                        clearHide.AnimationState.SetAnimation(0, "idle_zs", false);
-                        break;
-                    case 12:
-                        clearHide.AnimationState.SetAnimation(0, "idle_mh", false);
-                        break;
-
-                }
+                var animName = DATA.GetDescription<EClearHideAnim>((EClearHideAnim)unlockClear);
+                clearHide.AnimationState.SetAnimation(0, animName, false);
             }
         }
        
@@ -1143,9 +1062,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                 }
             }
         }
-     
         
-
         spineGo.localPosition = spineNode[useNode].localPosition;
     }
 
@@ -1550,10 +1467,5 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
         moveRecords.Remove(record);
         finishGo.SetActive(isFinish);
-    }
-
-    private void LateUpdate()
-    {
-        fillWaterGoAnim.transform.localRotation = Quaternion.Inverse(fillWaterGoAnim.transform.parent.rotation);
     }
 }

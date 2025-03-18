@@ -102,6 +102,35 @@ public enum EClearHideAnim
     IDLE_MAX = 13
 }
 
+public enum EDisappearAnim
+{
+    [Description("disapear_cl")]
+    DISAPPEAR_CL = 1,
+    [Description("disapear_dh")]
+    DISAPPEAR_DH = 2,
+    [Description("idledisapear_fh")]
+    DISAPPEAR_FH = 3,
+    [Description("disapear_gl")]
+    DISAPPEAR_GL = 4,
+    [Description("disapear_hl")]
+    DISAPPEAR_HL = 5,
+    [Description("disapear_hs")]
+    DISAPPEAR_HS = 6,
+    [Description("disapear_jh")]
+    DISAPPEAR_JH = 7,
+    [Description("disapear_lh")]
+    DISAPPEAR_LH = 8,
+    [Description("disapear_sl")]
+    DISAPPEAR_SL = 9,
+    [Description("disapear_ze")]
+    DISAPPEAR_ZE = 10,
+    [Description("disapear_zs")]
+    DISAPPEAR_ZS = 11,
+    [Description("disapear_mh")]
+    DISAPPEAR_MH = 12,
+    DISAPPEAR_MAX = 13
+}
+
 public class DATA
 {
     public static string GetDescription<T>(T value)

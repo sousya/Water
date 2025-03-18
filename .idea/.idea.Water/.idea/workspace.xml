@@ -5,14 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d16bfc2-d8cc-4ba7-9c18-603db2cfaed9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Ctrl/Data.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Ctrl/Data.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Water/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Water/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Anim/BottleModel.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Anim/BottleModel.controller" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Anim/BottleOut.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Anim/BottleOut.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Anim/BottleOut1.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Anim/BottleOut1.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Anim/BottleOut2.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Anim/BottleOut2.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Anim/BottleOut3.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Anim/BottleOut3.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleCtrl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleCtrl.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Level/Level1.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Level/Level1.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/LevelManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/LevelManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Ctrl/WaterRenderUpdater.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Ctrl/WaterRenderUpdater.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,10 +90,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="127140">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="22360">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="127140" />
+      <option name="pid" value="22360" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -111,6 +113,7 @@
       <workItem from="1741851547239" duration="25068000" />
       <workItem from="1741940535715" duration="113000" />
       <workItem from="1741940826792" duration="1493000" />
+      <workItem from="1742286599673" duration="3923000" />
     </task>
     <servers />
   </component>
@@ -132,16 +135,29 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/Ctrl/BottleCtrl.cs</url>
-          <line>1300</line>
+          <line>1302</line>
           <properties documentPath="E:\ChunLei\Water\Assets\Scripts\Ctrl\BottleCtrl.cs" initialLine="1300" containingFunctionPresentation="Method 'MoveToOtherAnim'">
             <startOffsets>
-              <option value="39791" />
+              <option value="40037" />
             </startOffsets>
             <endOffsets>
-              <option value="39809" />
+              <option value="40055" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Ctrl/Data.cs</url>
+          <line>110</line>
+          <properties documentPath="E:\ChunLei\Water\Assets\Scripts\Ctrl\Data.cs" initialLine="77" containingFunctionPresentation="Method 'GetDescription'">
+            <startOffsets>
+              <option value="2556" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2632" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

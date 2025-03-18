@@ -91,6 +91,8 @@ public class WaterRenderUpdater : MonoBehaviour
         verts[3] = topCenter + new Vector3(-halfWaterWidth,  0, 0);
         verts[1].x = verts[2].x;
         verts[3].x = verts[0].x;
+        verts[0].y = Mathf.Min(verts[0].y, verts[3].y);
+        verts[1].y = Mathf.Min(verts[1].y, verts[2].y);
 
         _mesh.vertices = verts;
         _mesh.triangles = new int[] {0, 1, 2, 0, 2, 3};

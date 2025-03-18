@@ -6639,6 +6639,7 @@ MonoBehaviour:
   BotteImage: {fileID: 1666836226}
   MaskImage: {fileID: 1297804900}
   bottleIndex: 1
+  waterTopSurface: {fileID: 2024418936}
 --- !u!1 &664279743
 GameObject:
   m_ObjectHideFlags: 0
@@ -36417,6 +36418,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4401f32edd228214e837476d68168f6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2024418936 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4649219313893040677, guid: 5c0746996e1124049bc7344d3ee3530d, type: 3}
+  m_PrefabInstance: {fileID: 8657882607543056242}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8657882607543056242
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -5,7 +5,6 @@ using QFramework;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 using static LevelCreateCtrl;
@@ -541,6 +540,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             //ImgClearHide.gameObject.SetActive(isClearHide);
             if (isClearHide)
             {
+                var animName = "";
                 switch (unlockClear)
                 {
                     case 1:
@@ -1073,47 +1073,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     public void PlaySpineAnim()
     {
-        string spineAnimName = "";
         var color = GetMoveOutTop();
-        switch (color)
-        {
-            case 1:
-                spineAnimName = "daoshui_cl";
-                break;
-            case 2:
-                spineAnimName = "daoshui_dh";
-                break;
-            case 3:
-                spineAnimName = "daoshui_fh";
-                break;
-            case 4:
-                spineAnimName = "daoshui_gl";
-                break;
-            case 5:
-                spineAnimName = "daoshui_hl";
-                break;
-            case 6:
-                spineAnimName = "daoshui_hs";
-                break;
-            case 7:
-                spineAnimName = "daoshui_jh";
-                break;
-            case 8:
-                spineAnimName = "daoshui_lh";
-                break;
-            case 9:
-                spineAnimName = "daoshui_sl";
-                break;
-            case 10:
-                spineAnimName = "daoshui_ze";
-                break;
-            case 11:
-                spineAnimName = "daoshui_zs";
-                break;
-            case 12:
-                spineAnimName = "daoshui_mh";
-                break;  
-        }
+        
+        var spineAnimName = color is > 0 and < (int) ESpineWaterOutAnimName.ANIM_MAX ? DATA.GetDescription<ESpineWaterOutAnimName>((ESpineWaterOutAnimName)color) : "";
 
         if(color < 1000 && color != 0)
         {
@@ -1122,7 +1084,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     }
     public void PlaySpineWaitAnim(int useColor = -1)
     {
-        string spineAnimName = "";
         //var color = GetMoveOutTop();
         int spinePosIdx = topIdx;
 
@@ -1145,45 +1106,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             {
                 color = useColor;
             }
-            switch (color)
-            {
-                case 1:
-                    spineAnimName = "ruchanghuangdong_cl";
-                    break;
-                case 2:
-                    spineAnimName = "ruchanghuangdong_dh";
-                    break;
-                case 3:
-                    spineAnimName = "ruchanghuangdong_fh";
-                    break;
-                case 4:
-                    spineAnimName = "ruchanghuangdong_gl";
-                    break;
-                case 5:
-                    spineAnimName = "ruchanghuangdong_hl";
-                    break;
-                case 6:
-                    spineAnimName = "ruchanghuangdong_hs";
-                    break;
-                case 7:
-                    spineAnimName = "ruchanghuangdong_jh";
-                    break;
-                case 8:
-                    spineAnimName = "ruchanghuangdong_lh";
-                    break;
-                case 9:
-                    spineAnimName = "ruchanghuangdong_sl";
-                    break;
-                case 10:
-                    spineAnimName = "ruchanghuangdong_ze";
-                    break;
-                case 11:
-                    spineAnimName = "ruchanghuangdong_zs";
-                    break;
-                case 12:
-                    spineAnimName = "ruchanghuangdong_mh";
-                    break;
-            }
+
+            var spineAnimName = color is >= 0 and < (int)ESpinWaitAnimName.ANIM_MAX ? DATA.GetDescription<ESpinWaitAnimName>((ESpinWaitAnimName)color) : "";
             if (color > 0)
             {
                 if (color < 1000)
@@ -1201,10 +1125,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             {
                 spineGo.gameObject.SetActive(false);
             }
-        }
-        else
-        {
-            //spineGo.gameObject.SetActive(false);
         }
     }
 
@@ -1299,22 +1219,22 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         bottleRenderUpdate.SetMoveBottleRenderState(true);
         if(useColor < 1000)
         {
-            switch (leftWater)
-            {
-                case 1:
-                    bottleAnim.Play("BottleOut1");
-                    break;
-                case 2:
-                    bottleAnim.Play("BottleOut2");
-                    break;
-                case 3:
-                    bottleAnim.Play("BottleOut3");
-                    break;
-                default:
-                    bottleAnim.Play("BottleOut");
-                    break;
-            }
-            
+            // switch (leftWater)
+            // {
+            //     case 1:
+            //         bottleAnim.Play("BottleOut1");
+            //         break;
+            //     case 2:
+            //         bottleAnim.Play("BottleOut2");
+            //         break;
+            //     case 3:
+            //         bottleAnim.Play("BottleOut3");
+            //         break;
+            //     default:
+            //         bottleAnim.Play("BottleOut");
+            //         break;
+            // }
+                bottleAnim.Play("BottleOut3");
         }
         else
         {

@@ -1,13 +1,16 @@
+using System;
 using DG.Tweening;
 using QFramework;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.UI;
+using GameAttributes;
 
 public class BottleWaterCtrl : MonoBehaviour
 {
@@ -36,12 +39,7 @@ public class BottleWaterCtrl : MonoBehaviour
             }
         }
     }
-    // Start is called before the first frame update
-    private void Start()
-    {
-
-    }
-
+    
     public void SetSpineActive(bool active)
     {
         spineGo.SetActive(active);
@@ -368,5 +366,41 @@ public class BottleWaterCtrl : MonoBehaviour
         //yield return new WaitForSeconds(2);
         //thunderGo.SetActive(false);
 
+    }
+
+    public void SetColorState(GameDefine.ItemType itemType, Color inColor)
+    {
+        this.color = inColor;
+        
+        var type = itemType.GetType();
+        var fieldName = Enum.GetName(type, itemType);
+
+        if (fieldName == null) 
+            return;
+        var fieldInfo = type.GetField(fieldName);
+        if (fieldInfo.GetCustomAttribute(typeof(WaterColorState), false) is not WaterColorState attribute) 
+            return;
+        broomItemGo.SetActive(attribute.BroomItemActive);
+        createItemGo.SetActive(attribute.CreateItemActive);
+        changeItemGo.SetActive(attribute.ChangeItemActive);
+        magnetItemGo.SetActive(attribute.MagnetItemActive);
+        if (attribute.SpineAnim.IsNullOrEmpty() == false && attribute.SpineType > EColorStateSpineType.None && attribute.SpineType < EColorStateSpineType.Max)
+        {
+            switch (attribute.SpineType)
+            {
+                case EColorStateSpineType.EBroomSpine:
+                    broomSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
+                    break;
+                case EColorStateSpineType.EMagnetSpine:
+                    magnetSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
+                    break;
+                case EColorStateSpineType.ECreateSpine:
+                    createSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
+                    break;
+                case EColorStateSpineType.EChangeSpine:
+                    changeSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
+                    break;
+            }
+        }
     }
 }

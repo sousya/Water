@@ -821,7 +821,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     {
         foreach (var bottle in nowBottles)
         {
-            bottle.RemovHide();
+            bottle.RemoveHide();
         }
     }
 

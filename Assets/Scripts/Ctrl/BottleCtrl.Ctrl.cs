@@ -8,34 +8,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static LevelCreateCtrl;
-using static UnityEngine.GraphicsBuffer;
 
-public partial class BottleCtrl : IController, ICanSendEvent, ICanRegisterEvent
+public partial class BottleCtrl : IController, ICanSendEvent
 {
     public IArchitecture GetArchitecture()
     {
         return GameMainArc.Interface;
     }
 
-    public bool isFinish, isFreeze, isClearHide, isNearHide, isPlayAnim, isSelect, isClearHideAnim;
-    public List<int> waters = new List<int>();
-    public List<bool> hideWaters = new List<bool>();
-    public List<WaterItem> waterItems = new List<WaterItem>();
-    public List<BottleWaterCtrl> waterImg = new List<BottleWaterCtrl>();
-    public List<Transform> spineNode = new List<Transform>();
-    public List<Transform> waterNode = new List<Transform>();
-    public Transform spineGo, modelGo, leftMovePlace, freezeGo;
-    public Animator bottleAnim, fillWaterGoAnim;
-    public SkeletonGraphic spine, finishSpine, freezeSpine;
-    public int maxNum = 4, limitColor = 0;
-    public Image ImgWaterTop, ImgWaterDown, ImgLimit;
-    public SkeletonGraphic nearHide, clearHide, thunder;
-    public bool isUp;
-    public GameObject finishGo;
-    public GameObject waterTopSurface;// 倒水的过程中，水面的最高高度不会超过这个线。
-
-    public List<BottleRecord> moveRecords = new List<BottleRecord>();
-    public int topIdx
+    private int topIdx
     {
         get
         {
@@ -43,54 +24,10 @@ public partial class BottleCtrl : IController, ICanSendEvent, ICanRegisterEvent
         }
     }
 
-    // 把顶部的水到出之后剩余的水。这里用于确定选择使用哪个倒水动画。
-    public int leftWaterAfterTops
-    {
-        get
-        {
-            var localTopIdx = topIdx;
-            if (localTopIdx <= 1)
-            {
-                return 0;
-            }
-
-            localTopIdx--;
-            
-            while (localTopIdx >= 0)
-            {
-                if (waters[localTopIdx] != waters[topIdx])
-                {
-                    break;
-                }
-                localTopIdx--;
-            }
-            return localTopIdx + 1;
-        }
-    }
-
-
-    public int bottleIdx;
-    public int unlockClear = 0;
-    public Button bottle;
-
     BottleProperty originProperty;
-
-    private void OnSelected()
-    {
-        if(!LevelManager.Instance.isPlayAnim && !LevelManager.Instance.isPlayFxAnim)
-        {
-            GameCtrl.Instance.OnSelect(this);
-        }
-    }
     
-
     public void Init(BottleProperty property, int idx)
     {
-        //foreach (var anim in spine.SkeletonData.Animations)
-        //{
-        //    Debug.Log("动画名称 " + anim.name);
-
-        //}
         originProperty = property;
         isFinish = false; isFreeze = false; isClearHideAnim = false;
         finishGo.SetActive(isFinish);
@@ -139,9 +76,7 @@ public partial class BottleCtrl : IController, ICanSendEvent, ICanRegisterEvent
                 LevelManager.Instance.cantChangeColorList.Add(color);
             }
         }
-
-
-
+        
         if (topIdx < 0)
         {
             spineGo.gameObject.SetActive(false);
@@ -257,7 +192,7 @@ public partial class BottleCtrl : IController, ICanSendEvent, ICanRegisterEvent
         }
     }
 
-    public void RemovHide()
+    public void RemoveHide()
     {
         for (int i = 0; i < hideWaters.Count; i++)
         {
@@ -304,11 +239,7 @@ public partial class BottleCtrl : IController, ICanSendEvent, ICanRegisterEvent
     /// <returns></returns>
     public void AddColor(int color, Vector3 fromPos)
     {
-        if (waters.Count >= maxNum)
-        {
-
-        }
-        else
+        if (waters.Count < maxNum)
         {
             waters.Add(color);
             var fx = GameObject.Instantiate(LevelManager.Instance.createFx[color - 1], fromPos, Quaternion.identity);
@@ -533,7 +464,7 @@ public partial class BottleCtrl : IController, ICanSendEvent, ICanRegisterEvent
         }
 
         var color = GetMoveOutTop();
-        MoveToOtherAnim(other, leftWaterAfterTops, color);
+        MoveToOtherAnim(other, waters.Count - moveNum, color);
         PlayOutAnim(moveNum, topIdx, color);
 
         for (int i = 0; i < moveNum; i++)
@@ -587,9 +518,6 @@ public partial class BottleCtrl : IController, ICanSendEvent, ICanRegisterEvent
                 OnFinish();
             }
         }
-
-      
-
     }
 
     public void OnFinish()

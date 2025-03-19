@@ -23,7 +23,6 @@ namespace GameAttributes
         public readonly bool MagnetItemActive;
         public readonly string SpineAnim;
         public readonly EColorStateSpineType SpineType;
-        
 
         public WaterColorState(bool broomItemActive, bool createItemActive, bool changeItemActive, 
             bool magnetItemActive, string spineAnim, EColorStateSpineType spineType = EColorStateSpineType.None)

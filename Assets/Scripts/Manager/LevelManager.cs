@@ -30,7 +30,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public List<BottleCtrl> nowBottles = new List<BottleCtrl>();
     public List<BottleCtrl> tempBottles = new List<BottleCtrl>();
     public List<BottleCtrl> iceBottles = new List<BottleCtrl>();
-    public List<BottleCtrl> bottles = new List<BottleCtrl>();
     public List<BottleCtrl> topBottle = new List<BottleCtrl>();
     public List<BottleCtrl> bottomBottle = new List<BottleCtrl>();
     public List<int> hideColor = new List<int>();

@@ -265,29 +265,6 @@ public class BottleWaterCtrl : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void PlayFillAnimConnect()
-    {
-        string spineAnimName = "";
-        switch (waterColor)
-        {
-            case 0:
-                spineAnimName = "daoshui_dh";
-                break;
-            case 1:
-                spineAnimName = "daoshui_cl";
-                break;
-        }
-        spineGo.SetActive(true);
-        anim.Play("WaterFillConnect");
-        spine.AnimationState.SetAnimation(0, spineAnimName, false);
-        //StartCoroutine(CoroutinePlayFillAnim());
-    }
-
-    public void PlayEmptyAnim()
-    {
-        anim.Play("NormalEmpty");
-    }
-
     public void SetHide(bool isHide, bool noWait)
     {
         if (isHide || (!isHide && noWait) || !gameObject.activeSelf)

@@ -3,6 +3,7 @@ using UnityEngine;
 using GameDefine;
 using Spine.Unity;
 using UnityEngine.UI;
+using QFramework;
 
 public partial class BottleCtrl : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public partial class BottleCtrl : MonoBehaviour
     public bool isUp;
     public GameObject finishGo;
     public GameObject waterTopSurface;// 倒水的过程中，水面的最高高度不会超过这个线。
-
+    
     public List<BottleRecord> moveRecords = new List<BottleRecord>();
     
     public int bottleIdx;
@@ -31,6 +32,7 @@ public partial class BottleCtrl : MonoBehaviour
     
     // 存储每种情况的水的旋转角度。index表示瓶子剩余水的个数。
     private Quaternion[] _waterRotations = new Quaternion[4];
+    private BottleRenderUpdate _bottleRenderUpdate;
     
     // Start is called before the first frame update
     void Start()
@@ -39,7 +41,16 @@ public partial class BottleCtrl : MonoBehaviour
         
         // 计算瓶子的旋转角度(根据三角形公式推导)
         var sinEdge = Mathf.Abs(waterTopSurface.transform.position.x - this.transform.position.x);
-        
+        _bottleRenderUpdate = bottleAnim.GetComponent<BottleRenderUpdate>();
+        var waterRenderUpdaters = _bottleRenderUpdate.GetComponentsInChildren<WaterRenderUpdater>();
+        for (int i = waterRenderUpdaters.Length - 1; i >= 1; i--)
+        {
+            var position = waterRenderUpdaters[i].waterSurface[0].position;
+            var cosEdge = Mathf.Abs(waterTopSurface.transform.position.y - position.y);
+            _waterRotations[i] = GetBottleRotation(sinEdge, cosEdge);
+        }
+        // 倒完水使用120度写死角度。
+        _waterRotations[0] = Quaternion.Euler(0, 0, -120); 
     }
     
     private void LateUpdate()
@@ -59,6 +70,6 @@ public partial class BottleCtrl : MonoBehaviour
     {
         float angle = Mathf.Atan(sinEdge / cosEdge);
         angle = Mathf.PI / 2 - angle;
-        return Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
+        return Quaternion.Euler(0, 0, -angle * Mathf.Rad2Deg);
     }
 }

@@ -115,8 +115,7 @@ public partial class BottleCtrl : IController, ICanSendEvent
             freezeSpine.AnimationState.SetAnimation(0, "idle", false);
         }
 
-         Debug.Log("名字 " + name);
-     
+        Debug.Log("名字 " + name);
     }
 
     public void MoveBottle(BottleCtrl bottleCtrl)
@@ -924,30 +923,11 @@ public partial class BottleCtrl : IController, ICanSendEvent
 
         var bottleRenderUpdate = bottleAnim.GetComponent<BottleRenderUpdate>();
         bottleRenderUpdate.SetMoveBottleRenderState(true);
-        if(useColor < 1000)
-        {
-            // switch (leftWater)
-            // {
-            //     case 1:
-            //         bottleAnim.Play("BottleOut1");
-            //         break;
-            //     case 2:
-            //         bottleAnim.Play("BottleOut2");
-            //         break;
-            //     case 3:
-            //         bottleAnim.Play("BottleOut3");
-            //         break;
-            //     default:
-            //         bottleAnim.Play("BottleOut");
-            //         break;
-            // }
-                bottleAnim.Play("BottleOut3");
-        }
-        else
+        
+        if(useColor >= 1000)
         {
             bottleAnim.Play("BottleItemOut");
         }
-        //modelGo.transform.DOMove(other.leftMovePlace.position, 0.67f).SetEase(Ease.Linear).OnComplete(() =>
         modelGo.transform.DOMove(other.leftMovePlace.position, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
         {
             SetDownWaterSp(useColor);
@@ -955,7 +935,7 @@ public partial class BottleCtrl : IController, ICanSendEvent
             {
                 PlayWaterDown();
 
-                modelGo.transform.DOMove(other.leftMovePlace.position, 0.62f).SetEase(Ease.Linear).OnComplete(() =>
+                modelGo.transform.DORotateQuaternion(_waterRotations[leftWater], 0.62f).SetEase(Ease.Linear).OnComplete(() =>
                 {
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {
@@ -975,7 +955,6 @@ public partial class BottleCtrl : IController, ICanSendEvent
                     });
                 });
             }
-
         });
     }
 

@@ -64,14 +64,14 @@ public class BottleWaterCtrl : MonoBehaviour
             waterImg.fillAmount = 0;
             gameObject.SetActive(false);
         }
-        else
-        {
-            waterImg.fillAmount = 1;
-            waterImg.DOFillAmount(0, time).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                gameObject.SetActive(false);
-            });
-        }
+        // else
+        // {
+        //     waterImg.fillAmount = 1;
+        //     waterImg.DOFillAmount(0, time).SetEase(Ease.Linear).OnComplete(() =>
+        //     {
+        //         gameObject.SetActive(false);
+        //     });
+        // }
 
     }
 

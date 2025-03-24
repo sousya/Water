@@ -44,8 +44,8 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public LevelCreateCtrl nowLevel;
     public Color ItemColor;
 
-    public Material shineMaterial;// 鏉愯川
-    public float speed = 1.0f; // 鍏夊甫绉诲姩閫熷害
+    public Material shineMaterial;// 材质
+    public float speed = 1.0f; // 光带移动速度
 
     //public List<>
 
@@ -107,11 +107,11 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         switch ((ItemType)itemId)
         {
             case ItemType.ClearItem:
-                ////////闅忔満鑹插潡
+                ////////随机色块
                 var clearlist = CheckCanClearList();
                 int clearColorIdx = UnityEngine.Random.Range(0, clearlist.Count);
                 int clearColor = clearlist[clearColorIdx];
-                ////////娓呴櫎鑹插潡
+                ////////清除色块
                 ClearColor(clearColor, fromPos);
 
                 break;
@@ -136,7 +136,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeGreenColorTo = 1;
-                ////////鏇存崲鑹插潡
+                ////////更换色块
                 ChangeColor(changeGreenColorFrom, changeGreenColorTo, fromTarget);
                 break;
 
@@ -153,7 +153,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeOrangeColorTo = 7;
-                ////////鏇存崲鑹插潡
+                ////////更换色块
                 ChangeColor(changeOrangeColorFrom, changeOrangeColorTo, fromTarget);
                 break;
             case ItemType.ChangePink:
@@ -169,7 +169,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changePinkColorTo = 3;
-                ////////鏇存崲鑹插潡
+                ////////更换色块
                 ChangeColor(changePinkColorFrom, changePinkColorTo, fromTarget);
                 break;
             case ItemType.ChangeYellow:
@@ -185,7 +185,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeYellowColorTo = 6;
-                ////////鏇存崲鑹插潡
+                ////////更换色块
                 ChangeColor(changeYellowColorFrom, changeYellowColorTo, fromTarget);
                 break;
             case ItemType.ChangePurple:
@@ -201,7 +201,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changePurpleColorTo = 10;
-                ////////鏇存崲鑹插潡
+                ////////更换色块
                 ChangeColor(changePurpleColorFrom, changePurpleColorTo, fromTarget);
                 break;
             case ItemType.ChangeDarkBlue:
@@ -217,35 +217,35 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeDarkBlueColorTo = 4;
-                ////////鏇存崲鑹插潡
+                ////////更换色块
                 ChangeColor(changeDarkBlueColorFrom, changeDarkBlueColorTo, fromTarget);
                 break;
             case ItemType.ClearPink:
-                ////////娓呴櫎鑹插潡
+                ////////清除色块
                 ClearColor(3, fromPos);
                 break;
             case ItemType.ClearOrange:
-                ////////娓呴櫎鑹插潡
+                ////////清除色块
                 ClearColor(7, fromPos);
                 break;
             case ItemType.ClearBlue:
-                ////////娓呴櫎鑹插潡
+                ////////清除色块
                 ClearColor(4, fromPos);
                 break;
             case ItemType.ClearYellow:
-                ////////娓呴櫎鑹插潡
+                ////////清除色块
                 ClearColor(6, fromPos);
                 break;
             case ItemType.ClearDarkGreen:
-                ////////娓呴櫎鑹插潡
+                ////////清除色块
                 ClearColor(9, fromPos);
                 break;
             case ItemType.ClearRed:
-                ////////娓呴櫎鑹插潡
+                ////////清除色块
                 ClearColor(2, fromPos);
                 break;
             case ItemType.ClearGreen:
-                ////////娓呴櫎鑹插潡
+                ////////清除色块
                 ClearColor(1, fromPos);
                 break;
         }
@@ -267,7 +267,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 useBottles.Add(useBottle);
                 useBottle.AddColor(addColor, fromPos);
                 hideColor.RemoveAt(addColorIdx);
-                Debug.Log("娣诲姞棰滆壊 " + addColor);
+                Debug.Log("添加颜色 " + addColor);
             }
             else
             {
@@ -300,7 +300,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         if (clearList.Count == 0)
         {
             //VictoryBottle = idx;
-            Debug.Log("鑳滃埄");
+            Debug.Log("胜利");
         }
 
         yield return new WaitForSeconds(4);
@@ -330,7 +330,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         if (clearList.Count == 0)
         {
             //VictoryBottle = idx;
-            Debug.Log("鑳滃埄");
+            Debug.Log("胜利");
         }
     }
 
@@ -733,7 +733,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
     public void OnDefeat()
     {
-        Debug.Log("澶辫触");
+        Debug.Log("失败");
     }
 
     public void TimeCountDown()
@@ -753,7 +753,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             test = 0;
             CheckVitality();
-            //Debug.Log("鏃堕棿 " + this.GetUtility<SaveDataUtility>().GetVitalityNum()  + " " + this.GetUtility<SaveDataUtility>().GetVitalityTime());
+            //Debug.Log("时间 " + this.GetUtility<SaveDataUtility>().GetVitalityNum()  + " " + this.GetUtility<SaveDataUtility>().GetVitalityTime());
         }
     }
 
@@ -765,13 +765,13 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             long recoveryTime = this.GetUtility<SaveDataUtility>().GetVitalityTime() + (5 - lastVitalityNum) * GameConst.RecoveryTime;
             long timeOffset = recoveryTime - this.GetUtility<SaveDataUtility>().GetNowTime();
-            //Debug.Log("浣撳姏 " + lastVitalityNum + " " + timeOffset);
+            //Debug.Log("体力 " + lastVitalityNum + " " + timeOffset);
             if (timeOffset > 0)
             {
                 long checkTime = this.GetUtility<SaveDataUtility>().GetNowTime() - this.GetUtility<SaveDataUtility>().GetVitalityTime();
                 int addNum = Mathf.FloorToInt((float)checkTime / GameConst.RecoveryTime);
 
-                //Debug.Log("浣撳姏 " + addNum + " " + timeOffset);
+                //Debug.Log("体力 " + addNum + " " + timeOffset);
 
                 if (addNum > GameConst.MaxVitality)
                 {

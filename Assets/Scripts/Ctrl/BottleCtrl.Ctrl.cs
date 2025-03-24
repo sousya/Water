@@ -8,9 +8,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static LevelCreateCtrl;
+using System.Linq;
 
 public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
 {
+    private class BottleData
+    {
+        public bool IsFinish { get; set; }
+        public bool IsFreeze { get; set; }
+        public bool IsClearHide { get; set; }
+        public bool IsNearHide { get; set; }
+        public bool IsPlayAnim { get; set; }
+        public bool IsSelect { get; set; }
+        public bool IsClearHideAnim { get; set; }
+        
+        public List<int> Waters { get; set; } = new List<int>();
+        public List<bool> HideWaters { get; set; } = new List<bool>();
+        public List<WaterItem> WaterItems { get; set; } = new List<WaterItem>();
+        public int MaxNum { get; set; } = 4;
+        public int LimitColor { get; set; }
+        public int UnlockClear { get; set; }
+        public int BottleIdx { get; set; }
+        
+        public int TopIdx => Waters.Count - 1;
+    }
+
+    private readonly BottleData _data = new BottleData();
+
+    [Header("UI Components")]
+    public Transform spineGo;
+    public Transform modelGo;
+    public Transform leftMovePlace;
+    public Transform freezeGo;
+    public Animator bottleAnim;
+    public Animator fillWaterGoAnim;
+    public SkeletonGraphic spine;
+    public SkeletonGraphic finishSpine;
+    public SkeletonGraphic freezeSpine;
+    public Image ImgWaterTop;
+    public Image ImgWaterDown;
+    public Image ImgLimit;
+    public GameObject finishGo;
+    public GameObject waterTopSurface;
+
+    [Header("Water Controls")]
+    public List<BottleWaterCtrl> waterImg = new List<BottleWaterCtrl>();
+    public List<Transform> spineNode = new List<Transform>();
+    public List<Transform> waterNode = new List<Transform>();
+
     public bool isFinish, isFreeze, isClearHide, isNearHide, isPlayAnim, isSelect, isClearHideAnim;
     public List<int> waters = new List<int>();
     public List<bool> hideWaters = new List<bool>();
@@ -98,30 +143,54 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
     
     public void Init(BottleProperty property, int idx)
     {
-        originProperty = property;
-        isFinish = false; isFreeze = false; isClearHideAnim = false;
-        finishGo.SetActive(isFinish);
-        waters = new List<int>(property.waterSet);
-        hideWaters = new List<bool>(property.isHide);
-        waterItems = new List<WaterItem>(property.waterItem);
-        isClearHide = property.isClearHide;
-        isNearHide = property.isNearHide;
-        isFreeze = property.isFreeze;
-        unlockClear = property.lockType;
-        limitColor = property.limitColor;
-        bottleIdx = idx;
+        InitializeBottleData(property, idx);
+        InitializeVisuals();
+        InitializeWaterControls();
+        UpdateBottleState();
+    }
 
-        nearHide.gameObject.SetActive(isNearHide);
-        if(nearHide)
+    private void InitializeBottleData(BottleProperty property, int idx)
+    {
+        _data.IsFinish = false;
+        _data.IsFreeze = property.isFreeze;
+        _data.IsClearHide = property.isClearHide;
+        _data.IsNearHide = property.isNearHide;
+        _data.Waters = new List<int>(property.waterSet);
+        _data.HideWaters = new List<bool>(property.isHide);
+        _data.WaterItems = new List<WaterItem>(property.waterItem);
+        _data.UnlockClear = property.lockType;
+        _data.LimitColor = property.limitColor;
+        _data.BottleIdx = idx;
+    }
+
+    private void InitializeVisuals()
+    {
+        finishGo.SetActive(_data.IsFinish);
+        nearHide.gameObject.SetActive(_data.IsNearHide);
+        freezeGo.gameObject.SetActive(_data.IsFreeze);
+        
+        if (_data.IsNearHide)
         {
             nearHide.AnimationState.SetAnimation(0, "idle", true);
         }
-
-        foreach (var bottle in waterImg)
+        
+        if (_data.IsFreeze)
         {
-            bottle.waterImg.fillAmount = 1;
+            freezeSpine.AnimationState.SetAnimation(0, "idle", false);
         }
+        
+        UpdateLimitColorVisual();
+    }
 
+    private void UpdateLimitColorVisual()
+    {
+        ImgLimit.color = _data.LimitColor != 0 
+            ? LevelManager.Instance.waterColor[_data.LimitColor - 1] 
+            : new Color(1, 1, 1, 0);
+    }
+
+    private void UpdateBottleState()
+    {
         for (int i = 0; i < waters.Count; i++)
         {
             if(isClearHide || isNearHide || waterItems[i] == WaterItem.Ice)
@@ -132,11 +201,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
                 }
             }
         }
-
-        //if(unlockClear != 0)
-        //{
-        //    LevelManager.Instance.cantChangeColorList.Add(unlockClear);
-        //}
 
         for (int i = 0; i < waters.Count; i++)
         {
@@ -153,10 +217,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
         }
         SetBottleColor(true, true);
         int spinePosIdx = topIdx + 1;
-        //while (spinePosIdx > 0 && waters[spinePosIdx - 1] > 1000)
-        //{
-        //    spinePosIdx -= 1;
-        //}
         SetNowSpinePos(spinePosIdx);
         PlaySpineWaitAnim();
 
@@ -169,17 +229,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
         }
         CheckFinish();
 
-        freezeGo.gameObject.SetActive(isFreeze);
-        if(limitColor != 0)
-        {
-            ImgLimit.color = LevelManager.Instance.waterColor[limitColor - 1];
-        }
-        else
-        {
-            ImgLimit.color = new Color(1,1,1,0);
-        }
-
-
         if(isFreeze)
         {
             freezeSpine.AnimationState.SetAnimation(0, "idle", false);
@@ -190,29 +239,26 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
 
     public void MoveBottle(BottleCtrl bottleCtrl)
     {
-        isFinish = bottleCtrl.isFinish; isFreeze = bottleCtrl.isFreeze;
-        waters = new List<int>(bottleCtrl.waters);
-        hideWaters = new List<bool>(bottleCtrl.hideWaters);
-        waterItems = new List<WaterItem>(bottleCtrl.waterItems);
-        isClearHide = bottleCtrl.isClearHide;
-        isNearHide = bottleCtrl.isNearHide;
-        unlockClear = bottleCtrl.unlockClear;
-        bottleIdx = bottleCtrl.bottleIdx;
-        nearHide.gameObject.SetActive(isNearHide);
+        _data.IsFinish = bottleCtrl._data.IsFinish;
+        _data.IsFreeze = bottleCtrl._data.IsFreeze;
+        _data.Waters = new List<int>(bottleCtrl._data.Waters);
+        _data.HideWaters = new List<bool>(bottleCtrl._data.HideWaters);
+        _data.WaterItems = new List<WaterItem>(bottleCtrl._data.WaterItems);
+        _data.IsClearHide = bottleCtrl._data.IsClearHide;
+        _data.IsNearHide = bottleCtrl._data.IsNearHide;
+        _data.UnlockClear = bottleCtrl._data.UnlockClear;
+        _data.BottleIdx = bottleCtrl._data.BottleIdx;
+        nearHide.gameObject.SetActive(_data.IsNearHide);
         SetClearHide();
         SetBottleColor(true);
         int spinePosIdx = topIdx + 1;
-        //while (spinePosIdx > 0 && waters[spinePosIdx - 1] > 1000)
-        //{
-        //    spinePosIdx -= 1;
-        //}
         SetNowSpinePos(spinePosIdx);
         PlaySpineWaitAnim();
         if (topIdx < 0)
         {
             spineGo.gameObject.SetActive(false);
         }
-        foreach (var item in waterItems)
+        foreach (var item in _data.WaterItems)
         {
             if (item == WaterItem.Ice)
             {
@@ -407,7 +453,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
             return false;
         }
 
-        if (color < 1000)///判断非道具
+        if (color < 1000///判断非道具
         {
             if (color != top && top != 0)
             {
@@ -477,26 +523,26 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
 
     IEnumerator HideClearHide()
     {
-        isClearHideAnim = true;
+        _data.IsClearHideAnim = true;
         yield return new WaitForSeconds(1.5f);
         var animName = DATA.GetDescription<EDisappearAnim>((EDisappearAnim)unlockClear);
         clearHide.AnimationState.SetAnimation(0, animName, false);
         
-        isClearHide = false;
+        _data.IsClearHide = false;
         CheckFinish();
 
         yield return new WaitForSeconds(3.7f);
         clearHide.gameObject.SetActive(false);
-        isClearHideAnim = false;
+        _data.IsClearHideAnim = false;
     }
 
     void SetClearHide()
     {
-        if(!isClearHideAnim)
+        if(!_data.IsClearHideAnim)
         {
-            clearHide.gameObject.SetActive(isClearHide);
+            clearHide.gameObject.SetActive(_data.IsClearHide);
             //ImgClearHide.gameObject.SetActive(isClearHide);
-            if (isClearHide)
+            if (_data.IsClearHide)
             {
                 var animName = DATA.GetDescription<EClearHideAnim>((EClearHideAnim)unlockClear);
                 clearHide.AnimationState.SetAnimation(0, animName, false);
@@ -512,48 +558,72 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
 
     public void MoveTo(BottleCtrl other)
     {
-        int moveNum = other.GetLeftEmpty();
-        int sameNum = 1;
+        int moveAmount = CalculateMoveAmount(other);
+        if (moveAmount <= 0) return;
+        
+        ExecuteWaterMove(other, moveAmount);
+    }
 
+    private int CalculateMoveAmount(BottleCtrl other)
+    {
+        int availableSpace = other.GetLeftEmpty();
+        int sameColorCount = CountSameColorWaters();
+        return Mathf.Min(availableSpace, sameColorCount);
+    }
+
+    private int CountSameColorWaters()
+    {
+        int count = 1;
+        int topColor = GetMoveOutTop();
+        
         for (int i = topIdx - 1; i >= 0; i--)
         {
-            if (waters[i] == GetMoveOutTop() && waterItems[i] != WaterItem.Ice)
+            if (waters[i] == topColor && waterItems[i] != WaterItem.Ice)
             {
-                sameNum++;
+                count++;
             }
             else
             {
                 break;
             }
         }
+        
+        return count;
+    }
 
-        if (moveNum > sameNum)
+    private void ExecuteWaterMove(BottleCtrl other, int moveAmount)
+    {
+        int color = GetMoveOutTop();
+        MoveToOtherAnim(other, waters.Count - moveAmount, color);
+        PlayOutAnim(moveAmount, topIdx, color);
+        
+        for (int i = 0; i < moveAmount; i++)
         {
-            moveNum = sameNum;
+            TransferWater(other);
         }
-
-        var color = GetMoveOutTop();
-        MoveToOtherAnim(other, waters.Count - moveNum, color);
-        PlayOutAnim(moveNum, topIdx, color);
-
-        for (int i = 0; i < moveNum; i++)
-        {
-            other.ReceiveWater(color, GetMoveOutItemTop());
-            int idx = topIdx;
-            if (waters.Count > 0)
-            {
-                waterImg[idx].wenhaoFxGo.SetActive(false);
-                waterImg[idx].HideGo.SetActive(false);
-                waters.RemoveAt(idx);
-                waterItems.RemoveAt(idx);
-                hideWaters.RemoveAt(idx);
-            }
-            GameCtrl.Instance.control = false;
-        }
-
+        
         OnCancelSelect();
-        other.PlayFillAnim(moveNum, color);
+        other.PlayFillAnim(moveAmount, color);
+    }
 
+    private void TransferWater(BottleCtrl other)
+    {
+        int color = GetMoveOutTop();
+        WaterItem item = GetMoveOutItemTop();
+        
+        other.ReceiveWater(color, item);
+        RemoveTopWater();
+        GameCtrl.Instance.control = false;
+    }
+
+    private void RemoveTopWater()
+    {
+        if (topIdx >= 0)
+        {
+            waters.RemoveAt(topIdx);
+            waterItems.RemoveAt(topIdx);
+            hideWaters.RemoveAt(topIdx);
+        }
     }
 
     public void ReceiveWater(int water, WaterItem item)
@@ -569,29 +639,34 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
 
     public void CheckFinish(bool isChange = false)
     {
-
-        if (topIdx > 0 && !isNearHide && !isClearHide && !isFinish)
+        if (!ShouldCheckFinish()) return;
+        
+        if (IsBottleComplete())
         {
-            var topColor = waters[topIdx];
-            if (topIdx == maxNum - 1)
-            {
-                for(int i = 3; i >=0; i--)
-                {
-                    var water = waters[i];
-                    if (water != topColor || waterItems[i] == WaterItem.Ice)
-                    {
-                        return;
-                    }
-                }
-
-                OnFinish();
-            }
+            OnFinish();
         }
+    }
+
+    private bool ShouldCheckFinish()
+    {
+        return topIdx > 0 && 
+               !_data.IsNearHide && 
+               !_data.IsClearHide && 
+               !_data.IsFinish;
+    }
+
+    private bool IsBottleComplete()
+    {
+        if (topIdx != maxNum - 1) return false;
+        
+        int topColor = waters[topIdx];
+        return waters.Take(4).All(w => w == topColor) &&
+               waterItems.Take(4).All(i => i != WaterItem.Ice);
     }
 
     public void OnFinish()
     {
-        isFinish = true;
+        _data.IsFinish = true;
 
         LevelManager.Instance.FinishClear(GetMoveOutTop(), bottleIdx);
 
@@ -638,7 +713,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
         yield return new WaitForSeconds(0.2f);
 
     
-        finishGo.SetActive(isFinish);
+        finishGo.SetActive(_data.IsFinish);
     }
 
     public void UnlockIceWater()
@@ -700,7 +775,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
     {
         CheckHide(isFirst);
 
-        if (isFinish)
+        if (_data.IsFinish)
         {
             for (int i = 0; i < hideWaters.Count; i++)
             {
@@ -740,10 +815,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
         SetClearHide();
 
         int spinePosIdx = topIdx + 1;
-        //while (spinePosIdx > 0 && waters[spinePosIdx - 1] > 1000)
-        //{
-        //    spinePosIdx -= 1;
-        //}
         SetNowSpinePos(spinePosIdx);
         PlaySpineWaitAnim();
     }
@@ -1002,8 +1073,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
             {
                 PlayWaterDown();
 
-                //modelGo.transform.DORotate(_waterRotations[leftWater], 0.62f).SetEase(Ease.Linear).OnComplete(() =>
-                modelGo.transform.DORotate(_waterRotations[leftWater], 10.0f).SetEase(Ease.Linear).OnComplete(() =>
+                modelGo.transform.DORotate(_waterRotations[leftWater], 0.62f).SetEase(Ease.Linear).OnComplete(() =>
+                //modelGo.transform.DORotate(_waterRotations[leftWater], 10.0f).SetEase(Ease.Linear).OnComplete(() =>
                 {
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {

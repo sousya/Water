@@ -106,7 +106,7 @@ namespace GameDefine
         WaterLeftThree
     }
 
-    // 入场扰动动画
+    // 鍏ュ満鎵板姩鍔ㄧ敾
     public enum ESpinWaitAnimName
     {
         [Description("ruchanghuangdong_cl")]

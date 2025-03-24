@@ -44,8 +44,8 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public LevelCreateCtrl nowLevel;
     public Color ItemColor;
 
-    public Material shineMaterial;// ²ÄÖÊ
-    public float speed = 1.0f; // ¹â´øÒÆ¶¯ËÙ¶È
+    public Material shineMaterial;// ï¿½ï¿½ï¿½ï¿½
+    public float speed = 1.0f; // ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½Ù¶ï¿½
 
     //public List<>
 
@@ -107,11 +107,11 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         switch ((ItemType)itemId)
         {
             case ItemType.ClearItem:
-                ////////Ëæ»úÉ«¿é
+                ////////ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 var clearlist = CheckCanClearList();
                 int clearColorIdx = UnityEngine.Random.Range(0, clearlist.Count);
                 int clearColor = clearlist[clearColorIdx];
-                ////////Çå³ýÉ«¿é
+                ////////ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ClearColor(clearColor, fromPos);
 
                 break;
@@ -136,7 +136,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeGreenColorTo = 1;
-                ////////¸ü»»É«¿é
+                ////////ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ChangeColor(changeGreenColorFrom, changeGreenColorTo, fromTarget);
                 break;
 
@@ -153,7 +153,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeOrangeColorTo = 7;
-                ////////¸ü»»É«¿é
+                ////////ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ChangeColor(changeOrangeColorFrom, changeOrangeColorTo, fromTarget);
                 break;
             case ItemType.ChangePink:
@@ -169,7 +169,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changePinkColorTo = 3;
-                ////////¸ü»»É«¿é
+                ////////ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ChangeColor(changePinkColorFrom, changePinkColorTo, fromTarget);
                 break;
             case ItemType.ChangeYellow:
@@ -185,7 +185,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeYellowColorTo = 6;
-                ////////¸ü»»É«¿é
+                ////////ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ChangeColor(changeYellowColorFrom, changeYellowColorTo, fromTarget);
                 break;
             case ItemType.ChangePurple:
@@ -201,7 +201,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changePurpleColorTo = 10;
-                ////////¸ü»»É«¿é
+                ////////ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ChangeColor(changePurpleColorFrom, changePurpleColorTo, fromTarget);
                 break;
             case ItemType.ChangeDarkBlue:
@@ -217,35 +217,35 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeDarkBlueColorTo = 4;
-                ////////¸ü»»É«¿é
+                ////////ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ChangeColor(changeDarkBlueColorFrom, changeDarkBlueColorTo, fromTarget);
                 break;
             case ItemType.ClearPink:
-                ////////Çå³ýÉ«¿é
+                ////////ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ClearColor(3, fromPos);
                 break;
             case ItemType.ClearOrange:
-                ////////Çå³ýÉ«¿é
+                ////////ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ClearColor(7, fromPos);
                 break;
             case ItemType.ClearBlue:
-                ////////Çå³ýÉ«¿é
+                ////////ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ClearColor(4, fromPos);
                 break;
             case ItemType.ClearYellow:
-                ////////Çå³ýÉ«¿é
+                ////////ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ClearColor(6, fromPos);
                 break;
             case ItemType.ClearDarkGreen:
-                ////////Çå³ýÉ«¿é
+                ////////ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ClearColor(9, fromPos);
                 break;
             case ItemType.ClearRed:
-                ////////Çå³ýÉ«¿é
+                ////////ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ClearColor(2, fromPos);
                 break;
             case ItemType.ClearGreen:
-                ////////Çå³ýÉ«¿é
+                ////////ï¿½ï¿½ï¿½É«ï¿½ï¿½
                 ClearColor(1, fromPos);
                 break;
         }
@@ -262,12 +262,12 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             int addColorIdx = UnityEngine.Random.Range(0, hideColor.Count);
             int addColor = hideColor[addColorIdx];
             var useBottle = bottleList[addIdx];
-            if (useBottle.waters.Count < useBottle.maxNum)
+            if (useBottle.bottleData.Waters.Count < useBottle.bottleData.MaxNum)
             {
                 useBottles.Add(useBottle);
                 useBottle.AddColor(addColor, fromPos);
                 hideColor.RemoveAt(addColorIdx);
-                Debug.Log("Ìí¼ÓÑÕÉ« " + addColor);
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½É« " + addColor);
             }
             else
             {
@@ -300,7 +300,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         if (clearList.Count == 0)
         {
             //VictoryBottle = idx;
-            Debug.Log("Ê¤Àû");
+            Debug.Log("Ê¤ï¿½ï¿½");
         }
 
         yield return new WaitForSeconds(4);
@@ -330,7 +330,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         if (clearList.Count == 0)
         {
             //VictoryBottle = idx;
-            Debug.Log("Ê¤Àû");
+            Debug.Log("Ê¤ï¿½ï¿½");
         }
     }
 
@@ -347,7 +347,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         List<BottleCtrl> ret = new List<BottleCtrl>();
         foreach(var bottle in nowBottles)
         {   
-            if(!bottle.isFreeze && bottle.waters.Count < 4 && !bottle.isClearHide && !bottle.isNearHide)
+            if(!bottle.bottleData.IsFreeze && bottle.bottleData.Waters.Count < 4 && !bottle.bottleData.IsClearHide && !bottle.bottleData.IsNearHide)
             {
                 ret.Add(bottle);
             }
@@ -673,7 +673,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             var bottle = nowBottles[i];
             bottle.Init(levelInfo.bottles[i], i);
-            bottle.maxNum = 4;
+            bottle.bottleData.MaxNum = 4;
         }
 
         for(int i = 0; i < moreBottle; i++)
@@ -696,11 +696,11 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         if(isHalf)
         {
-            nowBottles[nowBottles.Count - 1].maxNum = 1;
+            nowBottles[nowBottles.Count - 1].bottleData.MaxNum = 1;
         }
         else
         {
-            nowBottles[nowBottles.Count - 1].maxNum = 4;
+            nowBottles[nowBottles.Count - 1].bottleData.MaxNum = 4;
         }
     }
 
@@ -733,7 +733,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
     public void OnDefeat()
     {
-        Debug.Log("Ê§°Ü");
+        Debug.Log("Ê§ï¿½ï¿½");
     }
 
     public void TimeCountDown()
@@ -753,7 +753,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             test = 0;
             CheckVitality();
-            //Debug.Log("Ê±¼ä " + this.GetUtility<SaveDataUtility>().GetVitalityNum()  + " " + this.GetUtility<SaveDataUtility>().GetVitalityTime());
+            //Debug.Log("Ê±ï¿½ï¿½ " + this.GetUtility<SaveDataUtility>().GetVitalityNum()  + " " + this.GetUtility<SaveDataUtility>().GetVitalityTime());
         }
     }
 
@@ -765,13 +765,13 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             long recoveryTime = this.GetUtility<SaveDataUtility>().GetVitalityTime() + (5 - lastVitalityNum) * GameConst.RecoveryTime;
             long timeOffset = recoveryTime - this.GetUtility<SaveDataUtility>().GetNowTime();
-            //Debug.Log("ÌåÁ¦ " + lastVitalityNum + " " + timeOffset);
+            //Debug.Log("ï¿½ï¿½ï¿½ï¿½ " + lastVitalityNum + " " + timeOffset);
             if (timeOffset > 0)
             {
                 long checkTime = this.GetUtility<SaveDataUtility>().GetNowTime() - this.GetUtility<SaveDataUtility>().GetVitalityTime();
                 int addNum = Mathf.FloorToInt((float)checkTime / GameConst.RecoveryTime);
 
-                //Debug.Log("ÌåÁ¦ " + addNum + " " + timeOffset);
+                //Debug.Log("ï¿½ï¿½ï¿½ï¿½ " + addNum + " " + timeOffset);
 
                 if (addNum > GameConst.MaxVitality)
                 {

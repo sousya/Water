@@ -38,4 +38,22 @@ public class BottleData
         IsNearHide = false;
         MaxNum = 4;
     }
+
+    public void Clone(BottleData data)
+    {
+        Waters = new List<int>(data.Waters);  
+        HideWaters = new List<bool>(data.HideWaters);
+        WaterItems = new List<WaterItem>(data.WaterItems);
+        IsClearHide = data.IsClearHide;
+        IsFreeze = data.IsFreeze;
+        UnlockClear = data.UnlockClear;
+        LimitColor = data.LimitColor;
+        BottleIdx = data.BottleIdx;
+        IsFinish = data.IsFinish;
+        IsSelect = data.IsSelect;
+        IsPlayAnim = data.IsPlayAnim;
+        IsClearHideAnim = data.IsClearHideAnim;
+        IsNearHide = data.IsNearHide;
+        MaxNum = data.MaxNum;
+    }
 }

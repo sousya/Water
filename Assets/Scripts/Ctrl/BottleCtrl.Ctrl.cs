@@ -19,7 +19,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
     public SkeletonGraphic spine, finishSpine, freezeSpine;
 
     public Image ImgWaterTop, ImgWaterDown, ImgLimit;
-    public SkeletonGraphic nearHide, clearHide, thunder;
+    public SkeletonGraphic nearHide, clearHide;
     public bool isUp;
     public GameObject finishGo;
     public GameObject waterTopSurface;// 倒水的过程中，水面的最高高度不会超过这个线。
@@ -32,24 +32,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
     private Vector3[] _waterRotations = new Vector3[4];
     private BottleRenderUpdate _bottleRenderUpdate;
     public BottleData bottleData;
-    
-    // 删除本地属性定义，直接使用 BottleData 中的变量
-    // public bool isFinish => bottleData.IsFinish;
-    // public bool isFreeze => bottleData.IsFreeze;
-    // public bool isNearHide => bottleData.IsNearHide;
-    // public bool isClearHide => bottleData.IsClearHide;
-    // public bool isClearHideAnim => bottleData.IsClearHideAnim;
-    // public bool isSelect => bottleData.IsSelect;
-    // public int bottleIdx => bottleData.BottleIdx;
-    // public int maxNum => bottleData.MaxNum;
-    // public int limitColor => bottleData.LimitColor;
-    // public int topIdx => bottleData.TopIdx;
-    // public int unlockClear => bottleData.UnlockClear;
-    
-    // public List<int> waters => bottleData.Waters;
-    // public List<bool> hideWaters => bottleData.HideWaters;
-    // public List<WaterItem> waterItems => bottleData.WaterItems;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -125,15 +108,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
                 {
                     LevelManager.Instance.cantClearColorList.Add(bottleData.Waters[i]);
                 }
-            }
-        }
-
-        for (int i = 0; i < bottleData.Waters.Count; i++)
-        {
-            var color = bottleData.Waters[i];
-            if (bottleData.IsClearHide || bottleData.IsNearHide || bottleData.WaterItems[i] == WaterItem.Ice)
-            {
-                LevelManager.Instance.cantChangeColorList.Add(color);
+                LevelManager.Instance.cantChangeColorList.Add(bottleData.Waters[i]);
             }
         }
         
@@ -166,7 +141,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
             ImgLimit.color = new Color(1,1,1,0);
         }
 
-
         if(bottleData.IsFreeze)
         {
             freezeSpine.AnimationState.SetAnimation(0, "idle", false);
@@ -183,15 +157,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
 
     public void MoveBottle(BottleCtrl bottleCtrl)
     {
-        bottleData.IsFinish = bottleCtrl.bottleData.IsFinish;
-        bottleData.IsFreeze = bottleCtrl.bottleData.IsFreeze;
-        bottleData.Waters = new List<int>(bottleCtrl.bottleData.Waters);
-        bottleData.HideWaters = new List<bool>(bottleCtrl.bottleData.HideWaters);
-        bottleData.WaterItems = new List<WaterItem>(bottleCtrl.bottleData.WaterItems);
-        bottleData.IsClearHide = bottleCtrl.bottleData.IsClearHide;
-        bottleData.IsNearHide = bottleCtrl.bottleData.IsNearHide;
-        bottleData.UnlockClear = bottleCtrl.bottleData.UnlockClear;
-        bottleData.BottleIdx = bottleCtrl.bottleData.BottleIdx;
+        bottleData.Clone(bottleCtrl.bottleData);
         
         nearHide.gameObject.SetActive(bottleData.IsNearHide);
         SetClearHide();

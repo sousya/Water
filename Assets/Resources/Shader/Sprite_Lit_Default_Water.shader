@@ -4,7 +4,7 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
     {
         _MainTex("Diffuse", 2D) = "white" {}
         _MaskTex("Mask", 2D) = "white" {}
-        _FillHeight("Fill Height", float) = -1000
+        _FillHeight("Fill Height", float) = 1000.0
         _StencilRef("Stencil Reference", Float) = 1.0
 		[Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp("Stencil Comparison", Float) = 8 // Set to Always as default
 
@@ -117,7 +117,6 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
             {
                 Varyings o = (Varyings)0;
                 UNITY_SETUP_INSTANCE_ID(attributes);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
                 o.positionCS = TransformWorldToHClip(attributes.positionOS);
                 o.uv = TRANSFORM_TEX(attributes.uv, _MainTex);
@@ -128,6 +127,7 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
             float4 UnlitFragment(Varyings i) : SV_Target
             {
                 clip(_FillHeight - i.positionWS.y);
+                //clip(-1);
                 float4 mainTex = _Color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 return mainTex;
             }

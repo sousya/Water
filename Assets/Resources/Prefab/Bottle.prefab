@@ -1824,7 +1824,7 @@ RectTransform:
   m_GameObject: {fileID: 4649219313893040677}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2224691207524176525}
@@ -1841,7 +1841,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4649219313893040677}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -2073,16 +2073,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4401f32edd228214e837476d68168f6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isFinish: 0
-  isFreeze: 0
-  isClearHide: 0
-  isNearHide: 0
-  isPlayAnim: 0
-  isSelect: 0
-  isClearHideAnim: 0
-  waters: 
-  hideWaters: 
-  waterItems: 
   waterImg:
   - {fileID: 1116649241928074139}
   - {fileID: 3699458289674822070}
@@ -2108,19 +2098,14 @@ MonoBehaviour:
   spine: {fileID: 5863203414289781505}
   finishSpine: {fileID: 537319627303462193}
   freezeSpine: {fileID: 3793054665075431380}
-  maxNum: 4
-  limitColor: 0
   ImgWaterTop: {fileID: 2841147931161303087}
   ImgWaterDown: {fileID: 999113890790113712}
   ImgLimit: {fileID: 4969747738762361255}
   nearHide: {fileID: 4351887863434805902}
   clearHide: {fileID: 5669543852491119425}
-  thunder: {fileID: 0}
   isUp: 0
   finishGo: {fileID: 7187312058495922299}
   waterTopSurface: {fileID: 4649219313893040677}
-  bottleIdx: 0
-  unlockClear: 0
   bottle: {fileID: 7716752635147297431}
 --- !u!1 &5229961665208476233
 GameObject:

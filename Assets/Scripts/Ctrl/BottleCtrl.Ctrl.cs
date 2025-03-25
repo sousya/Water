@@ -890,13 +890,13 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
         }
         else
         {
-            spineGo.DOLocalMove(spineNode[useIdx + 1 - num].localPosition, fillAlltime).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                if (bottleData.TopIdx < 0)
-                {
-                    spineGo.gameObject.SetActive(false);
-                }
-            });
+            // spineGo.DOLocalMove(spineNode[useIdx + 1 - num].localPosition, fillAlltime).SetEase(Ease.Linear).OnComplete(() =>
+            // {
+            //     if (bottleData.TopIdx < 0)
+            //     {
+            //         spineGo.gameObject.SetActive(false);
+            //     }
+            // });
         }
    
         PlaySpineWaitAnim(useColor);
@@ -937,8 +937,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
             {
                 PlayWaterDown();
 
-                //modelGo.transform.DORotate(_waterRotations[leftWater], 0.62f).SetEase(Ease.Linear).OnComplete(() =>
-                modelGo.transform.DORotate(_waterRotations[leftWater], 10.0f).SetEase(Ease.Linear).OnComplete(() =>
+                modelGo.transform.DORotate(_waterRotations[leftWater], 0.62f).SetEase(Ease.Linear).OnComplete(() =>
+                //modelGo.transform.DORotate(_waterRotations[leftWater], 10.0f).SetEase(Ease.Linear).OnComplete(() =>
                 {
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {

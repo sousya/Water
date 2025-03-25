@@ -58,11 +58,16 @@ public class BottleRenderUpdate : MonoBehaviour
         var oneDivCos = 1.0f / Mathf.Max(Mathf.Cos(angle * Mathf.Deg2Rad), 0.1f);
         WaterSpine.localScale = new Vector3(oneDivCos *_waterScale.x, _waterScale.y, _waterScale.z);
 
+        // 设置最高水位线
         var waterHeightClip = waterTopSurface.transform.position.y;
         foreach (var waterRenderUpdater in waterRenders)
         {
             waterRenderUpdater.FillHeightClip = waterHeightClip;
         }
+        var position = WaterSpine.position;
+        var waterSpineHeight = Mathf.Min(position.y, waterHeightClip + 0.5f);
+        position = new Vector3(position.x, waterSpineHeight, position.z);
+        WaterSpine.position = position;
     }
 
     // 移动的瓶子，最后渲染

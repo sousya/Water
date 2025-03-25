@@ -29,6 +29,7 @@ public class WaterRenderUpdater : MonoBehaviour
     {
         set
         {
+            //Debug.Log(value + "-----------------");
             _material.SetFloat("_FillHeight", value);
         }
     }

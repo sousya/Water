@@ -9,9 +9,9 @@ Shader "Spine/SkeletonGraphic"
 		[Toggle(_CANVAS_GROUP_COMPATIBLE)] _CanvasGroupCompatible("CanvasGroup Compatible", Int) = 1
 		_Color ("Tint", Color) = (1,1,1,1)
 
-		[HideInInspector][Enum(UnityEngine.Rendering.CompareFunction)] _StencilCompWater ("Stencil Comparison", Float) = 8
-		[HideInInspector] _StencilWater ("Stencil ID", Float) = 0
-		[HideInInspector][Enum(UnityEngine.Rendering.StencilOp)] _StencilOpWater ("Stencil Operation", Float) = 0
+		[HideInInspector][Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Float) = 8
+		[HideInInspector] _Stencil ("Stencil ID", Float) = 0
+		[HideInInspector][Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Float) = 0
 		[HideInInspector] _StencilWriteMask ("Stencil Write Mask", Float) = 255
 		[HideInInspector] _StencilReadMask ("Stencil Read Mask", Float) = 255
 
@@ -44,9 +44,9 @@ Shader "Spine/SkeletonGraphic"
 
 		Stencil
 		{
-			Ref [_StencilWater]
-			Comp [_StencilCompWater]
-			Pass [_StencilOpWater]
+			Ref [_Stencil]
+			Comp [_StencilComp]
+			Pass [_StencilOp]
 			ReadMask [_StencilReadMask]
 			WriteMask [_StencilWriteMask]
 		}

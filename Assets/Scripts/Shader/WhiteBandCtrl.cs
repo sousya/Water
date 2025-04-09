@@ -1,15 +1,15 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 public class WhiteBandCtrl : MonoBehaviour
 {
-    public Material uiMaterial; // ²ÄÖÊ
-    public float speed = 1.0f; // ¹â´øÒÆ¶¯ËÙ¶È
+    public Material uiMaterial; // æè´¨
+    public float speed = 1.0f; // å…‰å¸¦ç§»åŠ¨é€Ÿåº¦
 
     private void Update()
     {
-        // ¸üĞÂ¹â´øÎ»ÖÃ
-        float bandPosition = Mathf.Repeat(Time.time * speed, 1.0f); // Ñ­»·´Ó0µ½1
+        // æ›´æ–°å…‰å¸¦ä½ç½®
+        float bandPosition = Mathf.Repeat(Time.time * speed, 1.0f); // å¾ªç¯ä»0åˆ°1
         uiMaterial.SetFloat("_BandPosition", bandPosition);
     }
 }

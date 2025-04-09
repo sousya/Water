@@ -6489,6 +6489,105 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4401f32edd228214e837476d68168f6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &589981704
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 589981705}
+  - component: {fileID: 589981708}
+  - component: {fileID: 589981707}
+  - component: {fileID: 589981706}
+  m_Layer: 5
+  m_Name: ImgShowSelect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &589981705
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589981704}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1628571911}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.8501129, y: 94.02}
+  m_SizeDelta: {x: 1774.5, y: 3165.75}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!223 &589981706
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589981704}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: -1
+  m_TargetDisplay: 0
+--- !u!114 &589981707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589981704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.11372549, g: 0.11372549, b: 0.11372549, a: 0.62352943}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &589981708
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589981704}
+  m_CullTransparentMesh: 1
 --- !u!1 &628962269
 GameObject:
   m_ObjectHideFlags: 0
@@ -6636,7 +6735,7 @@ MonoBehaviour:
   - {fileID: 149923007}
   - {fileID: 1079556842}
   WaterSpine: {fileID: 130922359}
-  BotteImage: {fileID: 1666836226}
+  BotteImage: {fileID: 0}
   MaskImage: {fileID: 1297804900}
   bottleIndex: 1
   waterTopSurface: {fileID: 2024418936}
@@ -25831,6 +25930,7 @@ RectTransform:
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 589981705}
   - {fileID: 1212999879}
   - {fileID: 1608939697}
   - {fileID: 1191291128}
@@ -30864,17 +30964,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &1666836226 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2315303159857296806, guid: 5c0746996e1124049bc7344d3ee3530d, type: 3}
-  m_PrefabInstance: {fileID: 8657882607543056242}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1697365242
 GameObject:
   m_ObjectHideFlags: 0
@@ -36069,6 +36158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 751ea2f915395424c84d13e9689b7a82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreAnim: 0
   bottleNodes: []
   levels:
   - {fileID: 11400000, guid: c8bf6b14c8402f04b840d85a49ad8c69, type: 2}
@@ -36212,6 +36302,7 @@ MonoBehaviour:
   - {fileID: 1014392099}
   - {fileID: 110124248}
   - {fileID: 872438214}
+  hideBottleList: []
   hideColor: 
   waterColor:
   - {r: 0.54509807, g: 0.7176471, b: 0.16078432, a: 1}
@@ -36290,15 +36381,78 @@ MonoBehaviour:
   moreMoveNum: 0
   bombMaxNum: 0
   countDownNum: 0
+  nowItem: 0
   timeCountDown: 0
   timeNow: 0
   test: 0
   mahoujinGo: {fileID: 1377963001}
   broomBullet: {fileID: 2768198876783416694, guid: adff4f81b2aa6ed49a500a58bc625fd2, type: 3}
+  fireRuneBullet: {fileID: 0}
   mahoujinSpine: {fileID: 1377963003}
   isPlayAnim: 0
   isPlayFxAnim: 0
+  isSelectItem: 0
+  nowHalf: {fileID: 0}
   gameCtrl: {fileID: 1954153136}
+  scene1:
+  - {fileID: 21300000, guid: ad620981d5a646643b48b92578cb20c4, type: 3}
+  - {fileID: 21300000, guid: 59e032969bf10b04a8dea78245aa69a2, type: 3}
+  - {fileID: 21300000, guid: b745f49e6e4a239418b4bea67c502f23, type: 3}
+  - {fileID: 21300000, guid: 792c4c361184b08409d63a77236ff3a5, type: 3}
+  - {fileID: 21300000, guid: e36908935d3a7c342bf0aeb69c06ff73, type: 3}
+  scene2:
+  - {fileID: 21300000, guid: 705e7b3353676324a9c8296abf95ce33, type: 3}
+  - {fileID: 21300000, guid: d1cc7c20d2b0fc44883dad9663e1e51e, type: 3}
+  - {fileID: 21300000, guid: 1d65ab742c34e8a47850ed421173e525, type: 3}
+  - {fileID: 21300000, guid: 8e3f24c7979ab2f46a87e83e6cb27d48, type: 3}
+  - {fileID: 21300000, guid: 3e9258a0e8f35b64b80f2ad9ab4d7daa, type: 3}
+  scene3:
+  - {fileID: 21300000, guid: 467c58c9b0fc2764c934ed00df434fd5, type: 3}
+  - {fileID: 21300000, guid: 1ec9eb133fd4e68489e26554e1e211b9, type: 3}
+  - {fileID: 21300000, guid: 0765959e45e7cd045ad8993da79e7b5f, type: 3}
+  - {fileID: 21300000, guid: 4f08885c81b96814c8c3d2786f84ea32, type: 3}
+  - {fileID: 21300000, guid: 96dd4956c82875143ba7d924a3462f64, type: 3}
+  scene4:
+  - {fileID: 21300000, guid: 3d25bb2318f62464baa6bc283188a653, type: 3}
+  - {fileID: 21300000, guid: 2bbea95686e265d4d859373c9bf9aa50, type: 3}
+  - {fileID: 21300000, guid: e0552deed5c536e4e88ebe2f9c10c3a4, type: 3}
+  - {fileID: 21300000, guid: 720d64c00aa9dba4bab309dc764d07b3, type: 3}
+  - {fileID: 21300000, guid: bbd9221a129907c4dabfc1fc731cc016, type: 3}
+  scenePartName1:
+  - Guard Tower
+  - Sculpture
+  - Water Tower
+  - Observation Deck
+  - Fountain
+  scenePartName2:
+  - Cabin
+  - Yacht
+  - Deck Chair
+  - Radar Station
+  - Statue of Liberty
+  scenePartName3:
+  - Shelter
+  - Submarine
+  - Water Purifier
+  - Reactor
+  - Protective Tower
+  scenePartName4:
+  - Statue Sculpture
+  - Storage Room
+  - Raft
+  - Well
+  - Stone House
+  needScene1: 010000000300000005000000080000000c000000
+  needScene2: 0e0000001100000014000000180000001d000000
+  needScene3: 2000000024000000280000002d00000033000000
+  needScene4: 370000003c00000041000000470000004e000000
+  needScenePart1: 0100000002000000020000000300000004000000
+  needScenePart2: 0200000003000000030000000400000005000000
+  needScenePart3: 0300000004000000040000000500000006000000
+  needScenePart4: 0400000005000000050000000600000007000000
+  selectMaterial: {fileID: 2100000, guid: 832f7e60693e6b04b925463a993436cb, type: 2}
+  hideBg: {fileID: 0}
+  takeItem: 
 --- !u!4 &1954153133
 Transform:
   m_ObjectHideFlags: 0

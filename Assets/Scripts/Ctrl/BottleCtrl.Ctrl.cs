@@ -16,14 +16,15 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent
     public List<Transform> waterNode = new List<Transform>();
     public Transform spineGo, modelGo, leftMovePlace, freezeGo;
     public Animator bottleAnim, fillWaterGoAnim;
-    public SkeletonGraphic spine, finishSpine, freezeSpine;
+    public SkeletonGraphic spine, finishSpine, freezeSpine, bubbleSpine;;
 
-    public Image ImgWaterTop, ImgWaterDown, ImgLimit;
-    public SkeletonGraphic nearHide, clearHide;
-    public bool isUp;
-    public GameObject finishGo;
-    public GameObject waterTopSurface;// 倒水的过程中，水面的最高高度不会超过这个线。
     
+    public Image ImgWaterTop, ImgWaterDown, ImgBottleOne, ImgBottleTwo, ImgBottleThree, ImgBottleFour;
+    public SkeletonGraphic nearHide, clearHide, thunder, limitColorSpine;
+    public bool isUp;
+    public GameObject finishGo, bottleOne, bottleTwo, bottleThree, bottleFour;
+    public GameObject waterTopSurface;// 倒水的过程中，水面的最高高度不会超过这个线。
+	
     public List<BottleRecord> moveRecords = new List<BottleRecord>();
     
     public Button bottle;

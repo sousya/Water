@@ -27,54 +27,62 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
 
     public void OnSelect(BottleCtrl bottle)
     {
-        if(!control)
+        if(LevelManager.Instance.isSelectItem)
         {
-
-            if (FirstBottle == null)
-            {
-                if (bottle.OnSelect(true))
-                {
-                    FirstBottle = bottle;
-                }
-
-            }
-            else if (SecondBottle == null)
+            LevelManager.Instance.UseSelectItem(bottle);
+        }
+        else
+        {
+            if (!control)
             {
 
-                if (bottle != FirstBottle && bottle.OnSelect(false))
+                if (FirstBottle == null)
                 {
-                    SecondBottle = bottle;
-                }
-                else
-                {
-                    FirstBottle.OnCancelSelect();
-                    FirstBottle = null;
-                }
-            }
+                    if (bottle.OnSelect(true))
+                    {
+                        FirstBottle = bottle;
+                    }
 
-            if (FirstBottle != null && SecondBottle != null)
-            {
-                control = true;
-                if (FirstBottle.CheckMoveOut() && SecondBottle.CheckMoveIn(FirstBottle.GetMoveOutTop()))
-                {
-                    //Debug.Log("ç§»åŠ¨ " + FirstCake.gameObject.name + "->" + SecondCake.gameObject.name);
-                    LevelManager.Instance.RecordLast();
-
-                    FirstBottle.MoveTo(SecondBottle);
-                    FirstBottle = null;
-                    SecondBottle = null;
-                    LevelManager.Instance.AddMoveNum();
-                    this.SendEvent<MoveCakeEvent>();
                 }
-                else
+                else if (SecondBottle == null)
                 {
-                    control = false;
-                    FirstBottle.OnCancelSelect();
-                    FirstBottle = null;
-                    SecondBottle = null;
+
+                    if (bottle != FirstBottle && bottle.OnSelect(false))
+                    {
+                        SecondBottle = bottle;
+                    }
+                    else
+                    {
+                        FirstBottle.OnCancelSelect();
+                        FirstBottle = null;
+                    }
+                }
+
+                if (FirstBottle != null && SecondBottle != null)
+                {
+                    control = true;
+                    if (FirstBottle.CheckMoveOut() && SecondBottle.CheckMoveIn(FirstBottle.GetMoveOutTop()))
+                    {
+                        //Debug.Log("ÒÆ¶¯ " + FirstCake.gameObject.name + "->" + SecondCake.gameObject.name);
+                        LevelManager.Instance.RecordLast();
+
+                        FirstBottle.MoveTo(SecondBottle);
+                        FirstBottle = null;
+                        SecondBottle = null;
+                        LevelManager.Instance.AddMoveNum();
+                        this.SendEvent<MoveCakeEvent>();
+                    }
+                    else
+                    {
+                        control = false;
+                        FirstBottle.OnCancelSelect();
+                        FirstBottle = null;
+                        SecondBottle = null;
+                    }
                 }
             }
         }
+       
     }
 
     // Update is called once per frame

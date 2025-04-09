@@ -20,6 +20,7 @@ using Spine.Unity;
 public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRegisterEvent
 {
     private ResLoader mResLoader = ResLoader.Allocate();
+    public bool ignoreAnim = false;
     public static LevelManager Instance;
     public ReviewManager _reviewManager;
     public List<GameObject> bottleNodes = new List<GameObject>();
@@ -30,43 +31,53 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public List<BottleCtrl> nowBottles = new List<BottleCtrl>();
     public List<BottleCtrl> tempBottles = new List<BottleCtrl>();
     public List<BottleCtrl> iceBottles = new List<BottleCtrl>();
+    public List<BottleCtrl> bottles = new List<BottleCtrl>();
     public List<BottleCtrl> topBottle = new List<BottleCtrl>();
     public List<BottleCtrl> bottomBottle = new List<BottleCtrl>();
+    public List<BottleCtrl> hideBottleList = new List<BottleCtrl>();
+
     public List<int> hideColor = new List<int>();
     public List<Color> waterColor = new List<Color>();
     public List<Sprite> waterTopSp;
     public List<Sprite> waterSp;
     public int VictoryBottle, moreBottle;
-    public BottleProperty emptyBottle =  new BottleProperty();
+    public BottleProperty emptyBottle = new BottleProperty();
     public Transform gameCanvas;
     List<ChangePair> changeList;
     public List<GameObject> createFx = new List<GameObject>();
     public LevelCreateCtrl nowLevel;
     public Color ItemColor;
 
-    public Material shineMaterial;// ����
-    public float speed = 1.0f; // ����ƶ��ٶ�
+    public Material shineMaterial;// 材质
+    public float speed = 1.0f; // 光带移动速度
 
     //public List<>
 
     [SerializeField]
     SpriteRenderer levelBgSprite;
 
-    public int levelId = 1, moreCakeNum = 0, lastStar, moveNum, moreMoveNum, bombMaxNum, countDownNum;
+    public int levelId = 1, moreCakeNum = 0, lastStar, moveNum, moreMoveNum, bombMaxNum, countDownNum, nowItem;
     public float timeCountDown, timeNow, test;
-    public GameObject mahoujinGo, broomBullet;
+    public GameObject mahoujinGo, broomBullet, fireRuneBullet;
     public SkeletonGraphic mahoujinSpine;
     bool isOpenDefeat = false, isBomb = false, isCountDown = false, isTimeCountDown = false;
-    public bool isPlayAnim, isPlayFxAnim;
+    public bool isPlayAnim, isPlayFxAnim, isSelectItem;
+    public BottleCtrl nowHalf;
     [SerializeField]
     GameCtrl gameCtrl;
 
-
+    public List<Sprite> scene1, scene2, scene3, scene4;
+    public List<string> scenePartName1, scenePartName2, scenePartName3, scenePartName4;
+    public List<int> needScene1, needScene2, needScene3, needScene4;
+    public List<int> needScenePart1, needScenePart2, needScenePart3, needScenePart4;
+    public Material selectMaterial;
+    public GameObject hideBg;
+    public List<int> takeItem = new List<int>();
 
     public IArchitecture GetArchitecture()
     {
         return GameMainArc.Interface;
-    }   
+    }
 
     private void Awake()
     {
@@ -80,8 +91,14 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         //UIKit.OpenPanel("UILevelMain", UILevel.Common, "uilevelmain_prefab"); 
         //UIKit.OpenPanel<UIBegin>(UILevel.Common);
         //UIKit.OpenPanel<UIJudge>(UILevel.Common);
-        this.GetUtility<SaveDataUtility>().SaveLevel(11);
-        //this.GetUtility<SaveDataUtility>().SaveLevel(1);
+        //this.GetUtility<SaveDataUtility>().SaveLevel(6);
+        //PlayerPrefs.DeleteKey("g_WaterSceneRecord");
+        //PlayerPrefs.DeleteKey("g_WaterScenePartRecord");
+        //PlayerPrefs.DeleteKey("g_WaterSceneBoxRecord");
+        //this.GetUtility<SaveDataUtility>().SetCoinNum(0);
+        //this.GetUtility<SaveDataUtility>().SetSceneRecord(1);
+
+        this.GetUtility<SaveDataUtility>().SaveLevel(6);
 
         if (GameCtrl.Instance.FirstBottle != null)
         {
@@ -107,13 +124,12 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         switch ((ItemType)itemId)
         {
             case ItemType.ClearItem:
-                ////////���ɫ��
+                ////////随机色块
                 var clearlist = CheckCanClearList();
                 int clearColorIdx = UnityEngine.Random.Range(0, clearlist.Count);
                 int clearColor = clearlist[clearColorIdx];
-                ////////���ɫ��
+                ////////清除色块
                 ClearColor(clearColor, fromPos);
-
                 break;
             case ItemType.MagnetItem:
                 ShowMahoujin();
@@ -127,7 +143,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 int changeGreenColorFrom = 0;
                 foreach (var pair in changeList)
                 {
-                    if(pair.item == ItemType.ChangeGreen)
+                    if (pair.item == ItemType.ChangeGreen)
                     {
                         changeGreenColorFrom = pair.NeedChangeColor;
                         changeList.Remove(pair);
@@ -136,7 +152,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeGreenColorTo = 1;
-                ////////����ɫ��
+                ////////更换色块
                 ChangeColor(changeGreenColorFrom, changeGreenColorTo, fromTarget);
                 break;
 
@@ -144,7 +160,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 int changeOrangeColorFrom = 0;
                 foreach (var pair in changeList)
                 {
-                    if(pair.item == ItemType.ChangeOrange)
+                    if (pair.item == ItemType.ChangeOrange)
                     {
                         changeOrangeColorFrom = pair.NeedChangeColor;
                         changeList.Remove(pair);
@@ -153,14 +169,14 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeOrangeColorTo = 7;
-                ////////����ɫ��
+                ////////更换色块
                 ChangeColor(changeOrangeColorFrom, changeOrangeColorTo, fromTarget);
                 break;
             case ItemType.ChangePink:
                 int changePinkColorFrom = 0;
                 foreach (var pair in changeList)
                 {
-                    if(pair.item == ItemType.ChangePink)
+                    if (pair.item == ItemType.ChangePink)
                     {
                         changePinkColorFrom = pair.NeedChangeColor;
                         changeList.Remove(pair);
@@ -169,14 +185,14 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changePinkColorTo = 3;
-                ////////����ɫ��
+                ////////更换色块
                 ChangeColor(changePinkColorFrom, changePinkColorTo, fromTarget);
                 break;
             case ItemType.ChangeYellow:
                 int changeYellowColorFrom = 0;
                 foreach (var pair in changeList)
                 {
-                    if(pair.item == ItemType.ChangeYellow)
+                    if (pair.item == ItemType.ChangeYellow)
                     {
                         changeYellowColorFrom = pair.NeedChangeColor;
                         changeList.Remove(pair);
@@ -185,14 +201,14 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeYellowColorTo = 6;
-                ////////����ɫ��
+                ////////更换色块
                 ChangeColor(changeYellowColorFrom, changeYellowColorTo, fromTarget);
                 break;
             case ItemType.ChangePurple:
                 int changePurpleColorFrom = 0;
                 foreach (var pair in changeList)
                 {
-                    if(pair.item == ItemType.ChangePurple)
+                    if (pair.item == ItemType.ChangePurple)
                     {
                         changePurpleColorFrom = pair.NeedChangeColor;
                         changeList.Remove(pair);
@@ -201,14 +217,14 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changePurpleColorTo = 10;
-                ////////����ɫ��
+                ////////更换色块
                 ChangeColor(changePurpleColorFrom, changePurpleColorTo, fromTarget);
                 break;
             case ItemType.ChangeDarkBlue:
                 int changeDarkBlueColorFrom = 0;
                 foreach (var pair in changeList)
                 {
-                    if(pair.item == ItemType.ChangeDarkBlue)
+                    if (pair.item == ItemType.ChangeDarkBlue)
                     {
                         changeDarkBlueColorFrom = pair.NeedChangeColor;
                         changeList.Remove(pair);
@@ -217,35 +233,35 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 }
 
                 int changeDarkBlueColorTo = 4;
-                ////////����ɫ��
+                ////////更换色块
                 ChangeColor(changeDarkBlueColorFrom, changeDarkBlueColorTo, fromTarget);
                 break;
             case ItemType.ClearPink:
-                ////////���ɫ��
+                ////////清除色块
                 ClearColor(3, fromPos);
                 break;
             case ItemType.ClearOrange:
-                ////////���ɫ��
+                ////////清除色块
                 ClearColor(7, fromPos);
                 break;
             case ItemType.ClearBlue:
-                ////////���ɫ��
+                ////////清除色块
                 ClearColor(4, fromPos);
                 break;
             case ItemType.ClearYellow:
-                ////////���ɫ��
+                ////////清除色块
                 ClearColor(6, fromPos);
                 break;
             case ItemType.ClearDarkGreen:
-                ////////���ɫ��
+                ////////清除色块
                 ClearColor(9, fromPos);
                 break;
             case ItemType.ClearRed:
-                ////////���ɫ��
+                ////////清除色块
                 ClearColor(2, fromPos);
                 break;
             case ItemType.ClearGreen:
-                ////////���ɫ��
+                ////////清除色块
                 ClearColor(1, fromPos);
                 break;
         }
@@ -262,12 +278,12 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             int addColorIdx = UnityEngine.Random.Range(0, hideColor.Count);
             int addColor = hideColor[addColorIdx];
             var useBottle = bottleList[addIdx];
-            if (useBottle.bottleData.Waters.Count < useBottle.bottleData.MaxNum)
+            if (useBottle.waters.Count < useBottle.maxNum)
             {
                 useBottles.Add(useBottle);
                 useBottle.AddColor(addColor, fromPos);
                 hideColor.RemoveAt(addColorIdx);
-                Debug.Log("�����ɫ " + addColor);
+                Debug.Log("添加颜色 " + addColor);
             }
             else
             {
@@ -284,7 +300,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public void FinishClear(int clearColor, int idx)
     {
 
-        foreach(var item in nowBottles)
+        foreach (var item in nowBottles)
         {
             item.CheckUnlockHide(clearColor);
             item.CheckNearHide(idx);
@@ -292,7 +308,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         StopCoroutine(WaitCheckFinish());
         StartCoroutine(WaitCheckFinish(clearColor));
-        
     }
 
     public IEnumerator WaitCheckFinish(int clearColor = 0)
@@ -300,12 +315,15 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         if (clearList.Count == 0)
         {
             //VictoryBottle = idx;
-            Debug.Log("ʤ��");
+            Debug.Log("胜利");
         }
-
+        if (clearColor != 0 && clearList.Count > 1)
+        {
+            clearList.Remove(clearColor);
+        }
         yield return new WaitForSeconds(4);
-        
-        if(clearColor != 0)
+
+        if (clearColor != 0 && clearList.Count == 1)
         {
             clearList.Remove(clearColor);
         }
@@ -313,15 +331,32 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             //VictoryBottle = idx;
             this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
-            if(levelId  <= 5)
+            this.GetUtility<SaveDataUtility>().SetCoinNum(this.GetUtility<SaveDataUtility>().GetCoinNum() + 20);
+            if (levelId <= 5)
             {
+                CheckWinNum();
                 this.SendEvent<LevelStartEvent>();
                 StartGame(levelId + 1);
             }
             else
             {
-                this.SendEvent<LevelClearEvent>();
+                UIKit.OpenPanel<UIVictory>();
             }
+        }
+    }
+
+    public void CheckWinNum()
+    {
+
+        var winNum = this.GetUtility<SaveDataUtility>().GetCountinueWinNum();
+        winNum++;
+        if(winNum == 3)
+        {
+            this.GetUtility<SaveDataUtility>().SetCountinueWinNum(0);
+        }
+        else
+        {
+            this.GetUtility<SaveDataUtility>().SetCountinueWinNum(winNum);
         }
     }
 
@@ -330,13 +365,13 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         if (clearList.Count == 0)
         {
             //VictoryBottle = idx;
-            Debug.Log("ʤ��");
+            Debug.Log("胜利");
         }
     }
 
     public void VictoryEnter(int idx)
     {
-        if(VictoryBottle == idx)
+        if (VictoryBottle == idx)
         {
             //StartGame(levelId + 1);
         }
@@ -345,9 +380,9 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public List<BottleCtrl> GetMakeColorBottle()
     {
         List<BottleCtrl> ret = new List<BottleCtrl>();
-        foreach(var bottle in nowBottles)
-        {   
-            if(!bottle.bottleData.IsFreeze && bottle.bottleData.Waters.Count < 4 && !bottle.bottleData.IsClearHide && !bottle.bottleData.IsNearHide)
+        foreach (var bottle in nowBottles)
+        {
+            if (!bottle.isFreeze && bottle.waters.Count < 4 && !bottle.isClearHide && !bottle.isNearHide)
             {
                 ret.Add(bottle);
             }
@@ -373,7 +408,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public List<int> CheckCanClearList()
     {
         List<int> ret = new List<int>();
-        foreach(var color in clearList)
+        foreach (var color in clearList)
         {
             //if (!cantClearColorList.Contains(color))
             if (!cantChangeColorList.Contains(color))
@@ -409,7 +444,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             bottle.PlayBroomBullet(color, fromPos);
         }
-        
+
         yield return new WaitForSeconds(0.2f);
 
         if (clearList.Contains(color))
@@ -427,13 +462,13 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         }
     }
 
-    public void BreakIce()
+    public BottleWaterCtrl BreakIce()
     {
         int iceIdx = UnityEngine.Random.Range(0, iceBottles.Count);
 
         var bottle = iceBottles[iceIdx];
         iceBottles.RemoveAt(iceIdx);
-        bottle.UnlockIceWater();
+        return bottle.FindIceWater();
     }
 
     public void CancelBomb()
@@ -444,7 +479,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public void AddMoveNum()
     {
         moveNum++;
-        if((moveNum >= bombMaxNum && isBomb) || (isCountDown && moveNum >= countDownNum))
+        if ((moveNum >= bombMaxNum && isBomb) || (isCountDown && moveNum >= countDownNum))
         {
             OnDefeat();
         }
@@ -455,6 +490,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         moreBottle = 0;
         cantClearColorList.Clear();
         cantChangeColorList.Clear();
+        hideBottleList.Clear();
         levelId = id;
         VictoryBottle = -1;
         var levelInfo = levels[levelId - 1];
@@ -470,11 +506,11 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             isBomb = true;
         }
-        if(countDownNum > 0)
+        if (countDownNum > 0)
         {
             isCountDown = true;
         }
-        if(timeCountDown > 0)
+        if (timeCountDown > 0)
         {
             isTimeCountDown = true;
         }
@@ -490,7 +526,10 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
     public void AddBottle(bool isHalf)
     {
-        moreBottle++;
+        if (!isHalf || nowHalf == null || nowHalf.maxNum == 4)
+        {
+            moreBottle++;
+        }
         ShowBottleGo();
         //ShowBottleGo(nowBottles.Count + 1);
         MoveAndAddBottle(isHalf);
@@ -673,7 +712,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             var bottle = nowBottles[i];
             bottle.Init(levelInfo.bottles[i], i);
-            bottle.bottleData.MaxNum = 4;
+            bottle.maxNum = 4;
         }
 
         for(int i = 0; i < moreBottle; i++)
@@ -692,16 +731,27 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             nowBottles[i].MoveBottle(tempBottles[i]);            
         }
 
-        nowBottles[nowBottles.Count - 1].Init(emptyBottle, nowBottles.Count);
 
         if(isHalf)
         {
-            nowBottles[nowBottles.Count - 1].bottleData.MaxNum = 1;
+            if(nowHalf == null || nowHalf.maxNum == 4)
+            {
+                nowBottles[nowBottles.Count - 1].Init(emptyBottle, nowBottles.Count);
+                nowHalf = nowBottles[nowBottles.Count - 1];
+                nowBottles[nowBottles.Count - 1].maxNum = 1;
+            }
+            else
+            {
+                nowBottles[nowBottles.Count - 1].maxNum++;
+            }
         }
         else
         {
-            nowBottles[nowBottles.Count - 1].bottleData.MaxNum = 4;
+            nowBottles[nowBottles.Count - 1].Init(emptyBottle, nowBottles.Count);
+            nowBottles[nowBottles.Count - 1].maxNum = 4;
         }
+
+        nowBottles[nowBottles.Count - 1].SetMaxBottle();
     }
 
     public void RefreshLevel()
@@ -709,6 +759,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         clearList = new List<int>(nowLevel.clearList); 
         hideColor = new List<int>(nowLevel.hideList);
         changeList = new List<ChangePair>(nowLevel.changeList);
+        hideBottleList.Clear();
         cantClearColorList.Clear();
 
         //ShowBottleGo(nowBottles.Count);
@@ -727,13 +778,13 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            StartCoroutine(WaterShine());
+            BeginSelectItem(1);
         }
     }
 
     public void OnDefeat()
     {
-        Debug.Log("ʧ��");
+        Debug.Log("失败");
     }
 
     public void TimeCountDown()
@@ -753,7 +804,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             test = 0;
             CheckVitality();
-            //Debug.Log("ʱ�� " + this.GetUtility<SaveDataUtility>().GetVitalityNum()  + " " + this.GetUtility<SaveDataUtility>().GetVitalityTime());
+            //Debug.Log("时间 " + this.GetUtility<SaveDataUtility>().GetVitalityNum()  + " " + this.GetUtility<SaveDataUtility>().GetVitalityTime());
         }
     }
 
@@ -765,13 +816,13 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             long recoveryTime = this.GetUtility<SaveDataUtility>().GetVitalityTime() + (5 - lastVitalityNum) * GameConst.RecoveryTime;
             long timeOffset = recoveryTime - this.GetUtility<SaveDataUtility>().GetNowTime();
-            //Debug.Log("���� " + lastVitalityNum + " " + timeOffset);
+            //Debug.Log("体力 " + lastVitalityNum + " " + timeOffset);
             if (timeOffset > 0)
             {
                 long checkTime = this.GetUtility<SaveDataUtility>().GetNowTime() - this.GetUtility<SaveDataUtility>().GetVitalityTime();
                 int addNum = Mathf.FloorToInt((float)checkTime / GameConst.RecoveryTime);
 
-                //Debug.Log("���� " + addNum + " " + timeOffset);
+                //Debug.Log("体力 " + addNum + " " + timeOffset);
 
                 if (addNum > GameConst.MaxVitality)
                 {
@@ -800,12 +851,15 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         }
     }
 
-    public void ReturnLast()
+    public bool ReturnLast()
     {
+        bool ret = false;
         foreach (var bottle in nowBottles)
         {
-            bottle.ReturnLast();
+            var needRet = bottle.ReturnLast();
+            ret = ret || needRet;
         }
+        return ret;
     }
 
     public void RemoveAll()
@@ -816,11 +870,23 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         }
     }
 
-    public void RemoveHide()
+    public void RemoveHide(int num = 0)
     {
-        foreach (var bottle in nowBottles)
+        if(num == 0)
         {
-            bottle.RemoveHide();
+            foreach (var bottle in nowBottles)
+            {
+                bottle.RemovHide();
+            }
+
+        }
+        else
+        {
+
+            for(int i = 0; i < num; i++)
+            {
+                nowBottles[i].RemovHide();
+            }
         }
     }
 
@@ -853,6 +919,128 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         RemoveAll();
         mahoujinGo.SetActive(false);
         isPlayFxAnim = false;
+    }
+
+    public int GetUnlockNeedStar(int scene, int num)
+    {
+        List<int> useList = null;
+        switch (scene)
+        {
+            case 1:
+                useList = needScene1;
+                break;
+            case 2:
+                useList = needScene2;
+                break;
+            case 3:
+                useList = needScene3;
+                break;
+            case 4:
+                useList = needScene4;
+                break;
+        }
+
+        if(num == 0)
+        {
+            if(scene == 1)
+            {
+                return 0;
+            }
+            else
+            {
+                switch (scene)
+                {
+                    case 2:
+                        useList = needScene1;
+                        break;
+                    case 3:
+                        useList = needScene2;
+                        break;
+                    case 4:
+                        useList = needScene3;
+                        break;
+                }
+                return useList[4];
+
+            }
+        }
+        return useList[num - 1];
+    }
+
+    public int GetPartNeedStar(int scene, int num)
+    {
+        List<int> useList = null;
+        switch (scene)
+        {
+            case 1:
+                useList = needScenePart1;
+                break;
+            case 2:
+                useList = needScenePart2;
+                break;
+            case 3:
+                useList = needScenePart3;
+                break;
+            case 4:
+                useList = needScenePart4;
+                break;
+        }
+        return useList[num - 1];
+    }
+
+    public void UnlockScene(int scene, int num)
+    {
+        UnlockSceneEvent e = new UnlockSceneEvent();
+        e.scene = scene;
+        e.part = num;
+
+        this.GetUtility<SaveDataUtility>().SetSceneRecord(scene);
+        this.GetUtility<SaveDataUtility>().SetScenePartRecord(num);
+
+        this.SendEvent<UnlockSceneEvent>(e);
+    }
+
+    public void ShowItemSelect()
+    {
+        hideBg.SetActive(true);
+        for (int i = 0; i < nowBottles.Count; i++)
+        {
+            nowBottles[i].ShowItemSelect();
+        }
+    }
+
+    public void HideItemSelect()
+    {
+        hideBg.SetActive(false);
+        for (int i = 0; i < nowBottles.Count; i++)
+        {
+            nowBottles[i].HideItemSelect();
+        }
+    }
+
+    public void UseSelectItem(BottleCtrl bottleCtrl)
+    {
+        HideItemSelect();
+        LevelManager.Instance.isSelectItem = false;
+
+        switch (nowItem)
+        {
+            case 1:
+                bottleCtrl.RandomWater();
+                break;
+        }
+    }
+
+    public void BeginSelectItem(int item)
+    {
+        nowItem = item;
+        ShowItemSelect();
+        LevelManager.Instance.isSelectItem = true;
+    }
+
+    public void CancelSelectItem()
+    {
+        LevelManager.Instance.isSelectItem = false;
     }
 }
 

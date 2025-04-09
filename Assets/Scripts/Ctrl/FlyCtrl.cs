@@ -7,6 +7,7 @@ public class FlyCtrl : MonoBehaviour
 {
     public Transform target;
     public float flyTime;
+    public BottleCtrl bottle;
     // Start is called before the first frame update
     public void BeginFly()
     {

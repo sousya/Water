@@ -1,26 +1,25 @@
-using System;
 using DG.Tweening;
 using QFramework;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.UI;
-using GameAttributes;
 
 public class BottleWaterCtrl : MonoBehaviour
 {
-    public SkeletonGraphic spine, broomSpine, createSpine, changeSpine, magnetSpine, changeShineSpine, thunderSpine, broomAfterSpine;
-    public GameObject spineGo, HideGo, broomItemGo, createItemGo, changeItemGo, magnetItemGo, thunderGo, broomAfterGo, wenhaoFxGo;
+    public SkeletonGraphic spine, broomSpine, createSpine, changeSpine, magnetSpine, changeShineSpine, thunderSpine, broomAfterSpine, fireRuneSpine;
+    public GameObject spineGo, HideGo, broomItemGo, createItemGo, changeItemGo, magnetItemGo, thunderGo, broomAfterGo, wenhaoFxGo, iceGo;
     public Animator anim;
     public Image waterImg;
     public int waterColor;
     public bool isPlayItemAnim;
     public TextMeshProUGUI textItem;
+    public GameObject fireRuneGo;
+    public BottleCtrl bottle;
 
     public Color color
     {
@@ -32,14 +31,14 @@ public class BottleWaterCtrl : MonoBehaviour
         set
         {
             waterImg.color = value;
-            var waterRenderUpdater = waterImg.gameObject.GetComponent<WaterRenderUpdater>();
-            if (waterRenderUpdater != null)
-            {
-                waterRenderUpdater.WaterColor = value;
-            }
         }
     }
-    
+    // Start is called before the first frame update
+    private void Start()
+    {
+
+    }
+
     public void SetSpineActive(bool active)
     {
         spineGo.SetActive(active);
@@ -64,14 +63,14 @@ public class BottleWaterCtrl : MonoBehaviour
             waterImg.fillAmount = 0;
             gameObject.SetActive(false);
         }
-        // else
-        // {
-        //     waterImg.fillAmount = 1;
-        //     waterImg.DOFillAmount(0, time).SetEase(Ease.Linear).OnComplete(() =>
-        //     {
-        //         gameObject.SetActive(false);
-        //     });
-        // }
+        else
+        {
+            waterImg.fillAmount = 1;
+            waterImg.DOFillAmount(0, time).SetEase(Ease.Linear).OnComplete(() =>
+            {
+                gameObject.SetActive(false);
+            });
+        }
 
     }
 
@@ -265,6 +264,29 @@ public class BottleWaterCtrl : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void PlayFillAnimConnect()
+    {
+        string spineAnimName = "";
+        switch (waterColor)
+        {
+            case 0:
+                spineAnimName = "daoshui_dh";
+                break;
+            case 1:
+                spineAnimName = "daoshui_cl";
+                break;
+        }
+        spineGo.SetActive(true);
+        anim.Play("WaterFillConnect");
+        spine.AnimationState.SetAnimation(0, spineAnimName, false);
+        //StartCoroutine(CoroutinePlayFillAnim());
+    }
+
+    public void PlayEmptyAnim()
+    {
+        anim.Play("NormalEmpty");
+    }
+
     public void SetHide(bool isHide, bool noWait)
     {
         if (isHide || (!isHide && noWait) || !gameObject.activeSelf)
@@ -345,39 +367,55 @@ public class BottleWaterCtrl : MonoBehaviour
 
     }
 
-    public void SetColorState(GameDefine.ItemType itemType, Color inColor)
+    public IEnumerator BreakIce(BottleWaterCtrl waterCtrl)
     {
-        this.color = inColor;
-        
-        var type = itemType.GetType();
-        var fieldName = Enum.GetName(type, itemType);
+        isPlayItemAnim = true;
+        fireRuneGo.SetActive(true);
+        fireRuneSpine.AnimationState.SetAnimation(0, "combine", false);
 
-        if (fieldName == null) 
-            return;
-        var fieldInfo = type.GetField(fieldName);
-        if (fieldInfo.GetCustomAttribute(typeof(WaterColorState), false) is not WaterColorState attribute) 
-            return;
-        broomItemGo.SetActive(attribute.BroomItemActive);
-        createItemGo.SetActive(attribute.CreateItemActive);
-        changeItemGo.SetActive(attribute.ChangeItemActive);
-        magnetItemGo.SetActive(attribute.MagnetItemActive);
-        if (attribute.SpineAnim.IsNullOrEmpty() == false && attribute.SpineType > EColorStateSpineType.None && attribute.SpineType < EColorStateSpineType.Max)
+        yield return new WaitForSeconds(1.2f);
+
+        var go = GameObject.Instantiate(fireRuneGo);
+        go.transform.parent = transform;
+        go.transform.localPosition = Vector3.zero;
+        go.transform.parent = LevelManager.Instance.gameCanvas;
+        go.transform.localScale = new Vector3(1, 1, 1);
+        var spine = go.transform.Find("FireRune").GetComponent<SkeletonGraphic>();
+        spine.AnimationState.SetAnimation(0, "bullet", false);
+
+        var offset = waterCtrl.transform.position - transform.position;
+        if(offset.x < 0)
         {
-            switch (attribute.SpineType)
-            {
-                case EColorStateSpineType.EBroomSpine:
-                    broomSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
-                    break;
-                case EColorStateSpineType.EMagnetSpine:
-                    magnetSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
-                    break;
-                case EColorStateSpineType.ECreateSpine:
-                    createSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
-                    break;
-                case EColorStateSpineType.EChangeSpine:
-                    changeSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
-                    break;
-            }
+            go.transform.localScale = new Vector3(1, 1, 1);
         }
+        else
+        {
+            go.transform.localScale = new Vector3(-1, 1, 1);
+        }
+
+
+        go.transform.DOMove(waterCtrl.transform.position, 0.45f).SetEase(Ease.Linear).OnComplete(() =>
+        {
+            StartCoroutine(waterCtrl.HideIce());
+
+            isPlayItemAnim = false;
+            fireRuneGo.SetActive(false);
+        });
+
+    }
+
+    public IEnumerator HideIce()
+    {
+        fireRuneGo.SetActive(true);
+        fireRuneSpine.AnimationState.SetAnimation(0, "attack", false);
+
+        yield return new WaitForSeconds(1.75f);
+        UnlockIceWater();
+        fireRuneGo.SetActive(false);
+    }
+
+    public void UnlockIceWater()
+    {
+        bottle.UnlockIceWater();
     }
 }

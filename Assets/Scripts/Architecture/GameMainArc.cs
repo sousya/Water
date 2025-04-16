@@ -25,6 +25,7 @@ public class GameMainArc : Architecture<GameMainArc>
         //PlayerPrefs.SetInt("g_ClearCakeLevel", 2);
         //PlayerPrefs.SetInt("g_CakeMoreStar", PlayerPrefs.GetInt("g_CakeMoreStar") + 3);
         //PlayerPrefs.SetInt("g_ClearCakeJigsaw", 0);
+
         ResKit.Init();
         //ResetShader();
         RegisterModels();
@@ -49,9 +50,11 @@ public class GameMainArc : Architecture<GameMainArc>
     {
     }
 
+    //单例构建
     void CreateInstance()
     {
         TextManager textManager = TextManager.Instance;
+        //放到TextManager去做OnsingletonInit做初始化
         string languageStr = GetUtility<SaveDataUtility>().GetSelectLanguage();
         if (languageStr == "-1")
         {

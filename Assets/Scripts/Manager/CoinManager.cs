@@ -32,9 +32,14 @@ public class CoinManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanReg
         }
 
         coin -= cost;
+        //缺少保存金币的逻辑
         return true;
     }
 
+    /// <summary>
+    /// 购买体力
+    /// </summary>
+    /// 900金币补满体力
     public void BuyVitality()
     {
         if(CostCoin(900))

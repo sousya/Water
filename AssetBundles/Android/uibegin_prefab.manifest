@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2225576268
+CRC: 3130682169
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7d771b30365f9acab42131b5a7c79d04
+    Hash: c670af8dac9da08be194940e69050d48
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 67a5c496ae42a99612d3eb7eb9d47760
+    Hash: 7bcde653565db09c7352c37dae2d683d
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 7d771b30365f9acab42131b5a7c79d04
+    Hash: c670af8dac9da08be194940e69050d48
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -64,11 +64,31 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FaceInfo_Legacy
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FontAssetCreationSettings
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.KerningTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_Character
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontFeatureTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontWeightPair
+- AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.VertexGradient
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.Glyph
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.AnimationTriggers
 - AssemblyName: UnityEngine.UI
@@ -84,4 +104,5 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Art/UIPrefab/UIBegin.prefab
 Dependencies:
-- E:/Water/AssetBundles/Android/fontall_asset
+- E:/Unity Project/Water/AssetBundles/Android/font
+- E:/Unity Project/Water/AssetBundles/Android/fontall_asset

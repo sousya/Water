@@ -29,8 +29,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BandPosition: 2.5599985
-    - _BandWidth: 0.119
+    - _BandPosition: 2.0499992
+    - _BandWidth: 0.142
     - _ColorMask: 15
     - _FlashSpeed: 2
     - _LightBandSpeed: 1

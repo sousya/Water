@@ -54,7 +54,7 @@ public struct RefreshUnlockLevel
 
 public struct LevelClearEvent
 {
-
+    public int coin;
 }
 
 public struct ShowOrderEnd
@@ -87,4 +87,25 @@ public struct VitalityChangeEvent
 public struct VitalityTimeChangeEvent
 {
     public long timeOffset;
+}
+
+public struct UnlockSceneEvent
+{
+    public int scene;
+    public int part;
+}
+
+public struct RewardSceneEvent
+{
+}
+
+public struct ReturnMainEvent
+{
+}
+
+public struct RefreshItemEvent
+{
+}
+public struct GameStartEvent
+{
 }

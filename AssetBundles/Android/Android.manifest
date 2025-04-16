@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3040504359
+CRC: 1335118278
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -13,17 +13,54 @@ AssetBundleManifest:
       Name: uibegin_prefab
       Dependencies:
         Dependency_0: fontall_asset
+        Dependency_1: font
     Info_3:
       Name: font
       Dependencies: {}
     Info_4:
-      Name: uidefeat_prefab
-      Dependencies:
-        Dependency_0: fontall_asset
-    Info_5:
       Name: uimorelife_prefab
       Dependencies:
         Dependency_0: fontall_asset
-    Info_6:
+    Info_5:
       Name: coinfx_prefab
       Dependencies: {}
+    Info_6:
+      Name: uivictory_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+        Dependency_1: font
+    Info_7:
+      Name: uigetcoin_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+        Dependency_1: font
+    Info_8:
+      Name: uiunlockscene_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+        Dependency_1: font
+    Info_9:
+      Name: uideletelife_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_10:
+      Name: uibuyitem_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+        Dependency_1: font
+    Info_11:
+      Name: uicontinue_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_12:
+      Name: uibeginselect_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_13:
+      Name: uilessstar_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+    Info_14:
+      Name: uiretry_prefab
+      Dependencies:
+        Dependency_0: fontall_asset

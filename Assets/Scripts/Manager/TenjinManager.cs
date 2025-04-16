@@ -16,16 +16,14 @@ public class TenjinManager: MonoBehaviour
     }
     public void Init()
     {
-        Debug.Log("TenjinTime " + Time.time);
-
-
-        Debug.Log("Tenjin StartConnect0");
+        //Debug.Log("TenjinTime " + Time.time);
+        //Debug.Log("Tenjin StartConnect0");
 
         BaseTenjin instance = Tenjin.getInstance("CMPSNGWPF6EXGKL1JS1DAMRVF7OMD2LS");
-        Debug.Log("Tenjin StartConnect1");
+        //Debug.Log("Tenjin StartConnect1");
 
 #if UNITY_ANDROID
-        Debug.Log("Tenjin StartConnect2");
+        //Debug.Log("Tenjin StartConnect2");
 
         instance.SetAppStoreType(AppStoreType.googleplay);
         // Sends install/open event to Tenjin

@@ -15,6 +15,7 @@ namespace QAssetBundle
     {
         public const string BundleName = "coinfx_prefab";
         public const string CoinFx = "CoinFx";
+        public const string StarFx = "StarFx";
     }
     public class Font
     {
@@ -36,16 +37,54 @@ namespace QAssetBundle
         public const string BundleName = "uibegin_prefab";
         public const string UIBegin = "UIBegin";
     }
-    public class Uidefeat_prefab
+    public class Uibeginselect_prefab
     {
-        public const string BundleName = "uidefeat_prefab";
-        public const string UIDefeat = "UIDefeat";
-        public const string UIInfo = "UIInfo";
-        public const string UIVictory = "UIVictory";
+        public const string BundleName = "uibeginselect_prefab";
+        public const string UIBeginSelect = "UIBeginSelect";
+    }
+    public class Uibuyitem_prefab
+    {
+        public const string BundleName = "uibuyitem_prefab";
+        public const string UIBuyItem = "UIBuyItem";
+    }
+    public class Uicontinue_prefab
+    {
+        public const string BundleName = "uicontinue_prefab";
+        public const string UIContinue = "UIContinue";
+    }
+    public class Uideletelife_prefab
+    {
+        public const string BundleName = "uideletelife_prefab";
+        public const string UIDeleteLife = "UIDeleteLife";
+    }
+    public class Uigetcoin_prefab
+    {
+        public const string BundleName = "uigetcoin_prefab";
+        public const string UIGetCoin = "UIGetCoin";
+    }
+    public class Uilessstar_prefab
+    {
+        public const string BundleName = "uilessstar_prefab";
+        public const string UILessStar = "UILessStar";
     }
     public class Uimorelife_prefab
     {
         public const string BundleName = "uimorelife_prefab";
         public const string UIMoreLife = "UIMoreLife";
+    }
+    public class Uiretry_prefab
+    {
+        public const string BundleName = "uiretry_prefab";
+        public const string UIRetry = "UIRetry";
+    }
+    public class Uiunlockscene_prefab
+    {
+        public const string BundleName = "uiunlockscene_prefab";
+        public const string UIUnlockScene = "UIUnlockScene";
+    }
+    public class Uivictory_prefab
+    {
+        public const string BundleName = "uivictory_prefab";
+        public const string UIVictory = "UIVictory";
     }
 }

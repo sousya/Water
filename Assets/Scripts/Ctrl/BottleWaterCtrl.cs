@@ -11,13 +11,15 @@ using UnityEngine.UI;
 
 public class BottleWaterCtrl : MonoBehaviour
 {
-    public SkeletonGraphic spine, broomSpine, createSpine, changeSpine, magnetSpine, changeShineSpine, thunderSpine, broomAfterSpine;
-    public GameObject spineGo, HideGo, broomItemGo, createItemGo, changeItemGo, magnetItemGo, thunderGo, broomAfterGo, wenhaoFxGo;
+    public SkeletonGraphic spine, broomSpine, createSpine, changeSpine, magnetSpine, changeShineSpine, thunderSpine, broomAfterSpine, fireRuneSpine;
+    public GameObject spineGo, HideGo, broomItemGo, createItemGo, changeItemGo, magnetItemGo, thunderGo, broomAfterGo, wenhaoFxGo, iceGo;
     public Animator anim;
     public Image waterImg;
     public int waterColor;
     public bool isPlayItemAnim;
     public TextMeshProUGUI textItem;
+    public GameObject fireRuneGo;
+    public BottleCtrl bottle;
 
     public Color color
     {
@@ -363,5 +365,57 @@ public class BottleWaterCtrl : MonoBehaviour
         //yield return new WaitForSeconds(2);
         //thunderGo.SetActive(false);
 
+    }
+
+    public IEnumerator BreakIce(BottleWaterCtrl waterCtrl)
+    {
+        isPlayItemAnim = true;
+        fireRuneGo.SetActive(true);
+        fireRuneSpine.AnimationState.SetAnimation(0, "combine", false);
+
+        yield return new WaitForSeconds(1.2f);
+
+        var go = GameObject.Instantiate(fireRuneGo);
+        go.transform.parent = transform;
+        go.transform.localPosition = Vector3.zero;
+        go.transform.parent = LevelManager.Instance.gameCanvas;
+        go.transform.localScale = new Vector3(1, 1, 1);
+        var spine = go.transform.Find("FireRune").GetComponent<SkeletonGraphic>();
+        spine.AnimationState.SetAnimation(0, "bullet", false);
+
+        var offset = waterCtrl.transform.position - transform.position;
+        if(offset.x < 0)
+        {
+            go.transform.localScale = new Vector3(1, 1, 1);
+        }
+        else
+        {
+            go.transform.localScale = new Vector3(-1, 1, 1);
+        }
+
+
+        go.transform.DOMove(waterCtrl.transform.position, 0.45f).SetEase(Ease.Linear).OnComplete(() =>
+        {
+            StartCoroutine(waterCtrl.HideIce());
+
+            isPlayItemAnim = false;
+            fireRuneGo.SetActive(false);
+        });
+
+    }
+
+    public IEnumerator HideIce()
+    {
+        fireRuneGo.SetActive(true);
+        fireRuneSpine.AnimationState.SetAnimation(0, "attack", false);
+
+        yield return new WaitForSeconds(1.75f);
+        UnlockIceWater();
+        fireRuneGo.SetActive(false);
+    }
+
+    public void UnlockIceWater()
+    {
+        bottle.UnlockIceWater();
     }
 }

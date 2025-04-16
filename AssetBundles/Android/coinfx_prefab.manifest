@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1465757586
+CRC: 292700907
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 48dcb4ddf0de9dc2375aed9991917911
+    Hash: f1de4327f5ce5fa02b4e604bea039468
   TypeTreeHash:
     serializedVersion: 2
     Hash: 19e85b4fdb6bd762788ac8ca246cc7f1
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 48dcb4ddf0de9dc2375aed9991917911
+    Hash: f1de4327f5ce5fa02b4e604bea039468
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -37,4 +37,5 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/daoshui_fx/CoinFx.prefab
+- Assets/daoshui_fx/StarFx.prefab
 Dependencies: []

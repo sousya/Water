@@ -132,7 +132,7 @@ public class ShopManager : MonoBehaviour, IDetailedStoreListener, ICanGetUtility
             {
                 // Debug.Log("recepit all:" + p.receipt);
                 GooglePurchaseData data = new GooglePurchaseData(p.receipt);
-                if (data.json.purchaseState == "1")
+                if (data.json.purchaseState == "1") //0=购买成功, 1=已取消, 2=待处理
                 {
                     //LevelManager.Instance.NoCostVitality = true;
                     //this.GetUtility<SaveDataUtility>().SaveUnlock(1);

@@ -19,11 +19,17 @@ public class SaveDataUtility : IUtility, ICanSendEvent
         //Debug.Log("LevelBefore " + Convert.ToString(clearLevel, 2) + " clearNowLevel " + clearNowLevel + " LevelNow " + Convert.ToString((clearLevel | clearNowLevel), 2));
         PlayerPrefs.SetInt("g_ClearWaterLevel", level);
     }
+
+    /// <summary>
+    /// 当前关卡/已获得的总星星数
+    /// </summary>
+    /// <returns></returns>
     public int GetLevelClear()
     {
         int clearLevel = PlayerPrefs.GetInt("g_ClearWaterLevel", 1);
        return clearLevel;
     }
+
     public void SaveChallenge(int level)
     {
         int clearLevel = PlayerPrefs.GetInt("g_ClearWaterChallenge", 0);
@@ -313,15 +319,24 @@ public class SaveDataUtility : IUtility, ICanSendEvent
         SetVitality(GetVitalityNum() - 1);
     }
 
+    /// <summary>
+    /// 设置上一次体力恢复的时间
+    /// </summary>
+    /// <param name="time"></param>
     public void SetVitalityTime(string time)
     {
         PlayerPrefs.SetString("g_WaterVitalityTime", time);
     }
 
+   
     public void SetVitalityTime()
     {
         PlayerPrefs.SetString("g_WaterVitalityTime", GetNowTime() + "");
     }
+
+    /// <summary>
+    /// 获取上一次体力恢复的时间
+    /// </summary>
     public long GetVitalityTime()
     {
         string timeStr = PlayerPrefs.GetString("g_WaterVitalityTime", "0");
@@ -347,6 +362,10 @@ public class SaveDataUtility : IUtility, ICanSendEvent
     }
 
 
+    /// <summary>
+    /// 获取体力
+    /// </summary>
+    /// <returns></returns>
     public int GetVitalityNum()
     {
         return PlayerPrefs.GetInt("g_WaterVitalityNum", GameConst.MaxVitality);
@@ -371,6 +390,10 @@ public class SaveDataUtility : IUtility, ICanSendEvent
        PlayerPrefs.SetInt("g_WaterSceneRecord", scene);
     }
 
+    /// <summary>
+    /// 当前玩家所在的场景编号
+    /// </summary>
+    /// <returns></returns>
     public int GetSceneRecord()
     {
         return PlayerPrefs.GetInt("g_WaterSceneRecord", 1);
@@ -381,19 +404,30 @@ public class SaveDataUtility : IUtility, ICanSendEvent
        PlayerPrefs.SetInt("g_WaterScenePartRecord", scene);
     }
 
+    /// <summary>
+    /// 当前场景中所解锁的建筑编号
+    /// </summary>
+    /// <returns></returns>
     public int GetScenePartRecord()
     {
-        return PlayerPrefs.GetInt("g_WaterScenePartRecord", 0);
+        return PlayerPrefs.GetInt("g_WaterScenePartRecord", 0); 
     }
 
+    /// <summary>
+    /// 设置宝箱编号(用于确定哪个场景的宝箱)
+    /// </summary>
+    /// <param name="scene"></param>
     public void SetSceneBox(int scene)
     {
         PlayerPrefs.SetInt("g_WaterSceneBoxRecord", scene);
     }
-
+    /// <summary>
+    /// 获取宝箱编号
+    /// </summary>
+    /// <returns></returns>
     public int GetSceneBox()
     {
-        return PlayerPrefs.GetInt("g_WaterSceneBoxRecord", 0);
+        return PlayerPrefs.GetInt("g_WaterSceneBoxRecord", 0);  
     }
 
     public void AddItemNum(int item, int num = 1)
@@ -421,13 +455,17 @@ public class SaveDataUtility : IUtility, ICanSendEvent
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="item">1 回退 2 取消黑色 3 加瓶子 4 加一格瓶子 5 取消所有限制 6 加一格瓶子 7取消两根黑色 8随机颜色</param>
+    /// <param name="item"> 1 回退 2 取消黑色 3 加瓶子 4 加一格瓶子 5 取消所有限制 6 加一格瓶子 7取消两根黑色 8随机颜色</param>
     /// <returns></returns>
     public int GetItemNum(int item)
     {
         return PlayerPrefs.GetInt("g_WaterSceneItem" + item, 0);
     }
 
+    /// <summary>
+    /// 连胜次数
+    /// </summary>
+    /// <returns></returns>
     public void SetCountinueWinNum(int num)
     {
         PlayerPrefs.SetInt("g_WaterCountinueWinNum", num);

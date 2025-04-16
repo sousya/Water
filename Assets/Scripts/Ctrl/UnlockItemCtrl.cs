@@ -17,7 +17,11 @@ public class UnlockItemCtrl : MonoBehaviour, ICanGetUtility
     public Image ImgIcon;
     public Button BtnUnlock;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="num">取值范围1-5</param>
     public void SetItem(int scene, int num)
     {
         List<Sprite> useScene = null;
@@ -50,14 +54,18 @@ public class UnlockItemCtrl : MonoBehaviour, ICanGetUtility
         BtnUnlock.onClick.AddListener(() =>
         {
 
-            var nowStar = this.GetUtility<SaveDataUtility>().GetLevelClear();
+            var nowStar = this.GetUtility<SaveDataUtility>().GetLevelClear() -1;   // -1
 
             var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
             var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
 
             var offset = nowStar - LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow);
-
-            if(offset > LevelManager.Instance.GetPartNeedStar(scene, num))
+            //Debug.Log("解锁面板-已有星星：" + nowStar);
+            //Debug.Log("解锁面板-使用星星：" + LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow));
+            //Debug.Log("解锁面板-剩下星星：" + offset);
+            //Debug.Log("解锁面板-需要星星：" + LevelManager.Instance.GetPartNeedStar(scene, num));
+            //剩余星星足够解锁部件 大于等于 
+            if (offset >= LevelManager.Instance.GetPartNeedStar(scene, num))
             {
                 LevelManager.Instance.UnlockScene(scene, num);
                 UIKit.ClosePanel<UIUnlockScene>();

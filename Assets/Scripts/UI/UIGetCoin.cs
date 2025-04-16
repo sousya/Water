@@ -21,9 +21,9 @@ namespace QFramework.Example
 		
 		protected override void OnOpen(IUIData uiData = null)
 		{
-		}
-		
-		protected override void OnShow()
+        }
+
+        protected override void OnShow()
         {
 			BindClick();
 
@@ -40,23 +40,31 @@ namespace QFramework.Example
 
 		void BindClick()
 		{
+            BtnClose.onClick.RemoveAllListeners();
+            BtnContinue.onClick.RemoveAllListeners();
+
             BtnClose.onClick.AddListener(() =>
             {
-                LevelClearEvent e = new LevelClearEvent();
-				e.coin = 20;
-
-                this.SendEvent<LevelClearEvent>(e);
-				CloseSelf();
+                BackUIBegin();
             });
 
             BtnContinue.onClick.AddListener(() =>
             {
-                LevelClearEvent e = new LevelClearEvent();
-                e.coin = 20;
-
-                this.SendEvent<LevelClearEvent>(e);
-				CloseSelf();
+                BackUIBegin();
             });
+        }
+
+        void BackUIBegin()
+        {
+            LevelClearEvent e = new LevelClearEvent();
+
+            e.coin = 20;
+
+            this.SendEvent<LevelClearEvent>(e);
+            //退出更新下方节点布局
+            StringEventSystem.Global.Send("InitBeginMenuButton");
+            StringEventSystem.Global.Send("ClearTakeItem");
+            CloseSelf();
         }
 	}
 }

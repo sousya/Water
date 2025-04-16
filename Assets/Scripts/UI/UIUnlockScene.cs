@@ -55,9 +55,6 @@ namespace QFramework.Example
             var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
             var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
 
-
-            
-
             ImgProgress.fillAmount = partNow / 5f;
             TxtImgprogress.text = partNow + " / 5";
             if(partNow < 5)
@@ -97,8 +94,15 @@ namespace QFramework.Example
             ImgUnlockItem5.SetItem(sceneNow, 5);
         }
 
+        /// <summary>
+        /// 打开宝箱
+        /// </summary>
+        /// <returns></returns>
         IEnumerator OpenBox()
         {
+            //避免打断下面逻辑
+            BtnClose.interactable = false;
+            //增加道具
             this.GetUtility<SaveDataUtility>().AddItemNum(1, 1);
             this.GetUtility<SaveDataUtility>().AddItemNum(2, 1);
             this.GetUtility<SaveDataUtility>().AddItemNum(3, 1);
@@ -111,8 +115,10 @@ namespace QFramework.Example
             var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
             this.GetUtility<SaveDataUtility>().SetScenePartRecord(0);
             this.GetUtility<SaveDataUtility>().SetSceneBox(sceneNow);
+            //Debug.Log(this.GetUtility<SaveDataUtility>().GetSceneBox());
             yield return new WaitForSeconds(1f);
             this.SendEvent<RewardSceneEvent>();
+            BtnClose.interactable = true;
             CloseSelf();
         }
 

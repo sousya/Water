@@ -62,10 +62,20 @@ namespace QAssetBundle
         public const string BundleName = "uigetcoin_prefab";
         public const string UIGetCoin = "UIGetCoin";
     }
+    public class Uilessstar_prefab
+    {
+        public const string BundleName = "uilessstar_prefab";
+        public const string UILessStar = "UILessStar";
+    }
     public class Uimorelife_prefab
     {
         public const string BundleName = "uimorelife_prefab";
         public const string UIMoreLife = "UIMoreLife";
+    }
+    public class Uiretry_prefab
+    {
+        public const string BundleName = "uiretry_prefab";
+        public const string UIRetry = "UIRetry";
     }
     public class Uiunlockscene_prefab
     {

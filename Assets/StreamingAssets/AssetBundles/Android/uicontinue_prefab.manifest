@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3794155908
+CRC: 3939041129
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c78700f100d24f7b3f07701a3e02ce9a
+    Hash: 9047b1ec0afde0a430ca2692a897b966
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 31c8d4c2963ec4fb74c6b442e5fc6a42
+    Hash: ca06d16f3d5c4a91839d3a0c8cc7e393
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: c78700f100d24f7b3f07701a3e02ce9a
+    Hash: 9047b1ec0afde0a430ca2692a897b966
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -21,9 +21,9 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
@@ -80,4 +80,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Art/UIPrefab/UIContinue.prefab
 Dependencies:
-- E:/Water/AssetBundles/Android/fontall_asset
+- E:/Unity Project/Water/AssetBundles/Android/fontall_asset

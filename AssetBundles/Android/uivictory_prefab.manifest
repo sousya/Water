@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3873382980
+CRC: 1556025596
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a9051fbf9b4f3171cb59a4fd9e910862
+    Hash: bd9e41a9676089559efa122bfc25693e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 918db5ee0868668e2b647fbbb2d89ade
+    Hash: 769eb37b5a2f087bd28c746542af6634
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: a9051fbf9b4f3171cb59a4fd9e910862
+    Hash: bd9e41a9676089559efa122bfc25693e
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -31,11 +31,11 @@ ClassTypes:
 - Class: 95
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: d85b887af7e6c3f45a2e2d2920d641bc, type: 3}
 - Class: 114
@@ -82,5 +82,5 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Art/UIPrefab/UIVictory.prefab
 Dependencies:
-- E:/Water/AssetBundles/Android/font
-- E:/Water/AssetBundles/Android/fontall_asset
+- E:/Unity Project/Water/AssetBundles/Android/font
+- E:/Unity Project/Water/AssetBundles/Android/fontall_asset

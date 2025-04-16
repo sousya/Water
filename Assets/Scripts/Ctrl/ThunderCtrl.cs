@@ -29,17 +29,20 @@ public class ThunderCtrl : MonoBehaviour
         totalTime += Time.deltaTime;
         var angle = Vector3.Angle(fromPos - transform.position, Vector3.up);
 
+        //判断方向
         int sign = 1;
-        if(fromPos.x > transform.position.x)
+        if (fromPos.x > transform.position.x)
         {
             sign = -1;
         }
         transform.rotation = Quaternion.Euler(0, 0, angle * sign);
 
 
-        if(totalTime > 2)
+        if (totalTime > 2)
         {
             gameObject.SetActive(false);
+            //用完销毁
+            Destroy(this.gameObject);
         }
     }
 }

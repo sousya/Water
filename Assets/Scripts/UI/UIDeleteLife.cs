@@ -32,6 +32,7 @@ namespace QFramework.Example
 			BtnQuit.onClick.AddListener(() =>
 			{
 				this.SendEvent<ReturnMainEvent>();
+                StringEventSystem.Global.Send("ClearTakeItem");
                 CloseSelf();
             });
 		}

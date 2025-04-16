@@ -48,10 +48,10 @@ public class LanguageUtility : IUtility
         if (Application.platform == RuntimePlatform.Android)
         {
 
-            Debug.Log("9999999999999");
+            //Debug.Log("9999999999999");
             AndroidJavaObject locale = UnityContext.Call<AndroidJavaObject>("getResources").Call<AndroidJavaObject>("getConfiguration").Get<AndroidJavaObject>("locale");
             systemLanguage = locale.Call<string>("getLanguage");
-            Debug.Log("100000000000000000");
+            //Debug.Log("100000000000000000");
 
             //Debug.Log(systemLanguage);
             //if (locale.Call<string>("getLanguage").Equals("zh"))

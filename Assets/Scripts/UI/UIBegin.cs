@@ -4,6 +4,7 @@ using QFramework;
 using System.Collections.Generic;
 using System.Collections;
 using DG.Tweening;
+using UnityEngine.SocialPlatforms;
 
 namespace QFramework.Example
 {
@@ -20,13 +21,9 @@ namespace QFramework.Example
 		public List<Animator> ButtonAnim;
 
 		public GameObject BeginNode, LevelNode, SceneNode1, SceneNode2, SceneNode3, SceneNode4;
-        public ScenePartCtrl ScenePart1, ScenePart2, ScenePart3, ScenePart4, ScenePart5;
+        public ScenePartCtrl ScenePart1, ScenePart2, ScenePart3, ScenePart4; 
         public ParticleTargetMoveCtrl coinFx, starFx;
-
-
 		int nowButton = 2;
-
-        public List<int> checkScene = new List<int>();
 
         protected override void OnInit(IUIData uiData = null)
 		{
@@ -39,6 +36,35 @@ namespace QFramework.Example
             TxtLevel.font.material.shader = Shader.Find(TxtLevel.font.material.shader.name);
         }
 
+        protected override void OnShow()
+        {
+            BindBtn();
+            RegisterEvent();
+            SetText();
+            SetCoin();
+            SetStar();
+            SetVitality();
+            SetItem();
+            InitBeginMenuButton();
+
+            var levelNow = this.GetUtility<SaveDataUtility>().GetLevelClear();
+            if (levelNow <= 5)
+            {
+                LevelNode.SetActive(true);
+                BeginNode.SetActive(false);
+            }
+            SetScene();
+        }
+
+        protected override void OnHide()
+        {
+        }
+
+        protected override void OnClose()
+        {
+        }
+
+        //按钮监听
         void BindBtn()
         {
             BtnRefresh.onClick.RemoveAllListeners();
@@ -176,15 +202,24 @@ namespace QFramework.Example
             BtnArea.onClick.RemoveAllListeners();
             BtnArea.onClick.AddListener(() =>
             {
-                var nowStar = this.GetUtility<SaveDataUtility>().GetLevelClear();
-
-                var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
-                var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
-
-                var offset = nowStar - LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow);
+                //已获得星星数
+                var nowStar = this.GetUtility<SaveDataUtility>().GetLevelClear() - 1;// -1
+                //当前场景编号
                 var scene = this.GetUtility<SaveDataUtility>().GetSceneRecord();
-
-                if (offset > LevelManager.Instance.GetPartNeedStar(scene, partNow) || this.GetUtility<SaveDataUtility>().GetSceneBox() != sceneNow)
+                //当前场景建筑编号
+                var num = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
+                //剩余多少星星
+                var offset = nowStar - LevelManager.Instance.GetUnlockNeedStar(scene, num);
+                //Debug.Log("已有星星 nowStar:" + nowStar);
+                //Debug.Log("场景编号 sceneNow :" + scene);
+                //Debug.Log("场景部件编号 partNow :" + num);
+                //Debug.Log("使用星星" + LevelManager.Instance.GetUnlockNeedStar(scene, num));
+                //Debug.Log("剩余星星 offset" + offset);
+                //剩余星星大于等于下一部件所需星星 或 宝箱满了未开
+                //Debug.Log("需要星星 ：" + LevelManager.Instance.GetPartNeedStar(scene, num));
+                //Debug.Log(this.GetUtility<SaveDataUtility>().GetSceneBox());
+                if (offset >= LevelManager.Instance.GetPartNeedStar(scene, num) ||
+                    (this.GetUtility<SaveDataUtility>().GetSceneBox() != scene) && scene != 1)
                 {
                     UIKit.OpenPanel<UIUnlockScene>();
                 }
@@ -195,78 +230,20 @@ namespace QFramework.Example
             });
 
             BtnGetReward.onClick.RemoveAllListeners();
+            //获取完奖励回调 
             BtnGetReward.onClick.AddListener(() =>
             {
+                //更新场景，
                 SetScene();
                 StartCoroutine(FlyReward());
             });
         }
 
-		void CheckBeginMenuButton()
-		{
-			switch(nowButton)
-            {
-                case 1:
-                    ButtonAnim[0].Play("BeginMenuButtonSelect");
-                    ButtonAnim[1].Play("BeginMenuButtonUnSelect");
-                    ButtonAnim[2].Play("BeginMenuButtonUnSelect");
-                    break;
-                case 2:
-                    ButtonAnim[0].Play("BeginMenuButtonUnSelect");
-                    ButtonAnim[1].Play("BeginMenuButtonSelect");
-                    ButtonAnim[2].Play("BeginMenuButtonUnSelect");
-                    break;
-                case 3:
-                    ButtonAnim[0].Play("BeginMenuButtonUnSelect");
-                    ButtonAnim[1].Play("BeginMenuButtonUnSelect");
-                    ButtonAnim[2].Play("BeginMenuButtonSelect");
-                    break;
-            }
-        }
-
-        void SetTakeItem()
+        //事件注册
+        void RegisterEvent()
         {
-            BtnItem1.onClick.RemoveAllListeners();
-            BtnItem2.onClick.RemoveAllListeners();
-            BtnItem3.onClick.RemoveAllListeners();
-            BtnItem1.onClick.AddListener(()=>
+            this.RegisterEvent<LevelStartEvent>(e =>
             {
-                LevelManager.Instance.takeItem.Remove(6);
-                LevelManager.Instance.AddBottle(true);
-                this.GetUtility<SaveDataUtility>().ReduceItemNum(6);
-                BtnItem1.gameObject.SetActive(false);
-            });
-
-            BtnItem2.onClick.AddListener(() =>
-            {
-                LevelManager.Instance.takeItem.Remove(7);
-                LevelManager.Instance.AddBottle(true);
-                this.GetUtility<SaveDataUtility>().ReduceItemNum(7);
-                BtnItem2.gameObject.SetActive(false);
-            });
-            BtnItem3.onClick.AddListener(() =>
-            {
-                LevelManager.Instance.takeItem.Remove(8);
-                LevelManager.Instance.AddBottle(true);
-                this.GetUtility<SaveDataUtility>().ReduceItemNum(8);
-                BtnItem3.gameObject.SetActive(false);
-            });
-
-            BtnItem1.gameObject.SetActive(LevelManager.Instance.takeItem.Contains(6));
-            BtnItem2.gameObject.SetActive(LevelManager.Instance.takeItem.Contains(7));
-            BtnItem3.gameObject.SetActive(LevelManager.Instance.takeItem.Contains(8));
-
-            TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();
-            TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
-            TxtItem3.text = this.GetUtility<SaveDataUtility>().GetItemNum(8).ToString();
-
-            SetItem();
-        }
-
-		void RegisterEvent()
-		{
-			this.RegisterEvent<LevelStartEvent>(e =>
-			{
                 TxtLevel.text = "Level " + LevelManager.Instance.levelId;
                 SetTakeItem();
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
@@ -318,8 +295,134 @@ namespace QFramework.Example
                 LevelNode.SetActive(true);
                 BeginNode.SetActive(false);
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
+
+            //驱动按钮初始选择
+            StringEventSystem.Global.Register("InitBeginMenuButton", () =>
+            {
+                InitBeginMenuButton();
+
+            }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
+        /// <summary>
+        /// 检查主页菜单当前状态
+        /// </summary>
+		void CheckBeginMenuButton()
+		{
+            switch (nowButton)
+            {
+                case 1:
+                    ButtonAnim[0].Play("BeginMenuButtonSelect");
+                    ButtonAnim[1].Play("BeginMenuButtonUnSelect");
+                    ButtonAnim[2].Play("BeginMenuButtonUnSelect");
+                    break;
+                case 2:
+                    ButtonAnim[0].Play("BeginMenuButtonUnSelect");
+                    ButtonAnim[1].Play("BeginMenuButtonSelect");
+                    ButtonAnim[2].Play("BeginMenuButtonUnSelect");
+                    break;
+                case 3:
+                    ButtonAnim[0].Play("BeginMenuButtonUnSelect");
+                    ButtonAnim[1].Play("BeginMenuButtonUnSelect");
+                    ButtonAnim[2].Play("BeginMenuButtonSelect");
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 初始化主页菜单当前状态
+        /// </summary>
+        void InitBeginMenuButton()
+        {
+            ButtonAnim[0].Play("BeginMenuButtonUnSelect");
+            ButtonAnim[1].Play("BeginMenuButtonSelect");
+            ButtonAnim[2].Play("BeginMenuButtonUnSelect");
+        }
+
+        /// <summary>
+        /// 使用携带道具按钮事件
+        /// </summary>
+        void  SetTakeItem()
+        {
+            BtnItem1.onClick.RemoveAllListeners();
+            BtnItem2.onClick.RemoveAllListeners();
+            BtnItem3.onClick.RemoveAllListeners();
+
+            //判断是否还有道具
+            BtnItem1.onClick.AddListener(()=>
+            {
+                if (CheckHaveItem(6))
+                    UseItem(6,BtnItem1);
+            });
+            BtnItem2.onClick.AddListener(() =>
+            {
+                if (CheckHaveItem(7))
+                    UseItem(7, BtnItem2);
+            });
+            BtnItem3.onClick.AddListener(() =>
+            {
+                if (CheckHaveItem(8))
+                    UseItem(8, BtnItem3);
+            });
+
+            BtnItem1.gameObject.SetActive(LevelManager.Instance.takeItem.Contains(6));
+            BtnItem2.gameObject.SetActive(LevelManager.Instance.takeItem.Contains(7));
+            BtnItem3.gameObject.SetActive(LevelManager.Instance.takeItem.Contains(8));
+
+            TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();
+            TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
+            TxtItem3.text = this.GetUtility<SaveDataUtility>().GetItemNum(8).ToString();
+
+            SetItem();
+        }
+
+        /// <summary>
+        /// 检查是否拥有道具
+        /// </summary>
+        /// <param name="itemID"></param>
+        /// <returns></returns>
+        bool CheckHaveItem(int itemID)
+        {
+            if (this.GetUtility<SaveDataUtility>().GetItemNum(itemID) > 0)
+                return true;
+            else return false;
+        }
+
+        /// <summary>
+        /// 使用携带道具 --道具效果还未实现
+        /// </summary>
+        /// <param name="itemID"></param>
+        void UseItem(int itemID, Button itemObj)
+        {
+            switch (itemID)
+            {
+                case 6:
+                    LevelManager.Instance.AddBottle(true);
+                    this.GetUtility<SaveDataUtility>().ReduceItemNum(6);
+                    TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();
+
+                    break;
+                case 7:
+                    LevelManager.Instance.AddBottle(true);
+                    this.GetUtility<SaveDataUtility>().ReduceItemNum(7);
+                    TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
+
+                    break;
+                case 8:
+                    LevelManager.Instance.AddBottle(true);
+                    this.GetUtility<SaveDataUtility>().ReduceItemNum(8);
+                    TxtItem3.text = this.GetUtility<SaveDataUtility>().GetItemNum(8).ToString();
+
+                    break;
+            }
+
+            if (!CheckHaveItem(itemID))
+                itemObj.Hide();
+        }
+
+        /// <summary>
+        /// 解锁建筑宝箱奖励
+        /// </summary>
         void ShowReward()
         {
             RewardNode.gameObject.SetActive(true);
@@ -333,9 +436,13 @@ namespace QFramework.Example
             ImgItem8.gameObject.SetActive(true);
         }
 
+        /// <summary>
+        /// 更新金币数量
+        /// </summary>
+        /// <param name="num"></param>
         void SetCoin(int num = 0)
         {
-            if(num == 0)
+            if (num == 0)
             {
                 num = this.GetUtility<SaveDataUtility>().GetCoinNum();
             }
@@ -343,27 +450,40 @@ namespace QFramework.Example
             TxtCoin.text = num.ToString();
         }
 
+        /// <summary>
+        /// 更新星星数量
+        /// </summary>
+        void SetStar()
+        {
+            var nowStar = this.GetUtility<SaveDataUtility>().GetLevelClear() - 1;
+            var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
+            var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
+            var useStar = LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow);
+            TxtStar.text = (nowStar - useStar).ToString();
+
+            //Debug.Log("更新星星数量");
+        }
+
+        /// <summary>
+        /// 更新体力
+        /// </summary>
         void SetVitality()
         {
             TxtHeart.text = this.GetUtility<SaveDataUtility>().GetVitalityNum().ToString();
         }
 
-        void SetStar()
-        {
-            var nowStar = this.GetUtility<SaveDataUtility>().GetLevelClear() - 1;
-
-            var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
-            var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
-            var useStar = LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow);
-
-            TxtStar.text = (nowStar - useStar).ToString();
-        }
-
-		void SetText()
+        /// <summary>
+        /// 更新关卡文本
+        /// </summary>
+        void SetText()
 		{
             TxtLevel.text = "Level " + LevelManager.Instance.levelId;
         }
 
+        /// <summary>
+        /// 返回主页
+        /// </summary>
+        /// <param name="coin"></param>
         void ReturnBegin(int coin = 0)
         {
             SetCoin(this.GetUtility<SaveDataUtility>().GetCoinNum() - coin);
@@ -388,11 +508,14 @@ namespace QFramework.Example
             TxtRemoveAllNum.text = saveU.GetItemNum(5).ToString();
         }
 
+        /// <summary>
+        /// 金币和星星的飞行粒子效果
+        /// </summary>
+        /// <returns></returns>
         IEnumerator ShowFx()
         {
             starFx.Play(10);
-
-
+            
             yield return new WaitForSeconds(1.5f);
             SetStar();
             TxtCoinAdd.Play("TxtUp");
@@ -402,15 +525,19 @@ namespace QFramework.Example
             SetCoin();
         }
 
+        /// <summary>
+        /// 更新主页场景建筑和部分UI
+        /// </summary>
         void SetScene()
 		{
+            //Debug.Log("更新场景");
             SetStar();
-			var levelNow = this.GetUtility<SaveDataUtility>().GetLevelClear();
+            var levelNow = this.GetUtility<SaveDataUtility>().GetLevelClear();
             var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
             var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
             TxtArea.text = "Area " + sceneNow;
 
-
+            //启用场景
             switch (sceneNow)
             {
                 case 1:
@@ -438,19 +565,24 @@ namespace QFramework.Example
                     SceneNode4.SetActive(true);
                     break;
             }
-
             ImgProgress.fillAmount = partNow / 5f;
             TxtImgprogress.text = partNow + " / 5";
-            if (this.GetUtility<SaveDataUtility>().GetSceneBox() == sceneNow)
-            {
-                TxtArea.text = "Area " + (sceneNow + 1);
-                ImgProgress.fillAmount = 0;
-                TxtImgprogress.text = 0 + " / 5";
-            }
+            //并不需要判断宝箱编号等，只需要负责更新UI即可
+            //if (this.GetUtility<SaveDataUtility>().GetSceneBox() == sceneNow)
+            //{
+            //    TxtArea.text = "Area " + (sceneNow);// + 1
+            //    ImgProgress.fillAmount = 0;
+            //    TxtImgprogress.text = 0 + " / 5";
+            //}
             SetScenePart(sceneNow, partNow);
 
         }
 
+        /// <summary>
+        /// 解锁场景建筑
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <param name="partNow"></param>
         void SetScenePart(int scene, int partNow)
         {
             switch (scene)
@@ -487,6 +619,11 @@ namespace QFramework.Example
             }
         }
 
+        /// <summary>
+        /// 解锁场景建筑触发特效
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <param name="num"></param>
         void ShowFx(int scene, int num)
         {
             switch (scene)
@@ -506,28 +643,10 @@ namespace QFramework.Example
             }
         }
 
-        protected override void OnShow()
-		{
-			BindBtn();
-			RegisterEvent();
-			SetText();
-            SetCoin();
-            SetStar();
-            SetVitality();
-            SetItem();
-            ButtonAnim[0].Play("BeginMenuButtonUnSelect");
-            ButtonAnim[1].Play("BeginMenuButtonSelect");
-            ButtonAnim[2].Play("BeginMenuButtonUnSelect");
-
-            var levelNow = this.GetUtility<SaveDataUtility>().GetLevelClear();
-            if (levelNow <= 5)
-            {
-                LevelNode.SetActive(true);
-                BeginNode.SetActive(false);
-            }
-            SetScene();
-        }
-
+        /// <summary>
+        /// 道具飞行效果(完成回调)
+        /// </summary>
+        /// <returns></returns>
         IEnumerator FlyReward()
         {
             RewardNode.gameObject.SetActive(false);
@@ -591,13 +710,5 @@ namespace QFramework.Example
             RewardCoinFx.Play(10);
 
         }
-
-        protected override void OnHide()
-		{
-		}
-		
-		protected override void OnClose()
-		{
-		}
     }
 }

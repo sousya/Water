@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2034967237
+CRC: 706289669
 Hashes:
   AssetFileHash:
     serializedVersion: 2
@@ -46,4 +46,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Resources/Font/FontAll.asset
 Dependencies:
-- E:/Water/AssetBundles/Android/fontextra_asset
+- E:/Unity Project/Water/AssetBundles/Android/fontextra_asset

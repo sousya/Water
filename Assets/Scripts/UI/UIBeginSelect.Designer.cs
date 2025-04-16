@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:51589fdf-4d92-4c11-9720-b7a33645ba4b
+	// Generate Id:04b02828-05f3-414f-90aa-a9d052ee3281
 	public partial class UIBeginSelect
 	{
 		public const string Name = "UIBeginSelect";
@@ -13,7 +13,9 @@ namespace QFramework.Example
 		[SerializeField]
 		public UnityEngine.UI.Button BtnClose;
 		[SerializeField]
-		public UnityEngine.RectTransform ImgReward;
+		public UnityEngine.UI.Button BtnBox;
+		[SerializeField]
+		public UnityEngine.UI.Button BtnInfo;
 		[SerializeField]
 		public UnityEngine.UI.Image ImgProgress;
 		[SerializeField]
@@ -37,16 +39,35 @@ namespace QFramework.Example
 		[SerializeField]
 		public UnityEngine.UI.Image ImgSelect3;
 		[SerializeField]
+		public UnityEngine.UI.Image ImgReward;
+		[SerializeField]
 		public UnityEngine.UI.Button BtnStart;
 		[SerializeField]
-		public UnityEngine.UI.Button BtnInfo;
+		public Transform RewardNode;
+		[SerializeField]
+		public UnityEngine.UI.Button CloseReward;
+		[SerializeField]
+		public RectTransform TargetPos;
+		[SerializeField]
+		public RectTransform BeginPos3;
+		[SerializeField]
+		public RectTransform BeginPos2;
+		[SerializeField]
+		public RectTransform BeginPos1;
+		[SerializeField]
+		public UnityEngine.UI.Image ImgItem3;
+		[SerializeField]
+		public UnityEngine.UI.Image ImgItem2;
+		[SerializeField]
+		public UnityEngine.UI.Image ImgItem1;
 		
 		private UIBeginSelectData mPrivateData = null;
 		
 		protected override void ClearUIComponents()
 		{
 			BtnClose = null;
-			ImgReward = null;
+			BtnBox = null;
+			BtnInfo = null;
 			ImgProgress = null;
 			TxtProgress = null;
 			BtnItem1 = null;
@@ -58,8 +79,17 @@ namespace QFramework.Example
 			BtnItem3 = null;
 			TxtItem3 = null;
 			ImgSelect3 = null;
+			ImgReward = null;
 			BtnStart = null;
-			BtnInfo = null;
+			RewardNode = null;
+			CloseReward = null;
+			TargetPos = null;
+			BeginPos3 = null;
+			BeginPos2 = null;
+			BeginPos1 = null;
+			ImgItem3 = null;
+			ImgItem2 = null;
+			ImgItem1 = null;
 			
 			mData = null;
 		}

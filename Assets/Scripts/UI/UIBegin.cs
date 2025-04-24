@@ -1,39 +1,44 @@
 using UnityEngine;
 using UnityEngine.UI;
 using QFramework;
+using GameDefine;
 using System.Collections.Generic;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine.SocialPlatforms;
+using System.Linq;
+using UnityEngine.Rendering;
 
 namespace QFramework.Example
 {
-	public class UIBeginData : UIPanelData
-	{
-	}
-	public partial class UIBegin : UIPanel, ICanRegisterEvent, ICanGetUtility
+    public class UIBeginData : UIPanelData
+    {
+    }
+    public partial class UIBegin : UIPanel, ICanRegisterEvent, ICanGetUtility
     {
         public IArchitecture GetArchitecture()
         {
             return GameMainArc.Interface;
         }
 
-		public List<Animator> ButtonAnim;
+        public List<Animator> ButtonAnim;
 
-		public GameObject BeginNode, LevelNode, SceneNode1, SceneNode2, SceneNode3, SceneNode4;
-        public ScenePartCtrl ScenePart1, ScenePart2, ScenePart3, ScenePart4; 
+        public GameObject BeginNode, LevelNode, SceneNode1, SceneNode2, SceneNode3, SceneNode4;
+        public ScenePartCtrl ScenePart1, ScenePart2, ScenePart3, ScenePart4;
         public ParticleTargetMoveCtrl coinFx, starFx;
-		int nowButton = 2;
+        int nowButton = 2;
 
         protected override void OnInit(IUIData uiData = null)
-		{
-			mData = uiData as UIBeginData ?? new UIBeginData();
-			// please add init code here
-		}
-		
-		protected override void OnOpen(IUIData uiData = null)
-		{
+        {
+            mData = uiData as UIBeginData ?? new UIBeginData();
+            // please add init code here
+        }
+
+        protected override void OnOpen(IUIData uiData = null)
+        {
+            //真机模式下，AssetBundle 加载资源后需要关联材质
             TxtLevel.font.material.shader = Shader.Find(TxtLevel.font.material.shader.name);
+            //TxtImgprogress.font.material.shader = Shader.Find(TxtImgprogress.font.material.shader.name);
         }
 
         protected override void OnShow()
@@ -73,22 +78,21 @@ namespace QFramework.Example
             BtnHalfBottle.onClick.RemoveAllListeners();
             BtnRemoveAll.onClick.RemoveAllListeners();
 
-			BtnRefresh.onClick.AddListener(() =>
-			{
+            BtnRefresh.onClick.AddListener(() =>
+            {
                 if (!LevelManager.Instance.isPlayFxAnim)
                 {
                     var num = this.GetUtility<SaveDataUtility>().GetItemNum(1);
-                    if(num <= 0)
+                    if (num <= 0)
                     {
                         UIBuyItemData data = new UIBuyItemData() { item = 1 };
                         UIKit.OpenPanel<UIBuyItem>(data);
                         return;
                     }
-                    if(LevelManager.Instance.ReturnLast())
+                    if (LevelManager.Instance.ReturnLast())
                     {
-                        this.GetUtility<SaveDataUtility>().ReduceItemNum(1);
+                        UseItemUpdateNum(1);
                     }
-                    SetItem();
                 }
             });
 
@@ -103,9 +107,14 @@ namespace QFramework.Example
                         UIKit.OpenPanel<UIBuyItem>(data);
                         return;
                     }
-                    LevelManager.Instance.RemoveHide();
-                    this.GetUtility<SaveDataUtility>().ReduceItemNum(2);
-                    SetItem();
+                    //判断是否有黑水瓶
+                    if (LevelManager.Instance.hideBottleList.Count != 0)
+                    {
+                        LevelManager.Instance.RemoveHide(() =>
+                        {
+                            UseItemUpdateNum(2);
+                        });
+                    }
                 }
             });
 
@@ -120,13 +129,14 @@ namespace QFramework.Example
                         UIKit.OpenPanel<UIBuyItem>(data);
                         return;
                     }
-                    LevelManager.Instance.AddBottle(false);
-                    this.GetUtility<SaveDataUtility>().ReduceItemNum(3);
-                    SetItem();
+                    LevelManager.Instance.AddBottle(false, () =>
+                    {
+                        UseItemUpdateNum(3);
+                    });
                 }
             });
 
-			BtnHalfBottle.onClick.AddListener(() =>
+            BtnHalfBottle.onClick.AddListener(() =>
             {
                 if (!LevelManager.Instance.isPlayFxAnim)
                 {
@@ -137,9 +147,10 @@ namespace QFramework.Example
                         UIKit.OpenPanel<UIBuyItem>(data);
                         return;
                     }
-                    LevelManager.Instance.AddBottle(true);
-                    this.GetUtility<SaveDataUtility>().ReduceItemNum(4);
-                    SetItem();
+                    LevelManager.Instance.AddBottle(true, () =>
+                    {
+                        UseItemUpdateNum(4);
+                    });
                 }
             });
 
@@ -154,9 +165,12 @@ namespace QFramework.Example
                         UIKit.OpenPanel<UIBuyItem>(data);
                         return;
                     }
-                    LevelManager.Instance.RemoveAll();
-                    this.GetUtility<SaveDataUtility>().ReduceItemNum(5);
-                    SetItem();
+                    //判定是否有任何阻碍效果
+                    if (LevelManager.Instance.CheckAllDebuff())
+                    {
+                        LevelManager.Instance.RemoveAll();
+                        UseItemUpdateNum(5);
+                    }
                 }
             });
 
@@ -167,23 +181,23 @@ namespace QFramework.Example
             });
 
             BeginMenuButton1.onClick.RemoveAllListeners();
-			BeginMenuButton1.onClick.AddListener(() =>
+            BeginMenuButton1.onClick.AddListener(() =>
             {
-				nowButton = 1;
+                nowButton = 1;
                 CheckBeginMenuButton();
             });
 
             BeginMenuButton2.onClick.RemoveAllListeners();
             BeginMenuButton2.onClick.AddListener(() =>
             {
-				nowButton = 2;
+                nowButton = 2;
                 CheckBeginMenuButton();
             });
 
             BeginMenuButton3.onClick.RemoveAllListeners();
             BeginMenuButton3.onClick.AddListener(() =>
             {
-				nowButton = 3;
+                nowButton = 3;
                 CheckBeginMenuButton();
             });
 
@@ -237,6 +251,35 @@ namespace QFramework.Example
                 SetScene();
                 StartCoroutine(FlyReward());
             });
+
+            BtnItem1.onClick.RemoveAllListeners();
+            //BtnItem2.onClick.RemoveAllListeners();
+            BtnItem3.onClick.RemoveAllListeners();
+
+            //判断是否还有道具
+            BtnItem1.onClick.AddListener(() =>
+            {
+                if (CheckHaveItem(6))
+                    UseItem(6, BtnItem1);
+            });
+            //由点击使用改为自动使用
+            /*BtnItem2.onClick.AddListener(() =>
+            {
+                if (CheckHaveItem(7))
+                    UseItem(7, BtnItem2);
+            });*/
+            BtnItem3.onClick.AddListener(() =>
+            {
+                if (CheckHaveItem(8))
+                    UseItem(8, BtnItem3);
+            });
+
+
+            BtnHead.onClick.RemoveAllListeners();
+            BtnHead.onClick.AddListener(() =>
+            {
+                UIKit.OpenPanel("UIPersonal");
+            });
         }
 
         //事件注册
@@ -244,7 +287,7 @@ namespace QFramework.Example
         {
             this.RegisterEvent<LevelStartEvent>(e =>
             {
-                TxtLevel.text = "Level " + LevelManager.Instance.levelId;
+                TxtLevel.text = LevelManager.Instance.levelId.ToString();//"Level " + 
                 SetTakeItem();
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
@@ -302,13 +345,19 @@ namespace QFramework.Example
                 InitBeginMenuButton();
 
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
+            //尝试使用道具7
+            StringEventSystem.Global.Register("TryUserItem7", () =>
+            {
+                if (CheckHaveItem(7))
+                    UseItem(7, BtnItem2);
+            }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
         /// <summary>
         /// 检查主页菜单当前状态
         /// </summary>
 		void CheckBeginMenuButton()
-		{
+        {
             switch (nowButton)
             {
                 case 1:
@@ -342,29 +391,9 @@ namespace QFramework.Example
         /// <summary>
         /// 使用携带道具按钮事件
         /// </summary>
-        void  SetTakeItem()
+        void SetTakeItem()
         {
-            BtnItem1.onClick.RemoveAllListeners();
-            BtnItem2.onClick.RemoveAllListeners();
-            BtnItem3.onClick.RemoveAllListeners();
-
-            //判断是否还有道具
-            BtnItem1.onClick.AddListener(()=>
-            {
-                if (CheckHaveItem(6))
-                    UseItem(6,BtnItem1);
-            });
-            BtnItem2.onClick.AddListener(() =>
-            {
-                if (CheckHaveItem(7))
-                    UseItem(7, BtnItem2);
-            });
-            BtnItem3.onClick.AddListener(() =>
-            {
-                if (CheckHaveItem(8))
-                    UseItem(8, BtnItem3);
-            });
-
+            BtnItemBg.gameObject.SetActive(LevelManager.Instance.takeItem.Count > 0);
             BtnItem1.gameObject.SetActive(LevelManager.Instance.takeItem.Contains(6));
             BtnItem2.gameObject.SetActive(LevelManager.Instance.takeItem.Contains(7));
             BtnItem3.gameObject.SetActive(LevelManager.Instance.takeItem.Contains(8));
@@ -397,22 +426,242 @@ namespace QFramework.Example
             switch (itemID)
             {
                 case 6:
-                    LevelManager.Instance.AddBottle(true);
-                    this.GetUtility<SaveDataUtility>().ReduceItemNum(6);
-                    TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();
-
+                    LevelManager.Instance.AddBottle(true, () =>
+                    {
+                        this.GetUtility<SaveDataUtility>().ReduceItemNum(6);
+                        TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();
+                    });
                     break;
+
                 case 7:
-                    LevelManager.Instance.AddBottle(true);
-                    this.GetUtility<SaveDataUtility>().ReduceItemNum(7);
-                    TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
+                    //判定使用有黑水瓶子，有则开始生效，然后道具减一,然后隐藏
+                    if (LevelManager.Instance.hideBottleList.Count > 0)
+                    {
+                        var tempList = new List<BottleCtrl>(LevelManager.Instance.hideBottleList);
 
+                        while (tempList.Count > 2)
+                        {
+                            int randIndex = Random.Range(0, tempList.Count);
+                            tempList.RemoveAt(randIndex);
+                        }
+                        foreach (var item in tempList)
+                        {
+                            for (int i = 0; i < item.hideWaters.Count; i++)
+                            {
+                                item.hideWaters[i] = false;
+                            }
+                            item.SetHideShow(false);
+                        }
+                        ActionKit.Delay(0.5f, () =>
+                        {
+                            //现在的问题就是回调执行的时机不对，需要动画播放完成之后，进行隐藏
+                            //没有隐藏的问题，
+                            this.GetUtility<SaveDataUtility>().ReduceItemNum(7);
+                            TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
+                            itemObj.Hide();
+                        }).Start(this);
+                    }
                     break;
-                case 8:
-                    LevelManager.Instance.AddBottle(true);
-                    this.GetUtility<SaveDataUtility>().ReduceItemNum(8);
-                    TxtItem3.text = this.GetUtility<SaveDataUtility>().GetItemNum(8).ToString();
 
+                case 8:
+                    //可能还需要别的条件
+                    if (GameCtrl.Instance.FirstBottle != null)
+                    {
+                        var botter = GameCtrl.Instance.FirstBottle;
+
+                        //非空瓶和只有一格水,还有水的颜色不统一
+                        if (botter.waters.Count > 1 && !botter.waters.All(x => x == botter.waters[0]))
+                        {
+                            //Debug.Log("可以使用道具");
+                            // 索引列表用于随机洗牌
+                            List<int> indices = Enumerable.Range(0, botter.waters.Count).ToList();
+                            do
+                            {
+                                for (int i = 0; i < indices.Count; i++)
+                                {
+                                    int randIndex = Random.Range(i, indices.Count);
+                                    (indices[i], indices[randIndex]) = (indices[randIndex], indices[i]);
+                                }
+                            }
+                            while (Enumerable.SequenceEqual(indices, Enumerable.Range(0, botter.waters.Count)));
+
+                            List<int> newWaters = new List<int>();
+                            List<bool> newHideWater = new List<bool>();
+                            //List<BottleWaterCtrl> newWaterImgs = new List<BottleWaterCtrl>();
+                            foreach (int idx in indices)
+                            {
+                                newWaters.Add(botter.waters[idx]);
+                                newHideWater.Add(botter.hideWaters[idx]);
+                                //newWaterImgs.Add(botter.waterImg[idx]);
+                            }
+                            // 替换原列表
+                            botter.waters = newWaters;
+                            botter.hideWaters = newHideWater;
+
+                            //修改水块颜色和切换道具位置
+                            for (int i = 0; i < botter.waters.Count; i++)
+                            {
+                                var useColor = botter.waters[i] - 1;
+                                if (useColor < 1000)
+                                {
+                                    botter.waterImg[i].color = LevelManager.Instance.waterColor[useColor];
+                                    botter.waterImg[i].broomItemGo.SetActive(false);
+                                    botter.waterImg[i].createItemGo.SetActive(false);
+                                    botter.waterImg[i].changeItemGo.SetActive(false);
+                                    botter.waterImg[i].magnetItemGo.SetActive(false);
+                                }
+                                else
+                                {
+                                    // 根据道具类型设置对应的显示和动画
+                                    switch (botter.waters[i])
+                                    {
+                                        case (int)ItemType.ClearItem:
+                                            botter.waterImg[i].broomItemGo.SetActive(true);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(false);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_cl", false);
+
+                                            break;
+                                        case (int)ItemType.MagnetItem:
+                                            botter.waterImg[i].broomItemGo.SetActive(false);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(false);
+                                            botter.waterImg[i].magnetItemGo.SetActive(true);
+                                            botter.waterImg[i].magnetSpine.AnimationState.SetAnimation(0, "idle", false);
+                                            break;
+                                        case (int)ItemType.MakeColorItem:
+                                            botter.waterImg[i].broomItemGo.SetActive(false);
+                                            botter.waterImg[i].createItemGo.SetActive(true);
+                                            botter.waterImg[i].changeItemGo.SetActive(false);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].createSpine.AnimationState.SetAnimation(0, "idle", false);
+
+                                            break;
+                                        case (int)ItemType.ChangeGreen:
+                                            botter.waterImg[i].broomItemGo.SetActive(false);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(true);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_cl", false);
+
+                                            //waterImg[i].color = new Color(1, 1, 1, 0);
+                                            break;
+                                        case (int)ItemType.ChangeOrange:
+                                            botter.waterImg[i].broomItemGo.SetActive(false);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(true);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_jh", false);
+
+                                            //waterImg[i].color = new Color(1, 1, 1, 0);
+                                            break;
+                                        case (int)ItemType.ChangePink:
+                                            botter.waterImg[i].broomItemGo.SetActive(false);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(true);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_fs", false);
+
+                                            //waterImg[i].color = new Color(1, 1, 1, 0);
+                                            break;
+                                        case (int)ItemType.ChangePurple:
+                                            botter.waterImg[i].broomItemGo.SetActive(false);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(true);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_zs", false);
+
+                                            break;
+                                        case (int)ItemType.ChangeYellow:
+                                            botter.waterImg[i].broomItemGo.SetActive(false);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(true);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_hs", false);
+
+                                            break;
+                                        case (int)ItemType.ChangeDarkBlue:
+                                            botter.waterImg[i].broomItemGo.SetActive(false);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(true);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_sl", false);
+
+                                            break;
+                                        case (int)ItemType.ClearPink:
+                                            botter.waterImg[i].broomItemGo.SetActive(true);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(false);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_fh", false);
+
+                                            break;
+                                        case (int)ItemType.ClearOrange:
+                                            botter.waterImg[i].broomItemGo.SetActive(true);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(false);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_jh", false);
+
+                                            break;
+                                        case (int)ItemType.ClearBlue:
+                                            botter.waterImg[i].broomItemGo.SetActive(true);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(false);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_gl", false);
+
+                                            break;
+                                        case (int)ItemType.ClearYellow:
+                                            botter.waterImg[i].broomItemGo.SetActive(true);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(false);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_hs", false);
+
+                                            break;
+                                        case (int)ItemType.ClearDarkGreen:
+                                            botter.waterImg[i].broomItemGo.SetActive(true);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(false);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_sl", false);
+
+                                            break;
+                                        case (int)ItemType.ClearRed:
+                                            botter.waterImg[i].broomItemGo.SetActive(true);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(false);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_dh", false);
+
+                                            break;
+                                        case (int)ItemType.ClearGreen:
+                                            botter.waterImg[i].broomItemGo.SetActive(true);
+                                            botter.waterImg[i].createItemGo.SetActive(false);
+                                            botter.waterImg[i].changeItemGo.SetActive(false);
+                                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                                            botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_cl", false);
+
+                                            break;
+                                    }
+                                    //var checkColor = LevelManager.Instance.waterColor[useColor - 1000];
+                                    // 设置道具的颜色为统一的道具颜色
+                                    botter.waterImg[i].color = LevelManager.Instance.ItemColor;
+                                }
+                            }
+
+                            //修改水面颜色
+                            botter.PlaySpineWaitAnim();
+                            //存在小问题，和黑水块交换位置时(不是交换到第一块)，也会触发动画
+                            botter.SetHideShow(true);
+
+                            this.GetUtility<SaveDataUtility>().ReduceItemNum(8);
+                            TxtItem3.text = this.GetUtility<SaveDataUtility>().GetItemNum(8).ToString();
+                            //Debug.Log("打乱顺序成功");
+                        }
+                    }
                     break;
             }
 
@@ -476,8 +725,8 @@ namespace QFramework.Example
         /// 更新关卡文本
         /// </summary>
         void SetText()
-		{
-            TxtLevel.text = "Level " + LevelManager.Instance.levelId;
+        {
+            TxtLevel.text = LevelManager.Instance.levelId.ToString();//"Level " + 
         }
 
         /// <summary>
@@ -492,20 +741,62 @@ namespace QFramework.Example
             StartCoroutine(ShowFx());
         }
 
-        void SetItem()
+        /// <summary>
+        /// 判断是否有道具
+        /// </summary>
+        public void SetItem()
         {
             var saveU = this.GetUtility<SaveDataUtility>();
-
             BtnAddRefresh.gameObject.SetActive(saveU.GetItemNum(1) <= 0);
-            BtnAddRemove.gameObject.SetActive(saveU.GetItemNum(2) <= 0);
-            BtnAddAddBottle.gameObject.SetActive(saveU.GetItemNum(3) <= 0);
-            BtnAddHalfBottle.gameObject.SetActive(saveU.GetItemNum(4) <= 0);
-            BtnAddRemoveBottle.gameObject.SetActive(saveU.GetItemNum(5) <= 0);
             TxtRefreshNum.text = saveU.GetItemNum(1).ToString();
+
+            BtnAddRemove.gameObject.SetActive(saveU.GetItemNum(2) <= 0);
             TxtRemoveHideNum.text = saveU.GetItemNum(2).ToString();
+
+            BtnAddAddBottle.gameObject.SetActive(saveU.GetItemNum(3) <= 0);
             TxtAddBottleNum.text = saveU.GetItemNum(3).ToString();
+
+            BtnAddHalfBottle.gameObject.SetActive(saveU.GetItemNum(4) <= 0);
             TxtAddHalfBottleNum.text = saveU.GetItemNum(4).ToString();
+
+            BtnAddRemoveBottle.gameObject.SetActive(saveU.GetItemNum(5) <= 0);
             TxtRemoveAllNum.text = saveU.GetItemNum(5).ToString();
+        }
+
+        /// <summary>
+        /// 使用道具后的回调，更新对应道具剩余数量
+        /// </summary>
+        void UseItemUpdateNum(int itemId)
+        {
+            var saveU = this.GetUtility<SaveDataUtility>();
+            switch (itemId)
+            {
+                case 1:
+                    saveU.ReduceItemNum(1);
+                    BtnAddRefresh.gameObject.SetActive(saveU.GetItemNum(1) <= 0);
+                    TxtRefreshNum.text = saveU.GetItemNum(1).ToString();
+                    break;
+                case 2:
+                    saveU.ReduceItemNum(2);
+                    BtnAddRemove.gameObject.SetActive(saveU.GetItemNum(2) <= 0);
+                    TxtRemoveHideNum.text = saveU.GetItemNum(2).ToString();
+                    break;
+                case 3:
+                    this.GetUtility<SaveDataUtility>().ReduceItemNum(3);
+                    BtnAddAddBottle.gameObject.SetActive(saveU.GetItemNum(3) <= 0);
+                    TxtAddBottleNum.text = saveU.GetItemNum(3).ToString();
+                    break;
+                case 4:
+                    this.GetUtility<SaveDataUtility>().ReduceItemNum(4);
+                    BtnAddHalfBottle.gameObject.SetActive(saveU.GetItemNum(4) <= 0);
+                    TxtAddHalfBottleNum.text = saveU.GetItemNum(4).ToString();
+                    break;
+                case 5:
+                    this.GetUtility<SaveDataUtility>().ReduceItemNum(5);
+                    BtnAddRemoveBottle.gameObject.SetActive(saveU.GetItemNum(5) <= 0);
+                    TxtRemoveAllNum.text = saveU.GetItemNum(5).ToString();
+                    break;
+            }
         }
 
         /// <summary>
@@ -515,7 +806,7 @@ namespace QFramework.Example
         IEnumerator ShowFx()
         {
             starFx.Play(10);
-            
+
             yield return new WaitForSeconds(1.5f);
             SetStar();
             TxtCoinAdd.Play("TxtUp");
@@ -529,7 +820,7 @@ namespace QFramework.Example
         /// 更新主页场景建筑和部分UI
         /// </summary>
         void SetScene()
-		{
+        {
             //Debug.Log("更新场景");
             SetStar();
             var levelNow = this.GetUtility<SaveDataUtility>().GetLevelClear();

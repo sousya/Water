@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2104576956
+CRC: 2840884801
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 32326d820cf40aab8f1de9ffd03c2024
+    Hash: 0b7f3c02226497a10c2c74aa4fb4d490
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 115f972dc4a4fbe0165df0506df7b9cb
+    Hash: 17310de4d1f79ffe17b0d20dd7403a88
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 32326d820cf40aab8f1de9ffd03c2024
+    Hash: 0b7f3c02226497a10c2c74aa4fb4d490
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -19,11 +19,11 @@ ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: a4aa6312ce7c5af4a8b79b2480c2194b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
@@ -58,5 +58,5 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Art/UIPrefab/UIBuyItem.prefab
 Dependencies:
-- E:/Unity Project/Water/AssetBundles/Android/font
-- E:/Unity Project/Water/AssetBundles/Android/fontall_asset
+- E:/U GitHub Project/Water/AssetBundles/Android/font
+- E:/U GitHub Project/Water/AssetBundles/Android/fontall_asset

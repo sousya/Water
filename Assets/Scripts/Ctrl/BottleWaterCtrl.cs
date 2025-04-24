@@ -1,6 +1,8 @@
 using DG.Tweening;
 using QFramework;
+using Spine;
 using Spine.Unity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -369,6 +371,9 @@ public class BottleWaterCtrl : MonoBehaviour
 
     public IEnumerator BreakIce(BottleWaterCtrl waterCtrl)
     {
+        //播放动画，禁止选取 
+        waterCtrl.bottle.isPlayAnim = true;
+
         isPlayItemAnim = true;
         fireRuneGo.SetActive(true);
         fireRuneSpine.AnimationState.SetAnimation(0, "combine", false);
@@ -396,22 +401,34 @@ public class BottleWaterCtrl : MonoBehaviour
 
         go.transform.DOMove(waterCtrl.transform.position, 0.45f).SetEase(Ease.Linear).OnComplete(() =>
         {
-            StartCoroutine(waterCtrl.HideIce());
-
+            //StartCoroutine(waterCtrl.HideIce());
+            waterCtrl.HideIce(() => waterCtrl.bottle.isPlayAnim = false);
             isPlayItemAnim = false;
             fireRuneGo.SetActive(false);
+            //特效销毁
+            go.DestroySelf();
         });
 
     }
 
-    public IEnumerator HideIce()
+    public void HideIce(Action action)
     {
         fireRuneGo.SetActive(true);
+
+        TrackEntry trackEntry =
         fireRuneSpine.AnimationState.SetAnimation(0, "attack", false);
 
-        yield return new WaitForSeconds(1.75f);
-        UnlockIceWater();
-        fireRuneGo.SetActive(false);
+        trackEntry.Complete += (entry) =>
+        {
+            UnlockIceWater();
+            fireRuneGo.SetActive(false);
+            action?.Invoke();
+        };
+
+        //改用事件驱动
+        //yield return new WaitForSeconds(1.75f);
+        //UnlockIceWater();
+        //fireRuneGo.SetActive(false);
     }
 
     public void UnlockIceWater()

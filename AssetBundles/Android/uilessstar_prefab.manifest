@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2399394794
+CRC: 856402856
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d9a3d2a30c37143f55f6afdb4fec95f5
+    Hash: beadbc82578798d8698a12ae1dec20c6
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 9f408f2a7be6920f8bfd42bf95d29e2b
+    Hash: b80f7b042f01c96209e45aec6bd94e11
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: d9a3d2a30c37143f55f6afdb4fec95f5
+    Hash: beadbc82578798d8698a12ae1dec20c6
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -19,11 +19,11 @@ ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 94e8804bcfc35d640a56bee2e7fc55c8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
@@ -58,4 +58,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Art/UIPrefab/UILessStar.prefab
 Dependencies:
-- E:/Unity Project/Water/AssetBundles/Android/fontall_asset
+- E:/U GitHub Project/Water/AssetBundles/Android/fontall_asset

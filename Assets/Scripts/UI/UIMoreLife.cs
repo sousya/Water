@@ -35,8 +35,9 @@ namespace QFramework.Example
 
         void CheckVitality(VitalityTimeChangeEvent e)
         {
-          
+            //打开界面的时候注册监听事件，导致界面关闭时出现问题
             int heartNum = this.GetUtility<SaveDataUtility>().GetVitalityNum();
+            Debug.Log(heartNum);
             TxtHeart.text = heartNum.ToString();
 
              var timeOffset = e.timeOffset % GameConst.RecoveryTime;
@@ -83,6 +84,7 @@ namespace QFramework.Example
 
         void RegisterEvent()
         {
+            Debug.Log("监听体力恢复");
             this.RegisterEvent<VitalityTimeChangeEvent>(e =>
             {
                 CheckVitality(e);
@@ -98,6 +100,7 @@ namespace QFramework.Example
 
             BtnCoinBuy.onClick.AddListener(() =>
             {
+                Debug.Log(CoinManager.Instance == null);
                 CoinManager.Instance.BuyVitality();
             });
 

@@ -5,21 +5,22 @@ using UnityEngine;
 
 public class GameCtrl : MonoBehaviour, ICanSendEvent
 {
-
     public BottleCtrl FirstBottle, FirstCake1;
     public BottleCtrl SecondBottle;
     public static GameCtrl Instance;
     [SerializeField] List<Sprite> sprites;
     public bool control = false;
+
     public IArchitecture GetArchitecture()
     {
         return GameMainArc.Interface;
     }
+
     private void Awake()
     {
         Instance = this;
     }
-    // Start is called before the first frame update
+
     void Start()
     {
 
@@ -61,7 +62,8 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
                 if (FirstBottle != null && SecondBottle != null)
                 {
                     control = true;
-                    if (FirstBottle.CheckMoveOut() && SecondBottle.CheckMoveIn(FirstBottle.GetMoveOutTop()))
+                    if (FirstBottle.CheckMoveOut() && SecondBottle.CheckMoveIn(FirstBottle.GetMoveOutTop())
+                        && !FirstBottle.isPlayAnim && !SecondBottle.isPlayAnim)
                     {
                         //Debug.Log("ÒÆ¶¯ " + FirstCake.gameObject.name + "->" + SecondCake.gameObject.name);
                         LevelManager.Instance.RecordLast();
@@ -85,7 +87,13 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
        
     }
 
-    // Update is called once per frame
+    public void InitGameCtrl()
+    {
+        FirstBottle = null;
+        SecondBottle = null;
+        control = false;
+    }
+
     void LateUpdate()
     {
 
@@ -103,8 +111,6 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
 
 
     }
-
-
 
     IEnumerator LerpMove(Vector3 vector3)
     {
@@ -125,5 +131,4 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
 
 
     }
-
 }

@@ -19,9 +19,9 @@ MonoBehaviour:
     numCake: 0
     limitColor: 0
     lockType: 0
-    isClearHide: 0
-    isNearHide: 0
-    isFreeze: 0
+    isClearHide: 1
+    isNearHide: 1
+    isFreeze: 1
   - waterSet: 02000000
     isHide: 00
     waterItem: 00000000

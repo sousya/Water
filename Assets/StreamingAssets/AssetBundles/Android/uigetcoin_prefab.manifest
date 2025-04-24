@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 99626772
+CRC: 1830561666
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3567aca7b4bad55b3615506654c2291c
+    Hash: 851e82deb041d0ea596ca1e7f5a9f93f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 3d8e1a6b3c6cba320200bc3f3247d947
+    Hash: 92528a0bd157b12d62b8d8dd91e658e5
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 3567aca7b4bad55b3615506654c2291c
+    Hash: 851e82deb041d0ea596ca1e7f5a9f93f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -21,9 +21,9 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
@@ -80,5 +80,5 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Art/UIPrefab/UIGetCoin.prefab
 Dependencies:
-- E:/Unity Project/Water/AssetBundles/Android/font
-- E:/Unity Project/Water/AssetBundles/Android/fontall_asset
+- E:/U GitHub Project/Water/AssetBundles/Android/font
+- E:/U GitHub Project/Water/AssetBundles/Android/fontall_asset

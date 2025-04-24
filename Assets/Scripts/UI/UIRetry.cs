@@ -50,11 +50,21 @@ namespace QFramework.Example
             BtnRetry.onClick.RemoveAllListeners();
             BtnRetry.onClick.AddListener(() =>
             {
-                var utility = this.GetUtility<SaveDataUtility>();
-                var coin = utility.GetCoinNum();
-                utility.SetCoinNum(coin - 90);
-                LevelManager.Instance.RefreshLevel();
-                CloseSelf();
+                //var utility = this.GetUtility<SaveDataUtility>();
+                //var coin = utility.GetCoinNum();
+                if (coin >= 90)
+                {
+                    //LevelManager.Instance.RefreshLevel();
+                    //utility.SetCoinNum(coin - 90);
+
+                    //增加管子
+                    LevelManager.Instance.AddBottle(false, () =>
+                    {
+                        utility.SetCoinNum(coin - 90);
+
+                    });
+                    CloseSelf();
+                }
             });
         }
 		

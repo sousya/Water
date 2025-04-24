@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3074801986
+CRC: 1304031755
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f84e07d97abf0c4472f77ad0db0594dd
+    Hash: 9774098eb8d3d5e9e545a6c4c4847009
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e954a193ad8fae16395e834831cd65b6
+    Hash: ee66f6e24824e97ef7a8529c1bab38dd
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: f84e07d97abf0c4472f77ad0db0594dd
+    Hash: 9774098eb8d3d5e9e545a6c4c4847009
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,9 +23,9 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
@@ -86,4 +86,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Art/UIPrefab/UIRetry.prefab
 Dependencies:
-- E:/Unity Project/Water/AssetBundles/Android/fontall_asset
+- E:/U GitHub Project/Water/AssetBundles/Android/fontall_asset

@@ -67,10 +67,20 @@ namespace QAssetBundle
         public const string BundleName = "uilessstar_prefab";
         public const string UILessStar = "UILessStar";
     }
+    public class Uimask_prefab
+    {
+        public const string BundleName = "uimask_prefab";
+        public const string UIMask = "UIMask";
+    }
     public class Uimorelife_prefab
     {
         public const string BundleName = "uimorelife_prefab";
         public const string UIMoreLife = "UIMoreLife";
+    }
+    public class Uipersonal_prefab
+    {
+        public const string BundleName = "uipersonal_prefab";
+        public const string UIPersonal = "UIPersonal";
     }
     public class Uiretry_prefab
     {

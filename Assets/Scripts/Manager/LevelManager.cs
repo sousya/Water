@@ -14,6 +14,7 @@ using QFramework.Example;
 using static LevelCreateCtrl;
 using System.Collections;
 using Spine.Unity;
+using Unity.Mathematics;
 
 [MonoSingletonPath("[Level]/LevelManager")]
 public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRegisterEvent
@@ -25,10 +26,12 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public List<GameObject> bottleNodes = new List<GameObject>();
     public List<LevelCreateCtrl> levels = new List<LevelCreateCtrl>();
     public List<int> clearList = new List<int>();
+    //带有阻碍的颜色(魔法布，藤曼，冰冻)
     public List<int> cantClearColorList = new List<int>();
+    //带有阻碍的颜色(魔法布，藤曼，冰冻)
     public List<int> cantChangeColorList = new List<int>();
     public List<BottleCtrl> nowBottles = new List<BottleCtrl>();
-    public List<BottleCtrl> tempBottles = new List<BottleCtrl>();
+
     public List<BottleCtrl> iceBottles = new List<BottleCtrl>();
     public List<BottleCtrl> bottles = new List<BottleCtrl>();
     public List<BottleCtrl> topBottle = new List<BottleCtrl>();
@@ -40,7 +43,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public List<Color> waterColor = new List<Color>();
     public List<Sprite> waterTopSp;
     public List<Sprite> waterSp;
-    public int VictoryBottle, moreBottle;
+    public int VictoryBottle;
     public BottleProperty emptyBottle = new BottleProperty();
     public Transform gameCanvas;
     List<ChangePair> changeList;
@@ -106,13 +109,8 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
-        this.GetUtility<SaveDataUtility>().SaveLevel(30);
+        this.GetUtility<SaveDataUtility>().SaveLevel(7);
 
-        if (GameCtrl.Instance.FirstBottle != null)
-        {
-            GameCtrl.Instance.FirstBottle.OnCancelSelect();
-            GameCtrl.Instance.FirstBottle = null;
-        }
         emptyBottle.numCake = 4;
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();
 
@@ -328,14 +326,15 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// 合成完毕逻辑
     /// </summary>
     /// <param name="clearColor"></param>
-    /// <param name="idx"></param>
-    public void FinishClear(int clearColor, int idx)
+    /// <param name="botterIdx"></param>
+    public void FinishClear(int clearColor, int botterIdx)
     {
-
+        //Debug.Log($"颜色编号：{clearColor}");
+        //Debug.Log($"idx：{botterIdx}");
         foreach (var item in nowBottles)
         {
             item.CheckUnlockHide(clearColor);
-            item.CheckNearHide(idx);
+            item.CheckNearHide(botterIdx);
         }
 
         StopCoroutine(WaitCheckFinish());
@@ -370,7 +369,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             //VictoryBottle = idx;
             this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
             this.GetUtility<SaveDataUtility>().SetCoinNum(this.GetUtility<SaveDataUtility>().GetCoinNum() + 20);
-            
+
             //前五关
             if (levelId < 5)
             {
@@ -550,13 +549,78 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         }
     }
 
+
+    /// <summary>
+    /// 使用道具添加瓶子(单个或整瓶)
+    /// </summary>
+    /// <param name="isHalf"></param>
+    public void AddBottle(bool isHalf ,Action action)
+    {
+        if (nowBottles.Count < (topBottle.Count + bottomBottle.Count) || nowHalf != null)
+        {
+            UseItemAddBottle();
+            MoveAndAddBottle(isHalf , action);
+        }
+    }
+
+    /// <summary>
+    /// 增加瓶子
+    /// </summary>
+    public void UseItemAddBottle()
+    {
+        if (nowBottles.Count < (topBottle.Count + bottomBottle.Count))
+        {
+            if (nowHalf != null && nowHalf.maxNum != 4)
+            {
+                //Debug.Log("nowHalf not null");
+                return;
+            }
+
+            int topAc = 0;
+            int bomAc = 0;
+
+            foreach (var item in topBottle)
+            {
+                if (item.gameObject.activeSelf)
+                {
+                    ++topAc;
+                }
+            }
+
+            foreach (var item in bottomBottle)
+            {
+                if (item.gameObject.activeSelf)
+                {
+                    ++bomAc;
+                }
+            }
+
+            //Debug.Log($"上排激活了{topAc}");
+            //Debug.Log($"下排激活了{bomAc}");
+
+            if (topAc > bomAc)
+            {
+                //索引刚好对应下一个要激活的瓶子
+                bottomBottle[bomAc].Show();
+                nowBottles.Add(bottomBottle[bomAc]);
+            }
+            else
+            {
+                topBottle[topAc].Show();
+                nowBottles.Add(topBottle[topAc]);
+            }
+        }
+    }
+
+    #region 关卡重置初始化/进入关卡初始化
+
     /// <summary>
     /// 开始游戏&初始化
     /// </summary>
     /// <param name="id"></param>
     public void StartGame(int id)
     {
-        moreBottle = 0;
+        //moreBottle = 0;
         cantClearColorList.Clear();
         cantChangeColorList.Clear();
         hideBottleList.Clear();
@@ -588,203 +652,64 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         hideColor = new List<int>(levelInfo.hideList);
         nowBottles.Clear();
 
-        SetBottle(levelInfo);
+        nowHalf = null;
+        InitLevels(levelInfo);
 
         this.SendEvent<LevelStartEvent>();
     }
 
     /// <summary>
-    /// 添加瓶子(单个或整瓶)
+    /// 关卡重置初始化/进入关卡初始化
     /// </summary>
-    /// <param name="isHalf"></param>
-    public void AddBottle(bool isHalf)
+    public void InitLevels(LevelCreateCtrl levelInfo)
     {
-        if (!isHalf || nowHalf == null || nowHalf.maxNum == 4)
-        {
-            moreBottle++;
-        }
+        //Debug.Log("关卡重置初始化/首次进入关卡初始化");
         ShowBottleGo();
-        //ShowBottleGo(nowBottles.Count + 1);
-        MoveAndAddBottle(isHalf);
+        InitBottle(levelInfo);
+
+        //携带了道具7，尝试使用道具
+        if (takeItem.Contains(7))
+            StringEventSystem.Global.Send("TryUserItem7");
     }
 
-    /// <summary>
+    /*/// <summary>
+    /// 由InitLevels替换
     /// 设置并根据数据初始化瓶子
     /// </summary>
     /// <param name="levelInfo"></param>
     public void SetBottle(LevelCreateCtrl levelInfo)
     {
-        //ShowBottleGo(levelInfo.bottles.Count);
-        ShowBottleGo();
-        InitBottle(levelInfo);
-    }
+        InitLevels(levelInfo);
+        //ShowBottleGo();
+        //InitBottle(levelInfo);
+    }*/
 
     /// <summary>
-    /// 判断显示那些瓶子
+    /// 判断显示那些瓶子（现用于初始化关卡的瓶子）
     /// </summary>
-    //public void ShowBottleGo(int num)
-
+    /// <param name="userItemSign"></param>
+    /// public void ShowBottleGo(int num)
     public void ShowBottleGo()
     {
-        tempBottles = new List<BottleCtrl>(nowBottles);
         nowBottles.Clear();
-
-        int topAdd = 0;
-        int bottomAdd = 0;
-
-        for (int i = 0; i < moreBottle; i++)
-        {
-            if (nowLevel.topNum < nowLevel.bottomNum)
-            {
-                topAdd += 1;
-            }
-            else if (nowLevel.topNum >= nowLevel.bottomNum)
-            {
-                bottomAdd += 1;
-            }
-        }
 
         for (int i = 0; i < topBottle.Count; i++)
         {
             var useBottle = topBottle[i];
-            var num = (topAdd + nowLevel.topNum);
+            var num = nowLevel.topNum;
             useBottle.gameObject.SetActive(i < num);
             if (i < num)
-            {
                 nowBottles.Add(useBottle);
-            }
         }
 
         for (int i = 0; i < bottomBottle.Count; i++)
         {
             var useBottle = bottomBottle[i];
-            var num = (bottomAdd + nowLevel.bottomNum);
+            var num = nowLevel.bottomNum;
             useBottle.gameObject.SetActive(i < num);
             if (i < num)
-            {
                 nowBottles.Add(useBottle);
-            }
         }
-        //var num = levelInfo.bottles.Count;
-        //if (num <= 6)
-        //{
-        //    for (int i = 0; i < bottles.Count; i++)
-        //    {
-        //        var useBottle = bottles[i];
-        //        useBottle.gameObject.SetActive(i < num);
-        //        if(i < num)
-        //        {
-        //            nowBottles.Add(useBottle);
-        //        }
-        //    }
-        //}
-        //else if (num == 7)
-        //{
-        //    for (int i = 0; i < 8; i++)
-        //    {
-        //        var useBottle = bottles[i];
-        //        useBottle.gameObject.SetActive(i < 4);
-        //        if(i < 4)
-        //        {
-        //            nowBottles.Add(useBottle);
-        //        }
-        //    }
-        //    for (int i = 8; i < 16; i++)
-        //    {
-        //        var useBottle = bottles[i];
-        //        useBottle.gameObject.SetActive(i < 11);
-        //        if (i < 11)
-        //        {
-        //            nowBottles.Add(useBottle);
-        //        }
-        //    }
-        //}
-        //else if (num == 8)
-        //{
-        //    for (int i = 0; i < 8; i++)
-        //    {
-        //        var useBottle = bottles[i];
-        //        useBottle.gameObject.SetActive(i < 4);
-
-        //        if (i < 4)
-        //        {
-        //            nowBottles.Add(useBottle);
-        //        }
-        //    }
-        //    for (int i = 8; i < 16; i++)
-        //    {
-        //        var useBottle = bottles[i];
-        //        useBottle.gameObject.SetActive(i < 12);
-        //        if (i < 12)
-        //        {
-        //            nowBottles.Add(useBottle);
-        //        }
-        //    }
-        //}
-        //else if (num == 9)
-        //{
-        //    for (int i = 0; i < 8; i++)
-        //    {
-        //        var useBottle = bottles[i];
-        //        useBottle.gameObject.SetActive(i < 5);
-        //        if (i < 5)
-        //        {
-        //            nowBottles.Add(useBottle);
-        //        }
-        //    }
-        //    for (int i = 8; i < 16; i++)
-        //    {
-        //        var useBottle = bottles[i];
-        //        useBottle.gameObject.SetActive(i < 12);
-        //        if (i < 12)
-        //        {
-        //            nowBottles.Add(useBottle);
-        //        }
-        //    }
-        //}
-        //else if (num == 10)
-        //{
-        //    for (int i = 0; i < 8; i++)
-        //    {
-        //        var useBottle = bottles[i];
-        //        useBottle.gameObject.SetActive(i < 5);
-        //        if (i < 5)
-        //        {
-        //            nowBottles.Add(useBottle);
-        //        }
-        //    }
-        //    for (int i = 8; i < 16; i++)
-        //    {
-        //        var useBottle = bottles[i];
-        //        useBottle.gameObject.SetActive(i < 13);
-        //        if (i < 13)
-        //        {
-        //            nowBottles.Add(useBottle);
-        //        }
-        //    }
-        //}
-        //else if (num == 11)
-        //{
-        //    for (int i = 0; i < 8; i++)
-        //    {
-        //        var useBottle = bottles[i];
-        //        useBottle.gameObject.SetActive(i < 6);
-        //        if (i < 6)
-        //        {
-        //            nowBottles.Add(useBottle);
-        //        }
-        //    }
-        //    for (int i = 8; i < 16; i++)
-        //    {
-        //        var useBottle = bottles[i];
-        //        useBottle.gameObject.SetActive(i < 13);
-        //        if (i < 13)
-        //        {
-        //            nowBottles.Add(useBottle);
-        //        }
-        //    }
-        //}
-
     }
 
     /// <summary>
@@ -793,70 +718,78 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// <param name="levelInfo"></param>
     public void InitBottle(LevelCreateCtrl levelInfo)
     {
+
         for (int i = 0; i < levelInfo.bottles.Count; i++)
         {
             var bottle = nowBottles[i];
             bottle.Init(levelInfo.bottles[i], i);
             bottle.maxNum = 4;
         }
-
-        for (int i = 0; i < moreBottle; i++)
-        {
-            int useIdx = levelInfo.bottles.Count + i;
-            var bottle = nowBottles[useIdx];
-            bottle.Init(emptyBottle, useIdx);
-        }
     }
 
     /// <summary>
-    /// 添加瓶子并移动瓶子数据
-    /// </summary>
-    /// <param name="isHalf"></param>
-    public void MoveAndAddBottle(bool isHalf)
-    {
-        var num = nowBottles.Count;
-        for (int i = 0; i < tempBottles.Count; i++)
-        {
-            nowBottles[i].MoveBottle(tempBottles[i]);
-        }
-
-
-        if (isHalf)
-        {
-            if (nowHalf == null || nowHalf.maxNum == 4)
-            {
-                nowBottles[nowBottles.Count - 1].Init(emptyBottle, nowBottles.Count);
-                nowHalf = nowBottles[nowBottles.Count - 1];
-                nowBottles[nowBottles.Count - 1].maxNum = 1;
-            }
-            else
-            {
-                nowBottles[nowBottles.Count - 1].maxNum++;
-            }
-        }
-        else
-        {
-            nowBottles[nowBottles.Count - 1].Init(emptyBottle, nowBottles.Count);
-            nowBottles[nowBottles.Count - 1].maxNum = 4;
-        }
-
-        nowBottles[nowBottles.Count - 1].SetMaxBottle();
-    }
-
-    /// <summary>
-    /// 刷新关卡
+    /// 重置关卡
     /// </summary>
     public void RefreshLevel()
     {
+        //Debug.Log("重置关卡");
         clearList = new List<int>(nowLevel.clearList);
         hideColor = new List<int>(nowLevel.hideList);
         changeList = new List<ChangePair>(nowLevel.changeList);
         hideBottleList.Clear();
         cantClearColorList.Clear();
 
-        //ShowBottleGo(nowBottles.Count);
-        ShowBottleGo();
-        InitBottle(nowLevel);
+        nowHalf = null;
+        InitLevels(nowLevel);
+
+        //会触发两次重置(事件调用了StartGame，里面调用了InitLevels)，
+        //如果后续有问题，直接在这调用StartGame做那些数据处理
+        //this.SendEvent<GameStartEvent>();
+
+        GameCtrl.Instance.InitGameCtrl();
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 添加瓶子并移动瓶子数据
+    /// </summary>
+    /// <param name="isHalf"></param>
+    /// <param name="action"><扣除道具的回调/param>
+    public void MoveAndAddBottle(bool isHalf ,Action action)
+    {
+        var num = nowBottles.Count;
+        //测试结果---无用
+        /*        for (int i = 0; i < tempBottles.Count; i++)
+                {
+                    nowBottles[i].MoveBottle(tempBottles[i]);
+                }*/
+
+        //初始化瓶子-更新索引
+        if (isHalf)
+        {
+            if (nowHalf == null || nowHalf.maxNum == 4)
+            {
+                nowBottles[nowBottles.Count - 1].Init(emptyBottle, nowBottles.Count - 1);
+                nowHalf = nowBottles[nowBottles.Count - 1];
+                nowBottles[nowBottles.Count - 1].maxNum = 1;
+            }
+            else
+            {
+                nowBottles[nowBottles.Count - 1].maxNum++;
+                if (nowBottles[nowBottles.Count - 1].maxNum == 4)
+                    nowHalf = null;
+            }
+        }
+        else    //整瓶
+        {
+            nowBottles[nowBottles.Count - 1].Init(emptyBottle, nowBottles.Count - 1);
+            nowBottles[nowBottles.Count - 1].maxNum = 4;
+            nowHalf = null;
+        }
+
+        action?.Invoke();
+        nowBottles[nowBottles.Count - 1].SetMaxBottle();
     }
 
     public void Update()
@@ -917,6 +850,8 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             // 计算完全恢复体力所需的时间点
             long recoveryTime = this.GetUtility<SaveDataUtility>().GetVitalityTime() + (5 - lastVitalityNum) * GameConst.RecoveryTime;
+            //Debug.Log($"上次体力恢复满的时候 ： {this.GetUtility<SaveDataUtility>().GetVitalityTime()}");
+
             // 计算当前时间与完全恢复时间的时间差
             long timeOffset = recoveryTime - this.GetUtility<SaveDataUtility>().GetNowTime();
             //Debug.Log("体力 " + lastVitalityNum + " " + timeOffset);
@@ -965,7 +900,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// <summary>
     /// 返回上一步
     /// </summary>
-    /// <returns></returns>
+    /// <returns>是否能回退</returns>
     public bool ReturnLast()
     {
         bool ret = false;
@@ -988,11 +923,40 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         }
     }
 
+    public bool CheckAllDebuff()
+    {
+        //是否有黑水
+        if (hideBottleList.Count != 0)
+        {
+            return true;
+        }
+
+        foreach (var bottle in nowBottles)
+        {
+            //是否有阻碍效果
+            if (bottle.isFreeze || bottle.limitColor != 0 || bottle.isNearHide || bottle.isClearHide)
+            {
+                return true;
+            }
+
+            foreach (var item in bottle.waterItems)
+            {
+                //是否有冰冻，荆棘等
+                if (item != WaterItem.None)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /// <summary>
     /// 清除所有黑水
     /// </summary>
     /// <param name="num"></param>
-    public void RemoveHide(int num = 0)
+    /// <param name="action">使用道具回调</param>
+    public void RemoveHide(Action action , int num = 0)
     {
         if (num == 0)
         {
@@ -1010,8 +974,10 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 nowBottles[i].RemovHide();
             }
         }
-    }
 
+        action?.Invoke();
+    }
+     
     /// <summary>
     /// 魔法阵动画
     /// </summary>
@@ -1059,7 +1025,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 break;
         }
 
-        if (num == 0)   
+        if (num == 0)
         {
             if (scene == 1)
             {

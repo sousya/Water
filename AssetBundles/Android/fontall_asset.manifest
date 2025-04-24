@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 706289669
+CRC: 4149066777
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dda9acf10762e7a5e477772249c6297b
+    Hash: 43a4748ae2fd9dffc7224a7a15fe9973
   TypeTreeHash:
     serializedVersion: 2
     Hash: 533ddedb5ba977670584d2c1db0f7fc3
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: dda9acf10762e7a5e477772249c6297b
+    Hash: 43a4748ae2fd9dffc7224a7a15fe9973
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -46,4 +46,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Resources/Font/FontAll.asset
 Dependencies:
-- E:/Unity Project/Water/AssetBundles/Android/fontextra_asset
+- E:/U GitHub Project/Water/AssetBundles/Android/fontextra_asset

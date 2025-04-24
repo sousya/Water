@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 860338954
+CRC: 2431112524
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3739c98a208b5cfd5826236042b472f4
+    Hash: aeba2c16278c9b9978e93c020e18a7b3
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 74ee21eb353991f405ddd966422ee8b4
+    Hash: a8636405117152719ed909e408a49e92
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 3739c98a208b5cfd5826236042b472f4
+    Hash: aeba2c16278c9b9978e93c020e18a7b3
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -29,9 +29,9 @@ ClassTypes:
 - Class: 95
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: cad884c0cd523d644b6320fb0673d21f, type: 3}
 - Class: 114
@@ -94,5 +94,5 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Art/UIPrefab/UIUnlockScene.prefab
 Dependencies:
-- E:/Unity Project/Water/AssetBundles/Android/font
-- E:/Unity Project/Water/AssetBundles/Android/fontall_asset
+- E:/U GitHub Project/Water/AssetBundles/Android/font
+- E:/U GitHub Project/Water/AssetBundles/Android/fontall_asset

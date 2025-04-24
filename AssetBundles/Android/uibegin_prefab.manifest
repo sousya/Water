@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3130682169
+CRC: 2281188800
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c670af8dac9da08be194940e69050d48
+    Hash: 37bb447da8efab400eceef8e5c6187b3
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7bcde653565db09c7352c37dae2d683d
+    Hash: 914e29f62adf4d248d56a92fd63c3d1c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: c670af8dac9da08be194940e69050d48
+    Hash: 37bb447da8efab400eceef8e5c6187b3
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -31,11 +31,11 @@ ClassTypes:
 - Class: 95
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: b43514edffd52424695b92831ecc75a9, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 114
@@ -104,5 +104,5 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Art/UIPrefab/UIBegin.prefab
 Dependencies:
-- E:/Unity Project/Water/AssetBundles/Android/font
-- E:/Unity Project/Water/AssetBundles/Android/fontall_asset
+- E:/U GitHub Project/Water/AssetBundles/Android/font
+- E:/U GitHub Project/Water/AssetBundles/Android/fontall_asset

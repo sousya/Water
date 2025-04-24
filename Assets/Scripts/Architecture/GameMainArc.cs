@@ -80,9 +80,12 @@ public class GameMainArc : Architecture<GameMainArc>
 
         ShareManager shareManager = ShareManager.Instance;
         AnalyticsManager analyticsManager = AnalyticsManager.Instance;
+        CoinManager coinManager = CoinManager.Instance;
+        HealthManager healthManager = HealthManager.Instance;
+
         //LevelManager.Instance.BeginGame();
         //TopOnADManager.Instance.LoadAD();
-        TenjinManager.Instance.Init();
+        //-----TenjinManager.Instance.Init();
         //UIKit.OpenPanel<UIBegin>(UILevel.Common, null, "uibegin_prefab", "UIBegin");
 
         //ResourceManager.Instance.LoadFont();

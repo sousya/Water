@@ -146,9 +146,9 @@ MonoBehaviour:
   icons:
   - {fileID: 21300000, guid: df1119d32cb225a4f9138590e1399d9a, type: 3}
   - {fileID: 21300000, guid: 2c9a11e7a98ee7f4292aa9262b9b2cb6, type: 3}
-  - {fileID: 21300000, guid: 53663a455aec6cf49b1e465580001902, type: 3}
   - {fileID: 21300000, guid: f1d1e6d364c8a0e4da1ac9f31b5154e7, type: 3}
-  - {fileID: 21300000, guid: 2c9a11e7a98ee7f4292aa9262b9b2cb6, type: 3}
+  - {fileID: 21300000, guid: 53663a455aec6cf49b1e465580001902, type: 3}
+  - {fileID: 21300000, guid: ad824b0a9fd905a4f89867c50b47eeac, type: 3}
   BtnClose: {fileID: 5821182617835892991}
   TxtTitle: {fileID: 6223274813730793891}
   ImgItem: {fileID: 2195542815331661013}
@@ -1286,7 +1286,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0

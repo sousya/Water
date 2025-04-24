@@ -7,14 +7,18 @@ using UnityEngine.Purchasing.Extension;
 using UnityEngine.Purchasing.MiniJSON;
 using UnityEngine.UI;
 using Unity.Services.Core;
-using Unity.Services.Core.Environments;
 using GameDefine;
 
-public class CoinManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRegisterEvent
+public class CoinManager : MonoSingleton<CoinManager>, ICanSendEvent, ICanGetUtility, ICanRegisterEvent
 {
-    static public CoinManager Instance;
-
     public int coin;
+
+    public override void OnSingletonInit()
+    {
+
+    }
+
+
     public IArchitecture GetArchitecture()
     {
         return GameMainArc.Interface;

@@ -22,6 +22,7 @@ namespace QFramework
             private void Awake()
             {
                 ResKit.Init();
+                UIKit.OpenPanel("UIPersonal");
             }
 
             private IEnumerator Start()

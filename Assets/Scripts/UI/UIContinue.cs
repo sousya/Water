@@ -28,7 +28,8 @@ namespace QFramework.Example
 			BtnContinue.onClick.RemoveAllListeners();
 			BtnContinue.onClick.AddListener(() =>
 			{
-				var utility = this.GetUtility<SaveDataUtility>();
+                //这里还需要判断是否有足够的金币
+                var utility = this.GetUtility<SaveDataUtility>();
 				var coin = utility.GetCoinNum();
 				utility.SetCoinNum(coin - 90);
 				LevelManager.Instance.RefreshLevel();

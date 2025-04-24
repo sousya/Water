@@ -100,6 +100,7 @@ namespace QFramework.Example
             BtnStart.onClick.AddListener(() =>
             {
                 this.SendEvent<GameStartEvent>();
+                GameCtrl.Instance.InitGameCtrl();
                 CloseSelf();
             });
 

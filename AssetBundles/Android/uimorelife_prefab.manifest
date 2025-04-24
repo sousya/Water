@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1730948390
+CRC: 1955224562
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 9bd72866f8e7f737057517299d78e8aa
+    Hash: 3a3aeb8116848efe06875d81c2612a72
   TypeTreeHash:
     serializedVersion: 2
     Hash: e9f75774ac74b2ba63b27115907fa62a
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 9bd72866f8e7f737057517299d78e8aa
+    Hash: 3a3aeb8116848efe06875d81c2612a72
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -58,4 +58,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Art/UIPrefab/UIMoreLife.prefab
 Dependencies:
-- E:/Unity Project/Water/AssetBundles/Android/fontall_asset
+- E:/U GitHub Project/Water/AssetBundles/Android/fontall_asset

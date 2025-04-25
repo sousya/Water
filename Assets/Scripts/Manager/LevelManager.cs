@@ -795,7 +795,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public void Update()
     {
         TimeCountDown();
-
+        
 
         if (Input.GetKeyDown(KeyCode.F3))
         {
@@ -830,20 +830,25 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             }
         }
 
-        test += Time.deltaTime;
+        #region obsolete
+        /*test += Time.deltaTime;
         if (test >= 1)
         {
             test = 0;
             CheckVitality();
             //Debug.Log("时间 " + this.GetUtility<SaveDataUtility>().GetVitalityNum()  + " " + this.GetUtility<SaveDataUtility>().GetVitalityTime());
-        }
+        }*/
+        #endregion  
+
     }
 
-    /// <summary>
+    #region obsolete 
+    /*/// <summary>
     /// 判断体力
     /// </summary>
     void CheckVitality()
     {
+        //获取当前体力
         int lastVitalityNum = this.GetUtility<SaveDataUtility>().GetVitalityNum();
 
         if (lastVitalityNum < 5)
@@ -884,7 +889,9 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             // 发送体力时间变化事件，通知其他模块体力恢复的时间差
             this.SendEvent<VitalityTimeChangeEvent>(new VitalityTimeChangeEvent() { timeOffset = timeOffset });
         }
-    }
+    }*/
+    #endregion
+
 
     /// <summary>
     /// 记录所有瓶子

@@ -48,7 +48,9 @@ public class CoinManager : MonoSingleton<CoinManager>, ICanSendEvent, ICanGetUti
     {
         if(CostCoin(900))
         {
-            this.GetUtility<SaveDataUtility>().SetVitality(GameConst.MaxVitality);
+            //900金币购买满体力
+            //this.GetUtility<SaveDataUtility>().SetVitality(GameConst.MaxVitality);
+            HealthManager.Instance.SetNowHpToMax();
         }
     }
 }

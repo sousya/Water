@@ -7,6 +7,7 @@ using System;
 using static UnityEngine.UI.Image;
 using System.Reflection;
 using System.ComponentModel;
+using Unity.VisualScripting;
 
 public class SaveDataUtility : IUtility, ICanSendEvent
 {
@@ -279,78 +280,121 @@ public class SaveDataUtility : IUtility, ICanSendEvent
         return PlayerPrefs.GetInt("g_WaterIsTipMain", 0) == 1;
     }
 
-    //public int GetNowStar()
-    //{
-    //    return PlayerPrefs.GetInt("g_WaterIsTipMain", 0);
+    /*public int GetNowStar()
+    {
+        return PlayerPrefs.GetInt("g_WaterIsTipMain", 0);
 
-    //}
+    }*/
+
+    #region obsolete 
 
     ////////////////////////////体力相关///////////////////////////////////////
 
-    public void SetVitality(int num)
+    //三个调用都是设置最大体力值，
+    /*public void SetVitality(int num)
     {
         SetVitalityTime();
         SetVitalityNum(num);
-    }
+    }*/
 
+    /*/// <summary>
+    /// 消耗1点体力，并更新体力值和恢复时间。
+    /// </summary>
     public void CostVitality()
     {
+        //获取体力
         int lastVitalityNum = GetVitalityNum();
-        SetVitality(lastVitalityNum - 1);
-    }
+        SetVitalityTime();
+        SetVitalityNum(lastVitalityNum - 1);
+    }*/
 
-    public void SetVitality(int num, string time)
+    /// <summary>
+    /// 设置体力值，更新上一次恢复时间。
+    /// </summary>
+    /// <param name="num">要设置的体力值。</param>
+    /// <param name="time">上一次体力恢复的时间（字符串格式）。</param>
+    /// 
+    /// LevelManager.Instance调用可弃用，用于判断恢复了多少点体力，并更新恢复的时间点
+    /// 由HealthManager.Instance的Update管理体力恢复逻辑
+    /*public void SetVitality(int num, string time)
     {
         SetVitalityTime(time);
-        SetVitalityNum(num);
-    }
+        //SetVitalityNum(num);
+    }*/
 
-    public long GetNowTime()
+    /// <summary>
+    /// 获取当前时间的Unix时间戳（秒级）。
+    /// </summary>
+    /// <returns>当前时间的Unix时间戳。</returns>
+    /// 主要用于计算回复时间
+    /*public long GetNowTime()
     {
         DateTime now = DateTime.Now;
         long unixTimestamp = now.ToUniversalTime().Ticks - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).Ticks;
         long time = (unixTimestamp / 10000000);
 
         return time;
-    }
+    }*/
 
+    /*/// <summary>
+    /// 使用1点体力，并更新体力值和恢复时间。
+    /// </summary>
     public void UseVitality()
     {
         SetVitality(GetVitalityNum() - 1);
-    }
+    }*/
 
     /// <summary>
-    /// 设置上一次体力恢复的时间
+    /// 参数传入设置体力恢复满的时间点。
     /// </summary>
     /// <param name="time"></param>
-    public void SetVitalityTime(string time)
+    /// 
+    /// LevelManager.Instance调用可弃用，用于判断恢复了多少点体力，并更新恢复的时间点
+    /// 由HealthManager.Instance的Update管理体力恢复逻辑
+    /*public void SetVitalityTime(string time)
     {
         PlayerPrefs.SetString("g_WaterVitalityTime", time);
-    }
+    }*/
 
-   
+    /*/// <summary>
+    /// 设置体力恢复满的时间点为现在
+    /// </summary>
+    /// <param name="time">上一次体力恢复的时间（字符串格式）。</param>
     public void SetVitalityTime()
     {
         PlayerPrefs.SetString("g_WaterVitalityTime", GetNowTime() + "");
-    }
+    }*/
 
     /// <summary>
-    /// 获取上一次体力恢复的时间
+    /// 获取上一次体力恢复的时间（Unix时间戳）。
     /// </summary>
-    public long GetVitalityTime()
+    /// <returns>上一次体力恢复的时间（秒级时间戳）。</returns>
+    /// 
+    ///LevelManager.Instance三个调用弃用，UIMoreLife调用一次，主要就是用于更新倒计时文本的
+    ///HealthManager.Instance.RecoverTimerStr代替
+    /*public long GetVitalityTime()
     {
         string timeStr = PlayerPrefs.GetString("g_WaterVitalityTime", "0");
         long time = long.Parse(timeStr);
         return time;
-    }
+    }*/
 
-    public void SetVitalityNum(int num)
+    /// <summary>
+    /// 设置体力值，并发送体力变化事件。
+    /// </summary>
+    /// <param name="num">要设置的体力值。</param>
+    /*public void SetVitalityNum(int num)
     {
         PlayerPrefs.SetInt("g_WaterVitalityNum", num);
         this.SendEvent<VitalityChangeEvent>();
-    }
+    }*/
 
-    public void AddVitalityNum(int num)
+    ////////////////替换成 HealthManager.Instance.AddHp
+    /// <summary>
+    /// 增加体力值，确保体力值不会超过最大值。
+    /// </summary>
+    /// <param name="num">要增加的体力值。</param>
+    /* public void AddVitalityNum(int num)
     {
         var v = PlayerPrefs.GetInt("g_WaterVitalityNum", GameConst.MaxVitality);
         v += num;
@@ -359,18 +403,19 @@ public class SaveDataUtility : IUtility, ICanSendEvent
             v = GameConst.MaxVitality;
         }
         PlayerPrefs.SetInt("g_WaterVitalityNum", v);
-    }
+    }*/
 
-
+    ////////////////替换成 HealthManager.Instance.NowHp
     /// <summary>
     /// 获取体力
     /// </summary>
     /// <returns></returns>
-    public int GetVitalityNum()
+    /* public int GetVitalityNum()
     {
         return PlayerPrefs.GetInt("g_WaterVitalityNum", GameConst.MaxVitality);
-    }
+    }*/
 
+    #endregion
 
     ////////////////////////////金币相关//////////////////////////////////////
     ///

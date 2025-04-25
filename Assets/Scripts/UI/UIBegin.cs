@@ -324,7 +324,8 @@ namespace QFramework.Example
                 BeginNode.SetActive(true);
                 SetScene();
                 CheckBeginMenuButton();
-                this.GetUtility<SaveDataUtility>().CostVitality();
+                //this.GetUtility<SaveDataUtility>().CostVitality();
+                HealthManager.Instance.UseHp();
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
             this.RegisterEvent<RefreshItemEvent>(e =>
@@ -718,7 +719,8 @@ namespace QFramework.Example
         /// </summary>
         void SetVitality()
         {
-            TxtHeart.text = this.GetUtility<SaveDataUtility>().GetVitalityNum().ToString();
+            //TxtHeart.text = this.GetUtility<SaveDataUtility>().GetVitalityNum().ToString();
+            TxtHeart.text = HealthManager.Instance.NowHp.ToString();
         }
 
         /// <summary>

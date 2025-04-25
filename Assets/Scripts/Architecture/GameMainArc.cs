@@ -85,7 +85,7 @@ public class GameMainArc : Architecture<GameMainArc>
 
         //LevelManager.Instance.BeginGame();
         //TopOnADManager.Instance.LoadAD();
-        //-----TenjinManager.Instance.Init();
+        TenjinManager.Instance.Init();
         //UIKit.OpenPanel<UIBegin>(UILevel.Common, null, "uibegin_prefab", "UIBegin");
 
         //ResourceManager.Instance.LoadFont();

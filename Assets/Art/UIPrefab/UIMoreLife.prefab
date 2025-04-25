@@ -183,11 +183,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d495b28d4faa486448f86d3cfda170b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TxtHeart: {fileID: 7387552318391699345}
+  TxtNextHeart: {fileID: 3525346527008674739}
   TxtTime: {fileID: 8595407849129342425}
   BtnClose: {fileID: 3467003929469205071}
   BtnCoinBuy: {fileID: 4146399528330977761}
   BtnAD: {fileID: 2767235790847506716}
+  TxtHeart2: {fileID: 7387552318391699345}
 --- !u!1 &1131428141828574028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1163,7 +1164,7 @@ GameObject:
   - component: {fileID: 7387552318391699345}
   - component: {fileID: 5274933931469734426}
   m_Layer: 5
-  m_Name: TxtHeart
+  m_Name: TxtHeart2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1646,7 +1647,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 12:59
+  m_text: 00:00
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4af189eb160898e4cad2b3a678574d0b, type: 2}
   m_sharedMaterial: {fileID: 2695514029084683534, guid: 4af189eb160898e4cad2b3a678574d0b, type: 2}
@@ -1744,7 +1745,7 @@ GameObject:
   - component: {fileID: 3525346527008674739}
   - component: {fileID: 6346753094113215785}
   m_Layer: 5
-  m_Name: TxtHeart
+  m_Name: TxtNextHeart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

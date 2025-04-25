@@ -20,7 +20,9 @@ namespace QFramework.Example
 			// please add init code here
 		}
 
-        void CheckVitality()
+        #region obsolete
+        //关于倒计时文本的更新，可以直接获取HealthManager的RecoverTimerStr
+        /*void CheckVitality()
         {
             int lastVitalityNum = this.GetUtility<SaveDataUtility>().GetVitalityNum();
             long recoveryTime = this.GetUtility<SaveDataUtility>().GetVitalityTime() + (5 - lastVitalityNum) * GameConst.RecoveryTime;
@@ -31,13 +33,13 @@ namespace QFramework.Example
             }   
             var e = new VitalityTimeChangeEvent() { timeOffset = timeOffset };
             CheckVitality(e);
-        }
+        }*/
 
-        void CheckVitality(VitalityTimeChangeEvent e)
+        /*void CheckVitality(VitalityTimeChangeEvent e)
         {
             //打开界面的时候注册监听事件，导致界面关闭时出现问题
             int heartNum = this.GetUtility<SaveDataUtility>().GetVitalityNum();
-            Debug.Log(heartNum);
+            //Debug.Log(heartNum);
             TxtHeart.text = heartNum.ToString();
 
              var timeOffset = e.timeOffset % GameConst.RecoveryTime;
@@ -61,7 +63,9 @@ namespace QFramework.Example
             {
                 TxtTime.text = "00:00";
             }
-        }
+        }*/
+
+        #endregion
 
         protected override void OnOpen(IUIData uiData = null)
 		{
@@ -70,8 +74,9 @@ namespace QFramework.Example
 		protected override void OnShow()
 		{
 			BindBtn();
-			RegisterEvent();
-            CheckVitality();
+            //RegisterEvent();//弃用
+            //CheckVitality();//弃用
+            TxtNextHeart.text = HealthManager.Instance.CurRecoverySlot.ToString();
         }
 
         protected override void OnHide()
@@ -80,18 +85,22 @@ namespace QFramework.Example
 		
 		protected override void OnClose()
 		{
-		}
+        }
 
-        void RegisterEvent()
+        #region obsolete
+        /* private void RegisterEvent()
         {
             Debug.Log("监听体力恢复");
+
+            //弃用
             this.RegisterEvent<VitalityTimeChangeEvent>(e =>
             {
                 CheckVitality(e);
             });
-        }
+        }*/
+        #endregion
 
-        void BindBtn()
+        private void BindBtn()
         {
             BtnClose.onClick.AddListener(() =>
             {
@@ -100,18 +109,26 @@ namespace QFramework.Example
 
             BtnCoinBuy.onClick.AddListener(() =>
             {
-                Debug.Log(CoinManager.Instance == null);
                 CoinManager.Instance.BuyVitality();
             });
 
             BtnAD.onClick.AddListener(() =>
             {
-                TopOnADManager.Instance.ShowRewardAd();
+                //放在这是修改广告回调奖励？
                 TopOnADManager.Instance.rewardAction = () =>
                 {
-                    this.GetUtility<SaveDataUtility>().AddVitalityNum(1);
+                    //看广告恢复体力，是恢复一点体力还是恢复满？
+                    //this.GetUtility<SaveDataUtility>().AddVitalityNum(1);
+                    HealthManager.Instance.AddHp();
                 };
+                TopOnADManager.Instance.ShowRewardAd();
             });
+        }
+
+        private void Update()
+        {
+            TxtTime.text = HealthManager.Instance.RecoverTimerStr;
+            TxtNextHeart.text = HealthManager.Instance.CurRecoverySlot.ToString();
         }
     }
 }

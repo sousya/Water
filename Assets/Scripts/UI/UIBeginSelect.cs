@@ -13,6 +13,8 @@ namespace QFramework.Example
     }
     public partial class UIBeginSelect : UIPanel, ICanGetUtility, ICanSendEvent
     {
+        [SerializeField] private Sprite[] giftSprites;
+
         public IArchitecture GetArchitecture()
         {
             return GameMainArc.Interface;
@@ -104,32 +106,10 @@ namespace QFramework.Example
                 CloseSelf();
             });
 
-            //查看奖励
             BtnInfo.onClick.RemoveAllListeners();
             BtnInfo.onClick.AddListener(() =>
             {
                 ImgReward.gameObject.SetActive(!ImgReward.gameObject.activeSelf);
-            });
-
-            BtnBox.onClick.RemoveAllListeners();
-            BtnBox.onClick.AddListener(() =>
-            {
-                //判断是否能打开奖励（3胜及以上），
-                if (this.GetUtility<SaveDataUtility>().GetCountinueWinNum() >= 3)
-                {
-                    RewardNode.Show();
-                    ImgItem1.Show();
-                    ImgItem2.Show();
-                    ImgItem3.Show();
-                }
-            });
-
-            CloseReward.onClick.RemoveAllListeners();
-            CloseReward.onClick.AddListener(() =>
-            {
-                //打开奖励，触发动画，并开启遮罩
-                UIKit.OpenPanel<UIMask>(UILevel.PopUI);
-                FlyReward();
             });
 
             ImgReward.Hide();
@@ -160,66 +140,28 @@ namespace QFramework.Example
         /// <param name="itemId"></param>
         void RemoveItemIfExists(int itemId)
         {
-            //避免没选中仍携带
+            //避免取消选中仍携带
             if (LevelManager.Instance.takeItem.Contains(itemId))
                 LevelManager.Instance.takeItem.Remove(itemId);
-        }
-
-        void FlyReward()
-        {
-            RewardNode.Hide();
-
-            //需要确保动画时长一致
-            var seq = DOTween.Sequence();
-
-            seq.Join(ImgItem1.transform.DOMove(TargetPos.transform.position, 1f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ImgItem1.gameObject.SetActive(false);
-                    ImgItem1.transform.position = BeginPos1.transform.position;
-                }));
-
-            seq.Join(ImgItem2.transform.DOMove(TargetPos.transform.position, 1f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ImgItem2.gameObject.SetActive(false);
-                    ImgItem2.transform.position = BeginPos2.transform.position;
-                }));
-
-            seq.Join(ImgItem3.transform.DOMove(TargetPos.transform.position, 1f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ImgItem3.gameObject.SetActive(false);
-                    ImgItem3.transform.position = BeginPos3.transform.position;
-                }));
-
-            //回调
-            seq.AppendCallback(() =>
-            {
-                //宝箱进度清空
-                this.GetUtility<SaveDataUtility>().SetCountinueWinNum(0);
-
-                //道具数量增加
-                var saveU = this.GetUtility<SaveDataUtility>();
-                saveU.AddItemNum(6, 1);
-                saveU.AddItemNum(7, 1);
-                saveU.AddItemNum(8, 1);
-                UpdateItemNum();
-
-                //关闭遮罩
-                UIKit.ClosePanel<UIMask>();
-                //Debug.Log("所有动画完成了！");
-            });
         }
 
         void UpdateItemNum()
         {
             var saveU = this.GetUtility<SaveDataUtility>();
-            TxtProgress.text = saveU.GetCountinueWinNum() + " / 3";
+            int winNum = saveU.GetCountinueWinNum();
+            TxtProgress.text = winNum + " / 3";
             TxtItem1.text = saveU.GetItemNum(6) + "";
             TxtItem2.text = saveU.GetItemNum(7) + "";
             TxtItem3.text = saveU.GetItemNum(8) + "";
-            ImgProgress.fillAmount = saveU.GetCountinueWinNum() * 1f / 3;
+            ImgProgress.fillAmount = winNum * 1f / 3;
+
+            //0-3胜，更新图标
+            if (winNum == 0 || winNum == 1)
+            {
+                ImgBox.sprite = giftSprites[0];
+                return;
+            }
+            ImgBox.sprite = giftSprites[winNum - 1];
         }
     }
 }

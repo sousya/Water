@@ -2,19 +2,12 @@ using QFramework;
 using System.Collections.Generic;
 using UnityEngine;
 using GameDefine;
-using LitJson;
-using QAssetBundle;
-using TMPro;
-using System.IO;
 using System;
 using Google.Play.Review;
-using UnityEngine.UI;
-using Unity.VisualScripting;
 using QFramework.Example;
 using static LevelCreateCtrl;
 using System.Collections;
 using Spine.Unity;
-using Unity.Mathematics;
 
 [MonoSingletonPath("[Level]/LevelManager")]
 public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRegisterEvent
@@ -53,8 +46,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
     public Material shineMaterial;// 材质
     public float speed = 1.0f; // 光带移动速度
-
-    //public List<>
 
     [SerializeField]
     SpriteRenderer levelBgSprite;
@@ -109,7 +100,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
-        this.GetUtility<SaveDataUtility>().SaveLevel(7);
+        this.GetUtility<SaveDataUtility>().SaveLevel(30);
 
         emptyBottle.numCake = 4;
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();
@@ -370,7 +361,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
             this.GetUtility<SaveDataUtility>().SetCoinNum(this.GetUtility<SaveDataUtility>().GetCoinNum() + 20);
 
-            //前五关
+            //前五关(前五关应该不统计连胜)
             if (levelId < 5)
             {
                 //CheckWinNum();
@@ -392,16 +383,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     {
         var winNum = this.GetUtility<SaveDataUtility>().GetCountinueWinNum();
         winNum++;
-        //if (winNum == 3)
-        //{
-        //    this.GetUtility<SaveDataUtility>().SetCountinueWinNum(0);
-        //}
-        //else
-        //{
-        //    this.GetUtility<SaveDataUtility>().SetCountinueWinNum(winNum);
-        //}
-
-        //调整，不算是连胜，是胜利次数达到三次，且不开宝箱不继续累计
+        
         if (winNum < 3)
             this.GetUtility<SaveDataUtility>().SetCountinueWinNum(winNum);
         else
@@ -667,22 +649,12 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         ShowBottleGo();
         InitBottle(levelInfo);
 
-        //携带了道具7，尝试使用道具
-        if (takeItem.Contains(7))
-            StringEventSystem.Global.Send("TryUserItem7");
+        //当前有连胜，去黑水瓶生效
+        int WinNum = this.GetUtility<SaveDataUtility>().GetCountinueWinNum();
+        //Debug.Log("当前连胜次数:" + WinNum);
+        if (WinNum > 0)
+            StringEventSystem.Global.Send("StreakWinItem", WinNum);
     }
-
-    /*/// <summary>
-    /// 由InitLevels替换
-    /// 设置并根据数据初始化瓶子
-    /// </summary>
-    /// <param name="levelInfo"></param>
-    public void SetBottle(LevelCreateCtrl levelInfo)
-    {
-        InitLevels(levelInfo);
-        //ShowBottleGo();
-        //InitBottle(levelInfo);
-    }*/
 
     /// <summary>
     /// 判断显示那些瓶子（现用于初始化关卡的瓶子）
@@ -1106,8 +1078,8 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         //需要先保存数据，然后在发送事件，因为后面的逻辑需要更新UI，重新读取数据，
         this.SendEvent<UnlockSceneEvent>(e);
 
-        //在发送完事件之后，处理完一系列解锁动画更新
-        if (num == 5)//表示当前场景解锁完成,进入到下一场景
+        //在发送完事件之后，处理完解锁动画更新数据
+        if (num == 5)
             this.GetUtility<SaveDataUtility>().SetSceneRecord(scene + 1);
     }
 

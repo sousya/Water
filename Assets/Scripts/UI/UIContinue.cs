@@ -25,15 +25,31 @@ namespace QFramework.Example
 		
 		protected override void OnShow()
 		{
-			BtnContinue.onClick.RemoveAllListeners();
+            var utility = this.GetUtility<SaveDataUtility>();
+            var coin = utility.GetCoinNum();
+            TxtCoin.text = coin.ToString();
+            if (coin < 90)
+            {
+                TxtCoin.color = Color.red;
+                TxtCoinCost.color = Color.red;
+            }
+            else
+            {
+                TxtCoin.color = Color.white;
+                TxtCoinCost.color = Color.white;
+            }
+
+            BtnContinue.onClick.RemoveAllListeners();
 			BtnContinue.onClick.AddListener(() =>
 			{
-                //这里还需要判断是否有足够的金币
-                var utility = this.GetUtility<SaveDataUtility>();
-				var coin = utility.GetCoinNum();
-				utility.SetCoinNum(coin - 90);
-				LevelManager.Instance.RefreshLevel();
-                CloseSelf();
+				//这是花费90金币重新开始游戏？还是需要附加清楚之类的效果
+				if (coin >= 90)
+				{
+                    utility.SetCoinNum(coin - 90);
+                    LevelManager.Instance.RefreshLevel();
+                    CloseSelf();
+                }
+				
             });
 
 			BtnClose.onClick.RemoveAllListeners();
@@ -42,21 +58,6 @@ namespace QFramework.Example
 				CloseSelf();
 				UIKit.OpenPanel<UIDeleteLife>();
             });
-
-            var utility = this.GetUtility<SaveDataUtility>();
-            var coin = utility.GetCoinNum();
-            TxtCoin.text = coin.ToString();
-
-			if(coin < 90)
-			{
-				TxtCoin.color = Color.red;
-                TxtCoinCost.color = Color.red;
-			}
-			else
-			{
-				TxtCoin.color = Color.white;
-                TxtCoinCost.color = Color.white;
-			}
         }
 		
 		protected override void OnHide()

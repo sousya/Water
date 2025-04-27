@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:04b02828-05f3-414f-90aa-a9d052ee3281
+	// Generate Id:5c65558f-094d-4e78-bee2-ada54d28e98b
 	public partial class UIBeginSelect
 	{
 		public const string Name = "UIBeginSelect";
@@ -13,7 +13,7 @@ namespace QFramework.Example
 		[SerializeField]
 		public UnityEngine.UI.Button BtnClose;
 		[SerializeField]
-		public UnityEngine.UI.Button BtnBox;
+		public UnityEngine.UI.Image ImgBox;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnInfo;
 		[SerializeField]
@@ -42,31 +42,13 @@ namespace QFramework.Example
 		public UnityEngine.UI.Image ImgReward;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnStart;
-		[SerializeField]
-		public Transform RewardNode;
-		[SerializeField]
-		public UnityEngine.UI.Button CloseReward;
-		[SerializeField]
-		public RectTransform TargetPos;
-		[SerializeField]
-		public RectTransform BeginPos3;
-		[SerializeField]
-		public RectTransform BeginPos2;
-		[SerializeField]
-		public RectTransform BeginPos1;
-		[SerializeField]
-		public UnityEngine.UI.Image ImgItem3;
-		[SerializeField]
-		public UnityEngine.UI.Image ImgItem2;
-		[SerializeField]
-		public UnityEngine.UI.Image ImgItem1;
 		
 		private UIBeginSelectData mPrivateData = null;
 		
 		protected override void ClearUIComponents()
 		{
 			BtnClose = null;
-			BtnBox = null;
+			ImgBox = null;
 			BtnInfo = null;
 			ImgProgress = null;
 			TxtProgress = null;
@@ -81,15 +63,6 @@ namespace QFramework.Example
 			ImgSelect3 = null;
 			ImgReward = null;
 			BtnStart = null;
-			RewardNode = null;
-			CloseReward = null;
-			TargetPos = null;
-			BeginPos3 = null;
-			BeginPos2 = null;
-			BeginPos1 = null;
-			ImgItem3 = null;
-			ImgItem2 = null;
-			ImgItem1 = null;
 			
 			mData = null;
 		}

@@ -910,8 +910,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     /// <returns></returns>
     IEnumerator ShowBreakIce()
     {
-        //yield return new WaitForSeconds(1f);
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(1f);
         for (int i = waterItems.Count - 1; i >= 0; i--)
         {
             if (waterItems[i] == WaterItem.BreakIce)

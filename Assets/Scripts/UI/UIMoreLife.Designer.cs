@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:640bc6ba-2395-4666-a3fb-055efe501bdd
+	// Generate Id:2d361118-cf35-4dbb-b101-e4feb9d15ae1
 	public partial class UIMoreLife
 	{
 		public const string Name = "UIMoreLife";
@@ -19,6 +19,8 @@ namespace QFramework.Example
 		[SerializeField]
 		public UnityEngine.UI.Button BtnCoinBuy;
 		[SerializeField]
+		public TMPro.TextMeshProUGUI TxtCoinCost;
+		[SerializeField]
 		public UnityEngine.UI.Button BtnAD;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtHeart2;
@@ -31,6 +33,7 @@ namespace QFramework.Example
 			TxtTime = null;
 			BtnClose = null;
 			BtnCoinBuy = null;
+			TxtCoinCost = null;
 			BtnAD = null;
 			TxtHeart2 = null;
 			

@@ -26,7 +26,6 @@ namespace QFramework.Example
 
 		protected override void OnShow()
 		{
-			BindButton();
 			ShowAnim();
 			TxtLevel.text = (this.GetUtility<SaveDataUtility>().GetLevelClear() - 1).ToString();
 			StartCoroutine(WaitClose());
@@ -38,15 +37,6 @@ namespace QFramework.Example
 
 		protected override void OnClose()
 		{
-		}
-
-		void BindButton()
-		{
-			BtnClose.onClick.AddListener(() =>
-			{
-				this.SendEvent<LevelClearEvent>();
-				CloseSelf();
-			});
 		}
 
 		void ShowAnim()

@@ -44,19 +44,16 @@ namespace QFramework.Example
 			BtnGiveUp.onClick.AddListener(()=>
 			{
                 CloseSelf();
+                //退出中断连胜
+                this.GetUtility<SaveDataUtility>().SetCountinueWinNum(0);
                 UIKit.OpenPanel<UIContinue>();
             });
 
             BtnRetry.onClick.RemoveAllListeners();
             BtnRetry.onClick.AddListener(() =>
             {
-                //var utility = this.GetUtility<SaveDataUtility>();
-                //var coin = utility.GetCoinNum();
                 if (coin >= 90)
                 {
-                    //LevelManager.Instance.RefreshLevel();
-                    //utility.SetCoinNum(coin - 90);
-
                     //增加管子
                     LevelManager.Instance.AddBottle(false, () =>
                     {

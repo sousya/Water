@@ -102,6 +102,9 @@ namespace QFramework.Example
 
         private void BindBtn()
         {
+            var coin = this.GetUtility<SaveDataUtility>().GetCoinNum();
+            TxtCoinCost.color = coin < 900 ? Color.red : Color.white;
+
             BtnClose.onClick.AddListener(() =>
             {
                 this.CloseSelf();
@@ -109,7 +112,8 @@ namespace QFramework.Example
 
             BtnCoinBuy.onClick.AddListener(() =>
             {
-                CoinManager.Instance.BuyVitality();
+                CoinManager.Instance.BuyVitality(900);
+                TxtCoinCost.color = CoinManager.Instance.Coin < 900 ? Color.red : Color.white;
             });
 
             BtnAD.onClick.AddListener(() =>

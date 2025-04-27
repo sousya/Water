@@ -53,12 +53,9 @@ public class UnlockItemCtrl : MonoBehaviour, ICanGetUtility
         BtnUnlock.onClick.RemoveAllListeners();
         BtnUnlock.onClick.AddListener(() =>
         {
-
             var nowStar = this.GetUtility<SaveDataUtility>().GetLevelClear() -1;   // -1
-
             var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
             var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
-
             var offset = nowStar - LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow);
             //Debug.Log("解锁面板-已有星星：" + nowStar);
             //Debug.Log("解锁面板-使用星星：" + LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow));
@@ -69,6 +66,11 @@ public class UnlockItemCtrl : MonoBehaviour, ICanGetUtility
             {
                 LevelManager.Instance.UnlockScene(scene, num);
                 UIKit.ClosePanel<UIUnlockScene>();
+            }
+            else
+            {
+                UIKit.ClosePanel<UIUnlockScene>();
+                UIKit.OpenPanel<UILessStar>();
             }
         });
     }

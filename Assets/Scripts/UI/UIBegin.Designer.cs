@@ -5,17 +5,17 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:ed44cf19-cb56-4414-ba07-4ce09acd7ddb
+	// Generate Id:1bdef236-e895-40c3-bb78-0088af082bbc
 	public partial class UIBegin
 	{
 		public const string Name = "UIBegin";
 		
 		[SerializeField]
-		public UnityEngine.UI.Button BtnRefresh;
+		public UnityEngine.UI.Button BtnStepBack;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtRefreshNum;
 		[SerializeField]
-		public UnityEngine.UI.Button BtnAddRefresh;
+		public UnityEngine.UI.Button BtnAddStepBack;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnRemoveHide;
 		[SerializeField]
@@ -141,9 +141,9 @@ namespace QFramework.Example
 		
 		protected override void ClearUIComponents()
 		{
-			BtnRefresh = null;
+			BtnStepBack = null;
 			TxtRefreshNum = null;
-			BtnAddRefresh = null;
+			BtnAddStepBack = null;
 			BtnRemoveHide = null;
 			TxtRemoveHideNum = null;
 			BtnAddRemove = null;

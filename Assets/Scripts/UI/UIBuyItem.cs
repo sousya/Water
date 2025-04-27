@@ -58,9 +58,6 @@ namespace QFramework.Example
             BtnStart.onClick.RemoveAllListeners();
             BtnStart.onClick.AddListener(() =>
             {
-                //var utility = this.GetUtility<SaveDataUtility>();
-                //var nowCoin = utility.GetCoinNum();
-                //var needCoin = costs[mData.item - 1];
                 if (nowCoin < needCoin)
 				{
 					return;

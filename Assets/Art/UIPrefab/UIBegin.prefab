@@ -385,9 +385,9 @@ MonoBehaviour:
   ScenePart4: {fileID: 1856272295933640326}
   coinFx: {fileID: 4192289755092124865}
   starFx: {fileID: 7386107850048871920}
-  BtnRefresh: {fileID: 7413187514121347207}
+  BtnStepBack: {fileID: 7413187514121347207}
   TxtRefreshNum: {fileID: 3746007303307591691}
-  BtnAddRefresh: {fileID: 2654593108018522049}
+  BtnAddStepBack: {fileID: 2654593108018522049}
   BtnRemoveHide: {fileID: 6782587263207737614}
   TxtRemoveHideNum: {fileID: 8122312344771695778}
   BtnAddRemove: {fileID: 8025917992098818009}
@@ -1063,7 +1063,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1982664808531052745
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5045,7 +5045,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8254488377898336944
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5111,7 +5111,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3441985621294383773}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -6053,7 +6053,7 @@ GameObject:
   - component: {fileID: 7413187514121347207}
   - component: {fileID: 4138818216846934878}
   m_Layer: 0
-  m_Name: BtnRefresh
+  m_Name: BtnStepBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6661,7 +6661,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1884958516581136077
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9442,7 +9442,7 @@ GameObject:
   - component: {fileID: 2654593108018522049}
   - component: {fileID: 7085090166814558506}
   m_Layer: 0
-  m_Name: BtnAddRefresh
+  m_Name: BtnAddStepBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9565,7 +9565,7 @@ MonoBehaviour:
   MarkType: 0
   CustomComponentName: 
   CustomComment: 
-  mComponentName: 
+  mComponentName: UnityEngine.UI.Button
 --- !u!1 &7344990071208150440
 GameObject:
   m_ObjectHideFlags: 0

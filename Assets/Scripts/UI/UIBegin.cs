@@ -28,7 +28,22 @@ namespace QFramework.Example
         public GameObject BeginNode, LevelNode, SceneNode1, SceneNode2, SceneNode3, SceneNode4;
         public ScenePartCtrl ScenePart1, ScenePart2, ScenePart3, ScenePart4;
         public ParticleTargetMoveCtrl coinFx, starFx;
-        int nowButton = 2;
+        
+
+        #region BottomMenuSetting
+        [SerializeField] private List<Button> bottomMenuBtns;
+        [SerializeField] private List<RectTransform> bottomMenuRect;
+        [SerializeField] private List<GameObject> Panels;
+        [SerializeField] private RectTransform selectedImg;
+
+        private int nowButton = 2;
+        private readonly Vector2 SELECTED = new Vector2(256, 200);  // 选中放大的大小
+        private readonly Vector2 NSELECTED = new Vector2(206, 200); // 未选中的大小
+        private readonly float minScaleValue = 0.5f;                // 按钮的缩小值(先缩小后放大)
+        private readonly float maxScaleValue = 1.2f;                // 按钮的放大值
+        private readonly float targetPosY = 80f;                    // 按钮往上抬起的高度
+        private readonly float initPosY = 15f;                      // 按钮的初始位置
+        #endregion
 
         protected override void OnInit(IUIData uiData = null)
         {
@@ -53,7 +68,7 @@ namespace QFramework.Example
             SetVitality();
             //SetItem();
             InitBeginMenuButton();
-
+            
             var levelNow = this.GetUtility<SaveDataUtility>().GetLevelClear();
             if (levelNow <= 5)
             {
@@ -255,6 +270,54 @@ namespace QFramework.Example
             {
                 UIKit.OpenPanel("UIPersonal");
             });
+
+            //底部区域按钮监听
+            //bottomMenuBtns[i].onClick.Invoke();可以作为事件触发某一个点击
+            foreach (var btn in bottomMenuBtns)
+            {
+                btn.onClick.AddListener(() =>
+                {
+                    int index = bottomMenuBtns.IndexOf(btn);
+                    //切换界面
+
+                    if (nowButton != index)
+                    {
+                        for (int i = 0; i < bottomMenuRect.Count; i++)
+                        {
+                            var rt = bottomMenuBtns[i].GetComponent<RectTransform>();
+                            if (i == index)
+                            {
+                                //设置选中效果
+                                rt.localScale = new Vector3(minScaleValue, minScaleValue, minScaleValue);
+                                rt.DOScale(new Vector3(maxScaleValue, maxScaleValue, 1), 0.1f);
+                                rt.DOLocalMoveY(targetPosY, 0.1f);
+                                bottomMenuRect[index].sizeDelta = SELECTED;
+                            }
+                            else
+                            {
+                                //设置未选中效果
+                                rt.DOScale(Vector3.one, 0.2f);
+                                rt.DOLocalMoveY(initPosY, 0.2f);
+                                bottomMenuRect[i].sizeDelta = NSELECTED;
+                            }
+
+                        }
+                        //等待一帧
+                        ActionKit.DelayFrame(1, () =>
+                        {
+                            //同步按钮中心位置(可以设置按钮下的字体显示)
+                            for (int i = 0; i < bottomMenuBtns.Count; i++)
+                            {
+                                var rt = bottomMenuBtns[i].GetComponent<RectTransform>();
+                                rt.DOLocalMoveX(bottomMenuRect[i].localPosition.x, 0.2f);
+                            }
+                            //更新滑动块
+                            selectedImg.DOMove(bottomMenuRect[index].position, 0.1f);
+                            nowButton = index;
+                        }).Start(this);
+                    }
+                });
+            }
         }
 
         //事件注册
@@ -268,13 +331,17 @@ namespace QFramework.Example
 
             this.RegisterEvent<LevelClearEvent>(e =>
             {
-                //SetScene();
-                ReturnBegin(e.coin);
+                //胜利结算=》返回主页
+                //VictoryReturnBegin
+                BeginNode.SetActive(true);
+                LevelNode.SetActive(false);
+                StartCoroutine(ShowFx());
+
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
             this.RegisterEvent<CoinChangeEvent>(e =>
             {
-                SetCoin();
+                SetCoin(e.coin);
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
             this.RegisterEvent<VitalityChangeEvent>(e =>
@@ -325,6 +392,21 @@ namespace QFramework.Example
             {
                 ClearBottleBlackWater(count);
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
+        }
+
+        /// <summary>
+        /// 菜单按钮点击切换界面
+        /// </summary>
+        /// <param name="index"></param>
+        void ChangePanel(int index)
+        {
+            for (int i = 0; i < Panels.Count; i++)
+            {
+                if (i == index)
+                    Panels[i].Show();
+                else
+                    Panels[i].Hide();
+            }
         }
 
         /// <summary>
@@ -739,9 +821,7 @@ namespace QFramework.Example
         void SetCoin(int num = 0)
         {
             if (num == 0)
-            {
-                num = this.GetUtility<SaveDataUtility>().GetCoinNum();
-            }
+                num = CoinManager.Instance.Coin;
 
             TxtCoin.text = num.ToString();
         }
@@ -775,21 +855,6 @@ namespace QFramework.Example
         void SetText()
         {
             TxtLevel.text = LevelManager.Instance.levelId.ToString();//"Level " + 
-        }
-
-        /// <summary>
-        /// 返回主页
-        /// </summary>
-        /// <param name="coin"></param>
-        void ReturnBegin(int coin = 0)
-        {
-            Debug.Log("收到参数：" + coin);
-            Debug.Log("原金币数：" + this.GetUtility<SaveDataUtility>().GetCoinNum());
-            Debug.Log(this.GetUtility<SaveDataUtility>().GetCoinNum() - coin);
-            SetCoin(this.GetUtility<SaveDataUtility>().GetCoinNum() - coin);
-            BeginNode.SetActive(true);
-            LevelNode.SetActive(false);
-            StartCoroutine(ShowFx());
         }
 
         /// <summary>

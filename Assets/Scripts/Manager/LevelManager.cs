@@ -359,7 +359,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             //VictoryBottle = idx;
             this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
-            this.GetUtility<SaveDataUtility>().SetCoinNum(this.GetUtility<SaveDataUtility>().GetCoinNum() + 20);
+            CoinManager.Instance.AddCoin(20);
 
             //前五关(前五关应该不统计连胜)
             if (levelId < 5)

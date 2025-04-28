@@ -102,7 +102,7 @@ namespace QFramework.Example
 
         private void BindBtn()
         {
-            var coin = this.GetUtility<SaveDataUtility>().GetCoinNum();
+            var coin = CoinManager.Instance.Coin;
             TxtCoinCost.color = coin < 900 ? Color.red : Color.white;
 
             BtnClose.onClick.AddListener(() =>
@@ -112,8 +112,14 @@ namespace QFramework.Example
 
             BtnCoinBuy.onClick.AddListener(() =>
             {
-                CoinManager.Instance.BuyVitality(900);
-                TxtCoinCost.color = CoinManager.Instance.Coin < 900 ? Color.red : Color.white;
+                if (HealthManager.Instance.UsedHp > 0)
+                {
+                    CoinManager.Instance.CostCoin(900, () =>
+                    {
+                        HealthManager.Instance.SetNowHpToMax();
+                        TxtCoinCost.color = CoinManager.Instance.Coin < 900 ? Color.red : Color.white;
+                    });
+                }
             });
 
             BtnAD.onClick.AddListener(() =>

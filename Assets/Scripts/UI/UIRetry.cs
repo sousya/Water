@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using QFramework;
+using UnityEditor.Playables;
 
 namespace QFramework.Example
 {
@@ -25,8 +26,7 @@ namespace QFramework.Example
 		
 		protected override void OnShow()
         {
-            var utility = this.GetUtility<SaveDataUtility>();
-            var coin = utility.GetCoinNum();
+            var coin = CoinManager.Instance.Coin;
             TxtCoin.text = coin.ToString();
 
             if (coin < 90)
@@ -54,11 +54,10 @@ namespace QFramework.Example
             {
                 if (coin >= 90)
                 {
-                    //增加管子
-                    LevelManager.Instance.AddBottle(false, () =>
+                    CoinManager.Instance.CostCoin(90, () =>
                     {
-                        utility.SetCoinNum(coin - 90);
-
+                        //增加管子
+                        LevelManager.Instance.AddBottle(false,null);
                     });
                     CloseSelf();
                 }

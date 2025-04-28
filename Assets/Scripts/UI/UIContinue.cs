@@ -25,8 +25,7 @@ namespace QFramework.Example
 		
 		protected override void OnShow()
 		{
-            var utility = this.GetUtility<SaveDataUtility>();
-            var coin = utility.GetCoinNum();
+            var coin = CoinManager.Instance.Coin;
             TxtCoin.text = coin.ToString();
             if (coin < 90)
             {
@@ -45,8 +44,10 @@ namespace QFramework.Example
 				//这是花费90金币重新开始游戏？还是需要附加清楚之类的效果
 				if (coin >= 90)
 				{
-                    utility.SetCoinNum(coin - 90);
-                    LevelManager.Instance.RefreshLevel();
+					CoinManager.Instance.CostCoin(90, () =>
+					{
+                        LevelManager.Instance.RefreshLevel();
+                    });
                     CloseSelf();
                 }
 				

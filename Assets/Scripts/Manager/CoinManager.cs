@@ -10,8 +10,6 @@ public class CoinManager : MonoSingleton<CoinManager>, ICanSendEvent, ICanGetUti
     private int coin;
     public int Coin => coin;
 
-    private SaveDataUtility saveData;
-
     public override void OnSingletonInit()
     {
 
@@ -22,11 +20,11 @@ public class CoinManager : MonoSingleton<CoinManager>, ICanSendEvent, ICanGetUti
         return GameMainArc.Interface;
     }
 
-    #region 金币数据存储
-    private void SetCoinNum(int num)
+    #region Coin data storage
+    private void SaveCoinNum(int value)
     {
-        PlayerPrefs.SetInt("g_WaterCoinNum", num);
-        this.SendEvent<CoinChangeEvent>();
+        PlayerPrefs.SetInt("g_WaterCoinNum", value);
+        this.SendEvent<CoinChangeEvent>(new CoinChangeEvent() { coin = coin});
     }
 
     private int GetCoinNum()
@@ -37,33 +35,34 @@ public class CoinManager : MonoSingleton<CoinManager>, ICanSendEvent, ICanGetUti
 
     private void Awake()
     {
-        saveData = this.GetUtility<SaveDataUtility>();
-        coin = saveData.GetCoinNum();
+        coin = GetCoinNum();
     }
 
     /// <summary>
-    /// 使用金币
+    /// Use Coins
     /// </summary>
-    /// <param name="cost"></param>
+    /// <param name="costValue"></param>
+    /// <param name="action">Callback</param>
     /// <returns></returns>
-    public void CostCoin(int cost)
+    public void CostCoin(int costValue ,Action action = null)
     {
-        coin -= cost;
-        saveData.SetCoinNum(coin);
+        if (costValue > coin)
+            return;
+
+        coin -= costValue;
+        SaveCoinNum(coin);
+        action?.Invoke();
     }
 
     /// <summary>
-    /// 购买体力
+    /// Add Coins
     /// </summary>
-    /// 900金币补满体力
-    public void BuyVitality(int cost)
+    /// <param name="addValue"></param>
+    /// <param name="action">Callback</param>
+    public void AddCoin(int addValue,Action action = null)
     {
-        if(cost <= coin && HealthManager.Instance.UsedHp > 0)
-        {
-            //this.GetUtility<SaveDataUtility>().SetVitality(GameConst.MaxVitality);
-            CostCoin(cost);
-            HealthManager.Instance.SetNowHpToMax();
-        }
+        coin += addValue;
+        SaveCoinNum(coin);
     }
 }
 

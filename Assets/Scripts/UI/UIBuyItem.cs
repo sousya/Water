@@ -33,17 +33,8 @@ namespace QFramework.Example
 		
 		protected override void OnShow()
 		{
-            var utility = this.GetUtility<SaveDataUtility>();
-            var nowCoin = utility.GetCoinNum();
             var needCoin = costs[mData.item - 1];
-            if (nowCoin < needCoin)
-            {
-				TxtCost.color = Color.red;
-            }
-            else
-			{
-                TxtCost.color = Color.white;
-            }
+            TxtCost.color = CoinManager.Instance.Coin < needCoin ? Color.red : Color.white;
 				
 			ImgItem.sprite = icons[mData.item - 1];
             TxtTitle.text = names[mData.item - 1];
@@ -55,16 +46,16 @@ namespace QFramework.Example
                 CloseSelf();
             });
 			
-            BtnStart.onClick.RemoveAllListeners();
-            BtnStart.onClick.AddListener(() =>
+            BtnBuy.onClick.RemoveAllListeners();
+            BtnBuy.onClick.AddListener(() =>
             {
-                if (nowCoin < needCoin)
+                if (CoinManager.Instance.Coin < needCoin)
+                    return;
+				CoinManager.Instance.CostCoin(needCoin, () =>
 				{
-					return;
-				}
-				utility.SetCoinNum(nowCoin - needCoin);
-				utility.AddItemNum(mData.item);
-				this.SendEvent<RefreshItemEvent>();
+					this.GetUtility<SaveDataUtility>().AddItemNum(mData.item);
+                    this.SendEvent<RefreshItemEvent>();
+                });
                 CloseSelf();
             });
 

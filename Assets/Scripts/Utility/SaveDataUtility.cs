@@ -417,9 +417,11 @@ public class SaveDataUtility : IUtility, ICanSendEvent
 
     #endregion
 
+    #region obsolete
+
     ////////////////////////////½ð±ÒÏà¹Ø//////////////////////////////////////
-    ///
-    public void SetCoinNum(int num)
+
+    /*public void SetCoinNum(int num)
     {
         PlayerPrefs.SetInt("g_WaterCoinNum", num);
         this.SendEvent<CoinChangeEvent>();
@@ -428,7 +430,8 @@ public class SaveDataUtility : IUtility, ICanSendEvent
     public int GetCoinNum()
     {
         return PlayerPrefs.GetInt("g_WaterCoinNum", 0);
-    }
+    }*/
+    #endregion
 
     public void SetSceneRecord(int scene)
     {

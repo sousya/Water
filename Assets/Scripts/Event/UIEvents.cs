@@ -54,7 +54,7 @@ public struct RefreshUnlockLevel
 
 public struct LevelClearEvent
 {
-    public int coin;
+
 }
 
 public struct ShowOrderEnd
@@ -78,6 +78,7 @@ public struct CakeUnlock
 
 public struct CoinChangeEvent
 {
+    public int coin;
 }
 
 public struct VitalityChangeEvent

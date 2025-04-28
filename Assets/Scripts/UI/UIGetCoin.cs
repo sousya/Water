@@ -56,11 +56,7 @@ namespace QFramework.Example
 
         void BackUIBegin()
         {
-            LevelClearEvent e = new LevelClearEvent();
-
-            e.coin = 20;
-
-            this.SendEvent<LevelClearEvent>(e);
+            this.SendEvent<LevelClearEvent>(new LevelClearEvent());
             //退出更新下方节点布局
             StringEventSystem.Global.Send("InitBeginMenuButton");
             StringEventSystem.Global.Send("ClearTakeItem");

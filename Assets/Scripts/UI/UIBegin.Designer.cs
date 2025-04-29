@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:1bdef236-e895-40c3-bb78-0088af082bbc
+	// Generate Id:a10b5c74-7ad1-4d90-b6e9-a9d909b0680b
 	public partial class UIBegin
 	{
 		public const string Name = "UIBegin";
@@ -87,12 +87,6 @@ namespace QFramework.Example
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtStar;
 		[SerializeField]
-		public UnityEngine.UI.Button BeginMenuButton1;
-		[SerializeField]
-		public UnityEngine.UI.Button BeginMenuButton2;
-		[SerializeField]
-		public UnityEngine.UI.Button BeginMenuButton3;
-		[SerializeField]
 		public Transform RewardNode;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnGetReward;
@@ -136,6 +130,8 @@ namespace QFramework.Example
 		public UnityEngine.Animator TxtCoinAdd;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnHead;
+		[SerializeField]
+		public RectTransform BottomMenuBtns;
 		
 		private UIBeginData mPrivateData = null;
 		
@@ -179,9 +175,6 @@ namespace QFramework.Example
 			TxtCoin = null;
 			BtnStar = null;
 			TxtStar = null;
-			BeginMenuButton1 = null;
-			BeginMenuButton2 = null;
-			BeginMenuButton3 = null;
 			RewardNode = null;
 			BtnGetReward = null;
 			Target = null;
@@ -204,6 +197,7 @@ namespace QFramework.Example
 			RewardCoinFx = null;
 			TxtCoinAdd = null;
 			BtnHead = null;
+			BottomMenuBtns = null;
 			
 			mData = null;
 		}

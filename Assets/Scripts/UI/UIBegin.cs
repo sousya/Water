@@ -23,8 +23,6 @@ namespace QFramework.Example
             return GameMainArc.Interface;
         }
 
-        public List<Animator> ButtonAnim;
-
         public GameObject BeginNode, LevelNode, SceneNode1, SceneNode2, SceneNode3, SceneNode4;
         public ScenePartCtrl ScenePart1, ScenePart2, ScenePart3, ScenePart4;
         public ParticleTargetMoveCtrl coinFx, starFx;
@@ -66,9 +64,8 @@ namespace QFramework.Example
             SetCoin();
             SetStar();
             SetVitality();
-            //SetItem();
-            InitBeginMenuButton();
-            
+            //InitBeginMenuButton();//有需要初始化可以使用
+
             var levelNow = this.GetUtility<SaveDataUtility>().GetLevelClear();
             if (levelNow <= 5)
             {
@@ -197,7 +194,7 @@ namespace QFramework.Example
                 UIKit.OpenPanel<UIBeginSelect>();
             });
 
-            BeginMenuButton1.onClick.RemoveAllListeners();
+            /*BeginMenuButton1.onClick.RemoveAllListeners();
             BeginMenuButton1.onClick.AddListener(() =>
             {
                 nowButton = 1;
@@ -216,7 +213,7 @@ namespace QFramework.Example
             {
                 nowButton = 3;
                 CheckBeginMenuButton();
-            });
+            });*/
 
             BtnReturn.onClick.RemoveAllListeners();
             BtnReturn.onClick.AddListener(() =>
@@ -323,16 +320,18 @@ namespace QFramework.Example
         //事件注册
         void RegisterEvent()
         {
+            //开始游戏事件
             this.RegisterEvent<LevelStartEvent>(e =>
             {
+                BottomMenuBtns.Hide();
                 TxtLevel.text = LevelManager.Instance.levelId.ToString();//"Level " + 
                 SetTakeItem();
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
+            //胜利结算=》返回主页事件
             this.RegisterEvent<LevelClearEvent>(e =>
             {
-                //胜利结算=》返回主页
-                //VictoryReturnBegin
+                InitBeginMenuButton();
                 BeginNode.SetActive(true);
                 LevelNode.SetActive(false);
                 StartCoroutine(ShowFx());
@@ -365,8 +364,7 @@ namespace QFramework.Example
                 LevelNode.SetActive(false);
                 BeginNode.SetActive(true);
                 SetScene();
-                CheckBeginMenuButton();
-                //this.GetUtility<SaveDataUtility>().CostVitality();
+                InitBeginMenuButton();
                 HealthManager.Instance.UseHp();
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
@@ -382,12 +380,6 @@ namespace QFramework.Example
                 BeginNode.SetActive(false);
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
-            //驱动按钮初始选择
-            StringEventSystem.Global.Register("InitBeginMenuButton", () =>
-            {
-                InitBeginMenuButton();
-
-            }).UnRegisterWhenGameObjectDestroyed(gameObject);
             StringEventSystem.Global.Register("StreakWinItem", (int count) =>
             {
                 ClearBottleBlackWater(count);
@@ -410,38 +402,14 @@ namespace QFramework.Example
         }
 
         /// <summary>
-        /// 检查主页菜单当前状态
+        /// 显示并初始化底部菜单按钮
         /// </summary>
-		void CheckBeginMenuButton()
+        void InitBeginMenuButton(int index = -1)
         {
-            switch (nowButton)
-            {
-                case 1:
-                    ButtonAnim[0].Play("BeginMenuButtonSelect");
-                    ButtonAnim[1].Play("BeginMenuButtonUnSelect");
-                    ButtonAnim[2].Play("BeginMenuButtonUnSelect");
-                    break;
-                case 2:
-                    ButtonAnim[0].Play("BeginMenuButtonUnSelect");
-                    ButtonAnim[1].Play("BeginMenuButtonSelect");
-                    ButtonAnim[2].Play("BeginMenuButtonUnSelect");
-                    break;
-                case 3:
-                    ButtonAnim[0].Play("BeginMenuButtonUnSelect");
-                    ButtonAnim[1].Play("BeginMenuButtonUnSelect");
-                    ButtonAnim[2].Play("BeginMenuButtonSelect");
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// 初始化主页菜单当前状态
-        /// </summary>
-        void InitBeginMenuButton()
-        {
-            ButtonAnim[0].Play("BeginMenuButtonUnSelect");
-            ButtonAnim[1].Play("BeginMenuButtonSelect");
-            ButtonAnim[2].Play("BeginMenuButtonUnSelect");
+            BottomMenuBtns.Show();
+            //有参传入，初始按钮点击(切换对应界面)
+            if (index > 0)
+                bottomMenuBtns[index].onClick.Invoke();
         }
 
         /// <summary>

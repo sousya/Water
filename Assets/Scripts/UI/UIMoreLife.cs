@@ -76,6 +76,7 @@ namespace QFramework.Example
 			BindBtn();
             //RegisterEvent();//弃用
             //CheckVitality();//弃用
+            //无限体力的一些UI更新
             TxtNextHeart.text = HealthManager.Instance.CurRecoverySlot.ToString();
         }
 
@@ -137,6 +138,7 @@ namespace QFramework.Example
 
         private void Update()
         {
+            //判断是否处于无限体力，无限体力的情况应该更新剩余时间倒计时
             TxtTime.text = HealthManager.Instance.RecoverTimerStr;
             TxtNextHeart.text = HealthManager.Instance.CurRecoverySlot.ToString();
         }

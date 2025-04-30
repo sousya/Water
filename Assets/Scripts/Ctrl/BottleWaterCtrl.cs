@@ -41,6 +41,7 @@ public class BottleWaterCtrl : MonoBehaviour
 
     }
 
+
     public void SetSpineActive(bool active)
     {
         spineGo.SetActive(active);
@@ -88,7 +89,6 @@ public class BottleWaterCtrl : MonoBehaviour
         isPlayItemAnim = true;
         hide.gameObject.SetActive(true);
         var go = Instantiate(broomItemGo);
-        var go2 = Instantiate(broomItemGo);
         var go1 = Instantiate(hide.broomItemGo);
         go.transform.parent = transform;
         go.transform.localScale = broomItemGo.transform.localScale;
@@ -116,6 +116,9 @@ public class BottleWaterCtrl : MonoBehaviour
         isPlayItemAnim = false;
         hide.gameObject.SetActive(false);
         yield return new WaitForSeconds(1f);
+
+        hide.bottle.SetBottleColor();
+
         Destroy(go);
         //gameObject.SetActive(false);
 
@@ -219,7 +222,6 @@ public class BottleWaterCtrl : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         isPlayItemAnim = false;
-        //gameObject.SetActive(false);
         Destroy(go);
         gameObject.SetActive(false);
     }

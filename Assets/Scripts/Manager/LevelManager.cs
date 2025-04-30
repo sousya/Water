@@ -100,7 +100,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
-        this.GetUtility<SaveDataUtility>().SaveLevel(30);
+        this.GetUtility<SaveDataUtility>().SaveLevel(11);
 
         emptyBottle.numCake = 4;
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();
@@ -339,7 +339,38 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// <returns></returns>
     public IEnumerator WaitCheckFinish(int clearColor = 0)
     {
+        // 通过逻辑重构
+        if (clearColor != 0 && clearList.Count > 0)
+            clearList.Remove(clearColor);
+
         if (clearList.Count == 0)
+        {
+            //Debug.Log("胜利");
+            UIKit.OpenPanel<UIMask>(UILevel.PopUI);
+            yield return new WaitForSeconds(4);
+
+            //Debug.Log("开始播放胜利结算");
+            UIKit.ClosePanel<UIMask>();
+            this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
+            CoinManager.Instance.AddCoin(20);
+
+            //前五关(前五关应该不统计连胜)
+            if (levelId < 5)
+            {
+                this.SendEvent<LevelStartEvent>();
+                StartGame(levelId + 1);
+            }
+            else
+            {
+                UIKit.OpenPanel<UIVictory>();
+            }
+            CheckWinNum();
+        }
+        else
+            yield return null;
+
+        // obsolete
+        /*if (clearList.Count == 0)
         {
             //VictoryBottle = idx;
             Debug.Log("胜利");
@@ -373,7 +404,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 UIKit.OpenPanel<UIVictory>();
             }
             CheckWinNum();
-        }
+        }*/
     }
 
     /// <summary>
@@ -645,6 +676,12 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// </summary>
     public void InitLevels(LevelCreateCtrl levelInfo)
     {
+        //清空操作记录 
+        foreach (var bottle in bottles)
+        {
+            bottle.moveRecords.Clear();
+        }
+
         //Debug.Log("关卡重置初始化/首次进入关卡初始化");
         ShowBottleGo();
         InitBottle(levelInfo);
@@ -902,6 +939,10 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         }
     }
 
+    /// <summary>
+    /// 判断是否有阻碍效果
+    /// </summary>
+    /// <returns></returns>
     public bool CheckAllDebuff()
     {
         //是否有黑水
@@ -962,6 +1003,8 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// </summary>
     public void ShowMahoujin()
     {
+        //触发遮罩
+        UIKit.OpenPanel<UIMask>(UILevel.PopUI);
         StartCoroutine(ShowMahoujinCoroutine());
     }
 
@@ -974,6 +1017,8 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         mahoujinSpine.AnimationState.SetAnimation(0, "attack", false);
 
         yield return new WaitForSeconds(3.34f);
+        UIKit.ClosePanel<UIMask>();
+        //Debug.Log("去除遮罩");
         RemoveAll();
         mahoujinGo.SetActive(false);
         isPlayFxAnim = false;
@@ -1037,8 +1082,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// <param name="scene">当前场景编号</param>
     /// <param name="num">当前部件编号</param>
     /// <returns></returns>
-    ///这里有问题。有可能传入1-5的值进来，也有可能传入0
-    ///判断当前需要解锁的是什么部件，然后返回对应需要的星星
     public int GetPartNeedStar(int scene, int num)
     {
         List<int> useList = null;
@@ -1148,6 +1191,7 @@ public class MovePair
     public int to;
 }
 
+[Serializable]
 public class BottleRecord
 {
     public bool isFinish, isFreeze, isClearHide, isNearHide;

@@ -1942,15 +1942,17 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
         foreach (var ctrl in list)
         {
-            var go = GameObject.Instantiate(LevelManager.Instance.broomBullet);
-
+            var go = Instantiate(LevelManager.Instance.broomBullet);
+            
             var fly = go.GetComponent<FlyCtrl>();
             fly.target = ctrl.transform;
             fly.flyTime = 1.2f;
             go.transform.position = fromPos;
             fly.BeginFly();
         }
-        SetBottleColor();
+
+        //由BottleWaterCtrl的协程调用(避免中断协程导致Destroy不生效)
+        //SetBottleColor();
     }
 
     /// <summary>

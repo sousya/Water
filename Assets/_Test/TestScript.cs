@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TestScript : MonoBehaviour
 {
     public Button rebtn;
-    //public Button addbtn;
+    public Button addbtn;
 
     private void Awake()
     {
@@ -17,13 +17,13 @@ public class TestScript : MonoBehaviour
     {
         rebtn.onClick.AddListener(() =>
         {
-            HealthManager.Instance.UseHp();
+            HealthManager.Instance.CancelUnLimitHp();
         });
 
-        //addbtn.onClick.AddListener(() =>
-        //{
-        //    HealthManager.Instance.AddHp();
-        //});
+        addbtn.onClick.AddListener(() =>
+        {
+            HealthManager.Instance.SetUnLimitHp(120);
+        });
         //Debug.Log(IsNetworkReachability());
     }
 

@@ -5,11 +5,8 @@ using GameDefine;
 using System.Collections.Generic;
 using System.Collections;
 using DG.Tweening;
-using UnityEngine.SocialPlatforms;
 using System.Linq;
-using UnityEngine.Rendering;
 using System;
-using System.Runtime.InteropServices;
 
 namespace QFramework.Example
 {
@@ -23,11 +20,12 @@ namespace QFramework.Example
             return GameMainArc.Interface;
         }
 
-        public GameObject BeginNode, LevelNode, SceneNode1, SceneNode2, SceneNode3, SceneNode4;
+        public GameObject LevelNode, SceneNode1, SceneNode2, SceneNode3, SceneNode4;
+
         public ScenePartCtrl ScenePart1, ScenePart2, ScenePart3, ScenePart4;
         public ParticleTargetMoveCtrl coinFx, starFx;
-        
 
+        private GameObject HomeNode => Panels[2];
         #region BottomMenuSetting
         [SerializeField] private List<Button> bottomMenuBtns;
         [SerializeField] private List<RectTransform> bottomMenuRect;
@@ -60,17 +58,18 @@ namespace QFramework.Example
         {
             BindBtn();
             RegisterEvent();
-            SetText();
             SetCoin();
             SetStar();
             SetVitality();
             //InitBeginMenuButton();//有需要初始化可以使用
 
+            //启动游戏时，处于前五关会直接开始游戏，需要更新UI
             var levelNow = this.GetUtility<SaveDataUtility>().GetLevelClear();
             if (levelNow <= 5)
             {
-                LevelNode.SetActive(true);
-                BeginNode.SetActive(false);
+                StartOrOverChangePanel(true, false);
+                TxtLevel.text = LevelManager.Instance.levelId.ToString();
+                BottomMenuBtns.Hide();
             }
             SetScene();
         }
@@ -179,7 +178,6 @@ namespace QFramework.Example
                         UIKit.OpenPanel<UIBuyItem>(data);
                         return;
                     }
-                    //判定是否有任何阻碍效果
                     if (LevelManager.Instance.CheckAllDebuff())
                     {
                         LevelManager.Instance.RemoveAll();
@@ -193,27 +191,6 @@ namespace QFramework.Example
             {
                 UIKit.OpenPanel<UIBeginSelect>();
             });
-
-            /*BeginMenuButton1.onClick.RemoveAllListeners();
-            BeginMenuButton1.onClick.AddListener(() =>
-            {
-                nowButton = 1;
-                CheckBeginMenuButton();
-            });
-
-            BeginMenuButton2.onClick.RemoveAllListeners();
-            BeginMenuButton2.onClick.AddListener(() =>
-            {
-                nowButton = 2;
-                CheckBeginMenuButton();
-            });
-
-            BeginMenuButton3.onClick.RemoveAllListeners();
-            BeginMenuButton3.onClick.AddListener(() =>
-            {
-                nowButton = 3;
-                CheckBeginMenuButton();
-            });*/
 
             BtnReturn.onClick.RemoveAllListeners();
             BtnReturn.onClick.AddListener(() =>
@@ -269,14 +246,13 @@ namespace QFramework.Example
             });
 
             //底部区域按钮监听
-            //bottomMenuBtns[i].onClick.Invoke();可以作为事件触发某一个点击
             foreach (var btn in bottomMenuBtns)
             {
                 btn.onClick.AddListener(() =>
                 {
                     int index = bottomMenuBtns.IndexOf(btn);
                     //切换界面
-
+                    ChangePanel(index);
                     if (nowButton != index)
                     {
                         for (int i = 0; i < bottomMenuRect.Count; i++)
@@ -324,7 +300,7 @@ namespace QFramework.Example
             this.RegisterEvent<LevelStartEvent>(e =>
             {
                 BottomMenuBtns.Hide();
-                TxtLevel.text = LevelManager.Instance.levelId.ToString();//"Level " + 
+                TxtLevel.text = LevelManager.Instance.levelId.ToString();
                 SetTakeItem();
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
@@ -332,8 +308,7 @@ namespace QFramework.Example
             this.RegisterEvent<LevelClearEvent>(e =>
             {
                 InitBeginMenuButton();
-                BeginNode.SetActive(true);
-                LevelNode.SetActive(false);
+                StartOrOverChangePanel(false, true);
                 StartCoroutine(ShowFx());
 
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
@@ -361,8 +336,7 @@ namespace QFramework.Example
 
             this.RegisterEvent<ReturnMainEvent>(e =>
             {
-                LevelNode.SetActive(false);
-                BeginNode.SetActive(true);
+                StartOrOverChangePanel(false, true);
                 SetScene();
                 InitBeginMenuButton();
                 HealthManager.Instance.UseHp();
@@ -376,8 +350,7 @@ namespace QFramework.Example
             this.RegisterEvent<GameStartEvent>(e =>
             {
                 LevelManager.Instance.StartGame(this.GetUtility<SaveDataUtility>().GetLevelClear());
-                LevelNode.SetActive(true);
-                BeginNode.SetActive(false);
+                StartOrOverChangePanel(true, false);
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
             StringEventSystem.Global.Register("StreakWinItem", (int count) =>
@@ -385,6 +358,8 @@ namespace QFramework.Example
                 ClearBottleBlackWater(count);
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
+
+        #region 底部菜单栏按钮切换
 
         /// <summary>
         /// 菜单按钮点击切换界面
@@ -402,6 +377,17 @@ namespace QFramework.Example
         }
 
         /// <summary>
+        /// 切换开始游戏和结束游戏面板
+        /// </summary>
+        /// <param name="levelNode">游戏界面状态</param>
+        /// <param name="homeNode">主页开始启用状态</param>
+        void StartOrOverChangePanel(bool levelNode, bool homeNode)
+        {
+            LevelNode.gameObject.SetActive(levelNode);
+            HomeNode.gameObject.SetActive(homeNode);
+        }
+
+        /// <summary>
         /// 显示并初始化底部菜单按钮
         /// </summary>
         void InitBeginMenuButton(int index = -1)
@@ -411,6 +397,10 @@ namespace QFramework.Example
             if (index > 0)
                 bottomMenuBtns[index].onClick.Invoke();
         }
+
+        #endregion
+
+        #region 道具相关
 
         /// <summary>
         /// 使用携带道具按钮事件
@@ -467,9 +457,9 @@ namespace QFramework.Example
                         TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();
                     });
                     break;
-                    
+
                 case 7:
-                    ClearBottleBlackWater(2,() =>
+                    ClearBottleBlackWater(2, () =>
                     {
                         this.GetUtility<SaveDataUtility>().ReduceItemNum(7);
                         TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
@@ -680,7 +670,7 @@ namespace QFramework.Example
         /// </summary>
         /// <param name="count">祛除的瓶子数量</param>
         /// <param name="action">回调(道具使用时传入)</param>
-        private void ClearBottleBlackWater(int count,Action action = null)
+        private void ClearBottleBlackWater(int count, Action action = null)
         {
             if (LevelManager.Instance.hideBottleList.Count > 0)
             {
@@ -766,6 +756,8 @@ namespace QFramework.Example
             }
         }
 
+        #endregion
+
         /// <summary>
         /// 解锁建筑宝箱奖励
         /// </summary>
@@ -813,16 +805,7 @@ namespace QFramework.Example
         /// </summary>
         void SetVitality()
         {
-            //TxtHeart.text = this.GetUtility<SaveDataUtility>().GetVitalityNum().ToString();
             TxtHeart.text = HealthManager.Instance.NowHp.ToString();
-        }
-
-        /// <summary>
-        /// 更新关卡文本
-        /// </summary>
-        void SetText()
-        {
-            TxtLevel.text = LevelManager.Instance.levelId.ToString();//"Level " + 
         }
 
         /// <summary>

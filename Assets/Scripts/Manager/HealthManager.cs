@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using QFramework;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [MonoSingletonPath("[Health]/HealthManager")]
@@ -9,13 +10,15 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
 {
     private const int MAXHP = 5;
     private const float RECOVERTIME = 1800;
-    [SerializeField] private int nowHp;
-    //体力完全恢复的时间点
-    private DateTime recoverEndTime;
-    [SerializeField] private string recoverTimeStr;
+    private const float SECOND = 60;
 
-    //用于后续无限体力功能
-    public bool UseHpSign = true;
+    private int nowHp;
+    private DateTime recoverEndTime;        // 体力完全恢复的时间点
+    private string recoverTimeStr;
+
+    private DateTime unLimitHpEndTime;      // 无限体力截止的时间点
+    [SerializeField] private string unLimitHpTimeStr;
+    private bool unLimitHp;                 // T无限体力，F消耗体力
 
     /// <summary>
     /// 当前体力恢复剩余时间
@@ -41,6 +44,11 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
     /// 是否有体力
     /// </summary>
     public bool HasHp => nowHp > 0;
+
+    /// <summary>
+    /// 无限体力状态
+    /// </summary>
+    public bool UnLimitHp => unLimitHp;
 
     #region QF
 
@@ -69,8 +77,19 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
         else
             recoverEndTime = DateTime.MinValue;
 
+
         //检查体力是否需要恢复
         CheckRecoverHp();
+
+        unLimitHpTimeStr = "00:00";
+        string UnLimitTime = GetUnLimitHpEndTime();
+        if (!string.IsNullOrEmpty(UnLimitTime))
+            unLimitHpEndTime = DateTime.Parse(UnLimitTime);
+        else
+            unLimitHpEndTime = DateTime.MinValue;
+
+        //检查无限体力是否到期
+        unLimitHp = CheckUnLimitHp();
     }
 
     /// <summary>
@@ -82,7 +101,7 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
         if (recoverEndTime == DateTime.MinValue)
             return;
 
-        float timer = GetrecoverTime();
+        float timer = GetRemainingTime(recoverEndTime);
         // 体力恢复完成
         if (timer <= 0)
             SaveNowHpToMax();
@@ -94,18 +113,6 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
             nowHp = num >= MAXHP ? 0 : MAXHP - num;
             SaveNowHp(nowHp);
         }
-    }
-
-    /// <summary>
-    /// 获取恢复所有体力的所需时间
-    /// </summary>
-    /// <returns></returns>
-    private float GetrecoverTime()
-    {
-        //获取当前时间与 恢复完成时间的时间间隔
-        TimeSpan recoverInterval = recoverEndTime - DateTime.Now;
-        float remainingTime = (float)recoverInterval.TotalSeconds;
-        return remainingTime;
     }
 
     /// <summary>
@@ -127,6 +134,50 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
         return recoverInterval;
     }
 
+    /// <summary>
+    /// 倒计时结束恢复一点体力
+    /// </summary>
+    private void CountDownAddHp()
+    {
+        nowHp = nowHp + 1 > MAXHP ? MAXHP : nowHp + 1;
+        SaveNowHp(nowHp);
+    }
+
+    /// <summary>
+    /// 检查无限体力是否到期
+    /// </summary>
+    private bool CheckUnLimitHp()
+    {
+        if (unLimitHpEndTime == DateTime.MinValue)
+            return false;
+
+        float timer = GetRemainingTime(unLimitHpEndTime);
+        if (timer > 0)
+            return true;
+        else
+        {
+            unLimitHpEndTime = DateTime.MinValue;
+            unLimitHpTimeStr = "00:00";
+            SaveUnLimitHpEndTime(string.Empty);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 获取恢复所有体力的所需时间
+    /// 获取无限体力剩余时间
+    /// </summary>
+    /// <returns></returns>
+    private float GetRemainingTime(DateTime endTime)
+    {
+        //获取当前时间与 目标时间的时间间隔
+        TimeSpan recoverInterval = endTime - DateTime.Now;
+        float remainingTime = (float)recoverInterval.TotalSeconds;
+        return remainingTime;
+    }
+
+    #endregion
+
     private void Update()
     {
         if (nowHp < MAXHP)
@@ -142,23 +193,25 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
             int seconds = timer.Seconds;
             recoverTimeStr = $"{minutes}:{seconds:D2}";
             if (timer.TotalSeconds <= 0)
-                //AddHp();
                 CountDownAddHp();
+        }
+
+        if (unLimitHp)
+        {
+            float remainingTime = GetRemainingTime(unLimitHpEndTime);
+            TimeSpan timer = TimeSpan.FromSeconds(remainingTime);
+            unLimitHpTimeStr = timer.ToString(@"hh\:mm\:ss");
+            if (remainingTime <= 0)
+            {
+                unLimitHpEndTime = DateTime.MinValue;
+                unLimitHpTimeStr = "00:00";
+                SaveUnLimitHpEndTime(string.Empty);
+                unLimitHp = false;
+            }
         }
     }
 
-    /// <summary>
-    /// 倒计时结束恢复一点体力
-    /// </summary>
-    private void CountDownAddHp()
-    {
-        nowHp = nowHp + 1 > MAXHP ? MAXHP : nowHp + 1;
-        SaveNowHp(nowHp);
-    }
-    
-    #endregion
-
-    #region SaveHp
+    #region Data Storage
 
     /// <summary>
     /// 存储当前体力
@@ -211,6 +264,22 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
         PlayerPrefs.SetString("_RecoverEndTime", value);
     }
 
+    /// <summary>
+    /// 设置无限体力截止时间
+    /// </summary>
+    /// <param name="value"></param>
+    private void SaveUnLimitHpEndTime(string value)
+    {
+        PlayerPrefs.SetString("_UnLimitHpEndTime", value);
+    }
+
+    /// <summary>
+    /// 获取无限体力截止时间
+    /// </summary>
+    private string GetUnLimitHpEndTime()
+    {
+        return PlayerPrefs.GetString("_UnLimitHpEndTime", string.Empty);
+    }
     #endregion
 
     /// <summary>
@@ -236,6 +305,9 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
     /// </summary>
     public void UseHp()
     {
+        if (unLimitHp)
+            return;
+
         if (nowHp > 0)
         {
             nowHp--;
@@ -268,4 +340,46 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
     {
         SaveNowHpToMax();
     }
+
+    /// <summary>
+    /// 设置无限体力
+    /// </summary>
+    /// <param name="minute">时长(单位分钟)</param>
+    public void SetUnLimitHp(int minute)
+    {
+        unLimitHp = true;
+
+        // 判断是否累加时长
+        string time = GetUnLimitHpEndTime();
+        if (!string.IsNullOrEmpty(time))
+            unLimitHpEndTime = unLimitHpEndTime.AddSeconds(minute * SECOND);
+        else
+            unLimitHpEndTime = DateTime.Now.AddSeconds(minute * SECOND);
+        SaveUnLimitHpEndTime(unLimitHpEndTime.ToString());
+
+        // 优化项
+        // 无限体力的时间大于当前的体力恢复时间则恢复满
+        if (nowHp < MAXHP)
+        {
+            float remainingRecoverTime = GetRemainingTime(recoverEndTime);
+            float unLimitDuration = minute * SECOND;
+
+            if (unLimitDuration >= remainingRecoverTime)
+                SetNowHpToMax();
+        }
+        
+        // 发送事件通知表现层(UI更新等)
+        // 可能由这里去通知表现层更新无限体力的时长(当经过一秒时更新一次即可，不每帧更新)
+    }
+
+
+    #region TestFun
+
+    public void CancelUnLimitHp()
+    {
+        unLimitHpEndTime = DateTime.MinValue;
+        unLimitHpTimeStr = "00:00";
+        SaveUnLimitHpEndTime(string.Empty);
+    }
+    #endregion
 }

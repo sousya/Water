@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.SymbolStore;
 using UnityEngine;
 using UnityEngine.UI;
+using GameAttributes;
 
 namespace GameDefine
 {
@@ -35,24 +37,78 @@ namespace GameDefine
         NearShow = 2
     }
 
-    public enum ItemType
+    // public enum ItemType
+    // {
+    //     ClearItem = 1001,       // ï¿½ï¿½ï¿½Ô²ï¿½ï¿½ï¿½Ð§ï¿½ï¿½
+    //     MagnetItem = 1002,      // Ä§ï¿½ï¿½ï¿½é£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Debuff(ï¿½Ï°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½)
+    //     MakeColorItem = 1003,   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½É«ï¿½ï¿½Æ¿ï¿½ï¿½ï¿½ï¿½
+    //     ChangeGreen = 2001,     // ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Îªï¿½ï¿½É«-ï¿½ï¿½ï¿½1
+    //     ChangeOrange = 2002,    // ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Îªï¿½ï¿½É«-ï¿½ï¿½ï¿½7
+    //     ChangePink = 2003,      // ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Îªï¿½ï¿½É«-ï¿½ï¿½ï¿½3
+    //     ChangePurple = 2004,    // ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Îªï¿½ï¿½É«-ï¿½ï¿½ï¿½10
+    //     ChangeYellow = 2005,    // ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Îªï¿½ï¿½É«-ï¿½ï¿½ï¿½6
+    //     ChangeDarkBlue = 2006,  // ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½É«-ï¿½ï¿½ï¿½4
+    //     ClearPink = 3001,       // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð·ï¿½É«Ë®ï¿½ï¿½-ï¿½ï¿½ï¿½3
+    //     ClearOrange = 3002,     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð³ï¿½É«Ë®ï¿½ï¿½-ï¿½ï¿½ï¿½7
+    //     ClearBlue = 3003,       // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«Ë®ï¿½ï¿½-ï¿½ï¿½ï¿½4
+    //     ClearYellow = 3004,     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½É«Ë®ï¿½ï¿½-ï¿½ï¿½ï¿½6
+    //     ClearDarkGreen = 3005,  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«Ë®-ï¿½ï¿½ï¿½ï¿½9
+    //     ClearRed = 3006,        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðºï¿½É«Ë®ï¿½ï¿½-ï¿½ï¿½ï¿½2
+    //     ClearGreen = 3007,      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«Ë®ï¿½ï¿½-ï¿½ï¿½ï¿½1
+    // }
+    
+     public enum ItemType
     {
-        ClearItem = 1001,       // ²âÊÔ²»³öÐ§¹û
-        MagnetItem = 1002,      // Ä§·¨Êé£¬Çå³þËùÓÐDebuff(ÕÏ°­£¬±ù¶³Ð§¹û)
-        MakeColorItem = 1003,   // Ìí¼ÓÒþ²ØµÄÑÕÉ«µ½Æ¿×ÓÖÐ
-        ChangeGreen = 2001,     // ½«Ä³ÖÖÑÕÉ«±äÎªÂÌÉ«-±àºÅ1
-        ChangeOrange = 2002,    // ½«Ä³ÖÖÑÕÉ«±äÎª³ÈÉ«-±àºÅ7
-        ChangePink = 2003,      // ½«Ä³ÖÖÑÕÉ«±äÎª·ÛÉ«-±àºÅ3
-        ChangePurple = 2004,    // ½«Ä³ÖÖÑÕÉ«±äÎª×ÏÉ«-±àºÅ10
-        ChangeYellow = 2005,    // ½«Ä³ÖÖÑÕÉ«±äÎª»ÆÉ«-±àºÅ6
-        ChangeDarkBlue = 2006,  // ½«Ä³ÖÖÑÕÉ«±äÎªÉîÀ¶É«-±àºÅ4
-        ClearPink = 3001,       // Çå³ýËùÓÐ·ÛÉ«Ë®¿é-±àºÅ3
-        ClearOrange = 3002,     // Çå³ýËùÓÐ³ÈÉ«Ë®¿é-±àºÅ7
-        ClearBlue = 3003,       // Çå³ýËùÓÐÀ¶É«Ë®¿é-±àºÅ4
-        ClearYellow = 3004,     // Çå³ýËùÓÐ»ÆÉ«Ë®¿é-±àºÅ6
-        ClearDarkGreen = 3005,  // Çå³ýËùÓÐÉîÂÌÉ«Ë®-¿é±àºÅ9
-        ClearRed = 3006,        // Çå³ýËùÓÐºìÉ«Ë®¿é-±àºÅ2
-        ClearGreen = 3007,      // Çå³ýËùÓÐÂÌÉ«Ë®¿é-±àºÅ1
+        [WaterColorState(false, false, false, false, "", EColorStateSpineType.None)]
+        UseColor = 1,
+        
+        [WaterColorState(true, false, false, false, "idle_cl", EColorStateSpineType.EBroomSpine)]
+        ClearItem = 1001,
+        
+        [WaterColorState(false, false, false, true, "idle", EColorStateSpineType.EMagnetSpine)]
+        MagnetItem = 1002, 
+        
+        [WaterColorState(false, true, false, false, "idle", EColorStateSpineType.ECreateSpine)]
+        MakeColorItem = 1003,
+        
+        [WaterColorState(false, false, true, false, "idle_cl", EColorStateSpineType.EChangeSpine)]
+        ChangeGreen = 2001,
+        
+        [WaterColorState(false, false, true, false, "idle_jh", EColorStateSpineType.EChangeSpine)]
+        ChangeOrange = 2002,
+        
+        [WaterColorState(false, false, true, false, "idle_fs", EColorStateSpineType.EChangeSpine)]
+        ChangePink = 2003,
+        
+        [WaterColorState(false, false, true, false, "idle_zs", EColorStateSpineType.EChangeSpine)]
+        ChangePurple = 2004,
+        
+        [WaterColorState(false, false, true, false, "idle_hs", EColorStateSpineType.EChangeSpine)]
+        ChangeYellow = 2005,
+        
+        [WaterColorState(false, false, true, false, "idle_sl", EColorStateSpineType.EChangeSpine)]
+        ChangeDarkBlue = 2006,
+        
+        [WaterColorState(true, false, false, false, "idle_fh", EColorStateSpineType.EBroomSpine)]
+        ClearPink = 3001,
+        
+        [WaterColorState(true, false, false, false, "idle_jh", EColorStateSpineType.EBroomSpine)]
+        ClearOrange = 3002,
+        
+        [WaterColorState(true, false, false, false, "idle_gl", EColorStateSpineType.EBroomSpine)]
+        ClearBlue = 3003,
+        
+        [WaterColorState(true, false, false, false, "idle_hs", EColorStateSpineType.EBroomSpine)]
+        ClearYellow = 3004,
+        
+        [WaterColorState(true, false, false, false, "idle_sl", EColorStateSpineType.EBroomSpine)]
+        ClearDarkGreen = 3005,
+        
+        [WaterColorState(true, false, false, false, "idle_dh", EColorStateSpineType.EBroomSpine)]
+        ClearRed = 3006,
+        
+        [WaterColorState(true, false, false, false, "idle_cl", EColorStateSpineType.EBroomSpine)]
+        ClearGreen = 3007,
     }
     public enum LanguageType
     {
@@ -60,5 +116,56 @@ namespace GameDefine
         ja = 1,
         en = 2,
         ko = 3,
+    }
+
+    public enum EIdleAnim
+    {
+        [Description("idle_cl")]
+        IDLE_CL = 1,
+        
+        [Description("idle_dh")]
+        IDLE_DH = 2,
+        
+        [Description("idle_fh")]
+        IDLE_FH = 3,
+        
+        [Description("idle_gl")]
+        IDLE_GL = 4,
+        
+        [Description("idle_hl")]
+        IDLE_HL = 5,
+        
+        [Description("idle_hs")]
+        IDLE_HS = 6,
+        
+        [Description("idle_jh")]
+        IDLE_JH = 7,
+        
+        [Description("idle_lh")]
+        IDLE_LH = 8,
+        
+        [Description("idle_sl")]
+        IDLE_SL = 9,
+        
+        [Description("idle_ze")]
+        IDLE_ZE = 10,
+        
+        [Description("idle_zs")]
+        IDLE_ZS = 11,
+        
+        [Description("idle_mh")]
+        IDLE_MH = 12,
+        
+        IDLE_MAX = 13
+    }
+
+    public class GameEnum
+    {
+        public static string GetDescription<T>(T value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attributes = (DescriptionAttribute[])field.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            return attributes.Length > 0 ? attributes[0].Description : value.ToString();
+        }
     }
 }

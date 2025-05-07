@@ -194,44 +194,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         if (limitColor != 0)
         {
             limitColorSpine.gameObject.SetActive(true);
-            switch (limitColor)
+            if (limitColor > 0 && limitColor < (int)EIdleAnim.IDLE_MAX)
             {
-                case 1:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_cl", false);
-                    break;
-                case 2:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_dh", false);
-                    break;
-                case 3:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_fh", false);
-                    break;
-                case 4:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_gl", false);
-                    break;
-                case 5:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_hl", false);
-                    break;
-                case 6:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_hs", false);
-                    break;
-                case 7:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_jh", false);
-                    break;
-                case 8:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_lh", false);
-                    break;
-                case 9:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_sl", false);
-                    break;
-                case 10:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_ze", false);
-                    break;
-                case 11:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_zs", false);
-                    break;
-                case 12:
-                    limitColorSpine.AnimationState.SetAnimation(0, "idle_mh", false);
-                    break;
+                limitColorSpine.AnimationState.SetAnimation(0, GameDefine.GameEnum.GetDescription<EIdleAnim>((EIdleAnim)limitColor), false);
             }
         }
         else
@@ -727,45 +692,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             //ImgClearHide.gameObject.SetActive(isClearHide);
             if (isClearHide)
             {
-                switch (unlockClear)
+                if (unlockClear > 0 && unlockClear < (int)EIdleAnim.IDLE_MAX)
                 {
-                    case 1:
-                        clearHide.AnimationState.SetAnimation(0, "idle_cl", false);
-                        break;
-                    case 2:
-                        clearHide.AnimationState.SetAnimation(0, "idle_dh", false);
-                        break;
-                    case 3:
-                        clearHide.AnimationState.SetAnimation(0, "idle_fh", false);
-                        break;
-                    case 4:
-                        clearHide.AnimationState.SetAnimation(0, "idle_gl", false);
-                        break;
-                    case 5:
-                        clearHide.AnimationState.SetAnimation(0, "idle_hl", false);
-                        break;
-                    case 6:
-                        clearHide.AnimationState.SetAnimation(0, "idle_hs", false);
-                        break;
-                    case 7:
-                        clearHide.AnimationState.SetAnimation(0, "idle_jh", false);
-                        break;
-                    case 8:
-                        clearHide.AnimationState.SetAnimation(0, "idle_lh", false);
-                        break;
-                    case 9:
-                        clearHide.AnimationState.SetAnimation(0, "idle_sl", false);
-                        break;
-                    case 10:
-                        clearHide.AnimationState.SetAnimation(0, "idle_ze", false);
-                        break;
-                    case 11:
-                        clearHide.AnimationState.SetAnimation(0, "idle_zs", false);
-                        break;
-                    case 12:
-                        clearHide.AnimationState.SetAnimation(0, "idle_mh", false);
-                        break;
-
+                    clearHide.AnimationState.SetAnimation(0, GameEnum.GetDescription<EIdleAnim>((EIdleAnim)unlockClear), false);
                 }
             }
         }
@@ -1124,152 +1053,13 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             if (useColor < 1000)
             {
                 //Debug.Log("UseColor " + useColor);
-                waterImg[i].color = LevelManager.Instance.waterColor[useColor];
-                waterImg[i].broomItemGo.SetActive(false);
-                waterImg[i].createItemGo.SetActive(false);
-                waterImg[i].changeItemGo.SetActive(false);
-                waterImg[i].magnetItemGo.SetActive(false);
+                waterImg[i].SetColorState(ItemType.UseColor, LevelManager.Instance.waterColor[useColor]);
             }
             // 特殊道具水块
             else
             {
                 // 根据道具类型设置对应的显示和动画
-                switch (waters[i])
-                {
-                    case (int)ItemType.ClearItem:
-                        waterImg[i].broomItemGo.SetActive(true);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(false);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_cl", false);
-
-                        break;
-                    case (int)ItemType.MagnetItem:
-                        waterImg[i].broomItemGo.SetActive(false);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(false);
-                        waterImg[i].magnetItemGo.SetActive(true);
-                        waterImg[i].magnetSpine.AnimationState.SetAnimation(0, "idle", false);
-                        break;
-                    case (int)ItemType.MakeColorItem:
-                        waterImg[i].broomItemGo.SetActive(false);
-                        waterImg[i].createItemGo.SetActive(true);
-                        waterImg[i].changeItemGo.SetActive(false);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].createSpine.AnimationState.SetAnimation(0, "idle", false);
-
-                        break;
-                    case (int)ItemType.ChangeGreen:
-                        waterImg[i].broomItemGo.SetActive(false);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(true);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_cl", false);
-
-                        //waterImg[i].color = new Color(1, 1, 1, 0);
-                        break;
-                    case (int)ItemType.ChangeOrange:
-                        waterImg[i].broomItemGo.SetActive(false);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(true);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_jh", false);
-
-                        //waterImg[i].color = new Color(1, 1, 1, 0);
-                        break;
-                    case (int)ItemType.ChangePink:
-                        waterImg[i].broomItemGo.SetActive(false);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(true);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_fs", false);
-
-                        //waterImg[i].color = new Color(1, 1, 1, 0);
-                        break;
-                    case (int)ItemType.ChangePurple:
-                        waterImg[i].broomItemGo.SetActive(false);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(true);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_zs", false);
-
-                        break;
-                    case (int)ItemType.ChangeYellow:
-                        waterImg[i].broomItemGo.SetActive(false);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(true);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_hs", false);
-
-                        break;
-                    case (int)ItemType.ChangeDarkBlue:
-                        waterImg[i].broomItemGo.SetActive(false);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(true);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_sl", false);
-
-                        break;
-                    case (int)ItemType.ClearPink:
-                        waterImg[i].broomItemGo.SetActive(true);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(false);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_fh", false);
-
-                        break;
-                    case (int)ItemType.ClearOrange:
-                        waterImg[i].broomItemGo.SetActive(true);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(false);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_jh", false);
-
-                        break;
-                    case (int)ItemType.ClearBlue:
-                        waterImg[i].broomItemGo.SetActive(true);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(false);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_gl", false);
-
-                        break;
-                    case (int)ItemType.ClearYellow:
-                        waterImg[i].broomItemGo.SetActive(true);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(false);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_hs", false);
-
-                        break;
-                    case (int)ItemType.ClearDarkGreen:
-                        waterImg[i].broomItemGo.SetActive(true);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(false);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_sl", false);
-
-                        break;
-                    case (int)ItemType.ClearRed:
-                        waterImg[i].broomItemGo.SetActive(true);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(false);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_dh", false);
-
-                        break;
-                    case (int)ItemType.ClearGreen:
-                        waterImg[i].broomItemGo.SetActive(true);
-                        waterImg[i].createItemGo.SetActive(false);
-                        waterImg[i].changeItemGo.SetActive(false);
-                        waterImg[i].magnetItemGo.SetActive(false);
-                        waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_cl", false);
-
-                        break;
-                }
-                //var checkColor = LevelManager.Instance.waterColor[useColor - 1000];
-                // 设置道具的颜色为统一的道具颜色
-                waterImg[i].color = LevelManager.Instance.ItemColor;
+                waterImg[i].SetColorState((ItemType)waters[i], LevelManager.Instance.ItemColor);
             }
 
             //将隐藏水块显示
@@ -1355,44 +1145,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                 case WaterItem.BreakIce:
                     waterImg[i].textItem.text = "";
                     waterImg[i].fireRuneGo.SetActive(true);
-                    switch (waters[i])
+                    if (waters[i] > 0 && waters[i] < (int)EIdleAnim.IDLE_MAX)
                     {
-                        case 1:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_cl", false);
-                            break;
-                        case 2:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_dh", false);
-                            break;
-                        case 3:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_fh", false);
-                            break;
-                        case 4:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_gl", false);
-                            break;
-                        case 5:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_hl", false);
-                            break;
-                        case 6:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_hs", false);
-                            break;
-                        case 7:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_jh", false);
-                            break;
-                        case 8:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_lh", false);
-                            break;
-                        case 9:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_sl", false);
-                            break;
-                        case 10:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_ze", false);
-                            break;
-                        case 11:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_zs", false);
-                            break;
-                        case 12:
-                            waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, "idle_mh", false);
-                            break;
+                        waterImg[i].fireRuneSpine.AnimationState.SetAnimation(0, GameEnum.GetDescription<EIdleAnim>((EIdleAnim)waters[i]), false);
                     }
                     break;
             }

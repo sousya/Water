@@ -6,6 +6,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
+using GameAttributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -373,7 +375,7 @@ public class BottleWaterCtrl : MonoBehaviour
 
     public IEnumerator BreakIce(BottleWaterCtrl waterCtrl)
     {
-        //²¥·Å¶¯»­£¬½ûÖ¹Ñ¡È¡ 
+        //ï¿½ï¿½ï¿½Å¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹Ñ¡È¡ 
         waterCtrl.bottle.isPlayAnim = true;
 
         isPlayItemAnim = true;
@@ -407,7 +409,7 @@ public class BottleWaterCtrl : MonoBehaviour
             waterCtrl.HideIce(() => waterCtrl.bottle.isPlayAnim = false);
             isPlayItemAnim = false;
             fireRuneGo.SetActive(false);
-            //ÌØÐ§Ïú»Ù
+            //ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½
             go.DestroySelf();
         });
 
@@ -427,7 +429,7 @@ public class BottleWaterCtrl : MonoBehaviour
             action?.Invoke();
         };
 
-        //¸ÄÓÃÊÂ¼þÇý¶¯
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
         //yield return new WaitForSeconds(1.75f);
         //UnlockIceWater();
         //fireRuneGo.SetActive(false);
@@ -436,5 +438,41 @@ public class BottleWaterCtrl : MonoBehaviour
     public void UnlockIceWater()
     {
         bottle.UnlockIceWater();
+    }
+    
+    public void SetColorState(GameDefine.ItemType itemType, Color inColor)
+    {
+        this.color = inColor;
+        
+        var type = itemType.GetType();
+        var fieldName = Enum.GetName(type, itemType);
+
+        if (fieldName == null) 
+            return;
+        var fieldInfo = type.GetField(fieldName);
+        if (fieldInfo.GetCustomAttribute(typeof(WaterColorState), false) is not WaterColorState attribute) 
+            return;
+        broomItemGo.SetActive(attribute.BroomItemActive);
+        createItemGo.SetActive(attribute.CreateItemActive);
+        changeItemGo.SetActive(attribute.ChangeItemActive);
+        magnetItemGo.SetActive(attribute.MagnetItemActive);
+        if (attribute.SpineAnim.IsNullOrEmpty() == false && attribute.SpineType > EColorStateSpineType.None && attribute.SpineType < EColorStateSpineType.Max)
+        {
+            switch (attribute.SpineType)
+            {
+                case EColorStateSpineType.EBroomSpine:
+                    broomSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
+                    break;
+                case EColorStateSpineType.EMagnetSpine:
+                    magnetSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
+                    break;
+                case EColorStateSpineType.ECreateSpine:
+                    createSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
+                    break;
+                case EColorStateSpineType.EChangeSpine:
+                    changeSpine.AnimationState.SetAnimation(0, attribute.SpineAnim, false);
+                    break;
+            }
+        }
     }
 }

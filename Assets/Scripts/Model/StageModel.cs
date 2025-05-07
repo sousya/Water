@@ -18,5 +18,5 @@ public class StageModel : AbstractModel
         GameObject go = Resources.Load<GameObject>("Prefab/Stages/Stage" + stageNum);
         GameObject.Instantiate(go);
     }
-    
+
 }

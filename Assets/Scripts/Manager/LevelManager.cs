@@ -8,12 +8,12 @@ using QFramework.Example;
 using static LevelCreateCtrl;
 using System.Collections;
 using Spine.Unity;
+using System.Linq;
 
 [MonoSingletonPath("[Level]/LevelManager")]
 public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRegisterEvent
 {
     private ResLoader mResLoader = ResLoader.Allocate();
-    public bool ignoreAnim = false;
     public static LevelManager Instance;
     public ReviewManager _reviewManager;
     public List<GameObject> bottleNodes = new List<GameObject>();
@@ -21,7 +21,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public List<int> clearList = new List<int>();
     //带有阻碍的颜色(魔法布，藤曼，冰冻)
     public List<int> cantClearColorList = new List<int>();
-    //带有阻碍的颜色(魔法布，藤曼，冰冻)
     public List<int> cantChangeColorList = new List<int>();
     public List<BottleCtrl> nowBottles = new List<BottleCtrl>();
 
@@ -50,12 +49,13 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     [SerializeField]
     SpriteRenderer levelBgSprite;
 
-    public int levelId = 1, moreCakeNum = 0, lastStar, moveNum, moreMoveNum, bombMaxNum, countDownNum, nowItem;
+    public int levelId = 1,moveNum, bombMaxNum, countDownNum, selectedItem , playingHideAnimCount;
     public float timeCountDown, timeNow, test;
     public GameObject mahoujinGo, broomBullet, fireRuneBullet;
     public SkeletonGraphic mahoujinSpine;
-    bool isOpenDefeat = false, isBomb = false, isCountDown = false, isTimeCountDown = false;
-    public bool isPlayAnim, isPlayFxAnim, isSelectItem;
+    bool isFinish = false, isBomb = false, isCountDown = false, isTimeCountDown = false;
+    public bool isPlayAnim, isPlayFxAnim;
+    public bool ISPlayingHideAnim => playingHideAnimCount == 0;//playingHideAnimCount 遮挡布播放计数
     public BottleCtrl nowHalf;
     [SerializeField]
     GameCtrl gameCtrl;
@@ -100,7 +100,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
-        this.GetUtility<SaveDataUtility>().SaveLevel(11);
+        this.GetUtility<SaveDataUtility>().SaveLevel(82);
 
         emptyBottle.numCake = 4;
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();
@@ -142,9 +142,11 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 ////////清除色块
                 ClearColor(clearColor, fromPos);
                 break;
+
             case ItemType.MagnetItem:
                 ShowMahoujin();
                 break;
+
             case ItemType.MakeColorItem:
                 StartCoroutine(AddColor(fromPos));
 
@@ -183,6 +185,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 ////////更换色块
                 ChangeColor(changeOrangeColorFrom, changeOrangeColorTo, fromTarget);
                 break;
+
             case ItemType.ChangePink:
                 int changePinkColorFrom = 0;
                 foreach (var pair in changeList)
@@ -199,6 +202,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 ////////更换色块
                 ChangeColor(changePinkColorFrom, changePinkColorTo, fromTarget);
                 break;
+
             case ItemType.ChangeYellow:
                 int changeYellowColorFrom = 0;
                 foreach (var pair in changeList)
@@ -215,6 +219,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 ////////更换色块
                 ChangeColor(changeYellowColorFrom, changeYellowColorTo, fromTarget);
                 break;
+
             case ItemType.ChangePurple:
                 int changePurpleColorFrom = 0;
                 foreach (var pair in changeList)
@@ -231,6 +236,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 ////////更换色块
                 ChangeColor(changePurpleColorFrom, changePurpleColorTo, fromTarget);
                 break;
+
             case ItemType.ChangeDarkBlue:
                 int changeDarkBlueColorFrom = 0;
                 foreach (var pair in changeList)
@@ -247,6 +253,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 ////////更换色块
                 ChangeColor(changeDarkBlueColorFrom, changeDarkBlueColorTo, fromTarget);
                 break;
+
             case ItemType.ClearPink:
                 ////////清除色块
                 ClearColor(3, fromPos);
@@ -311,6 +318,8 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             StartCoroutine(bottle.FinishHide());
         }
+
+        UIKit.ClosePanel<UIMask>();
     }
 
     /// <summary>
@@ -343,8 +352,9 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         if (clearColor != 0 && clearList.Count > 0)
             clearList.Remove(clearColor);
 
-        if (clearList.Count == 0)
+        if (clearList.Count == 0 && !isFinish)
         {
+            isFinish = true;
             //Debug.Log("胜利");
             UIKit.OpenPanel<UIMask>(UILevel.PopUI);
             yield return new WaitForSeconds(4);
@@ -458,6 +468,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             bottle.CheckHide();
             bottle.CheckFinish(true);
         }
+        UIKit.ClosePanel<UIMask>();
     }
 
     /// <summary>
@@ -498,8 +509,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public void ClearColor(int color, Vector3 fromPos)
     {
         StartCoroutine(ClearColorCoroutine(color, fromPos));
-        //StartCoroutine(WaterShine());
-
     }
 
     IEnumerator ClearColorCoroutine(int color, Vector3 fromPos)
@@ -519,14 +528,13 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             clearList.Remove(color);
         }
 
-
-
-
         foreach (var bottle in nowBottles)
         {
             bottle.RemoveAllOneColor(color);
             bottle.CheckUnlockHide(color);
         }
+
+        UIKit.ClosePanel<UIMask>();
     }
 
     /// <summary>
@@ -562,6 +570,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         }
     }
 
+    #region Add Bottle
 
     /// <summary>
     /// 使用道具添加瓶子(单个或整瓶)
@@ -622,8 +631,66 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 topBottle[topAc].Show();
                 nowBottles.Add(topBottle[topAc]);
             }
+
+            int temp = 0;
+            foreach (var item in topBottle)
+            {
+                if (item.gameObject.activeSelf)
+                {
+                    item.bottleIdx = temp;
+                    ++temp;
+                }
+            }
+            foreach (var item in bottomBottle)
+            {
+                if (item.gameObject.activeSelf)
+                {
+                    item.bottleIdx = temp;
+                    ++temp;
+                }
+            }
         }
     }
+
+    /// <summary>
+    /// 添加瓶子并初始化瓶子数据
+    /// </summary>
+    /// <param name="isHalf"></param>
+    /// <param name="action"><扣除道具的回调/param>
+    public void MoveAndAddBottle(bool isHalf, Action action)
+    {
+        var num = nowBottles.Count;
+
+        //初始化瓶子-更新索引
+        if (isHalf)
+        {
+            if (nowHalf == null || nowHalf.maxNum == 4)
+            {
+                nowBottles[num - 1].Init(emptyBottle, nowBottles[num - 1].bottleIdx);
+                nowHalf = nowBottles[num - 1];
+                nowBottles[num - 1].maxNum = 1;
+            }
+            else
+            {
+                nowBottles[num - 1].maxNum++;
+                if (nowBottles[num - 1].maxNum == 4)
+                    nowHalf = null;
+            }
+        }
+        else    //整瓶
+        {
+            nowBottles[num - 1].Init(emptyBottle, nowBottles[num - 1].bottleIdx);
+            nowBottles[num - 1].maxNum = 4;
+            nowHalf = null;
+        }
+        action?.Invoke();
+        nowBottles[num - 1].SetMaxBottle();
+
+        //对瓶子列表重新排序(整个流程应该都是通过索引找瓶子，排序不改数据也不对)
+        nowBottles = nowBottles.OrderBy(bottle => bottle.bottleIdx).ToList();
+    }
+
+    #endregion
 
     #region 关卡重置初始化/进入关卡初始化
 
@@ -681,6 +748,10 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             bottle.moveRecords.Clear();
         }
+        GameCtrl.Instance.InitPouringCount();
+        //重置魔法布统计
+        playingHideAnimCount = 0;
+        isFinish = false;
 
         //Debug.Log("关卡重置初始化/首次进入关卡初始化");
         ShowBottleGo();
@@ -760,47 +831,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
     #endregion
 
-    /// <summary>
-    /// 添加瓶子并移动瓶子数据
-    /// </summary>
-    /// <param name="isHalf"></param>
-    /// <param name="action"><扣除道具的回调/param>
-    public void MoveAndAddBottle(bool isHalf ,Action action)
-    {
-        var num = nowBottles.Count;
-        //测试结果---无用
-        /*        for (int i = 0; i < tempBottles.Count; i++)
-                {
-                    nowBottles[i].MoveBottle(tempBottles[i]);
-                }*/
-
-        //初始化瓶子-更新索引
-        if (isHalf)
-        {
-            if (nowHalf == null || nowHalf.maxNum == 4)
-            {
-                nowBottles[nowBottles.Count - 1].Init(emptyBottle, nowBottles.Count - 1);
-                nowHalf = nowBottles[nowBottles.Count - 1];
-                nowBottles[nowBottles.Count - 1].maxNum = 1;
-            }
-            else
-            {
-                nowBottles[nowBottles.Count - 1].maxNum++;
-                if (nowBottles[nowBottles.Count - 1].maxNum == 4)
-                    nowHalf = null;
-            }
-        }
-        else    //整瓶
-        {
-            nowBottles[nowBottles.Count - 1].Init(emptyBottle, nowBottles.Count - 1);
-            nowBottles[nowBottles.Count - 1].maxNum = 4;
-            nowHalf = null;
-        }
-
-        action?.Invoke();
-        nowBottles[nowBottles.Count - 1].SetMaxBottle();
-    }
-
     public void Update()
     {
         TimeCountDown();
@@ -809,10 +839,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         if (Input.GetKeyDown(KeyCode.F3))
         {
             ShareManager.Instance.ShareScreen();
-        }
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            BeginSelectItem(1);
         }
     }
 
@@ -1004,7 +1030,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public void ShowMahoujin()
     {
         //触发遮罩
-        UIKit.OpenPanel<UIMask>(UILevel.PopUI);
         StartCoroutine(ShowMahoujinCoroutine());
     }
 
@@ -1127,7 +1152,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     }
 
     /// <summary>
-    /// 道具选择
+    /// 道具选择(替换背景，更换瓶子材质)
     /// </summary>
     public void ShowItemSelect()
     {
@@ -1139,7 +1164,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     }
 
     /// <summary>
-    /// 隐藏道具选择
+    /// 取消道具选择
     /// </summary>
     public void HideItemSelect()
     {
@@ -1149,46 +1174,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             nowBottles[i].HideItemSelect();
         }
     }
-
-    /// <summary>
-    /// 使用选择的道具
-    /// </summary>
-    /// <param name="bottleCtrl"></param>
-    public void UseSelectItem(BottleCtrl bottleCtrl)
-    {
-        HideItemSelect();
-        LevelManager.Instance.isSelectItem = false;
-
-        switch (nowItem)
-        {
-            case 1:
-                bottleCtrl.RandomWater();
-                break;
-        }
-    }
-
-    /// <summary>
-    /// 开始使用道具选择瓶子
-    /// </summary>
-    /// <param name="item"></param>
-    public void BeginSelectItem(int item)
-    {
-        nowItem = item;
-        ShowItemSelect();
-        LevelManager.Instance.isSelectItem = true;
-    }
-
-    public void CancelSelectItem()
-    {
-        LevelManager.Instance.isSelectItem = false;
-    }
-}
-
-[Serializable]
-public class MovePair
-{
-    public int from;
-    public int to;
 }
 
 [Serializable]

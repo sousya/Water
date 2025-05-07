@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using GameDefine;
 using QFramework;
+using QFramework.Example;
 using Spine;
 using Spine.Unity;
 using System;
@@ -8,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static LevelCreateCtrl;
@@ -20,23 +22,21 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         return GameMainArc.Interface;
     }
 
-    // 是否 已完成，结冰，清除隐藏，邻近隐藏，正在播放动画，选中，播放清除隐藏动画 状态
-    public bool isFinish, isFreeze, isClearHide, isNearHide, isPlayAnim, isSelect, isClearHideAnim;
-    // 是否处于抬起状态（如选中时的位移）
-    public bool isUp;
+    // 是否 已完成，结冰，清除隐藏，邻近隐藏，正在播放动画，播放清除隐藏动画 状态
+    public bool isFinish, isFreeze, isClearHide, isNearHide, isPlayAnim, isClearHideAnim;
+    public bool isUp;       // 区分上下排
     
-    public int bottleIdx;   // 瓶子的索引编号（用于关卡管理）
+    public int bottleIdx;   // 瓶子的索引编号
     public int maxNum = 4,  // 瓶子的最大容量（默认4层）
         limitColor = 0,     // 限制可倒入的颜色（0表示无限制）
         unlockClear = 0;    // 解锁清除隐藏需要的颜色编号
 
-    // 存储每层液体的颜色编号（如1-12表示颜色，>1000表示道具）
+    // 存储每层液体的颜色编号（1-12表示颜色，>1000表示道具）
     public List<int> waters = new List<int>();
-    // 每层液体是否被隐藏（如黑色遮挡层）
+    // 黑色遮挡
     public List<bool> hideWaters = new List<bool>();
-    // 每层液体的附加道具类型（如冰块、炸弹等）
+    // 每层液体的附加道具类型（冰块等）
     public List<WaterItem> waterItems = new List<WaterItem>();
-    // 每层水块的控制器（控制颜色、隐藏等）
     public List<BottleWaterCtrl> waterImg = new List<BottleWaterCtrl>();
     // 操作记录（用于撤销功能）
     public List<BottleRecord> moveRecords = new List<BottleRecord>();
@@ -66,7 +66,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public SkeletonGraphic 
         nearHide,           // 魔法部动画
         clearHide,          // 藤蔓动画 
-        thunder,            // 雷电特效动画 
         limitColorSpine;    // 限制颜色提示动画
 
     public GameObject finishGo,  // 完成状态提示图标
@@ -103,7 +102,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     private void OnSelected()
     {
-        if ((!isPlayAnim && (!LevelManager.Instance.isPlayFxAnim || LevelManager.Instance.ignoreAnim)))
+        if (!isPlayAnim && !LevelManager.Instance.isPlayFxAnim)
         {
             GameCtrl.Instance.OnSelect(this);
         }
@@ -164,11 +163,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             }
         }
 
-        //if(unlockClear != 0)
-        //{
-        //    LevelManager.Instance.cantChangeColorList.Add(unlockClear);
-        //}
-
         for (int i = 0; i < waters.Count; i++)
         {
             var color = waters[i];
@@ -178,20 +172,14 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             }
         }
 
-
-
         if (topIdx < 0)
         {
             spineGo.gameObject.SetActive(false);
         }
         SetBottleColor(true, true);
         int spinePosIdx = topIdx + 1;
-        //while (spinePosIdx > 0 && waters[spinePosIdx - 1] > 1000)
-        //{
-        //    spinePosIdx -= 1;
-        //}
         SetNowSpinePos(spinePosIdx);
-        PlaySpineWaitAnim();
+        //PlaySpineWaitAnim();//重复调用
 
         foreach (var item in waterItems)
         {
@@ -352,10 +340,11 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         PlaySpineWaitAnim();
         CheckFinish();
 
-        if (isFinish)
-        {
-            LevelManager.Instance.CheckFinishChange(to);
-        }
+        //会重复触发(暂弃)
+        /*if (isFinish)
+        //{
+        //    LevelManager.Instance.CheckFinishChange(to);
+        //}*/
     }
 
     /// <summary>
@@ -440,7 +429,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         isFreeze = false;
         isNearHide = false;
         isClearHide = false;
-        StartCoroutine(CoroutinePlayClearHide(true));
+        StartCoroutine(CoroutinePlayNearHide(true));
         SetBottleColor(false, true);
         CheckFinish();
         //CheckWaterItem();
@@ -502,7 +491,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public bool OnSelect(bool needUp)
     {
         ////判断是否被冰冻,隐藏或者完成
-        if ((isFreeze && needUp) || isClearHide || isNearHide || isFinish || isClearHideAnim || (LevelManager.Instance.isPlayAnim && !LevelManager.Instance.ignoreAnim))
+        if ((isFreeze && needUp) || isClearHide || isNearHide || isFinish || isClearHideAnim)
         {
             return false;
         }
@@ -519,7 +508,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public void OnCancelSelect()
     {
         modelGo.transform.localPosition = Vector3.zero;
-        isSelect = false;
     }
 
     /// <summary>
@@ -601,15 +589,18 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         //可能还需要调整逻辑
         if (Mathf.Abs(bottleIdx - idx) == 1 && LevelManager.Instance.nowBottles[idx].isUp == isUp)
         {
+            //Debug.Log($"瓶子名：{this.name}，瓶子索引：{bottleIdx}，完成的瓶子：{idx}");
+
+            //这里可以修改为只判定isNearHide的瓶子
             foreach (var item in waters)
             {
                 LevelManager.Instance.cantChangeColorList.Remove(item);
             }
 
-            isNearHide = false;
+            //isNearHide = false;
             SetClearHide();
             CheckFinish();
-            StartCoroutine(CoroutinePlayClearHide());
+            StartCoroutine(CoroutinePlayNearHide());
         }
     }
 
@@ -618,7 +609,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     /// </summary>
     /// <param name="nowait"></param>
     /// <returns></returns>
-    IEnumerator CoroutinePlayClearHide(bool nowait = false)
+    IEnumerator CoroutinePlayNearHide(bool nowait = false)
     {
         if (!nowait)
         {
@@ -627,6 +618,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         nearHide.AnimationState.SetAnimation(0, "jingji_xiaoshi", false);
         yield return new WaitForSeconds(1.7f);
         nearHide.gameObject.SetActive(false);
+        isNearHide = false;
     }
 
     /// <summary>
@@ -639,6 +631,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         {
             if (unlockClear == color)
             {
+                ++LevelManager.Instance.playingHideAnimCount;
+                UIKit.OpenPanel<UIMask>(UILevel.PopUI);
                 foreach (var item in waters)
                 {
                     LevelManager.Instance.cantChangeColorList.Remove(item);
@@ -708,17 +702,18 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             trackEntry.Complete += (entry) =>
             {
                 clearHide.gameObject.SetActive(false);
-                isClearHideAnim = false; // 动画完成时设置为 false
+                isClearHideAnim = false; 
+                --LevelManager.Instance.playingHideAnimCount;
+                //计数为0且未过关(15关较为特殊)
+                if (LevelManager.Instance.ISPlayingHideAnim && LevelManager.Instance.clearList.Count != 0)
+                {
+                    UIKit.ClosePanel<UIMask>();
+                }
             };
         }
 
         isClearHide = false;
         CheckFinish();
-
-        //改用事件驱动
-        //yield return new WaitForSeconds(3.7f);
-        //clearHide.gameObject.SetActive(false);
-        //isClearHideAnim = false;
     }
 
     /// <summary>
@@ -875,9 +870,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                 OnFinish();
             }
         }
-
-
-
     }
 
     /// <summary>
@@ -1340,7 +1332,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     /// <summary>
     /// 判断水块道具
     /// </summary>
-    void CheckWaterItem()
+    public void CheckWaterItem()
     {
         for (int i = 0; i < waterItems.Count; i++)
         {
@@ -1418,6 +1410,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     IEnumerator CoroutinePlayFillAnim(int num, int color)
     {
+        if (BottleHasItem())
+            UIKit.OpenPanel<UIMask>(UILevel.PopUI);
 
         isPlayAnim = true;
         float fillAlltime = 0.46f;
@@ -1458,17 +1452,10 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
 
         isPlayAnim = false;
-
+        
         CheckItem();
 
         CheckFill();
-
-        //if (isFinish)
-        //{
-        //    //LevelManager.Instance.CheckVictory(bottleIdx);
-        //    //yield return new WaitForSeconds(1);
-        //    //LevelManager.Instance.VictoryEnter(bottleIdx);
-        //}
     }
 
     /// <summary>
@@ -1716,6 +1703,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             yield return new WaitForSeconds(fillTime);
         }
 
+        //倒水过程结束
+        GameCtrl.Instance.ReducePouringCount();
+
         SetBottleColor();
         PlaySpineWaitAnim();
 
@@ -1785,6 +1775,70 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             ImgWaterTop.sprite = LevelManager.Instance.waterTopSp[color - 1];
             ImgWaterDown.sprite = LevelManager.Instance.waterSp[color - 1];
         }
+    }
+
+    /// <summary>
+    /// 检查本次倒水瓶子中是否有局内道具生效
+    /// </summary>
+    /// <returns></returns>
+    public bool BottleHasItem()
+    {
+        /*// 仅作用魔法阵
+        int itemId = 0;
+        int itemPlace = 0;
+
+        for (int i = 0; i < waters.Count; i++)
+        {
+            int waterColor = waters[i];
+
+            if (waterColor == (int)ItemType.MagnetItem)
+            {
+                if (itemId == 0)
+                {
+                    itemId = waterColor;
+                    itemPlace = i;
+                }
+                else if (itemId == waterColor && i - itemPlace == 1)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;*/
+
+        //作用所有道具
+        int itemId = 0;
+        int itemPlace = 0;
+
+        for (int i = 0; i < waters.Count; i++)
+        {
+            int waterColor = waters[i];
+
+            if (waterColor > 1000)
+            {
+                if (itemId == 0)
+                {
+                    itemPlace = i;
+                    itemId = waterColor;
+                }
+                else if (waterColor == itemId && i - itemPlace == 1)
+                {
+                    // 判断是否是符合条件的特殊道具
+                    bool isMatch =
+                        waterColor == (int)ItemType.ClearItem ||
+                        waterColor == (int)ItemType.MakeColorItem ||
+                        waterColor == (int)ItemType.MagnetItem ||
+                        (waterColor > 2000 && waterColor < 3000) ||
+                        waterColor > 3000;
+
+                    if (isMatch)
+                        return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -1961,8 +2015,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     /// <param name="color"></param>
     public void RemoveAllOneColor(int color)
     {
-
-        //int count = waters.Count;
         List<int> list = new List<int>();
         List<WaterItem> items = new List<WaterItem>();
         List<bool> hides = new List<bool>();
@@ -1992,7 +2044,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     /// <returns></returns>
     IEnumerator PlayShine(int i)
     {
-
+        isPlayAnim = true;
         var imgcmp = waterImg[i].transform.GetComponent<Image>();
         imgcmp.material = LevelManager.Instance.shineMaterial;
         StartCoroutine(waterImg[i].ShowBroomAfter());
@@ -2013,6 +2065,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         {
             spineGo.gameObject.SetActive(false);
         }
+        isPlayAnim = false;
     }
 
     /// <summary>

@@ -7,8 +7,7 @@ public class FlyCtrl : MonoBehaviour
 {
     public Transform target;
     public float flyTime;
-    public BottleCtrl bottle;
-    // Start is called before the first frame update
+
     public void BeginFly()
     {
 
@@ -19,16 +18,5 @@ public class FlyCtrl : MonoBehaviour
                 LevelManager.Instance.isPlayFxAnim = false;
                 Destroy(gameObject);
             });
-
-        //tween.OnUpdate(() =>
-        //{
-        //    tween.SetTarget(target.position);
-        //});
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

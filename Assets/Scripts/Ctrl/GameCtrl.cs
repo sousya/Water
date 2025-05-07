@@ -1,15 +1,25 @@
 using QFramework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class GameCtrl : MonoBehaviour, ICanSendEvent
 {
-    public BottleCtrl FirstBottle, FirstCake1;
-    public BottleCtrl SecondBottle;
     public static GameCtrl Instance;
-    [SerializeField] List<Sprite> sprites;
+    public BottleCtrl FirstBottle, SecondBottle;
+
     public bool control = false;
+
+    //选中道具标志及道具方法
+    [SerializeField] private bool isSelectedItem = false;    
+    private Action<BottleCtrl> RandomItemAction;
+
+    //倒水计数，处于0表示当前不处于倒水过程
+    private int pouringCount = 0;
+    public bool IsPouring => pouringCount == 0;
 
     public IArchitecture GetArchitecture()
     {
@@ -26,11 +36,28 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
 
     }
 
+    /// <summary>
+    /// 选中瓶子
+    /// </summary>
+    /// <param name="bottle"></param>
     public void OnSelect(BottleCtrl bottle)
     {
-        if(LevelManager.Instance.isSelectItem)
+        if (isSelectedItem)
         {
-            LevelManager.Instance.UseSelectItem(bottle);
+            //能被选中、水块大于1且不同色
+            if (bottle.OnSelect(false)
+            && bottle.waters.Count > 1 && !bottle.waters.All(x => x == bottle.waters[0]))
+            {
+                //Debug.Log("可选中");
+                RandomItemAction?.Invoke(bottle);
+            }
+            else
+            {
+                //Debug.Log("不可选中");
+                LevelManager.Instance.HideItemSelect();
+            }
+            isSelectedItem = false;
+            RandomItemAction = null;
         }
         else
         {
@@ -67,12 +94,12 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
                     {
                         //Debug.Log("移动 " + FirstCake.gameObject.name + "->" + SecondCake.gameObject.name);
                         LevelManager.Instance.RecordLast();
-
+                        ++pouringCount;
                         FirstBottle.MoveTo(SecondBottle);
                         FirstBottle = null;
                         SecondBottle = null;
                         LevelManager.Instance.AddMoveNum();
-                        this.SendEvent<MoveCakeEvent>();
+                        //this.SendEvent<MoveCakeEvent>();//未使用
                     }
                     else
                     {
@@ -84,9 +111,21 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
                 }
             }
         }
-       
     }
 
+    /// <summary>
+    /// 选中道具状态
+    /// </summary>
+    /// <param name="action"></param>
+    public void SeletedItem(Action<BottleCtrl> action)
+    {
+        isSelectedItem = true;
+        RandomItemAction = action;  
+    }
+
+    /// <summary>
+    /// 重置状态
+    /// </summary>
     public void InitGameCtrl()
     {
         FirstBottle = null;
@@ -94,41 +133,21 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
         control = false;
     }
 
-    void LateUpdate()
+    /// <summary>
+    /// 倒水状态完成
+    /// </summary>
+    public void ReducePouringCount()
     {
-
-        if (Input.GetMouseButtonDown(0) && !control)
-        {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-            RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-
-
-            if (hit.collider != null && hit.collider.GetComponent<BottleCtrl>() != null)
-            {
-            }
-        }
-
-
+        --pouringCount;
+        if (pouringCount < 0)
+            pouringCount = 0;
     }
 
-    IEnumerator LerpMove(Vector3 vector3)
+    /// <summary>
+    /// 重置倒水状态
+    /// </summary>
+    public void InitPouringCount()
     {
-        var t = 0f;
-        var start = FirstCake1.transform.position;
-        var target = vector3;
-
-        while (t < 1)
-        {
-            t += Time.deltaTime*20;
-
-            if (t > 1) t = 1;
-
-            FirstCake1.transform.position = Vector3.Lerp(start, target, t);
-
-            yield return null;
-        }
-
-
+        pouringCount = 0;
     }
 }

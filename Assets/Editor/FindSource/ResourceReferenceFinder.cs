@@ -47,7 +47,7 @@ public class ResourceReferenceFinder : EditorWindow
     // 查找引用
     private void ReferenceFinder(Object targetResource)
     {
-        referencingAssets.Clear();
+        /*referencingAssets.Clear();
 
         // 获取选择资源的 GUID
         string assetPath = AssetDatabase.GetAssetPath(targetResource);
@@ -72,6 +72,45 @@ public class ResourceReferenceFinder : EditorWindow
         }
 
         // 清除进度条
+        EditorUtility.ClearProgressBar();*/
+
+        referencingAssets.Clear();
+
+        // 获取选择资源的 GUID
+        string assetPath = AssetDatabase.GetAssetPath(targetResource);
+        string assetGuid = AssetDatabase.AssetPathToGUID(assetPath);
+
+        // 支持多种类型的文件（Prefab, AnimationClip, AnimatorController）
+        List<string> searchExtensions = new List<string> { ".prefab", ".anim", ".controller", ".unity" };
+        string[] allAssetPaths = AssetDatabase.GetAllAssetPaths();
+
+        int checkedCount = 0;
+        foreach (string path in allAssetPaths)
+        {
+            if (!path.StartsWith("Assets")) continue;
+
+            string ext = Path.GetExtension(path).ToLower();
+            if (!searchExtensions.Contains(ext)) continue;
+
+            EditorUtility.DisplayCancelableProgressBar("Checking", path, (float)checkedCount / allAssetPaths.Length);
+
+            try
+            {
+                string content = File.ReadAllText(path);
+                if (content.Contains(assetGuid))
+                {
+                    Object referencingAsset = AssetDatabase.LoadAssetAtPath(path, typeof(Object));
+                    referencingAssets.Add(referencingAsset);
+                }
+            }
+            catch
+            {
+                // 处理可能的读取异常（如二进制文件）
+            }
+
+            checkedCount++;
+        }
+
         EditorUtility.ClearProgressBar();
     }
 }

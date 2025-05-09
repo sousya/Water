@@ -375,7 +375,6 @@ public class BottleWaterCtrl : MonoBehaviour
 
     public IEnumerator BreakIce(BottleWaterCtrl waterCtrl)
     {
-        //���Ŷ�������ֹѡȡ 
         waterCtrl.bottle.isPlayAnim = true;
 
         isPlayItemAnim = true;
@@ -405,11 +404,9 @@ public class BottleWaterCtrl : MonoBehaviour
 
         go.transform.DOMove(waterCtrl.transform.position, 0.45f).SetEase(Ease.Linear).OnComplete(() =>
         {
-            //StartCoroutine(waterCtrl.HideIce());
             waterCtrl.HideIce(() => waterCtrl.bottle.isPlayAnim = false);
             isPlayItemAnim = false;
             fireRuneGo.SetActive(false);
-            //��Ч����
             go.DestroySelf();
         });
 
@@ -428,11 +425,6 @@ public class BottleWaterCtrl : MonoBehaviour
             fireRuneGo.SetActive(false);
             action?.Invoke();
         };
-
-        //�����¼�����
-        //yield return new WaitForSeconds(1.75f);
-        //UnlockIceWater();
-        //fireRuneGo.SetActive(false);
     }
 
     public void UnlockIceWater()

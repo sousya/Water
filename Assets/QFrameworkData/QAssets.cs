@@ -87,6 +87,11 @@ namespace QAssetBundle
         public const string BundleName = "uiretry_prefab";
         public const string UIRetry = "UIRetry";
     }
+    public class Uishop_prefab
+    {
+        public const string BundleName = "uishop_prefab";
+        public const string UIShop = "UIShop";
+    }
     public class Uiunlockscene_prefab
     {
         public const string BundleName = "uiunlockscene_prefab";

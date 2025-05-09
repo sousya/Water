@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using QFramework;
-using UnityEditor.Playables;
 
 namespace QFramework.Example
 {
@@ -29,7 +28,7 @@ namespace QFramework.Example
             var coin = CoinManager.Instance.Coin;
             TxtCoin.text = coin.ToString();
 
-            if (coin < 90)
+            if (coin < 900)
             {
                 TxtCoin.color = Color.red;
                 TxtCoinCost.color = Color.red;
@@ -52,15 +51,20 @@ namespace QFramework.Example
             BtnRetry.onClick.RemoveAllListeners();
             BtnRetry.onClick.AddListener(() =>
             {
-                if (coin >= 90)
+                if (coin >= 900)
                 {
-                    CoinManager.Instance.CostCoin(90, () =>
+                    CoinManager.Instance.CostCoin(900, () =>
                     {
                         //增加管子
                         LevelManager.Instance.AddBottle(false,null);
                     });
                     CloseSelf();
                 }
+            });
+
+            BtnClose.onClick.AddListener(() =>
+            {
+                CloseSelf();
             });
         }
 		

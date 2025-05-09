@@ -58,9 +58,9 @@ namespace QFramework.Example
         {
             BindBtn();
             RegisterEvent();
+            SetVitality();
             SetCoin();
             SetStar();
-            SetVitality();
             //InitBeginMenuButton();//有需要初始化可以使用
 
             //启动游戏时，处于前五关会直接开始游戏，需要更新UI
@@ -248,6 +248,11 @@ namespace QFramework.Example
                 UIKit.OpenPanel("UIPersonal");
             });
 
+            BtnCoin.onClick.AddListener(() =>
+            {
+                InitBeginMenuButton(0);
+            });
+
             //底部区域按钮监听
             foreach (var btn in bottomMenuBtns)
             {
@@ -310,6 +315,7 @@ namespace QFramework.Example
             //胜利结算=》返回主页事件
             this.RegisterEvent<LevelClearEvent>(e =>
             {
+                LevelManager.Instance.InitBottle();
                 InitBeginMenuButton();
                 StartOrOverChangePanel(false, true);
                 StartCoroutine(ShowFx());
@@ -397,7 +403,7 @@ namespace QFramework.Example
         {
             BottomMenuBtns.Show();
             //有参传入，初始按钮点击(切换对应界面)
-            if (index > 0)
+            if (index > -1)
                 bottomMenuBtns[index].onClick.Invoke();
         }
 
@@ -502,146 +508,12 @@ namespace QFramework.Example
                         var useColor = botter.waters[i] - 1;
                         if (useColor < 1000)
                         {
-                            botter.waterImg[i].color = LevelManager.Instance.waterColor[useColor];
-                            botter.waterImg[i].broomItemGo.SetActive(false);
-                            botter.waterImg[i].createItemGo.SetActive(false);
-                            botter.waterImg[i].changeItemGo.SetActive(false);
-                            botter.waterImg[i].magnetItemGo.SetActive(false);
+                            botter.waterImg[i].SetColorState(ItemType.UseColor, LevelManager.Instance.waterColor[useColor]);
                         }
                         else
                         {
                             // 根据道具类型设置对应的显示和动画
-                            switch (botter.waters[i])
-                            {
-                                case (int)ItemType.ClearItem:
-                                    botter.waterImg[i].broomItemGo.SetActive(true);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(false);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_cl", false);
-
-                                    break;
-                                case (int)ItemType.MagnetItem:
-                                    botter.waterImg[i].broomItemGo.SetActive(false);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(false);
-                                    botter.waterImg[i].magnetItemGo.SetActive(true);
-                                    botter.waterImg[i].magnetSpine.AnimationState.SetAnimation(0, "idle", false);
-                                    break;
-                                case (int)ItemType.MakeColorItem:
-                                    botter.waterImg[i].broomItemGo.SetActive(false);
-                                    botter.waterImg[i].createItemGo.SetActive(true);
-                                    botter.waterImg[i].changeItemGo.SetActive(false);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].createSpine.AnimationState.SetAnimation(0, "idle", false);
-
-                                    break;
-                                case (int)ItemType.ChangeGreen:
-                                    botter.waterImg[i].broomItemGo.SetActive(false);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(true);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_cl", false);
-
-                                    break;
-                                case (int)ItemType.ChangeOrange:
-                                    botter.waterImg[i].broomItemGo.SetActive(false);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(true);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_jh", false);
-
-                                    break;
-                                case (int)ItemType.ChangePink:
-                                    botter.waterImg[i].broomItemGo.SetActive(false);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(true);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_fs", false);
-
-                                    break;
-                                case (int)ItemType.ChangePurple:
-                                    botter.waterImg[i].broomItemGo.SetActive(false);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(true);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_zs", false);
-
-                                    break;
-                                case (int)ItemType.ChangeYellow:
-                                    botter.waterImg[i].broomItemGo.SetActive(false);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(true);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_hs", false);
-
-                                    break;
-                                case (int)ItemType.ChangeDarkBlue:
-                                    botter.waterImg[i].broomItemGo.SetActive(false);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(true);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].changeSpine.AnimationState.SetAnimation(0, "idle_sl", false);
-
-                                    break;
-                                case (int)ItemType.ClearPink:
-                                    botter.waterImg[i].broomItemGo.SetActive(true);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(false);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_fh", false);
-
-                                    break;
-                                case (int)ItemType.ClearOrange:
-                                    botter.waterImg[i].broomItemGo.SetActive(true);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(false);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_jh", false);
-
-                                    break;
-                                case (int)ItemType.ClearBlue:
-                                    botter.waterImg[i].broomItemGo.SetActive(true);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(false);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_gl", false);
-
-                                    break;
-                                case (int)ItemType.ClearYellow:
-                                    botter.waterImg[i].broomItemGo.SetActive(true);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(false);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_hs", false);
-
-                                    break;
-                                case (int)ItemType.ClearDarkGreen:
-                                    botter.waterImg[i].broomItemGo.SetActive(true);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(false);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_sl", false);
-
-                                    break;
-                                case (int)ItemType.ClearRed:
-                                    botter.waterImg[i].broomItemGo.SetActive(true);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(false);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_dh", false);
-
-                                    break;
-                                case (int)ItemType.ClearGreen:
-                                    botter.waterImg[i].broomItemGo.SetActive(true);
-                                    botter.waterImg[i].createItemGo.SetActive(false);
-                                    botter.waterImg[i].changeItemGo.SetActive(false);
-                                    botter.waterImg[i].magnetItemGo.SetActive(false);
-                                    botter.waterImg[i].broomSpine.AnimationState.SetAnimation(0, "idle_cl", false);
-
-                                    break;
-                            }
-                            botter.waterImg[i].color = LevelManager.Instance.ItemColor;
+                            botter.waterImg[i].SetColorState((ItemType)botter.waters[i], LevelManager.Instance.ItemColor);
                         }
                     }
                     //修改水面位置(有道具的情况水面位置不一样)，修改水面颜色并播放水面动画，更新破冰道具位置
@@ -818,7 +690,7 @@ namespace QFramework.Example
             coinFx.Play(10);
 
             yield return new WaitForSeconds(1.5f);
-            SetCoin();
+            CoinManager.Instance.AddCoin(20);
         }
 
         /// <summary>
@@ -863,13 +735,7 @@ namespace QFramework.Example
             }
             ImgProgress.fillAmount = partNow / 5f;
             TxtImgprogress.text = partNow + " / 5";
-            //并不需要判断宝箱编号等，只需要负责更新UI即可
-            //if (this.GetUtility<SaveDataUtility>().GetSceneBox() == sceneNow)
-            //{
-            //    TxtArea.text = "Area " + (sceneNow);// + 1
-            //    ImgProgress.fillAmount = 0;
-            //    TxtImgprogress.text = 0 + " / 5";
-            //}
+          
             SetScenePart(sceneNow, partNow);
 
         }
@@ -1004,7 +870,8 @@ namespace QFramework.Example
                 });
 
             RewardCoinFx.Play(10);
-
+            yield return new WaitForSeconds(1.5f);
+            CoinManager.Instance.AddCoin(200);
         }
     }
 }

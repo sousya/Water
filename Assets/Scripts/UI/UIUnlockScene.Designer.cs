@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:13fab098-e2f7-49fa-8b10-2a216a1db89f
+	// Generate Id:a192e93a-07a1-44ac-a413-a7a5d046c2ac
 	public partial class UIUnlockScene
 	{
 		public const string Name = "UIUnlockScene";

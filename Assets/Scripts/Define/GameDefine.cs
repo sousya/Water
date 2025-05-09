@@ -57,7 +57,7 @@ namespace GameDefine
     //     ClearGreen = 3007,      // ���������ɫˮ��-���1
     // }
     
-     public enum ItemType
+    public enum ItemType
     {
         [WaterColorState(false, false, false, false, "", EColorStateSpineType.None)]
         UseColor = 1,
@@ -110,6 +110,7 @@ namespace GameDefine
         [WaterColorState(true, false, false, false, "idle_cl", EColorStateSpineType.EBroomSpine)]
         ClearGreen = 3007,
     }
+
     public enum LanguageType
     {
         zh = 0,
@@ -156,6 +157,170 @@ namespace GameDefine
         [Description("idle_mh")]
         IDLE_MH = 12,
         
+        IDLE_MAX = 13
+    }
+
+    public enum ECombimeAnim
+    {
+        [Description("combine_cl")]
+        COMBINE_CL = 1,
+
+        [Description("combine_dh")]
+        COMBINE_DH = 2,
+
+        [Description("combine_fh")]
+        COMBINE_FH = 3,
+
+        [Description("combine_gl")]
+        COMBINE_GL = 4,
+
+        [Description("combine_hl")]
+        COMBINE_HL = 5,
+
+        [Description("combine_hs")]
+        COMBINE_HS = 6,
+
+        [Description("combine_jh")]
+        COMBINE_JH = 7,
+
+        [Description("combine_lh")]
+        COMBINE_LH = 8,
+
+        [Description("combine_sl")]
+        COMBINE_SL = 9,
+
+        [Description("combine_ze")]
+        COMBINE_ZE = 10,
+
+        [Description("combine_zs")]
+        COMBINE_ZS = 11,
+
+        [Description("combine_mh")]
+        COMBINE_MH = 12,
+
+        IDLE_MAX = 13
+    }
+
+    public enum EDisapearAnim
+    {
+        [Description("disapear_cl")]
+        DISAPEAR_CL = 1,
+
+        [Description("disapear_dh")]
+        DISAPEAR_DH = 2,
+
+        [Description("disapear_fh")]
+        DISAPEAR_FH = 3,
+
+        [Description("disapear_gl")]
+        DISAPEAR_GL = 4,
+
+        [Description("disapear_hl")]
+        DISAPEAR_HL = 5,
+
+        [Description("disapear_hs")]
+        DISAPEAR_HS = 6,
+
+        [Description("disapear_jh")]
+        DISAPEAR_JH = 7,
+
+        [Description("disapear_lh")]
+        DISAPEAR_LH = 8,
+
+        [Description("disapear_sl")]
+        DISAPEAR_SL = 9,
+
+        [Description("disapear_ze")]
+        DISAPEAR_ZE = 10,
+
+        [Description("disapear_zs")]
+        DISAPEAR_ZS = 11,
+
+        [Description("disapear_mh")]
+        DISAPEAR_MH = 12,
+
+        IDLE_MAX = 13
+    }
+
+    public enum EDaoShuiAnim
+    {
+        [Description("daoshui_cl")]
+        DAOSHUI_CL = 1,
+
+        [Description("daoshui_dh")]
+        DAOSHUI_DH = 2,
+
+        [Description("daoshui_fh")]
+        DAOSHUI_FH = 3,
+
+        [Description("daoshui_gl")]
+        DAOSHUI_GL = 4,
+
+        [Description("daoshui_hl")]
+        DAOSHUI_HL = 5,
+
+        [Description("daoshui_hs")]
+        DAOSHUI_HS = 6,
+
+        [Description("daoshui_jh")]
+        DAOSHUI_JH = 7,
+
+        [Description("daoshui_lh")]
+        DAOSHUI_LH = 8,
+
+        [Description("daoshui_sl")]
+        DAOSHUI_SL = 9,
+
+        [Description("daoshui_ze")]
+        DAOSHUI_ZE = 10,
+
+        [Description("daoshui_zs")]
+        DAOSHUI_ZS = 11,
+
+        [Description("daoshui_mh")]
+        DAOSHUI_MH = 12,
+
+        IDLE_MAX = 13
+    }
+
+    public enum ERuChangAnim 
+    {
+        [Description("ruchanghuangdong_cl")]
+        RUCHANGANIM_CL = 1,
+
+        [Description("ruchanghuangdong_dh")]
+        RUCHANGANIM_DH = 2,
+
+        [Description("ruchanghuangdong_fh")]
+        RUCHANGANIM_FH = 3,
+
+        [Description("ruchanghuangdong_gl")]
+        RUCHANGANIM_GL = 4,
+
+        [Description("ruchanghuangdong_hl")]
+        RUCHANGANIM_HL = 5,
+
+        [Description("ruchanghuangdong_hs")]
+        RUCHANGANIM_HS = 6,
+
+        [Description("ruchanghuangdong_jh")]
+        RUCHANGANIM_JH = 7,
+
+        [Description("ruchanghuangdong_lh")]
+        RUCHANGANIM_LH = 8,
+
+        [Description("ruchanghuangdong_sl")]
+        RUCHANGANIM_SL = 9,
+
+        [Description("ruchanghuangdong_ze")]
+        RUCHANGANIM_ZE = 10,
+
+        [Description("ruchanghuangdong_zs")]
+        RUCHANGANIM_ZS = 11,
+
+        [Description("ruchanghuangdong_mh")]
+        RUCHANGANIM_MH = 12,
+
         IDLE_MAX = 13
     }
 

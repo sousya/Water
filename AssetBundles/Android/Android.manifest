@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2241560171
+CRC: 2469338696
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -13,8 +13,7 @@ AssetBundleManifest:
     Info_2:
       Name: uivictory_prefab
       Dependencies:
-        Dependency_0: fontall_asset
-        Dependency_1: font
+        Dependency_0: font
     Info_3:
       Name: uibeginselect_prefab
       Dependencies:
@@ -71,3 +70,8 @@ AssetBundleManifest:
       Name: uipersonal_prefab
       Dependencies:
         Dependency_0: font
+    Info_17:
+      Name: uishop_prefab
+      Dependencies:
+        Dependency_0: fontall_asset
+        Dependency_1: font

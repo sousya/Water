@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2588591163
+CRC: 3965583526
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7f8ec3bbcaef0a17b6b2314976e0c33a
+    Hash: 9fe902e1b70ff9ddcd1d41a529d93543
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 918db5ee0868668e2b647fbbb2d89ade
+    Hash: 8700a7bea4490c58372b9a9538378cd2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 7f8ec3bbcaef0a17b6b2314976e0c33a
+    Hash: 9fe902e1b70ff9ddcd1d41a529d93543
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -34,8 +34,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: d85b887af7e6c3f45a2e2d2920d641bc, type: 3}
 - Class: 114
@@ -62,17 +60,7 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.AnimationTriggers
-- AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
-- AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.ColorBlock
-- AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
-- AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.Navigation
-- AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.SpriteState
 - AssemblyName: spine-unity
   ClassName: Spine.Unity.BlendModeMaterials
 - AssemblyName: spine-unity
@@ -83,4 +71,3 @@ Assets:
 - Assets/Art/UIPrefab/UIVictory.prefab
 Dependencies:
 - E:/U GitHub Project/Water/AssetBundles/Android/font
-- E:/U GitHub Project/Water/AssetBundles/Android/fontall_asset

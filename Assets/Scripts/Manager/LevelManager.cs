@@ -9,14 +9,14 @@ using static LevelCreateCtrl;
 using System.Collections;
 using Spine.Unity;
 using System.Linq;
+using Unity.VisualScripting;
 
 [MonoSingletonPath("[Level]/LevelManager")]
 public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRegisterEvent
 {
-    private ResLoader mResLoader = ResLoader.Allocate();
     public static LevelManager Instance;
     public ReviewManager _reviewManager;
-    public List<GameObject> bottleNodes = new List<GameObject>();
+    //public List<GameObject> bottleNodes = new List<GameObject>();
     public List<LevelCreateCtrl> levels = new List<LevelCreateCtrl>();
     public List<int> clearList = new List<int>();
     //带有阻碍的颜色(魔法布，藤曼，冰冻)
@@ -25,7 +25,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public List<BottleCtrl> nowBottles = new List<BottleCtrl>();
 
     public List<BottleCtrl> iceBottles = new List<BottleCtrl>();
-    public List<BottleCtrl> bottles = new List<BottleCtrl>();
+    [SerializeField] private List<BottleCtrl> bottles = new List<BottleCtrl>();
     public List<BottleCtrl> topBottle = new List<BottleCtrl>();
     public List<BottleCtrl> bottomBottle = new List<BottleCtrl>();
     public List<BottleCtrl> hideBottleList = new List<BottleCtrl>();
@@ -44,21 +44,17 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public Color ItemColor;
 
     public Material shineMaterial;// 材质
-    public float speed = 1.0f; // 光带移动速度
+    //public float speed = 3.0f; // 光带移动速度
 
-    [SerializeField]
-    SpriteRenderer levelBgSprite;
-
-    public int levelId = 1,moveNum, bombMaxNum, countDownNum, selectedItem , playingHideAnimCount;
-    public float timeCountDown, timeNow, test;
-    public GameObject mahoujinGo, broomBullet, fireRuneBullet;
+    public int levelId = 1, bombMaxNum, countDownNum, playingHideAnimCount;
+    //public int moveNum;//步数统计,暂无用
+    public float timeCountDown, timeNow;
+    public GameObject mahoujinGo, broomBullet;
     public SkeletonGraphic mahoujinSpine;
     bool isFinish = false, isBomb = false, isCountDown = false, isTimeCountDown = false;
     public bool isPlayAnim, isPlayFxAnim;
     public bool ISPlayingHideAnim => playingHideAnimCount == 0;//playingHideAnimCount 遮挡布播放计数
     public BottleCtrl nowHalf;
-    [SerializeField]
-    GameCtrl gameCtrl;
 
     public List<Sprite> scene1, scene2, scene3, scene4;
     public List<string> scenePartName1, scenePartName2, scenePartName3, scenePartName4;
@@ -78,6 +74,8 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     {
         Instance = this;
         _reviewManager = new ReviewManager();
+
+        InitBottle();
     }
 
     private void Start()
@@ -100,12 +98,11 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
-        this.GetUtility<SaveDataUtility>().SaveLevel(82);
+        this.GetUtility<SaveDataUtility>().SaveLevel(6);
 
         emptyBottle.numCake = 4;
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();
 
-        //var levelNow = this.GetUtility<SaveDataUtility>().GetLevelClear();
         if (levelId <= 5)
         {
             StartGame(levelId);
@@ -121,6 +118,18 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     void ClearTakeItem()
     {
         takeItem.Clear();
+    }
+
+    /// <summary>
+    /// 将瓶子数据初始化
+    /// 初始化时调用和游戏结束时调用
+    /// </summary>
+    public void InitBottle()
+    {
+        foreach (var item in bottles)
+        {
+            item.Init(emptyBottle, 0);
+        }
     }
 
     /// <summary>
@@ -254,32 +263,26 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 ChangeColor(changeDarkBlueColorFrom, changeDarkBlueColorTo, fromTarget);
                 break;
 
+            ////////清除色块
             case ItemType.ClearPink:
-                ////////清除色块
                 ClearColor(3, fromPos);
                 break;
             case ItemType.ClearOrange:
-                ////////清除色块
                 ClearColor(7, fromPos);
                 break;
             case ItemType.ClearBlue:
-                ////////清除色块
                 ClearColor(4, fromPos);
                 break;
             case ItemType.ClearYellow:
-                ////////清除色块
                 ClearColor(6, fromPos);
                 break;
             case ItemType.ClearDarkGreen:
-                ////////清除色块
                 ClearColor(9, fromPos);
                 break;
             case ItemType.ClearRed:
-                ////////清除色块
                 ClearColor(2, fromPos);
                 break;
             case ItemType.ClearGreen:
-                ////////清除色块
                 ClearColor(1, fromPos);
                 break;
         }
@@ -348,7 +351,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// <returns></returns>
     public IEnumerator WaitCheckFinish(int clearColor = 0)
     {
-        // 通过逻辑重构
         if (clearColor != 0 && clearList.Count > 0)
             clearList.Remove(clearColor);
 
@@ -362,7 +364,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             //Debug.Log("开始播放胜利结算");
             UIKit.ClosePanel<UIMask>();
             this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
-            CoinManager.Instance.AddCoin(20);
 
             //前五关(前五关应该不统计连胜)
             if (levelId < 5)
@@ -378,43 +379,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         }
         else
             yield return null;
-
-        // obsolete
-        /*if (clearList.Count == 0)
-        {
-            //VictoryBottle = idx;
-            Debug.Log("胜利");
-        }
-
-        if (clearColor != 0 && clearList.Count > 1)
-        {
-            clearList.Remove(clearColor);
-        }
-        yield return new WaitForSeconds(4);
-
-        if (clearColor != 0 && clearList.Count == 1)
-        {
-            clearList.Remove(clearColor);
-        }
-        if (clearList.Count == 0)
-        {
-            //VictoryBottle = idx;
-            this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
-            CoinManager.Instance.AddCoin(20);
-
-            //前五关(前五关应该不统计连胜)
-            if (levelId < 5)
-            {
-                //CheckWinNum();
-                this.SendEvent<LevelStartEvent>();
-                StartGame(levelId + 1);
-            }
-            else
-            {
-                UIKit.OpenPanel<UIVictory>();
-            }
-            CheckWinNum();
-        }*/
     }
 
     /// <summary>
@@ -424,7 +388,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     {
         var winNum = this.GetUtility<SaveDataUtility>().GetCountinueWinNum();
         winNum++;
-        
+
         if (winNum < 3)
             this.GetUtility<SaveDataUtility>().SetCountinueWinNum(winNum);
         else
@@ -490,18 +454,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     }
 
     /// <summary>
-    /// 判断瓶子完成后的消除逻辑
-    /// </summary>
-    /// <param name="color"></param>
-    public void CheckFinishChange(int color)
-    {
-        foreach (var bottle in nowBottles)
-        {
-            bottle.CheckUnlockHide(color);
-        }
-    }
-
-    /// <summary>
     /// 变色动画以及动画后的逻辑
     /// </summary>
     /// <param name="color"></param>
@@ -528,10 +480,22 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             clearList.Remove(color);
         }
 
+        //先获取要移除单色的瓶子列表(用于判断是否都在一个瓶子)
+        List<BottleCtrl> removeColorBottles = new List<BottleCtrl>();
+
         foreach (var bottle in nowBottles)
         {
-            bottle.RemoveAllOneColor(color);
+            var bottleCtrl = bottle.CheckRemoveOneColor(color);
+            if (bottleCtrl != null && !removeColorBottles.Contains(bottleCtrl))
+                removeColorBottles.Add(bottleCtrl);
+
+            //bottle.RemoveAllOneColor(color);
             bottle.CheckUnlockHide(color);
+        }
+
+        foreach (var bottle in removeColorBottles)
+        {
+            bottle.RemoveAllOneColor(color, removeColorBottles.Count == 1);
         }
 
         UIKit.ClosePanel<UIMask>();
@@ -558,7 +522,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         isBomb = false;
     }
 
-    /// <summary>
+    /*/// <summary>
     /// 移动步数记录
     /// </summary>
     public void AddMoveNum()
@@ -568,7 +532,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             OnDefeat();
         }
-    }
+    }*/
 
     #region Add Bottle
 
@@ -576,12 +540,12 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// 使用道具添加瓶子(单个或整瓶)
     /// </summary>
     /// <param name="isHalf"></param>
-    public void AddBottle(bool isHalf ,Action action)
+    public void AddBottle(bool isHalf, Action action)
     {
         if (nowBottles.Count < (topBottle.Count + bottomBottle.Count) || nowHalf != null)
         {
             UseItemAddBottle();
-            MoveAndAddBottle(isHalf , action);
+            MoveAndAddBottle(isHalf, action);
         }
     }
 
@@ -700,7 +664,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// <param name="id"></param>
     public void StartGame(int id)
     {
-        //moreBottle = 0;
         cantClearColorList.Clear();
         cantChangeColorList.Clear();
         hideBottleList.Clear();
@@ -834,7 +797,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public void Update()
     {
         TimeCountDown();
-        
+
 
         if (Input.GetKeyDown(KeyCode.F3))
         {
@@ -864,69 +827,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 isTimeCountDown = false;
             }
         }
-
-        #region obsolete
-        /*test += Time.deltaTime;
-        if (test >= 1)
-        {
-            test = 0;
-            CheckVitality();
-            //Debug.Log("时间 " + this.GetUtility<SaveDataUtility>().GetVitalityNum()  + " " + this.GetUtility<SaveDataUtility>().GetVitalityTime());
-        }*/
-        #endregion  
-
     }
-
-    #region obsolete 
-    /*/// <summary>
-    /// 判断体力
-    /// </summary>
-    void CheckVitality()
-    {
-        //获取当前体力
-        int lastVitalityNum = this.GetUtility<SaveDataUtility>().GetVitalityNum();
-
-        if (lastVitalityNum < 5)
-        {
-            // 计算完全恢复体力所需的时间点
-            long recoveryTime = this.GetUtility<SaveDataUtility>().GetVitalityTime() + (5 - lastVitalityNum) * GameConst.RecoveryTime;
-            //Debug.Log($"上次体力恢复满的时候 ： {this.GetUtility<SaveDataUtility>().GetVitalityTime()}");
-
-            // 计算当前时间与完全恢复时间的时间差
-            long timeOffset = recoveryTime - this.GetUtility<SaveDataUtility>().GetNowTime();
-            //Debug.Log("体力 " + lastVitalityNum + " " + timeOffset);
-            // 如果时间差大于0，说明体力尚未完全恢复
-            if (timeOffset > 0)
-            {
-                // 计算从上次记录的恢复时间到现在的时间差
-                long checkTime = this.GetUtility<SaveDataUtility>().GetNowTime() - this.GetUtility<SaveDataUtility>().GetVitalityTime();
-                // 根据时间差计算可以恢复的体力数量
-                int addNum = Mathf.FloorToInt((float)checkTime / GameConst.RecoveryTime);
-
-                //Debug.Log("体力 " + addNum + " " + timeOffset);
-                // 如果恢复的体力数量超过最大体力值，则直接设置为最大体力值
-                if (addNum > GameConst.MaxVitality)
-                {
-                    addNum = GameConst.MaxVitality;
-                    this.GetUtility<SaveDataUtility>().SetVitality(GameConst.MaxVitality);
-                }
-                // 如果恢复的体力数量大于等于1，则更新体力值和恢复时间
-                else if (addNum >= 1)
-                {
-                    this.GetUtility<SaveDataUtility>().SetVitality(lastVitalityNum + addNum, (this.GetUtility<SaveDataUtility>().GetVitalityTime() + (addNum) * GameConst.RecoveryTime) + "");
-                }
-            }
-            // 如果时间差小于等于0，说明体力已经完全恢复
-            else
-            {
-                this.GetUtility<SaveDataUtility>().SetVitality(GameConst.MaxVitality);
-            }
-            // 发送体力时间变化事件，通知其他模块体力恢复的时间差
-            this.SendEvent<VitalityTimeChangeEvent>(new VitalityTimeChangeEvent() { timeOffset = timeOffset });
-        }
-    }*/
-    #endregion
-
 
     /// <summary>
     /// 记录所有瓶子
@@ -1002,7 +903,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// </summary>
     /// <param name="num"></param>
     /// <param name="action">使用道具回调</param>
-    public void RemoveHide(Action action , int num = 0)
+    public void RemoveHide(Action action, int num = 0)
     {
         if (num == 0)
         {
@@ -1023,13 +924,12 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         action?.Invoke();
     }
-     
+
     /// <summary>
     /// 魔法阵动画
     /// </summary>
     public void ShowMahoujin()
     {
-        //触发遮罩
         StartCoroutine(ShowMahoujinCoroutine());
     }
 

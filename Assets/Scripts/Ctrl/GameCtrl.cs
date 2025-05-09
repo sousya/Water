@@ -98,7 +98,7 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
                         FirstBottle.MoveTo(SecondBottle);
                         FirstBottle = null;
                         SecondBottle = null;
-                        LevelManager.Instance.AddMoveNum();
+                        //LevelManager.Instance.AddMoveNum();//步数统计.暂时无用
                         //this.SendEvent<MoveCakeEvent>();//未使用
                     }
                     else

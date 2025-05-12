@@ -45,7 +45,7 @@ public class UnlockItemCtrl : MonoBehaviour, ICanGetUtility
                 useStr = LevelManager.Instance.scenePartName4;
                 break;
         }
-
+        
         ImgIcon.sprite = useScene[num - 1];
         TxtName.text = useStr[num - 1];
         TxtNeed.text = LevelManager.Instance.GetPartNeedStar(scene, num).ToString();

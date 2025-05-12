@@ -227,9 +227,24 @@ public class SaveDataUtility : IUtility, ICanSendEvent
         return PlayerPrefs.GetInt("g_WaterIsTipMain", 0) == 1;
     }
 
+
+    /// <summary>
+    /// 标志所有建筑解锁完成
+    /// </summary>
+    /// <param name="sign"></param>
+    public void SetOverUnLock(bool sign)
+    {
+        PlayerPrefs.SetString("g_OverUnLock", sign.ToString());
+    }
+
+    public string GetOverUnLock()
+    {
+       return PlayerPrefs.GetString("g_OverUnLock", "false");
+    }
+
     public void SetSceneRecord(int scene)
     {
-       PlayerPrefs.SetInt("g_WaterSceneRecord", scene);
+        PlayerPrefs.SetInt("g_WaterSceneRecord", scene);
     }
 
     /// <summary>
@@ -238,7 +253,8 @@ public class SaveDataUtility : IUtility, ICanSendEvent
     /// <returns></returns>
     public int GetSceneRecord()
     {
-        return PlayerPrefs.GetInt("g_WaterSceneRecord", 1);
+        int scene = PlayerPrefs.GetInt("g_WaterSceneRecord", 1);
+        return scene > 4 ? 4 : scene;
     }
 
     public void SetScenePartRecord(int scene)

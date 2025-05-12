@@ -419,12 +419,21 @@ namespace QFramework.Example
         {
             if (LevelManager.Instance.takeItem.Count > 0)
             {
-                TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();
-                TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
-                TxtItem3.text = this.GetUtility<SaveDataUtility>().GetItemNum(8).ToString();
+                //显示道具数量
+                //TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();
+                //TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
+                //TxtItem3.text = this.GetUtility<SaveDataUtility>().GetItemNum(8).ToString();
                 BtnItem1.interactable = LevelManager.Instance.takeItem.Contains(6) && CheckHaveItem(6);
                 BtnItem2.interactable = LevelManager.Instance.takeItem.Contains(7) && CheckHaveItem(7);
                 BtnItem3.interactable = LevelManager.Instance.takeItem.Contains(8) && CheckHaveItem(8);
+
+                //显示只能只用一次
+                if (BtnItem1.interactable)
+                    TxtItem1.text = "1";
+                if (BtnItem2.interactable)
+                    TxtItem2.text = "1"; 
+                if (BtnItem3.interactable)
+                    TxtItem3.text = "1";
             }
             else
             {
@@ -465,15 +474,19 @@ namespace QFramework.Example
                     LevelManager.Instance.AddBottle(true, () =>
                     {
                         this.GetUtility<SaveDataUtility>().ReduceItemNum(6);
-                        TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();
+                        TxtItem1.text = "0";
+                        //TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();//显示原数量
                     });
                     break;
 
                 case 7:
+                    if (!(LevelManager.Instance.hideBottleList.Count > 0))
+                        return;
                     ClearBottleBlackWater(2, true, () =>
                     {
                         this.GetUtility<SaveDataUtility>().ReduceItemNum(7);
-                        TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
+                        TxtItem2.text = "0";
+                        //TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
                     });
                     break;
 
@@ -526,13 +539,14 @@ namespace QFramework.Example
                     LevelManager.Instance.HideItemSelect();
 
                     this.GetUtility<SaveDataUtility>().ReduceItemNum(8);
-                    TxtItem3.text = this.GetUtility<SaveDataUtility>().GetItemNum(8).ToString();
+                    //TxtItem3.text = this.GetUtility<SaveDataUtility>().GetItemNum(8).ToString();
+                    TxtItem3.text = "0";
                     //Debug.Log("打乱顺序成功");
                     break;
             }
 
-            if (!CheckHaveItem(itemID))
-                itemObj.interactable = false;
+            //if (!CheckHaveItem(itemID))//仅使用一次
+            itemObj.interactable = false;
         }
 
         /// <summary>
@@ -662,6 +676,7 @@ namespace QFramework.Example
             var nowStar = this.GetUtility<SaveDataUtility>().GetLevelClear() - 1;
             var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
             var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
+            //可以记录一个已使用星星数量
             var useStar = LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow);
             TxtStar.text = (nowStar - useStar).ToString();
 
@@ -735,9 +750,17 @@ namespace QFramework.Example
             }
             ImgProgress.fillAmount = partNow / 5f;
             TxtImgprogress.text = partNow + " / 5";
-          
-            SetScenePart(sceneNow, partNow);
 
+            //解锁完成(暂用效果)
+            if (bool.Parse(this.GetUtility<SaveDataUtility>().GetOverUnLock()))
+            {
+                TxtArea.text = "Area " + 5;
+                ImgProgress.fillAmount = 0;
+                TxtImgprogress.text = 0 + " / 5";
+                return;
+            }
+
+            SetScenePart(sceneNow, partNow);
         }
 
         /// <summary>

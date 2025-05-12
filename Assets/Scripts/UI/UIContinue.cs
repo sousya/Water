@@ -41,7 +41,7 @@ namespace QFramework.Example
             BtnContinue.onClick.RemoveAllListeners();
 			BtnContinue.onClick.AddListener(() =>
 			{
-				//这是花费90金币重新开始游戏？还是需要附加清楚之类的效果
+				//这是花费90金币重新开始游戏？还是需要附加清除之类的效果
 				if (coin >= 90)
 				{
 					CoinManager.Instance.CostCoin(90, () =>

@@ -10,6 +10,7 @@ using System.Collections;
 using Spine.Unity;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEngine.Experimental.AI;
 
 [MonoSingletonPath("[Level]/LevelManager")]
 public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRegisterEvent
@@ -38,7 +39,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public int VictoryBottle;
     public BottleProperty emptyBottle = new BottleProperty();
     public Transform gameCanvas;
-    List<ChangePair> changeList;
+    public List<ChangePair> changeList;
     public List<GameObject> createFx = new List<GameObject>();
     public LevelCreateCtrl nowLevel;
     public Color ItemColor;
@@ -64,6 +65,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     public GameObject hideBg;
     //携带的道具
     public List<int> takeItem = new List<int>();
+    public List<LevelManagerRecord> LevelManagerRecords = new List<LevelManagerRecord>();
 
     public IArchitecture GetArchitecture()
     {
@@ -98,7 +100,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
-        this.GetUtility<SaveDataUtility>().SaveLevel(6);
+        this.GetUtility<SaveDataUtility>().SaveLevel(20);
 
         emptyBottle.numCake = 4;
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();
@@ -161,6 +163,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
                 break;
 
+            ////////改变色块
             case ItemType.ChangeGreen:
                 int changeGreenColorFrom = 0;
                 foreach (var pair in changeList)
@@ -368,7 +371,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             //前五关(前五关应该不统计连胜)
             if (levelId < 5)
             {
-                this.SendEvent<LevelStartEvent>();
                 StartGame(levelId + 1);
             }
             else
@@ -698,7 +700,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         nowHalf = null;
         InitLevels(levelInfo);
 
-        this.SendEvent<LevelStartEvent>();
     }
 
     /// <summary>
@@ -711,6 +712,8 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             bottle.moveRecords.Clear();
         }
+        LevelManagerRecords.Clear();
+
         GameCtrl.Instance.InitPouringCount();
         //重置魔法布统计
         playingHideAnimCount = 0;
@@ -725,6 +728,8 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         //Debug.Log("当前连胜次数:" + WinNum);
         if (WinNum > 0)
             StringEventSystem.Global.Send("StreakWinItem", WinNum);
+
+        this.SendEvent<LevelStartEvent>();
     }
 
     /// <summary>
@@ -834,10 +839,17 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
     /// </summary>
     public void RecordLast()
     {
+        LevelManagerRecord record = new LevelManagerRecord();
+        record.clearList = new List<int>(clearList);
+        record.hideColor = new List<int>(hideColor);
+        record.changeList = new List<ChangePair>(changeList);
+        LevelManagerRecords.Add(record);
+
         foreach (var bottle in nowBottles)
         {
             bottle.RecordLast();
         }
+        
     }
 
     /// <summary>
@@ -851,6 +863,14 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         {
             var needRet = bottle.ReturnLast();
             ret = ret || needRet;
+        }
+        if (ret)
+        {
+            var record = LevelManagerRecords.LastOrDefault();
+            clearList = record.clearList;
+            hideColor = record.hideColor;
+            changeList = record.changeList;
+            LevelManagerRecords.Remove(record);
         }
         return ret;
     }
@@ -1039,7 +1059,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         UnlockSceneEvent e = new UnlockSceneEvent();
         e.scene = scene;
         e.part = num;
-
+           
         this.GetUtility<SaveDataUtility>().SetSceneRecord(scene);
         this.GetUtility<SaveDataUtility>().SetScenePartRecord(num);
 
@@ -1083,4 +1103,12 @@ public class BottleRecord
     public List<int> waters = new List<int>();
     public List<bool> hideWaters = new List<bool>();
     public List<WaterItem> waterItems = new List<WaterItem>();
+}
+
+[Serializable]
+public class LevelManagerRecord
+{
+    public List<int> clearList;
+    public List<int> hideColor;
+    public List<ChangePair> changeList;
 }

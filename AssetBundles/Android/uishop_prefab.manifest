@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2441763477
+CRC: 2153298573
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1d6435041501ab5d2638fd0d0fdc9927
+    Hash: 10a5936d39daff8ed08d6653dd6686c5
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0a695c27a1d1cdeda19f2fe1fd765a22
+    Hash: bca274d3afcf5d49be1304e61c662747
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 1d6435041501ab5d2638fd0d0fdc9927
+    Hash: 10a5936d39daff8ed08d6653dd6686c5
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -29,6 +29,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: c3426f240276d0c4b86ac6e186931746, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 4c828f9268695a54190e08543c4fdd99, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
@@ -44,8 +46,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 21f3803431805974da2a902fda947718, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: c3426f240276d0c4b86ac6e186931746, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 213
@@ -103,4 +103,3 @@ Assets:
 - Assets/Art/UIPrefab/UIShop.prefab
 Dependencies:
 - E:/U GitHub Project/Water/AssetBundles/Android/font
-- E:/U GitHub Project/Water/AssetBundles/Android/fontall_asset

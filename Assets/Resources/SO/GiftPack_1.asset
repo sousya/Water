@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41af467769a5a6c41b484ef48ed521f0, type: 3}
   m_Name: GiftPack_1
   m_EditorClassIdentifier: 
-  giftId: 0
-  coins: 60000
+  PackID: gift_1
+  coins: 1000
   items:
-  - itemIndex: 6
-    quantity: 2
-  - itemIndex: 7
-    quantity: 20
-  - itemIndex: 8
-    quantity: 2
-  unlimitedHp: 4320
-  removeAds: 1
+  - itemIndex: 1
+    quantity: 1
+  - itemIndex: 2
+    quantity: 1
+  - itemIndex: 3
+    quantity: 1
+  - itemIndex: 4
+    quantity: 1
+  unlimitedHp: 60
+  removeAds: 0

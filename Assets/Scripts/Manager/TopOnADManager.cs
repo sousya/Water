@@ -1,20 +1,16 @@
 using AnyThinkAds.Api;
-using GameDefine;
 using QFramework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using System.Security.Cryptography;
-using Unity.Services.Analytics;
-using Unity.Services.Core;
 using UnityEngine;
 
 [MonoSingletonPath("[Analytics]/TopOnADManager")]
-public class TopOnADManager: MonoSingleton<TopOnADManager>, ICanGetUtility, ICanSendEvent
+public class TopOnADManager: MonoSingleton<TopOnADManager>
 {
-
-    string mPlacementId_rewardvideo_all = "b66b2e6bd9e29b";
-    string mPlacementId_interstitial_all = "b66b2e6d80684b";
+    /*#region 原手动加载
+    string mPlacementId_rewardvideo_all = "b1gfnjso5u3hej";
+    string mPlacementId_interstitial_all = "b1gfnjso5u3p46";
     string mPlacementId_native_all = "b66da9af8356bb";
     string mPlacementId_splash_all = "b6604dcd293d1c";
     string showingScenario = "f65f152173a5c1";
@@ -27,6 +23,11 @@ public class TopOnADManager: MonoSingleton<TopOnADManager>, ICanGetUtility, ICan
 
     public bool beginLoadSplash, isLoadBanner;
     public int AdBannerWidth = 640, AdBannerHeight = 100;
+
+    public override void OnSingletonInit()
+    {
+        
+    }
 
     private void Start()
     {
@@ -138,6 +139,7 @@ public class TopOnADManager: MonoSingleton<TopOnADManager>, ICanGetUtility, ICan
             //ShowAd();
         }
     }
+
     public void ShowInterstitialAd()
     {
             Debug.Log("准备播放广告");
@@ -265,10 +267,113 @@ public class TopOnADManager: MonoSingleton<TopOnADManager>, ICanGetUtility, ICan
             rewardAction();
         }
     }
+    #endregion*/
 
-    public IArchitecture GetArchitecture()
+    //全自动加载插屏广告和激励广告
+    private readonly string mPlacementId_rewardvideo_all = "b1gfnjso5u3hej";      //激励广告ID
+    private readonly string mPlacementId_interstitial_all = "b1gfnjso5u3p46";     //插屏广告ID
+    //private readonly string mPlacementId_rewardvideo_all = "b1fn8aua8i1k5i";
+    //private readonly string mPlacementId_interstitial_all = "b1fn8aua8i1s42";
+    private Action videoRewardAction;
+    private Action videoCloseAction;
+
+    private Action intersRewardAction;
+    private Action intersCloseAction;
+
+    public override void OnSingletonInit()
     {
-        return GameMainArc.Interface;
+        ATSDKAPI.initSDK("a68229c5f42e2b", "a82844bf085483dd3018ef16e347250e5");  //AppID和AppKey
+        //ATSDKAPI.initSDK("a667e2369f1df6", "a5e2ae5036721db4f108aef055cbe44c3");
+        ATSDKAPI.setLogDebug(false);
+        //Debug.Log("初始化SDK");
+
+        addAutoLoadAdPlacementID();
     }
 
+    public void addAutoLoadAdPlacementID()
+    {
+        ATRewardedAutoVideo.Instance.client.onRewardEvent += onAdVideoReward;
+        ATRewardedAutoVideo.Instance.client.onAdVideoCloseEvent += onAdVideoClosedEvent;
+        ATRewardedAutoVideo.Instance.client.onAdLoadFailureEvent += onAdVideoLoadFail;
+
+        ATInterstitialAutoAd.Instance.client.onAdShowEvent += onAdIntersShow;
+        ATInterstitialAutoAd.Instance.client.onAdCloseEvent += onAdIntersSClose;
+        ATInterstitialAutoAd.Instance.client.onAdLoadFailureEvent += onAdIntersLoadFail;
+
+        //全托管加载激励视频、插屏广告
+        ATInterstitialAutoAd.Instance.addAutoLoadAdPlacementID(new string[] { mPlacementId_interstitial_all });
+        ATRewardedAutoVideo.Instance.addAutoLoadAdPlacementID(new string[] { mPlacementId_rewardvideo_all });
+        //Debug.Log("自动加载广告");
+    }
+
+    #region 插屏广告
+
+    private void onAdIntersSClose(object sender, ATAdEventArgs e)
+    {
+        intersCloseAction?.Invoke();
+        intersCloseAction = null;
+    }
+
+    private void onAdIntersShow(object sender, ATAdEventArgs e)
+    {
+        intersRewardAction?.Invoke();
+        intersRewardAction = null;
+    }
+
+    private void onAdIntersLoadFail(object sender, ATAdErrorEventArgs e)
+    {
+        Debug.Log("插屏广告111111加载失败");
+    }
+
+    #endregion
+
+    #region 激励视频
+
+    private void onAdVideoReward(object sender, ATAdEventArgs e)
+    {
+        videoRewardAction?.Invoke();
+        videoCloseAction = null;
+    }
+
+    private void onAdVideoClosedEvent(object sender, ATAdRewardEventArgs e)
+    {
+        videoCloseAction?.Invoke();
+        videoCloseAction = null;
+    }
+
+    private void onAdVideoLoadFail(object sender, ATAdErrorEventArgs e)
+    {
+        Debug.Log("激励视频2222222加载失败");
+    }
+
+    #endregion
+
+    public bool ShowVideoAd(Action rewardAction, Action onAdClose)
+    {
+        var hasAd = ATRewardedAutoVideo.Instance.autoLoadRewardedVideoReadyForPlacementID(mPlacementId_rewardvideo_all);
+        //Debug.Log("是否有激励广告缓存：" + hasAd);
+        if (hasAd)
+        {
+            ATRewardedAutoVideo.Instance.showAutoAd(mPlacementId_rewardvideo_all);
+            videoRewardAction = rewardAction;
+            videoCloseAction = onAdClose;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool ShowIntersAd(Action rewardAction, Action onAdClose)
+    {
+        var hasAd = ATInterstitialAutoAd.Instance.autoLoadInterstitialAdReadyForPlacementID(mPlacementId_interstitial_all);
+        //Debug.Log("是否有插屏广告缓存：" + hasAd);
+        if (hasAd)
+        {
+            ATInterstitialAutoAd.Instance.showAutoAd(mPlacementId_interstitial_all);
+            intersRewardAction = rewardAction;
+            intersCloseAction = onAdClose;
+            return true;
+        }
+        return false;
+    }
 }

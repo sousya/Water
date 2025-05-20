@@ -8,23 +8,53 @@ namespace QFramework.Example
 	public partial class ShopManager : ViewController
 	{
         [SerializeField] private List<Button> buyGiftPackBtns;
-	  	private void Start()
+
+        private GooglePayManager googlePay;
+
+        private void Awake()
+        {
+            googlePay = GooglePayManager.Instance;
+        }
+
+        private void OnEnable()
+        {
+            ShopScrollView.verticalNormalizedPosition = 1f;
+        }
+
+        private void Start()
 		{
+            //注册按钮和对应礼包购买成功事件
             foreach (var btn in buyGiftPackBtns)
             {
-                btn.onClick.AddListener(()=> BuyGiftPackEvent(btn));
+                if (!btn.TryGetComponent<GiftPack>(out GiftPack _giftPack))
+                    continue;
+                var _packSo = _giftPack.giftPack;
+
+                btn.onClick.AddListener(()=> BuyGiftPackEvent(_packSo));
+                StringEventSystem.Global.Register(_packSo.ID, () => OnPaySuccess(_packSo)).UnRegisterWhenGameObjectDestroyed(gameObject);
             }
         }
 
-        private void BuyGiftPackEvent(Button btn)
+        /// <summary>
+        /// 购买礼包事件
+        /// </summary>
+        /// <param name="_packSo"></param>
+        private void BuyGiftPackEvent(GiftPackSO _packSo)
         {
-            // 调用谷歌购买等...
+            //Debug.Log("礼包ID ： " + _packSo.ID);
+            googlePay.BuyProduct(_packSo.ID);
+        }
 
-            // 应该是传入回调(或者注册购买成功的事件)
-            // 购买成功先播放动画，然后调用GiftPake的方法
-            var pack = btn.GetComponent<GiftPackButton>().giftPack;
-            Debug.Log(pack.name);
-            //pack.BuyGiftPack();
+        /// <summary>
+        /// 礼包购买成功回调
+        /// </summary>
+        private void OnPaySuccess(GiftPackSO _packSo)
+        {
+            PlayAnimaton();
+            //Debug.Log($"礼包{_packSo.ID}购买成功");
+            CoinManager.Instance.AddCoin(_packSo.Coins);
+            //HealthManager.Instance.SetUnLimitHp(_packSo.UnlimitedHp);
+            //
         }
 
         private void PlayAnimaton()

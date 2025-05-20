@@ -6808,7 +6808,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &628962270
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26530,7 +26530,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1630791234
 RectTransform:
   m_ObjectHideFlags: 0
@@ -36398,10 +36398,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1954153133}
   - component: {fileID: 1954153132}
-  - component: {fileID: 1954153134}
-  - component: {fileID: 1954153135}
   - component: {fileID: 1954153136}
-  - component: {fileID: 1954153137}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -36615,6 +36612,7 @@ MonoBehaviour:
     isNearHide: 0
     isFreeze: 0
   gameCanvas: {fileID: 1628571911}
+  changeList: []
   createFx:
   - {fileID: 4010074694300780744, guid: a16faf96fe35f2943a7cb58d0318af6a, type: 3}
   - {fileID: 1017272283892693178, guid: 132a558e00d047449a796c3b050c3174, type: 3}
@@ -36702,6 +36700,7 @@ MonoBehaviour:
   selectMaterial: {fileID: 2100000, guid: 832f7e60693e6b04b925463a993436cb, type: 2}
   hideBg: {fileID: 720305107}
   takeItem: 
+  LevelManagerRecords: []
 --- !u!4 &1954153133
 Transform:
   m_ObjectHideFlags: 0
@@ -36717,30 +36716,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1954153134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1954153131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c604cb8ce3c2b454eaffafa6607436f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1954153135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1954153131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28aa0e746567b0946868e23c46702c2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1954153136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36757,19 +36732,6 @@ MonoBehaviour:
   SecondBottle: {fileID: 0}
   control: 0
   isSelectedItem: 0
---- !u!114 &1954153137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1954153131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0525e2cde79bf594b8e665f81e9cbdf4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  topOnCtrl: {fileID: 1954153134}
 --- !u!1 &2012682058
 GameObject:
   m_ObjectHideFlags: 0

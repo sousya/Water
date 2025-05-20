@@ -15,6 +15,7 @@ public class TextManager : MonoSingleton<TextManager>, ICanGetUtility, ICanSendE
     Dictionary<string, string> textDic = new Dictionary<string, string>();
     public List<string> nameList = new List<string>();
     public List<string> starList = new List<string>();
+
     private void Awake()
     {
         text_ZH = Resources.Load<TextAsset>("Text/Text_ZH");
@@ -22,6 +23,21 @@ public class TextManager : MonoSingleton<TextManager>, ICanGetUtility, ICanSendE
         //text_KO = Resources.Load<TextAsset>("Text/Text_KO");
         text_EN = Resources.Load<TextAsset>("Text/Text_EN");
         Rank = Resources.Load<TextAsset>("Text/Rank");
+    }
+
+    public override void OnSingletonInit()
+    {
+        string languageStr = this.GetUtility<SaveDataUtility>().GetSelectLanguage();
+        if (languageStr == "-1")
+        {
+            if (this.GetUtility<LanguageUtility>() == null)
+            {
+                Debug.Log("没有Utility");
+            }
+            languageStr = this.GetUtility<LanguageUtility>().GetSystemLanguage();
+            this.GetUtility<SaveDataUtility>().SaveSelectLanguage(languageStr);
+        }
+        ReadTextCfg(languageStr);
     }
 
     public void ReadTextCfg(string languageType)
@@ -123,7 +139,7 @@ public class TextManager : MonoSingleton<TextManager>, ICanGetUtility, ICanSendE
         return GameMainArc.Interface;
     }
 
-     void Update()
+    /*void Update()
     {
         if(Input.GetKeyUp(KeyCode.K))
         {
@@ -133,6 +149,5 @@ public class TextManager : MonoSingleton<TextManager>, ICanGetUtility, ICanSendE
         {
             ChangeLanguage(GameDefine.LanguageType.zh);
         }
-        
-    }
+    }*/
 }

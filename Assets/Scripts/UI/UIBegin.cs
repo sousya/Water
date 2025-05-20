@@ -493,27 +493,32 @@ namespace QFramework.Example
                 case 8:
                     //Debug.Log("可以使用道具");
                     // 索引列表用于随机洗牌
-                    List<int> indices = Enumerable.Range(0, botter.waters.Count).ToList();
+                    List<int> _indices = Enumerable.Range(0, botter.waters.Count).ToList();
                     do
                     {
-                        for (int i = 0; i < indices.Count; i++)
+                        for (int i = 0; i < _indices.Count; i++)
                         {
-                            int randIndex = UnityEngine.Random.Range(i, indices.Count);
-                            (indices[i], indices[randIndex]) = (indices[randIndex], indices[i]);
+                            int randIndex = UnityEngine.Random.Range(i, _indices.Count);
+                            (_indices[i], _indices[randIndex]) = (_indices[randIndex], _indices[i]);
                         }
                     }
-                    while (Enumerable.SequenceEqual(indices, Enumerable.Range(0, botter.waters.Count)));
+                    //while (Enumerable.SequenceEqual(indices, Enumerable.Range(0, botter.waters.Count)));//只考虑索引不考虑值不太准确
+                    while (Enumerable.SequenceEqual(_indices.Select(i => botter.waters[i]), botter.waters));
 
-                    List<int> newWaters = new List<int>();
-                    List<bool> newHideWater = new List<bool>();
-                    foreach (int idx in indices)
+                    List<int> _newWaters = new List<int>();
+                    List<bool> _newHideWater = new List<bool>();
+                    List<WaterItem> _newWaterItems = new List<WaterItem>();
+
+                    foreach (int idx in _indices)
                     {
-                        newWaters.Add(botter.waters[idx]);
-                        newHideWater.Add(botter.hideWaters[idx]);
+                        _newWaters.Add(botter.waters[idx]);
+                        _newHideWater.Add(botter.hideWaters[idx]);
+                        _newWaterItems.Add(botter.waterItems[idx]);
                     }
                     // 替换原列表
-                    botter.waters = newWaters;
-                    botter.hideWaters = newHideWater;
+                    botter.waters = _newWaters;
+                    botter.hideWaters = _newHideWater;
+                    botter.waterItems = _newWaterItems;
 
                     //修改水块颜色和切换道具位置
                     for (int i = 0; i < botter.waters.Count; i++)
@@ -529,7 +534,7 @@ namespace QFramework.Example
                             botter.waterImg[i].SetColorState((ItemType)botter.waters[i], LevelManager.Instance.ItemColor);
                         }
                     }
-                    //修改水面位置(有道具的情况水面位置不一样)，修改水面颜色并播放水面动画，更新破冰道具位置
+                    //修改水面位置，修改水面颜色并播放水面动画
                     botter.SetNowSpinePos(botter.waters.Count);
                     botter.PlaySpineWaitAnim();
                     botter.CheckWaterItem();
@@ -545,7 +550,7 @@ namespace QFramework.Example
                     break;
             }
 
-            //if (!CheckHaveItem(itemID))//仅使用一次
+            if (!CheckHaveItem(itemID))//调整为仅使用一次
             itemObj.interactable = false;
         }
 

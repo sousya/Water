@@ -1,3 +1,4 @@
+using GameDefine;
 using QFramework;
 using System;
 using System.Collections;
@@ -44,9 +45,12 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
     {
         if (isSelectedItem)
         {
-            //能被选中、水块大于1且不同色
+            //可以将道具ID传入，根据道具ID在区分不同情况
+
+            //能被选中、水块大于1且不同色、不含结冰水块
             if (bottle.OnSelect(false)
-            && bottle.waters.Count > 1 && !bottle.waters.All(x => x == bottle.waters[0]))
+            && bottle.waters.Count > 1 && !bottle.waters.All(x => x == bottle.waters[0])
+            && bottle.waterItems.All(x => x != WaterItem.Ice))
             {
                 //Debug.Log("可选中");
                 RandomItemAction?.Invoke(bottle);

@@ -1,25 +1,27 @@
-using AnyThinkAds.Api;
 using QFramework;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class TenjinManager: MonoBehaviour
+public class TenjinManager: MonoSingleton<TenjinManager>
 {
-    static public TenjinManager Instance;
-    public TopOnCtrl topOnCtrl;
-    private void Awake()
+    public override void OnSingletonInit()
     {
-        Instance = this;
+        TenjinConnect();
     }
-    public void Init()
-    {
-        //Debug.Log("TenjinTime " + Time.time);
-        //Debug.Log("Tenjin StartConnect0");
 
-        BaseTenjin instance = Tenjin.getInstance("CMPSNGWPF6EXGKL1JS1DAMRVF7OMD2LS");
+    void OnApplicationPause(bool pauseStatus)
+    {
+        if (!pauseStatus)
+        {
+            TenjinConnect();
+        }
+    }
+
+    public void TenjinConnect()
+    {
+        //Debug.Log("Tenjin StartConnect0");
+        BaseTenjin instance = Tenjin.getInstance("C3AFW296ESTHECCHFBLL1BTSS6DQKYVA");
         //Debug.Log("Tenjin StartConnect1");
 
 #if UNITY_ANDROID
@@ -29,27 +31,5 @@ public class TenjinManager: MonoBehaviour
         // Sends install/open event to Tenjin
         instance.Connect();
 #endif
-        StartCoroutine(initTopOn());
     }
-
-    IEnumerator initTopOn()
-    {
-        yield return new WaitForSeconds(0.2f);
-        topOnCtrl.Init();
-
-    }
-
-    void OnApplicationPause(bool pauseStatus)
-    {
-        //if (!pauseStatus)
-        //{
-        //    TenjinConnect();
-        //}
-    }
-
-    public void TenjinConnect()
-    {
-
-    }
-
 }

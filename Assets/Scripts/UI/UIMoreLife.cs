@@ -125,14 +125,7 @@ namespace QFramework.Example
 
             BtnAD.onClick.AddListener(() =>
             {
-                //放在这是修改广告回调奖励？
-                TopOnADManager.Instance.rewardAction = () =>
-                {
-                    //看广告恢复体力，是恢复一点体力还是恢复满？
-                    //this.GetUtility<SaveDataUtility>().AddVitalityNum(1);
-                    HealthManager.Instance.AddHp();
-                };
-                TopOnADManager.Instance.ShowRewardAd();
+                TopOnADManager.Instance.ShowVideoAd(() => HealthManager.Instance.AddHp(), null);
             });
         }
 

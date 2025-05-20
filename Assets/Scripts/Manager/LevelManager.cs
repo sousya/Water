@@ -100,7 +100,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
-        this.GetUtility<SaveDataUtility>().SaveLevel(20);
+        this.GetUtility<SaveDataUtility>().SaveLevel(1);
 
         emptyBottle.numCake = 4;
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();

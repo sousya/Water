@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41af467769a5a6c41b484ef48ed521f0, type: 3}
   m_Name: CoinsPack_4
   m_EditorClassIdentifier: 
-  giftId: 0
-  coins: 15000
+  PackID: gold_4
+  coins: 8000
   items: []
   unlimitedHp: 0
   removeAds: 0

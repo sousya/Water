@@ -11785,6 +11785,7 @@ MonoBehaviour:
   - {fileID: 3529106071879179178}
   - {fileID: 996738029447313813}
   - {fileID: 7495724493146140856}
+  ShopScrollView: {fileID: 9075505197466249827}
 --- !u!114 &291577245118038543
 MonoBehaviour:
   m_ObjectHideFlags: 0

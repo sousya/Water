@@ -312,7 +312,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
                 useBottles.Add(useBottle);
                 useBottle.AddColor(addColor, fromPos);
                 hideColor.RemoveAt(addColorIdx);
-                Debug.Log("添加颜色 " + addColor);
+                //Debug.Log("添加颜色 " + addColor);
             }
             else
             {
@@ -728,6 +728,22 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         //Debug.Log("当前连胜次数:" + WinNum);
         if (WinNum > 0)
             StringEventSystem.Global.Send("StreakWinItem", WinNum);
+
+        //关卡引导判断
+        if (GameDefine.GameConst.GuideLevelInfo.TryGetValue(levelId ,out (string guideText,string guideAnimName) value))
+        {
+            UIKit.OpenPanel<UIGuideAnimPop>(UILevel.PopUI, new UIGuideAnimPopData
+            {
+                GuideText = value.guideText,
+                GuideAnimName = value.guideAnimName
+            });
+
+            ActionKit.Delay(5f, () =>
+            {
+                UIKit.ClosePanel<UIGuideAnimPop>();
+            }).Start(this);
+            
+        }
 
         this.SendEvent<LevelStartEvent>();
     }

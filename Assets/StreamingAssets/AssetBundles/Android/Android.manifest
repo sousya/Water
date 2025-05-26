@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3278490214
+CRC: 2845720624
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -74,3 +74,6 @@ AssetBundleManifest:
       Name: uishop_prefab
       Dependencies:
         Dependency_0: font
+    Info_18:
+      Name: uiguideanimpop_prefab
+      Dependencies: {}

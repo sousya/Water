@@ -62,6 +62,11 @@ namespace QAssetBundle
         public const string BundleName = "uigetcoin_prefab";
         public const string UIGetCoin = "UIGetCoin";
     }
+    public class Uiguideanimpop_prefab
+    {
+        public const string BundleName = "uiguideanimpop_prefab";
+        public const string UIGuideAnimPop = "UIGuideAnimPop";
+    }
     public class Uilessstar_prefab
     {
         public const string BundleName = "uilessstar_prefab";

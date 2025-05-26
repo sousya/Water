@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.SymbolStore;
-using UnityEngine;
-using UnityEngine.UI;
 using GameAttributes;
 
 namespace GameDefine
@@ -12,7 +9,23 @@ namespace GameDefine
     {
         public const int MaxVitality = 5;
         public const int RecoveryTime = 1800;
+
+        //关卡引导
+        public static readonly Dictionary<int, (string, string)> GuideLevelInfo = new Dictionary<int, (string, string)>
+        {
+            { 1, ("Make the water in the water bottle the same color", "GuideAnim_1") },
+            { 3, ("Synthesize water of the same color as the blocking gem to lift the blocking cloth", "GuideAnim_3") },
+            { 11, ("Combining two brooms can remove water of the same color", "GuideAnim_11") },
+            { 16, ("Combining two potion bottles can change 4 water of the same color", "GuideAnim_16") },
+            { 21, ("Combining two magic hats can generate 4 missing water", "GuideAnim_21") },
+            { 24, ("The water bottle entangled by the vines cannot be moved", "GuideAnim_24") },
+            { 31, ("The vine water bottle can break the entangled vines after the adjacent water bottles are combined", "GuideAnim_31") },
+            { 51, ("Water with Fire Emblem can thaw ice after being crafted", "GuideAnim_51") },
+            { 61, ("Synthesizing a magic book can remove all negative effects", "GuideAnim_61") },
+            { 91, ("Bottles with gemstone emblems can only be filled with water of the same color as the gemstone", "GuideAnim_91")},
+        };
     }
+
     public enum GameType
     {
         Normal = 0,
@@ -37,26 +50,6 @@ namespace GameDefine
         NearShow = 2
     }
 
-    // public enum ItemType
-    // {
-    //     ClearItem = 1001,       // ���Բ���Ч��
-    //     MagnetItem = 1002,      // ħ���飬�������Debuff(�ϰ�������Ч��)
-    //     MakeColorItem = 1003,   // ������ص���ɫ��ƿ����
-    //     ChangeGreen = 2001,     // ��ĳ����ɫ��Ϊ��ɫ-���1
-    //     ChangeOrange = 2002,    // ��ĳ����ɫ��Ϊ��ɫ-���7
-    //     ChangePink = 2003,      // ��ĳ����ɫ��Ϊ��ɫ-���3
-    //     ChangePurple = 2004,    // ��ĳ����ɫ��Ϊ��ɫ-���10
-    //     ChangeYellow = 2005,    // ��ĳ����ɫ��Ϊ��ɫ-���6
-    //     ChangeDarkBlue = 2006,  // ��ĳ����ɫ��Ϊ����ɫ-���4
-    //     ClearPink = 3001,       // ������з�ɫˮ��-���3
-    //     ClearOrange = 3002,     // ������г�ɫˮ��-���7
-    //     ClearBlue = 3003,       // ���������ɫˮ��-���4
-    //     ClearYellow = 3004,     // ������л�ɫˮ��-���6
-    //     ClearDarkGreen = 3005,  // �����������ɫˮ-����9
-    //     ClearRed = 3006,        // ������к�ɫˮ��-���2
-    //     ClearGreen = 3007,      // ���������ɫˮ��-���1
-    // }
-    
     public enum ItemType
     {
         [WaterColorState(false, false, false, false, "", EColorStateSpineType.None)]

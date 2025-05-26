@@ -46,6 +46,7 @@ public class AnalyticsManager : MonoSingleton<AnalyticsManager>, ICanGetUtility,
 
     public void TestSendEvent()
     {
+        //传递的键需要在Unity Analytics中预先定义
         var customEvent = new CustomEvent("completeLevel");
         customEvent["level"] = 5;
         customEvent["details"] = "自定义测试事件";

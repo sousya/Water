@@ -31,8 +31,8 @@ namespace QFramework.Example
             });
 			BtnQuit.onClick.AddListener(() =>
 			{
-				this.SendEvent<ReturnMainEvent>();
-                StringEventSystem.Global.Send("ClearTakeItem");
+				LevelManager.Instance.InitBottle();
+                this.SendEvent<ReturnMainEvent>();
                 CloseSelf();
             });
 		}

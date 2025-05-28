@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:5c65558f-094d-4e78-bee2-ada54d28e98b
+	// Generate Id:643110df-b160-4a3b-9017-08b27f5e85b8
 	public partial class UIBeginSelect
 	{
 		public const string Name = "UIBeginSelect";
@@ -25,17 +25,23 @@ namespace QFramework.Example
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtItem1;
 		[SerializeField]
+		public UnityEngine.UI.Button BtnAddItem1;
+		[SerializeField]
 		public UnityEngine.UI.Image ImgSelect1;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnItem2;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtItem2;
 		[SerializeField]
+		public UnityEngine.UI.Button BtnAddItem2;
+		[SerializeField]
 		public UnityEngine.UI.Image ImgSelect2;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnItem3;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtItem3;
+		[SerializeField]
+		public UnityEngine.UI.Button BtnAddItem3;
 		[SerializeField]
 		public UnityEngine.UI.Image ImgSelect3;
 		[SerializeField]
@@ -54,12 +60,15 @@ namespace QFramework.Example
 			TxtProgress = null;
 			BtnItem1 = null;
 			TxtItem1 = null;
+			BtnAddItem1 = null;
 			ImgSelect1 = null;
 			BtnItem2 = null;
 			TxtItem2 = null;
+			BtnAddItem2 = null;
 			ImgSelect2 = null;
 			BtnItem3 = null;
 			TxtItem3 = null;
+			BtnAddItem3 = null;
 			ImgSelect3 = null;
 			ImgReward = null;
 			BtnStart = null;

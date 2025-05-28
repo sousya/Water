@@ -57,7 +57,6 @@ namespace QFramework.Example
         void BackUIBegin()
         {
             this.SendEvent<LevelClearEvent>(new LevelClearEvent());
-            StringEventSystem.Global.Send("ClearTakeItem");
             CloseSelf();
         }
 	}

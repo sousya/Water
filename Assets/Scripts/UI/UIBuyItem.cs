@@ -5,10 +5,21 @@ using System.Collections.Generic;
 
 namespace QFramework.Example
 {
-	public class UIBuyItemData : UIPanelData
+    [System.Serializable]
+    public class BuyItemInfo
+    {
+        public string ItemName;
+        public string ItemDescription;
+        public int ItemCost;
+		public int ItemNum;
+        public Sprite ItemIcon;
+    }
+
+    public class UIBuyItemData : UIPanelData
 	{
 		public int item;
 	}
+
 	public partial class UIBuyItem : UIPanel, ICanGetUtility, ICanSendEvent
     {
         public IArchitecture GetArchitecture()
@@ -16,10 +27,7 @@ namespace QFramework.Example
             return GameMainArc.Interface;
         }
 
-        public List<string> names;
-		public List<string> descs;
-		public List<int> costs;
-		public List<Sprite> icons;
+		public List<BuyItemInfo> buyItemInfos;
 
 		protected override void OnInit(IUIData uiData = null)
 		{
@@ -33,13 +41,17 @@ namespace QFramework.Example
 		
 		protected override void OnShow()
 		{
-            var needCoin = costs[mData.item - 1];
+			var item = buyItemInfos[mData.item - 1];
+
+            var needCoin = item.ItemCost;
             TxtCost.color = CoinManager.Instance.Coin < needCoin ? Color.red : Color.white;
-				
-			ImgItem.sprite = icons[mData.item - 1];
-            TxtTitle.text = names[mData.item - 1];
-			TxtDesc.text = descs[mData.item - 1];
-			TxtCost.text = costs[mData.item - 1].ToString();
+
+            ImgItem.sprite = item.ItemIcon;
+            TxtTitle.text = item.ItemName;
+            TxtDesc.text = item.ItemDescription;
+            TxtCost.text = item.ItemCost.ToString();
+            TxtNum.text = $"X{item.ItemNum}";
+
             BtnClose.onClick.RemoveAllListeners();
             BtnClose.onClick.AddListener(() =>
 			{
@@ -50,10 +62,24 @@ namespace QFramework.Example
             BtnBuy.onClick.AddListener(() =>
             {
                 if (CoinManager.Instance.Coin < needCoin)
+                {
+                    //区分是1-5的道具还是6-8的道具(购买入口不一致)
+                    if (mData.item > 5)
+                    {
+                        UIKit.ClosePanel<UIBeginSelect>();
+                        CloseSelf();
+                        StringEventSystem.Global.Send("OpenShopPanel");
+                    }
+                    else
+                    {
+
+                    }
+
                     return;
-				CoinManager.Instance.CostCoin(needCoin, () =>
+                }
+                CoinManager.Instance.CostCoin(needCoin, () =>
 				{
-					this.GetUtility<SaveDataUtility>().AddItemNum(mData.item);
+					this.GetUtility<SaveDataUtility>().AddItemNum(mData.item, item.ItemNum);
                     this.SendEvent<RefreshItemEvent>();
                 });
                 CloseSelf();

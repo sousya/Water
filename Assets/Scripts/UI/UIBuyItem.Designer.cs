@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:4244ea1c-96ad-4cb2-a99e-09d360e341a2
+	// Generate Id:261316fd-9b63-4bb9-9664-765b7b871789
 	public partial class UIBuyItem
 	{
 		public const string Name = "UIBuyItem";
@@ -16,6 +16,8 @@ namespace QFramework.Example
 		public TMPro.TextMeshProUGUI TxtTitle;
 		[SerializeField]
 		public UnityEngine.UI.Image ImgItem;
+		[SerializeField]
+		public TMPro.TextMeshProUGUI TxtNum;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtDesc;
 		[SerializeField]
@@ -30,6 +32,7 @@ namespace QFramework.Example
 			BtnClose = null;
 			TxtTitle = null;
 			ImgItem = null;
+			TxtNum = null;
 			TxtDesc = null;
 			BtnBuy = null;
 			TxtCost = null;

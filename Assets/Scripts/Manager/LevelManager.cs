@@ -82,16 +82,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
     private void Start()
     {
-        //StartGame(levelId);
-        //UIKit.OpenPanel("UILevelMain", UILevel.Common, "uilevelmain_prefab"); 
         //UIKit.OpenPanel<UIBegin>(UILevel.Common);
-        //UIKit.OpenPanel<UIJudge>(UILevel.Common);
-        //this.GetUtility<SaveDataUtility>().SaveLevel(6);
-        //PlayerPrefs.DeleteKey("g_WaterSceneRecord");
-        //PlayerPrefs.DeleteKey("g_WaterScenePartRecord");
-        //PlayerPrefs.DeleteKey("g_WaterSceneBoxRecord");
-        //this.GetUtility<SaveDataUtility>().SetCoinNum(0);
-        //this.GetUtility<SaveDataUtility>().SetSceneRecord(1);
 
         //清空携带道具
         StringEventSystem.Global.Register("ClearTakeItem", () =>
@@ -100,7 +91,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
-        this.GetUtility<SaveDataUtility>().SaveLevel(1);
+        //this.GetUtility<SaveDataUtility>().SaveLevel(1);
 
         emptyBottle.numCake = 4;
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();
@@ -124,7 +115,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
     /// <summary>
     /// 将瓶子数据初始化
-    /// 初始化时调用和游戏结束时调用
+    /// 初始化时调用/游戏结束时调用/退出关卡调用
     /// </summary>
     public void InitBottle()
     {

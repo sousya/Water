@@ -60,6 +60,10 @@ namespace QFramework.Example
                     });
                     CloseSelf();
                 }
+                else
+                {
+                    //»½ÆðÉÌµê
+                }
             });
 
             BtnClose.onClick.AddListener(() =>

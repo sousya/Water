@@ -250,6 +250,7 @@ namespace QFramework.Example
 
             BtnCoin.onClick.AddListener(() =>
             {
+                //跳转商店
                 InitBeginMenuButton(0);
             });
 
@@ -365,6 +366,12 @@ namespace QFramework.Example
             StringEventSystem.Global.Register("StreakWinItem", (int count) =>
             {
                 ClearBottleBlackWater(count);
+            }).UnRegisterWhenGameObjectDestroyed(gameObject);
+
+            StringEventSystem.Global.Register("OpenShopPanel", () =>
+            {
+                InitBeginMenuButton(0);
+
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
@@ -550,7 +557,7 @@ namespace QFramework.Example
                     break;
             }
 
-            if (!CheckHaveItem(itemID))//调整为仅使用一次
+            //if (!CheckHaveItem(itemID))//调整为仅使用一次
             itemObj.interactable = false;
         }
 

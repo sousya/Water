@@ -4,14 +4,14 @@ using QFramework;
 using System;
 using System.Collections;
 using DG.Tweening;
-using static UnityEngine.GraphicsBuffer;
+using TMPro;
 
 namespace QFramework.Example
 {
     public class UIBeginSelectData : UIPanelData
     {
     }
-    public partial class UIBeginSelect : UIPanel, ICanGetUtility, ICanSendEvent
+    public partial class UIBeginSelect : UIPanel, ICanGetUtility, ICanSendEvent, ICanRegisterEvent
     {
         [SerializeField] private Sprite[] giftSprites;
 
@@ -32,12 +32,14 @@ namespace QFramework.Example
 
         protected override void OnShow()
         {
+            RigesterEvent();
+
             UpdateItemNum();
+            StringEventSystem.Global.Send("ClearTakeItem");
 
             BtnClose.onClick.RemoveAllListeners();
             BtnClose.onClick.AddListener(() =>
             {
-                StringEventSystem.Global.Send("ClearTakeItem");
                 CloseSelf();
             });
 
@@ -53,11 +55,6 @@ namespace QFramework.Example
                     else
                         RemoveItemIfExists(6);
                 }
-                else
-                {
-                    ImgSelect1.gameObject.SetActive(false);
-                }
-
             });
 
             BtnItem2.onClick.RemoveAllListeners();
@@ -72,10 +69,6 @@ namespace QFramework.Example
                         AddItemIfNotExists(7);
                     else
                         RemoveItemIfExists(7);
-                }
-                else
-                {
-                    ImgSelect2.gameObject.SetActive(false);
                 }
             });
 
@@ -92,15 +85,16 @@ namespace QFramework.Example
                     else
                         RemoveItemIfExists(8);
                 }
-                else
-                {
-                    ImgSelect3.gameObject.SetActive(false);
-                }
             });
 
             BtnStart.onClick.RemoveAllListeners();
             BtnStart.onClick.AddListener(() =>
             {
+                if (!HealthManager.Instance.HasHp)
+                {
+                    UIKit.OpenPanel<UIMoreLife>();
+                    return;
+                }
                 this.SendEvent<GameStartEvent>();
                 GameCtrl.Instance.InitGameCtrl();
                 CloseSelf();
@@ -112,6 +106,20 @@ namespace QFramework.Example
                 ImgReward.gameObject.SetActive(!ImgReward.gameObject.activeSelf);
             });
 
+            BtnAddItem1.onClick.AddListener(() =>
+            {
+                UIKit.OpenPanel<UIBuyItem>(UILevel.Common, new UIBuyItemData() { item = 6 });
+            });
+
+            BtnAddItem2.onClick.AddListener(() =>
+            {
+                UIKit.OpenPanel<UIBuyItem>(UILevel.Common, new UIBuyItemData() { item = 7 });
+            });
+
+            BtnAddItem3.onClick.AddListener(() =>
+            {
+                UIKit.OpenPanel<UIBuyItem>(UILevel.Common, new UIBuyItemData() { item = 8 });
+            });
             ImgReward.Hide();
         }
 
@@ -121,6 +129,15 @@ namespace QFramework.Example
 
         protected override void OnClose()
         {
+        }
+
+        void RigesterEvent()
+        {
+            this.RegisterEvent<RefreshItemEvent>(e =>
+            {
+                UpdateItem();
+
+            }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
         /// <summary>
@@ -150,10 +167,8 @@ namespace QFramework.Example
             var saveU = this.GetUtility<SaveDataUtility>();
             int winNum = saveU.GetCountinueWinNum();
             TxtProgress.text = winNum + " / 3";
-            TxtItem1.text = saveU.GetItemNum(6) + "";
-            TxtItem2.text = saveU.GetItemNum(7) + "";
-            TxtItem3.text = saveU.GetItemNum(8) + "";
             ImgProgress.fillAmount = winNum * 1f / 3;
+            UpdateItem();
 
             //0-3胜，更新图标
             if (winNum == 0 || winNum == 1)
@@ -162,6 +177,33 @@ namespace QFramework.Example
                 return;
             }
             ImgBox.sprite = giftSprites[winNum - 1];
+        }
+
+        void UpdateItem()
+        {
+            var saveU = this.GetUtility<SaveDataUtility>();
+            var item1 = saveU.GetItemNum(6);
+            var item2 = saveU.GetItemNum(7);
+            var item3 = saveU.GetItemNum(8);
+            UpdateItemDisplay(item1, TxtItem1, BtnAddItem1);
+            UpdateItemDisplay(item2, TxtItem2, BtnAddItem2);
+            UpdateItemDisplay(item3, TxtItem3, BtnAddItem3);
+        }
+
+        /// <summary>
+        /// 更新道具角标状态
+        /// </summary>
+        /// <param name="itemCount"></param>
+        /// <param name="txtItem"></param>
+        /// <param name="btnAdd"></param>
+        void UpdateItemDisplay(int itemCount, TextMeshProUGUI txtItem, Button btnAdd)
+        {
+            if (itemCount > 0)
+            {
+                btnAdd.Hide();
+                txtItem.transform.parent.Show();
+                txtItem.text = itemCount.ToString();
+            }
         }
     }
 }

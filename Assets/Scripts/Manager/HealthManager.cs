@@ -12,13 +12,13 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
     private const float RECOVERTIME = 1800;
     private const float SECOND = 60;
 
-    private int nowHp;
+    [SerializeField] private int nowHp;
     private DateTime recoverEndTime;        // 体力完全恢复的时间点
     [SerializeField] private string recoverTimeStr;
 
     private DateTime unLimitHpEndTime;      // 无限体力截止的时间点
     [SerializeField] private string unLimitHpTimeStr;
-    private bool unLimitHp;                 // T无限体力，F消耗体力
+    [SerializeField] private bool unLimitHp;                
 
     /// <summary>
     /// 当前体力恢复剩余时间
@@ -36,6 +36,11 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
     public int UsedHp => MAXHP - nowHp;
 
     /// <summary>
+    /// 是否满体力
+    /// </summary>
+    public bool IsMaxHp => nowHp == MAXHP;
+
+    /// <summary>
     /// 当前恢复的体力点
     /// </summary>
     public int CurRecoverySlot => nowHp == MAXHP ? MAXHP : nowHp + 1;
@@ -49,6 +54,11 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
     /// 无限体力状态
     /// </summary>
     public bool UnLimitHp => unLimitHp;
+
+    /// <summary>
+    /// 无限体力剩余时长
+    /// </summary>
+    public string UnLimitHpTimeStr => unLimitHpTimeStr;
 
     #region QF
 
@@ -200,6 +210,7 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
         {
             float remainingTime = GetRemainingTime(unLimitHpEndTime);
             TimeSpan timer = TimeSpan.FromSeconds(remainingTime);
+            //unLimitHpTimeStr = $"{(int)timer.TotalMinutes}:{timer.Seconds:D2}";
             unLimitHpTimeStr = timer.ToString(@"hh\:mm\:ss");
             if (remainingTime <= 0)
             {
@@ -207,6 +218,8 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
                 unLimitHpTimeStr = "00:00";
                 SaveUnLimitHpEndTime(string.Empty);
                 unLimitHp = false;
+                // 更新UI状态(取消无限体力状态)
+                this.SendEvent<VitalityChangeEvent>(new VitalityChangeEvent());
             }
         }
     }
@@ -367,9 +380,9 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
             if (unLimitDuration >= remainingRecoverTime)
                 SetNowHpToMax();
         }
-        
-        // 发送事件通知表现层(UI更新等)
-        // 可能由这里去通知表现层更新无限体力的时长(当经过一秒时更新一次即可，不每帧更新)
+
+        // 更新UI状态(设置无限体力状态)
+        this.SendEvent<VitalityChangeEvent>(new VitalityChangeEvent());
     }
 
 

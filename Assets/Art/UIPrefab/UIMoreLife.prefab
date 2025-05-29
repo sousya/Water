@@ -183,8 +183,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d495b28d4faa486448f86d3cfda170b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TxtNextHeart: {fileID: 3525346527008674739}
+  TxtHpNum: {fileID: 3525346527008674739}
   TxtTime: {fileID: 8595407849129342425}
+  TxtDetail: {fileID: 3054580505431189587}
   BtnClose: {fileID: 3467003929469205071}
   BtnCoinBuy: {fileID: 4146399528330977761}
   TxtCoinCost: {fileID: 8579018427514295900}
@@ -1848,7 +1849,7 @@ GameObject:
   - component: {fileID: 3525346527008674739}
   - component: {fileID: 6346753094113215785}
   m_Layer: 5
-  m_Name: TxtNextHeart
+  m_Name: TxtHpNum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1870,7 +1871,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -3.5316086}
+  m_AnchoredPosition: {x: 4, y: -3.5316086}
   m_SizeDelta: {x: 136.8633, y: 75.0261}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6997587403286348663
@@ -1997,8 +1998,9 @@ GameObject:
   - component: {fileID: 8647551927418723482}
   - component: {fileID: 8598763684333436265}
   - component: {fileID: 3054580505431189587}
+  - component: {fileID: 510286084782976751}
   m_Layer: 5
-  m_Name: TxtTitle (1)
+  m_Name: TxtDetail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2020,7 +2022,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.8502, y: 195}
+  m_AnchoredPosition: {x: 11, y: 189}
   m_SizeDelta: {x: 523.4142, y: 75.0261}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8598763684333436265
@@ -2120,6 +2122,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &510286084782976751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7645704032807437083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MarkType: 0
+  CustomComponentName: TxtTitle (1)
+  CustomComment: 
+  mComponentName: TMPro.TextMeshProUGUI
 --- !u!1 &7685484579937299144
 GameObject:
   m_ObjectHideFlags: 0

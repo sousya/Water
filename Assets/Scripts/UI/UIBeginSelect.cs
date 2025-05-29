@@ -34,7 +34,8 @@ namespace QFramework.Example
         {
             RigesterEvent();
 
-            UpdateItemNum();
+            UpdateWinNum();
+            UpdateItem();
             StringEventSystem.Global.Send("ClearTakeItem");
 
             BtnClose.onClick.RemoveAllListeners();
@@ -90,7 +91,7 @@ namespace QFramework.Example
             BtnStart.onClick.RemoveAllListeners();
             BtnStart.onClick.AddListener(() =>
             {
-                if (!HealthManager.Instance.HasHp)
+                if (!HealthManager.Instance.HasHp && !HealthManager.Instance.UnLimitHp)
                 {
                     UIKit.OpenPanel<UIMoreLife>();
                     return;
@@ -162,13 +163,12 @@ namespace QFramework.Example
                 LevelManager.Instance.takeItem.Remove(itemId);
         }
 
-        void UpdateItemNum()
+        void UpdateWinNum()
         {
             var saveU = this.GetUtility<SaveDataUtility>();
             int winNum = saveU.GetCountinueWinNum();
             TxtProgress.text = winNum + " / 3";
             ImgProgress.fillAmount = winNum * 1f / 3;
-            UpdateItem();
 
             //0-3胜，更新图标
             if (winNum == 0 || winNum == 1)
@@ -198,6 +198,10 @@ namespace QFramework.Example
         /// <param name="btnAdd"></param>
         void UpdateItemDisplay(int itemCount, TextMeshProUGUI txtItem, Button btnAdd)
         {
+            //选择道具按钮增加条件，非无线道具可触发，否则默认携带
+            //无线道具时间
+            //...return
+
             if (itemCount > 0)
             {
                 btnAdd.Hide();

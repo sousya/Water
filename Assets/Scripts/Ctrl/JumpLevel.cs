@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class JumpLevel : MonoBehaviour ,ICanSendEvent
+public class JumpLevel : MonoBehaviour ,ICanSendEvent, ICanGetUtility
 {
     public TMP_InputField inputField;
     public Button button;
@@ -21,6 +21,7 @@ public class JumpLevel : MonoBehaviour ,ICanSendEvent
         button.onClick.AddListener(() =>
         {
             LevelManager.Instance.StartGame(int.Parse(inputField.text));
+            this.GetUtility<SaveDataUtility>().SaveLevel(int.Parse(inputField.text));
             //this.SendEvent<GameStartEvent>();
             //GameCtrl.Instance.InitGameCtrl();
         });

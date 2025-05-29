@@ -87,10 +87,10 @@ namespace QFramework.Example
             {
                 saveDataUtility.AddItemNum(item.ItemIndex, item.Quantity);
             }
-
-            //无限体力、无限进关选中道具发放
-            //HealthManager.Instance.SetUnLimitHp(_packSo.UnlimitedHp);
-
+            //无限体力发放
+            HealthManager.Instance.SetUnLimitHp(_packSo.UnlimitedHp);
+            //无限道具
+            //...
             UIKit.ClosePanel<UIShop>();
         }
 

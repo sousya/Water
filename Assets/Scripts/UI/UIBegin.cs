@@ -83,9 +83,11 @@ namespace QFramework.Example
 
         private void Update()
         {
-            if (HealthManager.Instance.UsedHp > 0)
+            if (TxtTime.gameObject.activeSelf)
             {
-                TxtTime.text = HealthManager.Instance.RecoverTimerStr;
+                TxtTime.text = HealthManager.Instance.UnLimitHp ?
+                    HealthManager.Instance.UnLimitHpTimeStr :
+                    HealthManager.Instance.RecoverTimerStr;
             }
         }
 
@@ -707,8 +709,12 @@ namespace QFramework.Example
         /// </summary>
         void SetVitality()
         {
-            TxtHeart.text = HealthManager.Instance.NowHp.ToString();
-            _= HealthManager.Instance.UsedHp > 0 ? TxtTime.Show() : TxtTime.Hide();
+            TxtHeart.text = HealthManager.Instance.UnLimitHp ? "¡Þ" : HealthManager.Instance.NowHp.ToString();
+
+            if (HealthManager.Instance.UnLimitHp || !HealthManager.Instance.IsMaxHp)
+                TxtTime.Show();
+            else
+                TxtTime.Hide();
         }
 
         /// <summary>

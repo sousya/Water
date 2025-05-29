@@ -5,15 +5,17 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:2d361118-cf35-4dbb-b101-e4feb9d15ae1
+	// Generate Id:20800d58-10aa-4ae0-b6ad-222b4aba2279
 	public partial class UIMoreLife
 	{
 		public const string Name = "UIMoreLife";
 		
 		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtNextHeart;
+		public TMPro.TextMeshProUGUI TxtHpNum;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtTime;
+		[SerializeField]
+		public TMPro.TextMeshProUGUI TxtDetail;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnClose;
 		[SerializeField]
@@ -29,8 +31,9 @@ namespace QFramework.Example
 		
 		protected override void ClearUIComponents()
 		{
-			TxtNextHeart = null;
+			TxtHpNum = null;
 			TxtTime = null;
+			TxtDetail = null;
 			BtnClose = null;
 			BtnCoinBuy = null;
 			TxtCoinCost = null;

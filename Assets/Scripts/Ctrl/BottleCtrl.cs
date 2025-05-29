@@ -1223,6 +1223,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public void MoveToOtherAnim(BottleCtrl other, int useColor = -1)
     {
         isPlayAnim = true;
+        var bottleRenderUpdate = bottleAnim.GetComponent<BottleRenderUpdate>();
+        bottleRenderUpdate.SetMoveBottleRenderState(true);
 
         if (useColor < 1000)
         {
@@ -1245,6 +1247,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         isPlayAnim = false;
+                        bottleRenderUpdate.SetMoveBottleRenderState(false);
                     });
                 });
             }
@@ -1255,6 +1258,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         isPlayAnim = false;
+                        bottleRenderUpdate.SetMoveBottleRenderState(false);
                     });
                 });
             }

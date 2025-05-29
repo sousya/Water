@@ -17,7 +17,7 @@ public class GiftPackSO : ScriptableObject
     [SerializeField] private bool removeAds;
 
     public int Coins => coins;
-    public IReadOnlyList<ItemReward> Items => items;
+    public IReadOnlyList<ItemReward> ItemReward => items;
     public int UnlimitedHp => unlimitedHp;
     public bool RemoveAds => removeAds;
     public string ID => PackID;

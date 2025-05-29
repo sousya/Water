@@ -63,7 +63,7 @@ namespace QFramework.Example
             {
                 if (CoinManager.Instance.Coin < needCoin)
                 {
-                    //区分是1-5的道具还是6-8的道具(购买入口不一致)
+                    //区分是1-5的道具/6-8的道具(购买入口不一致)
                     if (mData.item > 5)
                     {
                         UIKit.ClosePanel<UIBeginSelect>();
@@ -72,15 +72,15 @@ namespace QFramework.Example
                     }
                     else
                     {
-
+                        UIKit.OpenPanel<UIShop>();
+                        CloseSelf();
                     }
-
+                    
                     return;
                 }
                 CoinManager.Instance.CostCoin(needCoin, () =>
 				{
 					this.GetUtility<SaveDataUtility>().AddItemNum(mData.item, item.ItemNum);
-                    this.SendEvent<RefreshItemEvent>();
                 });
                 CloseSelf();
             });

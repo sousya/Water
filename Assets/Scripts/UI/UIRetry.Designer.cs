@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:c840bfba-6716-4315-bcd6-0c7c5203269d
+	// Generate Id:27bcd359-f7b2-4092-8572-c42c539dd65b
 	public partial class UIRetry
 	{
 		public const string Name = "UIRetry";
@@ -13,15 +13,13 @@ namespace QFramework.Example
 		[SerializeField]
 		public UnityEngine.UI.Button BtnClose;
 		[SerializeField]
-		public UnityEngine.UI.Button BtnCoin;
-		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtCoin;
 		[SerializeField]
-		public UnityEngine.RectTransform ImgReward;
+		public UnityEngine.UI.Button BtnAddCoin;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnGiveUp;
 		[SerializeField]
-		public UnityEngine.UI.Button BtnRetry;
+		public UnityEngine.UI.Button BtnAddBottle;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtRetry;
 		[SerializeField]
@@ -32,11 +30,10 @@ namespace QFramework.Example
 		protected override void ClearUIComponents()
 		{
 			BtnClose = null;
-			BtnCoin = null;
 			TxtCoin = null;
-			ImgReward = null;
+			BtnAddCoin = null;
 			BtnGiveUp = null;
-			BtnRetry = null;
+			BtnAddBottle = null;
 			TxtRetry = null;
 			TxtCoinCost = null;
 			

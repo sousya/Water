@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:a10b5c74-7ad1-4d90-b6e9-a9d909b0680b
+	// Generate Id:f2ec159f-7780-4ae9-9a90-7076d39b23e9
 	public partial class UIBegin
 	{
 		public const string Name = "UIBegin";
@@ -15,13 +15,13 @@ namespace QFramework.Example
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtRefreshNum;
 		[SerializeField]
-		public UnityEngine.UI.Button BtnAddStepBack;
+		public UnityEngine.UI.Image BtnAddStepBack;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnRemoveHide;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtRemoveHideNum;
 		[SerializeField]
-		public UnityEngine.UI.Button BtnAddRemove;
+		public UnityEngine.UI.Image BtnAddRemove;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnAddBottle;
 		[SerializeField]
@@ -61,6 +61,8 @@ namespace QFramework.Example
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtItem3;
 		[SerializeField]
+		public UnityEngine.UI.ScrollRect ShopScrollView;
+		[SerializeField]
 		public UnityEngine.UI.Button BtnStart;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtStart;
@@ -78,6 +80,8 @@ namespace QFramework.Example
 		public UnityEngine.UI.Button BtnHeart;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtHeart;
+		[SerializeField]
+		public TMPro.TextMeshProUGUI TxtTime;
 		[SerializeField]
 		public UnityEngine.UI.Button BtnCoin;
 		[SerializeField]
@@ -131,6 +135,10 @@ namespace QFramework.Example
 		[SerializeField]
 		public UnityEngine.UI.Button BtnHead;
 		[SerializeField]
+		public UnityEngine.UI.Button BtnSelect;
+		[SerializeField]
+		public UnityEngine.UI.Image ImgSelected;
+		[SerializeField]
 		public RectTransform BottomMenuBtns;
 		
 		private UIBeginData mPrivateData = null;
@@ -162,6 +170,7 @@ namespace QFramework.Example
 			TxtItem2 = null;
 			BtnItem3 = null;
 			TxtItem3 = null;
+			ShopScrollView = null;
 			BtnStart = null;
 			TxtStart = null;
 			BtnArea = null;
@@ -171,6 +180,7 @@ namespace QFramework.Example
 			TxtImgprogress = null;
 			BtnHeart = null;
 			TxtHeart = null;
+			TxtTime = null;
 			BtnCoin = null;
 			TxtCoin = null;
 			BtnStar = null;
@@ -197,6 +207,8 @@ namespace QFramework.Example
 			RewardCoinFx = null;
 			TxtCoinAdd = null;
 			BtnHead = null;
+			BtnSelect = null;
+			ImgSelected = null;
 			BottomMenuBtns = null;
 			
 			mData = null;

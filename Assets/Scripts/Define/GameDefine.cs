@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using GameAttributes;
+using UnityEngine;
 
 namespace GameDefine
 {
@@ -9,6 +10,9 @@ namespace GameDefine
     {
         public const int MaxVitality = 5;
         public const int RecoveryTime = 1800;
+
+        //Gold coin font color
+        //public static readonly Color32 COINCOLOR = new Color32(87, 23, 0, 255);
 
         //关卡引导
         public static readonly Dictionary<int, (string, string)> GuideLevelInfo = new Dictionary<int, (string, string)>

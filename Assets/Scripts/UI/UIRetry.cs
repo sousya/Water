@@ -7,12 +7,15 @@ namespace QFramework.Example
 	public class UIRetryData : UIPanelData
 	{
 	}
-	public partial class UIRetry : UIPanel, ICanGetUtility
+	public partial class UIRetry : UIPanel, ICanGetUtility, ICanRegisterEvent
     {
+        private const int ADD_BOTTLE_COST = 900;
+
         public IArchitecture GetArchitecture()
         {
             return GameMainArc.Interface;
         }
+
         protected override void OnInit(IUIData uiData = null)
 		{
 			mData = uiData as UIRetryData ?? new UIRetryData();
@@ -25,51 +28,15 @@ namespace QFramework.Example
 		
 		protected override void OnShow()
         {
-            var coin = CoinManager.Instance.Coin;
-            TxtCoin.text = coin.ToString();
+            SetCoin();
 
-            if (coin < 900)
-            {
-                TxtCoin.color = Color.red;
-                TxtCoinCost.color = Color.red;
-            }
-            else
-            {
-                TxtCoin.color = Color.white;
-                TxtCoinCost.color = Color.white;
-            }
+            RegisterBtnEvent();
 
-			BtnGiveUp.onClick.RemoveAllListeners();
-			BtnGiveUp.onClick.AddListener(()=>
-			{
-                CloseSelf();
-                //退出中断连胜
-                this.GetUtility<SaveDataUtility>().SetCountinueWinNum(0);
-                UIKit.OpenPanel<UIContinue>();
-            });
-
-            BtnRetry.onClick.RemoveAllListeners();
-            BtnRetry.onClick.AddListener(() =>
+            this.RegisterEvent<CoinChangeEvent>(e =>
             {
-                if (coin >= 900)
-                {
-                    CoinManager.Instance.CostCoin(900, () =>
-                    {
-                        //增加管子
-                        LevelManager.Instance.AddBottle(false,null);
-                    });
-                    CloseSelf();
-                }
-                else
-                {
-                    //唤起商店
-                }
-            });
+                SetCoin();
 
-            BtnClose.onClick.AddListener(() =>
-            {
-                CloseSelf();
-            });
+            }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 		
 		protected override void OnHide()
@@ -78,6 +45,54 @@ namespace QFramework.Example
 		
 		protected override void OnClose()
 		{
-		}
-	}
+            BtnGiveUp.onClick.RemoveAllListeners();
+            BtnAddBottle.onClick.RemoveAllListeners();
+            BtnClose.onClick.RemoveAllListeners();
+            BtnAddCoin.onClick.RemoveAllListeners();
+        }
+
+        private void RegisterBtnEvent()
+        {
+            BtnGiveUp.onClick.AddListener(() =>
+            {
+                CloseSelf();
+                UIKit.OpenPanel<UIContinue>();
+            });
+
+            BtnAddBottle.onClick.AddListener(() =>
+            {
+                if (CoinManager.Instance.Coin >= ADD_BOTTLE_COST)
+                {
+                    CoinManager.Instance.CostCoin(ADD_BOTTLE_COST, () =>
+                    {
+                        //增加管子
+                        LevelManager.Instance.AddBottle(false, null);
+                    });
+                    CloseSelf();
+                }
+                else
+                {
+                    //唤起商店
+                    UIKit.OpenPanel<UIShop>();
+                }
+            });
+
+            BtnClose.onClick.AddListener(() =>
+            {
+                CloseSelf();
+            });
+
+            BtnAddCoin.onClick.AddListener(() =>
+            {
+                UIKit.OpenPanel<UIShop>();
+            });
+        }
+
+        private void SetCoin()
+        {
+            var coin = CoinManager.Instance.Coin;
+            TxtCoin.text = coin.ToString();
+            TxtCoinCost.color = coin < ADD_BOTTLE_COST ? Color.red : Color.white;
+        }
+    }
 }

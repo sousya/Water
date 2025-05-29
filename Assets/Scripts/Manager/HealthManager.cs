@@ -14,7 +14,7 @@ public class HealthManager : MonoSingleton<HealthManager> ,ICanSendEvent
 
     private int nowHp;
     private DateTime recoverEndTime;        // 体力完全恢复的时间点
-    private string recoverTimeStr;
+    [SerializeField] private string recoverTimeStr;
 
     private DateTime unLimitHpEndTime;      // 无限体力截止的时间点
     [SerializeField] private string unLimitHpTimeStr;

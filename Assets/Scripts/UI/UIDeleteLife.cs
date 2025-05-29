@@ -7,7 +7,7 @@ namespace QFramework.Example
 	public class UIDeleteLifeData : UIPanelData
 	{
 	}
-	public partial class UIDeleteLife : UIPanel, ICanSendEvent
+	public partial class UIDeleteLife : UIPanel, ICanSendEvent, ICanGetUtility
     {
         public IArchitecture GetArchitecture()
         {
@@ -33,6 +33,7 @@ namespace QFramework.Example
 			{
 				LevelManager.Instance.InitBottle();
                 this.SendEvent<ReturnMainEvent>();
+                this.GetUtility<SaveDataUtility>().SetCountinueWinNum(0);
                 CloseSelf();
             });
 		}

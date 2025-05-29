@@ -292,6 +292,7 @@ public class SaveDataUtility : IUtility, ICanSendEvent
     {
         var itemNum = GetItemNum(item);
         SetItemNum(item, itemNum + num);
+        this.SendEvent<RefreshItemEvent>();
     }
 
     public void ReduceItemNum(int item, int num = 1)

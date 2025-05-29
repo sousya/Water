@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3954088650
+CRC: 746962189
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3da92cba877a444faa96a4900edcc7bd
+    Hash: ac885e6d8b8539a86265909cd91aa99a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 965c1578ab3a79581247dde5a9c986ab
+    Hash: 6a5a67feb3148908991884f55be54c8a
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 3da92cba877a444faa96a4900edcc7bd
+    Hash: ac885e6d8b8539a86265909cd91aa99a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -39,6 +39,8 @@ ClassTypes:
 - Class: 224
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: QFramework.Example.BuyItemInfo
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.VertexGradient
 - AssemblyName: UnityEngine.CoreModule

@@ -25,13 +25,12 @@ namespace QFramework.Example
         public ScenePartCtrl ScenePart1, ScenePart2, ScenePart3, ScenePart4;
         public ParticleTargetMoveCtrl coinFx, starFx;
 
-        private GameObject HomeNode => Panels[2];
         #region BottomMenuSetting
         [SerializeField] private List<Button> bottomMenuBtns;
         [SerializeField] private List<RectTransform> bottomMenuRect;
         [SerializeField] private List<GameObject> Panels;
         [SerializeField] private RectTransform selectedImg;
-
+        private GameObject HomeNode => Panels[2];
         private int nowButton = 2;
         private readonly Vector2 SELECTED = new Vector2(256, 200);  // 选中放大的大小
         private readonly Vector2 NSELECTED = new Vector2(206, 200); // 未选中的大小
@@ -80,6 +79,14 @@ namespace QFramework.Example
 
         protected override void OnClose()
         {
+        }
+
+        private void Update()
+        {
+            if (HealthManager.Instance.UsedHp > 0)
+            {
+                TxtTime.text = HealthManager.Instance.RecoverTimerStr;
+            }
         }
 
         //按钮监听
@@ -311,6 +318,8 @@ namespace QFramework.Example
                 BottomMenuBtns.Hide();
                 TxtLevel.text = LevelManager.Instance.levelId.ToString();
                 SetTakeItem();
+                SetItem();
+
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
             //胜利结算=》返回主页事件
@@ -354,7 +363,7 @@ namespace QFramework.Example
 
             this.RegisterEvent<RefreshItemEvent>(e =>
             {
-                SetTakeItem();
+                SetItem();
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
             this.RegisterEvent<GameStartEvent>(e =>
@@ -451,8 +460,6 @@ namespace QFramework.Example
                 TxtItem2.text = "0";
                 TxtItem3.text = "0";
             }
-
-            SetItem();
         }
 
         /// <summary>
@@ -701,6 +708,7 @@ namespace QFramework.Example
         void SetVitality()
         {
             TxtHeart.text = HealthManager.Instance.NowHp.ToString();
+            _= HealthManager.Instance.UsedHp > 0 ? TxtTime.Show() : TxtTime.Hide();
         }
 
         /// <summary>

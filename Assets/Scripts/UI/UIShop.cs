@@ -21,7 +21,11 @@ namespace QFramework.Example
 		
 		protected override void OnShow()
 		{
-		}
+			BtnClose.onClick.AddListener(() =>
+			{
+                CloseSelf();
+            });
+        }
 		
 		protected override void OnHide()
 		{
@@ -29,6 +33,7 @@ namespace QFramework.Example
 		
 		protected override void OnClose()
 		{
+			BtnClose.onClick.RemoveAllListeners();
 		}
 	}
 }

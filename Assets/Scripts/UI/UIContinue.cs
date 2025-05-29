@@ -7,12 +7,15 @@ namespace QFramework.Example
 	public class UIContinueData : UIPanelData
 	{
 	}
-	public partial class UIContinue : UIPanel, ICanGetUtility
+	public partial class UIContinue : UIPanel, ICanGetUtility, ICanRegisterEvent
     {
+        private const int RESTART_COST = 90;
+
         public IArchitecture GetArchitecture()
         {
             return GameMainArc.Interface;
         }
+
         protected override void OnInit(IUIData uiData = null)
 		{
 			mData = uiData as UIContinueData ?? new UIContinueData();
@@ -25,43 +28,15 @@ namespace QFramework.Example
 		
 		protected override void OnShow()
 		{
-            var coin = CoinManager.Instance.Coin;
-            TxtCoin.text = coin.ToString();
-            if (coin < 90)
-            {
-                TxtCoin.color = Color.red;
-                TxtCoinCost.color = Color.red;
-            }
-            else
-            {
-                TxtCoin.color = Color.white;
-                TxtCoinCost.color = Color.white;
-            }
+			SetCoin();
 
-            BtnContinue.onClick.RemoveAllListeners();
-			BtnContinue.onClick.AddListener(() =>
-			{
-				if (coin >= 90)
-				{
-					CoinManager.Instance.CostCoin(90, () =>
-					{
-                        LevelManager.Instance.RefreshLevel();
-                    });
-                    CloseSelf();
-                }
-				else
-				{
-					//唤起商店
-				}
-				
-            });
+            RegisterBtnEvent();
 
-			BtnClose.onClick.RemoveAllListeners();
-            BtnClose.onClick.AddListener(() =>
-			{
-				CloseSelf();
-				UIKit.OpenPanel<UIDeleteLife>();
-            });
+            this.RegisterEvent<CoinChangeEvent>(e =>
+            {
+                SetCoin();
+
+            }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 		
 		protected override void OnHide()
@@ -70,6 +45,47 @@ namespace QFramework.Example
 		
 		protected override void OnClose()
 		{
-		}
-	}
+            BtnContinue.onClick.RemoveAllListeners();
+            BtnClose.onClick.RemoveAllListeners();
+            BtnAddCoin.onClick.RemoveAllListeners();
+        }
+
+        private void RegisterBtnEvent()
+		{
+            BtnContinue.onClick.AddListener(() =>
+            {
+                if (CoinManager.Instance.Coin >= RESTART_COST)
+                {
+                    CoinManager.Instance.CostCoin(RESTART_COST, () =>
+                    {
+                        LevelManager.Instance.RefreshLevel();
+                    });
+                    CloseSelf();
+                }
+                else
+                {
+                    //唤起商店
+                    UIKit.OpenPanel<UIShop>();
+                }
+
+            });
+            BtnClose.onClick.AddListener(() =>
+            {
+                CloseSelf();
+                UIKit.OpenPanel<UIDeleteLife>();
+            });
+            BtnAddCoin.onClick.AddListener(() =>
+            {
+                UIKit.OpenPanel<UIShop>();
+            });
+        }
+
+		private void SetCoin()
+		{
+            var coin = CoinManager.Instance.Coin;
+            TxtCoin.text = coin.ToString();
+
+            TxtCoinCost.color = coin < RESTART_COST ? Color.red : Color.white;
+        }
+    }
 }

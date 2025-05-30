@@ -11,6 +11,18 @@ public class SaveDataUtility : IUtility, ICanSendEvent
     {
         return GameMainArc.Interface;
     }
+
+    public void SaveInt(string key,int value)
+    {
+        PlayerPrefs.SetInt(key, value);
+    }
+
+    public int LoadIntValue(string key, int defaultValue = 0)
+    {
+        return PlayerPrefs.GetInt(key, defaultValue);
+    }
+
+
     public void SaveLevel(int level)
     {
         //Debug.Log("LevelBefore " + Convert.ToString(clearLevel, 2) + " clearNowLevel " + clearNowLevel + " LevelNow " + Convert.ToString((clearLevel | clearNowLevel), 2));
@@ -24,7 +36,7 @@ public class SaveDataUtility : IUtility, ICanSendEvent
     public int GetLevelClear()
     {
         int clearLevel = PlayerPrefs.GetInt("g_ClearWaterLevel", 1);
-       return clearLevel;
+        return clearLevel;
     }
 
     public void SaveChallenge(int level)
@@ -286,52 +298,5 @@ public class SaveDataUtility : IUtility, ICanSendEvent
     public int GetSceneBox()
     {
         return PlayerPrefs.GetInt("g_WaterSceneBoxRecord", 0);  
-    }
-
-    public void AddItemNum(int item, int num = 1)
-    {
-        var itemNum = GetItemNum(item);
-        SetItemNum(item, itemNum + num);
-        this.SendEvent<RefreshItemEvent>();
-    }
-
-    public void ReduceItemNum(int item, int num = 1)
-    {
-        var itemNum = GetItemNum(item);
-        SetItemNum(item, itemNum - num);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="item">1 回退 2 取消黑色 3 加瓶子 4 加一格瓶子 5 取消所有限制 6 加一格瓶子 7取消两根黑色 8随机颜色</param>
-    /// <returns></returns>
-    public void SetItemNum(int item, int num)
-    {
-        PlayerPrefs.SetInt("g_WaterSceneItem" + item, num);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="item"> 1 回退 2 取消黑色 3 加瓶子 4 加一格瓶子 5 取消所有限制 6 加一格瓶子 7取消两根黑色 8随机颜色</param>
-    /// <returns></returns>
-    public int GetItemNum(int item)
-    {
-        return PlayerPrefs.GetInt("g_WaterSceneItem" + item, 0);
-    }
-
-    /// <summary>
-    /// 连胜次数
-    /// </summary>
-    /// <returns></returns>
-    public void SetCountinueWinNum(int num)
-    {
-        PlayerPrefs.SetInt("g_WaterCountinueWinNum", num);
-    }
-
-    public int GetCountinueWinNum()
-    {
-        return PlayerPrefs.GetInt("g_WaterCountinueWinNum", 0);
     }
 }

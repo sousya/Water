@@ -9,9 +9,12 @@ namespace QFramework.Example
     {
     }
 
-    public partial class UIUnlockScene : UIPanel, ICanGetUtility, ICanRegisterEvent, ICanSendEvent
+    public partial class UIUnlockScene : UIPanel, ICanGetUtility, ICanRegisterEvent, ICanSendEvent, ICanGetModel
     {
         public Animator boxAnim;
+
+        private StageModel stageModel;
+
         public IArchitecture GetArchitecture()
         {
             return GameMainArc.Interface;
@@ -29,6 +32,8 @@ namespace QFramework.Example
 
         protected override void OnShow()
         {
+            stageModel = this.GetModel<StageModel>();
+
             SetScene();
             BtnClose.onClick.RemoveAllListeners();
             BtnClose.onClick.AddListener(() =>
@@ -124,14 +129,11 @@ namespace QFramework.Example
             //避免打断下面逻辑
             BtnClose.interactable = false;
             //增加道具
-            this.GetUtility<SaveDataUtility>().AddItemNum(1, 1);
-            this.GetUtility<SaveDataUtility>().AddItemNum(2, 1);
-            this.GetUtility<SaveDataUtility>().AddItemNum(3, 1);
-            this.GetUtility<SaveDataUtility>().AddItemNum(4, 1);
-            this.GetUtility<SaveDataUtility>().AddItemNum(5, 1);
-            this.GetUtility<SaveDataUtility>().AddItemNum(6, 1);
-            this.GetUtility<SaveDataUtility>().AddItemNum(7, 1);
-            this.GetUtility<SaveDataUtility>().AddItemNum(8, 1);
+            for (int i = 1; i <= GameDefine.GameConst.ITEM_COUNT; i++)
+            {
+                stageModel.AddItem(i, 1);
+            }
+            
             boxAnim.Play("BoxOpen");
             bool overUnlock = CheckOverUnLock(this.GetUtility<SaveDataUtility>().GetSceneRecord(),
                 this.GetUtility<SaveDataUtility>().GetScenePartRecord());

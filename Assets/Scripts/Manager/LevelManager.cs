@@ -13,7 +13,7 @@ using Unity.VisualScripting;
 using UnityEngine.Experimental.AI;
 
 [MonoSingletonPath("[Level]/LevelManager")]
-public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRegisterEvent
+public class LevelManager : MonoBehaviour,IController, ICanSendEvent
 {
     public static LevelManager Instance;
     public ReviewManager _reviewManager;
@@ -72,10 +72,13 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         return GameMainArc.Interface;
     }
 
+    private StageModel stageModel;
+
     private void Awake()
     {
         Instance = this;
         _reviewManager = new ReviewManager();
+        stageModel = this.GetModel<StageModel>();
 
         InitBottle();
     }
@@ -87,11 +90,9 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         //清空携带道具
         StringEventSystem.Global.Register("ClearTakeItem", () =>
         {
-            ClearTakeItem();
+            takeItem.Clear();
 
         }).UnRegisterWhenGameObjectDestroyed(gameObject);
-
-        //this.GetUtility<SaveDataUtility>().SaveLevel(1);
 
         emptyBottle.numCake = 4;
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();
@@ -103,14 +104,6 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
 
         UIKit.OpenPanel<UIBegin>();
 
-    }
-
-    /// <summary>
-    /// 清空携带道具
-    /// </summary>
-    void ClearTakeItem()
-    {
-        takeItem.Clear();
     }
 
     /// <summary>
@@ -368,25 +361,12 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
             {
                 UIKit.OpenPanel<UIVictory>();
             }
-            CheckWinNum();
+
+            // 连胜计数
+            stageModel.AddCountinueWinNum();
         }
         else
             yield return null;
-    }
-
-    /// <summary>
-    /// 连胜判断
-    /// </summary>
-    public void CheckWinNum()
-    {
-        var winNum = this.GetUtility<SaveDataUtility>().GetCountinueWinNum();
-        winNum++;
-
-        if (winNum < 3)
-            this.GetUtility<SaveDataUtility>().SetCountinueWinNum(winNum);
-        else
-            this.GetUtility<SaveDataUtility>().SetCountinueWinNum(3);
-
     }
 
     /// <summary>
@@ -715,7 +695,7 @@ public class LevelManager : MonoBehaviour, ICanSendEvent, ICanGetUtility, ICanRe
         InitBottle(levelInfo);
 
         //当前有连胜，去黑水瓶生效
-        int WinNum = this.GetUtility<SaveDataUtility>().GetCountinueWinNum();
+        int WinNum = stageModel.CountinueWinNum;
         //Debug.Log("当前连胜次数:" + WinNum);
         if (WinNum > 0)
             StringEventSystem.Global.Send("StreakWinItem", WinNum);

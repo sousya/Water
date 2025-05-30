@@ -9,17 +9,16 @@ public class GameMainArc : Architecture<GameMainArc>
     protected override void Init()
     {
         ResKit.Init();
-        //RegisterModels();
+        RegisterModels();
         RegisterUtilitys();
         RegisterSystems();
         CreateInstance();
     }
 
-    /*//ÔÝÎÞÊý¾Ý²ã
     void RegisterModels()
     {
         RegisterModel(new StageModel());
-    }*/
+    }
 
     void RegisterUtilitys()
     {

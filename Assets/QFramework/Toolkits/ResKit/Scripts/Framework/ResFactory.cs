@@ -37,9 +37,9 @@ namespace QFramework
         public static IRes Create(ResSearchKeys resSearchKeys)
         {
             var retRes = mResCreators
-                .Where(creator => creator.Match(resSearchKeys));
-            var retRes1 = retRes.Select(creator => creator.Create(resSearchKeys));
-            var retRes2 = retRes.FirstOrDefault();
+                .Where(creator => creator.Match(resSearchKeys))
+                .Select(creator => creator.Create(resSearchKeys))
+                .FirstOrDefault();
 
             if (retRes == null)
             {
@@ -47,10 +47,7 @@ namespace QFramework
                 return null;
             }
 
-            return mResCreators
-                .Where(creator => creator.Match(resSearchKeys))
-                .Select(creator => creator.Create(resSearchKeys))
-                .FirstOrDefault();
+            return retRes;
         }
 
         public static void AddResCreator<T>() where T : IResCreator, new()

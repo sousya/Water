@@ -20,14 +20,15 @@ namespace QFramework.Example
 		public int item;
 	}
 
-	public partial class UIBuyItem : UIPanel, ICanGetUtility, ICanSendEvent
+	public partial class UIBuyItem : UIPanel, ICanGetUtility, ICanSendEvent, ICanGetModel
     {
+        private StageModel stageModel;
+        [SerializeField] private List<BuyItemInfo> buyItemInfos;
+
         public IArchitecture GetArchitecture()
         {
             return GameMainArc.Interface;
         }
-
-		public List<BuyItemInfo> buyItemInfos;
 
 		protected override void OnInit(IUIData uiData = null)
 		{
@@ -41,7 +42,8 @@ namespace QFramework.Example
 		
 		protected override void OnShow()
 		{
-			var item = buyItemInfos[mData.item - 1];
+            stageModel = this.GetModel<StageModel>();
+            var item = buyItemInfos[mData.item - 1];
 
             var needCoin = item.ItemCost;
             TxtCost.color = CoinManager.Instance.Coin < needCoin ? Color.red : Color.white;
@@ -52,13 +54,10 @@ namespace QFramework.Example
             TxtCost.text = item.ItemCost.ToString();
             TxtNum.text = $"X{item.ItemNum}";
 
-            BtnClose.onClick.RemoveAllListeners();
             BtnClose.onClick.AddListener(() =>
 			{
                 CloseSelf();
             });
-			
-            BtnBuy.onClick.RemoveAllListeners();
             BtnBuy.onClick.AddListener(() =>
             {
                 if (CoinManager.Instance.Coin < needCoin)
@@ -80,11 +79,10 @@ namespace QFramework.Example
                 }
                 CoinManager.Instance.CostCoin(needCoin, () =>
 				{
-					this.GetUtility<SaveDataUtility>().AddItemNum(mData.item, item.ItemNum);
+                    stageModel.AddItem(mData.item, item.ItemNum);
                 });
                 CloseSelf();
             });
-
         }
 		
 		protected override void OnHide()
@@ -93,6 +91,8 @@ namespace QFramework.Example
 		
 		protected override void OnClose()
 		{
-		}
-	}
+            BtnClose.onClick.RemoveAllListeners();
+            BtnBuy.onClick.RemoveAllListeners();
+        }
+    }
 }

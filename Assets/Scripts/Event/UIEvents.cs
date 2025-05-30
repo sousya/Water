@@ -85,6 +85,10 @@ public struct VitalityChangeEvent
 {
 }
 
+public struct UnlimtItemEvent
+{
+}
+
 public struct VitalityTimeChangeEvent
 {
     public long timeOffset;

@@ -6,18 +6,18 @@ using System;
 
 namespace QFramework.Example
 {
-	public partial class ShopManager : ViewController, ICanGetUtility, ICanSendEvent
+	public partial class ShopManager : ViewController, IController
 	{
         [SerializeField] private List<Button> buyGiftPackBtns;
 
         private GooglePayManager googlePay;
         private Dictionary<string ,Action> giftPackBuySuccessActions;
-        private SaveDataUtility saveDataUtility;
+        private StageModel stageModel;
 
         private void Awake()
         {
             googlePay = GooglePayManager.Instance;
-            saveDataUtility = this.GetUtility<SaveDataUtility>();
+            stageModel = this.GetModel<StageModel>();
 
             // 初始化购买成功回调
             giftPackBuySuccessActions = new Dictionary<string, Action>();
@@ -85,12 +85,12 @@ namespace QFramework.Example
             //道具发放
             foreach (var item in _packSo.ItemReward)
             {
-                saveDataUtility.AddItemNum(item.ItemIndex, item.Quantity);
+                stageModel.AddItem(item.ItemIndex, item.Quantity);
             }
             //无限体力发放
             HealthManager.Instance.SetUnLimitHp(_packSo.UnlimitedHp);
             //无限道具
-            //...
+            //...暂用体力时长
             UIKit.ClosePanel<UIShop>();
         }
 

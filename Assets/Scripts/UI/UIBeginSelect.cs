@@ -5,15 +5,23 @@ using System;
 using System.Collections;
 using DG.Tweening;
 using TMPro;
+using System.Collections.Generic;
 
 namespace QFramework.Example
 {
     public class UIBeginSelectData : UIPanelData
     {
     }
-    public partial class UIBeginSelect : UIPanel, ICanGetUtility, ICanSendEvent, ICanRegisterEvent
+    public partial class UIBeginSelect : UIPanel, ICanGetUtility, ICanSendEvent, ICanRegisterEvent, ICanGetModel
     {
         [SerializeField] private Sprite[] giftSprites;
+        [SerializeField] private Button[] addItemBtns;
+
+        [SerializeField] private Button[] selectBtns;
+        [SerializeField] private GameObject[] selectImgs;
+        [SerializeField] private TextMeshProUGUI[] itemNumTxts;
+
+        private StageModel stageModel;
 
         public IArchitecture GetArchitecture()
         {
@@ -32,63 +40,19 @@ namespace QFramework.Example
 
         protected override void OnShow()
         {
+            stageModel = this.GetModel<StageModel>();
+            StringEventSystem.Global.Send("ClearTakeItem");
+
             RigesterEvent();
 
             UpdateWinNum();
             UpdateItem();
-            StringEventSystem.Global.Send("ClearTakeItem");
 
-            BtnClose.onClick.RemoveAllListeners();
             BtnClose.onClick.AddListener(() =>
             {
                 CloseSelf();
             });
 
-            BtnItem1.onClick.RemoveAllListeners();
-            BtnItem1.onClick.AddListener(() =>
-            {
-                if (this.GetUtility<SaveDataUtility>().GetItemNum(6) > 0)
-                {
-                    var show = !ImgSelect1.gameObject.activeSelf;
-                    ImgSelect1.gameObject.SetActive(show);
-                    if (show)
-                        AddItemIfNotExists(6);
-                    else
-                        RemoveItemIfExists(6);
-                }
-            });
-
-            BtnItem2.onClick.RemoveAllListeners();
-            BtnItem2.onClick.AddListener(() =>
-            {
-                if (this.GetUtility<SaveDataUtility>().GetItemNum(7) > 0)
-                {
-                    var show = !ImgSelect2.gameObject.activeSelf;
-                    ImgSelect2.gameObject.SetActive(show);
-
-                    if (show)
-                        AddItemIfNotExists(7);
-                    else
-                        RemoveItemIfExists(7);
-                }
-            });
-
-            BtnItem3.onClick.RemoveAllListeners();
-            BtnItem3.onClick.AddListener(() =>
-            {
-                if (this.GetUtility<SaveDataUtility>().GetItemNum(8) > 0)
-                {
-                    var show = !ImgSelect3.gameObject.activeSelf;
-                    ImgSelect3.gameObject.SetActive(show);
-
-                    if (show)
-                        AddItemIfNotExists(8);
-                    else
-                        RemoveItemIfExists(8);
-                }
-            });
-
-            BtnStart.onClick.RemoveAllListeners();
             BtnStart.onClick.AddListener(() =>
             {
                 if (!HealthManager.Instance.HasHp && !HealthManager.Instance.UnLimitHp)
@@ -101,26 +65,42 @@ namespace QFramework.Example
                 CloseSelf();
             });
 
-            BtnInfo.onClick.RemoveAllListeners();
             BtnInfo.onClick.AddListener(() =>
             {
                 ImgReward.gameObject.SetActive(!ImgReward.gameObject.activeSelf);
             });
 
-            BtnAddItem1.onClick.AddListener(() =>
+            int startID = 6; //道具起始ID
+            for (int i = 0; i < addItemBtns.Length; i++)
             {
-                UIKit.OpenPanel<UIBuyItem>(UILevel.Common, new UIBuyItemData() { item = 6 });
-            });
+                //闭包
+                int _itemId = i + startID;
+                addItemBtns[i].onClick.AddListener(() =>
+                {
+                    if (!HealthManager.Instance.UnLimitHp)
+                        UIKit.OpenPanel<UIBuyItem>(UILevel.Common, new UIBuyItemData() { item = _itemId });
+                });
+            }
 
-            BtnAddItem2.onClick.AddListener(() =>
+            for (int i = 0; i < selectBtns.Length; i++)
             {
-                UIKit.OpenPanel<UIBuyItem>(UILevel.Common, new UIBuyItemData() { item = 7 });
-            });
+                int _itemId = i + startID;
+                var _tempIndex = i;
 
-            BtnAddItem3.onClick.AddListener(() =>
-            {
-                UIKit.OpenPanel<UIBuyItem>(UILevel.Common, new UIBuyItemData() { item = 8 });
-            });
+                selectBtns[i].onClick.AddListener(() =>
+                {
+                    if (stageModel.ItemDic[_itemId] > 0 && !HealthManager.Instance.UnLimitHp) 
+                    {
+                        var show = !selectImgs[_tempIndex].gameObject.activeSelf;
+                        selectImgs[_tempIndex].gameObject.SetActive(show);
+                        if (show)
+                            AddItemIfNotExists(_itemId);
+                        else
+                            RemoveItemIfExists(_itemId);
+                    }
+                });
+            }
+
             ImgReward.Hide();
         }
 
@@ -130,11 +110,28 @@ namespace QFramework.Example
 
         protected override void OnClose()
         {
+            BtnClose.onClick.RemoveAllListeners();
+            BtnStart.onClick.RemoveAllListeners();
+            BtnInfo.onClick.RemoveAllListeners();
+
+            foreach (var btn in selectBtns)
+            {
+                btn.onClick.RemoveAllListeners();
+            }
+            foreach (var btn in addItemBtns)
+            {
+                btn.onClick.RemoveAllListeners();
+            }
         }
 
         void RigesterEvent()
         {
             this.RegisterEvent<RefreshItemEvent>(e =>
+            {
+                UpdateItem();
+
+            }).UnRegisterWhenGameObjectDestroyed(gameObject);
+            this.RegisterEvent<UnlimtItemEvent>(e =>
             {
                 UpdateItem();
 
@@ -163,31 +160,47 @@ namespace QFramework.Example
                 LevelManager.Instance.takeItem.Remove(itemId);
         }
 
+        /// <summary>
+        /// 更新连胜和奖励图标
+        /// </summary>
         void UpdateWinNum()
         {
-            var saveU = this.GetUtility<SaveDataUtility>();
-            int winNum = saveU.GetCountinueWinNum();
-            TxtProgress.text = winNum + " / 3";
-            ImgProgress.fillAmount = winNum * 1f / 3;
+            int _winNum = stageModel.CountinueWinNum;
+            TxtProgress.text = $"{_winNum} / {GameDefine.GameConst.COUNTINUE_WIN_NUM_ItemGift}";
+            ImgProgress.fillAmount = _winNum * 1f / GameDefine.GameConst.COUNTINUE_WIN_NUM_ItemGift;
 
             //0-3胜，更新图标
-            if (winNum == 0 || winNum == 1)
+            if (_winNum == 0 || _winNum == 1)
             {
                 ImgBox.sprite = giftSprites[0];
                 return;
             }
-            ImgBox.sprite = giftSprites[winNum - 1];
+            ImgBox.sprite = giftSprites[_winNum - 1];
         }
 
+        /// <summary>
+        /// 更新道具显示状态
+        /// </summary>
         void UpdateItem()
         {
-            var saveU = this.GetUtility<SaveDataUtility>();
-            var item1 = saveU.GetItemNum(6);
-            var item2 = saveU.GetItemNum(7);
-            var item3 = saveU.GetItemNum(8);
-            UpdateItemDisplay(item1, TxtItem1, BtnAddItem1);
-            UpdateItemDisplay(item2, TxtItem2, BtnAddItem2);
-            UpdateItemDisplay(item3, TxtItem3, BtnAddItem3);
+            if (HealthManager.Instance.UnLimitHp)
+            {
+                UnLimitNode.Show();
+                AddItemIfNotExists(6);
+                AddItemIfNotExists(7);
+                AddItemIfNotExists(8);
+
+                return;
+            }
+            else
+            {
+                StringEventSystem.Global.Send("ClearTakeItem");
+                UnLimitNode.Hide();
+            }
+
+            UpdateItemDisplay(stageModel.ItemDic[6], itemNumTxts[0], addItemBtns[0]);
+            UpdateItemDisplay(stageModel.ItemDic[7], itemNumTxts[1], addItemBtns[1]);
+            UpdateItemDisplay(stageModel.ItemDic[8], itemNumTxts[2], addItemBtns[2]);
         }
 
         /// <summary>
@@ -198,10 +211,6 @@ namespace QFramework.Example
         /// <param name="btnAdd"></param>
         void UpdateItemDisplay(int itemCount, TextMeshProUGUI txtItem, Button btnAdd)
         {
-            //选择道具按钮增加条件，非无线道具可触发，否则默认携带
-            //无线道具时间
-            //...return
-
             if (itemCount > 0)
             {
                 btnAdd.Hide();

@@ -13,7 +13,7 @@ namespace QFramework.Example
     public class UIBeginData : UIPanelData
     {
     }
-    public partial class UIBegin : UIPanel, ICanRegisterEvent, ICanGetUtility
+    public partial class UIBegin : UIPanel, ICanRegisterEvent, ICanGetUtility, ICanGetModel
     {
         public IArchitecture GetArchitecture()
         {
@@ -40,6 +40,8 @@ namespace QFramework.Example
         private readonly float initPosY = 15f;                      // 按钮的初始位置
         #endregion
 
+        private StageModel stageModel;
+
         protected override void OnInit(IUIData uiData = null)
         {
             mData = uiData as UIBeginData ?? new UIBeginData();
@@ -55,6 +57,8 @@ namespace QFramework.Example
 
         protected override void OnShow()
         {
+            stageModel = this.GetModel<StageModel>();
+
             BindBtn();
             RegisterEvent();
             SetVitality();
@@ -104,17 +108,14 @@ namespace QFramework.Example
             {
                 if (!LevelManager.Instance.isPlayFxAnim && GameCtrl.Instance.IsPouring)
                 {
-                    var num = this.GetUtility<SaveDataUtility>().GetItemNum(1);
-                    if (num <= 0)
+                    if (stageModel.ItemDic[1] <= 0)
                     {
                         UIBuyItemData data = new UIBuyItemData() { item = 1 };
                         UIKit.OpenPanel<UIBuyItem>(data);
                         return;
                     }
                     if (LevelManager.Instance.ReturnLast())
-                    {
-                        UseItemUpdateNum(1);
-                    }
+                        stageModel.ReduceItem(1, 1);
                 }
             });
 
@@ -122,8 +123,7 @@ namespace QFramework.Example
             {
                 if (!LevelManager.Instance.isPlayFxAnim && GameCtrl.Instance.IsPouring)
                 {
-                    var num = this.GetUtility<SaveDataUtility>().GetItemNum(2);
-                    if (num <= 0)
+                    if (stageModel.ItemDic[2] <= 0)
                     {
                         UIBuyItemData data = new UIBuyItemData() { item = 2 };
                         UIKit.OpenPanel<UIBuyItem>(data);
@@ -134,7 +134,7 @@ namespace QFramework.Example
                     {
                         LevelManager.Instance.RemoveHide(() =>
                         {
-                            UseItemUpdateNum(2);
+                            stageModel.ReduceItem(2, 1);
                         });
                     }
                 }
@@ -144,8 +144,7 @@ namespace QFramework.Example
             {
                 if (!LevelManager.Instance.isPlayFxAnim && GameCtrl.Instance.IsPouring)
                 {
-                    var num = this.GetUtility<SaveDataUtility>().GetItemNum(3);
-                    if (num <= 0)
+                    if (stageModel.ItemDic[3] <= 0)
                     {
                         UIBuyItemData data = new UIBuyItemData() { item = 3 };
                         UIKit.OpenPanel<UIBuyItem>(data);
@@ -153,7 +152,7 @@ namespace QFramework.Example
                     }
                     LevelManager.Instance.AddBottle(false, () =>
                     {
-                        UseItemUpdateNum(3);
+                        stageModel.ReduceItem(3, 1);
                     });
                 }
             });
@@ -162,8 +161,7 @@ namespace QFramework.Example
             {
                 if (!LevelManager.Instance.isPlayFxAnim && GameCtrl.Instance.IsPouring)
                 {
-                    var num = this.GetUtility<SaveDataUtility>().GetItemNum(4);
-                    if (num <= 0)
+                    if (stageModel.ItemDic[4] <= 0)
                     {
                         UIBuyItemData data = new UIBuyItemData() { item = 4 };
                         UIKit.OpenPanel<UIBuyItem>(data);
@@ -171,7 +169,7 @@ namespace QFramework.Example
                     }
                     LevelManager.Instance.AddBottle(true, () =>
                     {
-                        UseItemUpdateNum(4);
+                        stageModel.ReduceItem(4, 1);
                     });
                 }
             });
@@ -180,8 +178,7 @@ namespace QFramework.Example
             {
                 if (!LevelManager.Instance.isPlayFxAnim && GameCtrl.Instance.IsPouring)
                 {
-                    var num = this.GetUtility<SaveDataUtility>().GetItemNum(5);
-                    if (num <= 0)
+                    if (stageModel.ItemDic[5] <= 0)
                     {
                         UIBuyItemData data = new UIBuyItemData() { item = 5 };
                         UIKit.OpenPanel<UIBuyItem>(data);
@@ -190,7 +187,7 @@ namespace QFramework.Example
                     if (LevelManager.Instance.CheckAllDebuff())
                     {
                         LevelManager.Instance.RemoveAll();
-                        UseItemUpdateNum(5);
+                        stageModel.ReduceItem(5, 1);
                     }
                 }
             });
@@ -234,21 +231,16 @@ namespace QFramework.Example
 
             BtnItem1.onClick.AddListener(() =>
             {
-                if (CheckHaveItem(6))
-                    UseItem(6, BtnItem1);
+                UseItem(6, BtnItem1);
             });
             BtnItem2.onClick.AddListener(() =>
             {
-                if (CheckHaveItem(7))
-                    UseItem(7, BtnItem2);
+                UseItem(7, BtnItem2);
             });
             BtnItem3.onClick.AddListener(() =>
             {
-                if (CheckHaveItem(8))
-                {
-                    LevelManager.Instance.ShowItemSelect();
-                    GameCtrl.Instance.SeletedItem(bottele => { UseItem(8, BtnItem3, bottele); });
-                }
+                LevelManager.Instance.ShowItemSelect();
+                GameCtrl.Instance.SeletedItem(bottele => { UseItem(8, BtnItem3, bottele); });
             });
 
             BtnHead.onClick.RemoveAllListeners();
@@ -435,32 +427,19 @@ namespace QFramework.Example
         /// 进入游戏/重置关卡调用
         void SetTakeItem()
         {
-            if (LevelManager.Instance.takeItem.Count > 0)
-            {
-                //显示道具数量
-                //TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();
-                //TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
-                //TxtItem3.text = this.GetUtility<SaveDataUtility>().GetItemNum(8).ToString();
-                BtnItem1.interactable = LevelManager.Instance.takeItem.Contains(6) && CheckHaveItem(6);
-                BtnItem2.interactable = LevelManager.Instance.takeItem.Contains(7) && CheckHaveItem(7);
-                BtnItem3.interactable = LevelManager.Instance.takeItem.Contains(8) && CheckHaveItem(8);
+            var takeItems = LevelManager.Instance.takeItem;
 
-                //显示只能只用一次
-                if (BtnItem1.interactable)
-                    TxtItem1.text = "1";
-                if (BtnItem2.interactable)
-                    TxtItem2.text = "1"; 
-                if (BtnItem3.interactable)
-                    TxtItem3.text = "1";
-            }
-            else
+            var buttons = new[] { BtnItem1, BtnItem2, BtnItem3 };
+            var texts = new[] { TxtItem1, TxtItem2, TxtItem3 };
+            var itemIds = new[] { 6, 7, 8 };
+
+            for (int i = 0; i < itemIds.Length; i++)
             {
-                BtnItem1.interactable = false;
-                BtnItem2.interactable = false;
-                BtnItem3.interactable = false;
-                TxtItem1.text = "0";
-                TxtItem2.text = "0";
-                TxtItem3.text = "0";
+                int itemId = itemIds[i];
+
+                bool active = (takeItems.Contains(itemId) && CheckHaveItem(itemId)) || HealthManager.Instance.UnLimitHp;
+                buttons[i].interactable = active;
+                texts[i].text = active ? "1" : "0";
             }
         }
 
@@ -471,7 +450,7 @@ namespace QFramework.Example
         /// <returns></returns>
         bool CheckHaveItem(int itemID)
         {
-            if (this.GetUtility<SaveDataUtility>().GetItemNum(itemID) > 0)
+            if (stageModel.ItemDic[itemID] > 0)
                 return true;
             else return false;
         }
@@ -489,9 +468,9 @@ namespace QFramework.Example
                 case 6:
                     LevelManager.Instance.AddBottle(true, () =>
                     {
-                        this.GetUtility<SaveDataUtility>().ReduceItemNum(6);
+                        if (!HealthManager.Instance.UnLimitHp)
+                            stageModel.ReduceItem(6, 1);
                         TxtItem1.text = "0";
-                        //TxtItem1.text = this.GetUtility<SaveDataUtility>().GetItemNum(6).ToString();//显示原数量
                     });
                     break;
 
@@ -500,14 +479,13 @@ namespace QFramework.Example
                         return;
                     ClearBottleBlackWater(2, true, () =>
                     {
-                        this.GetUtility<SaveDataUtility>().ReduceItemNum(7);
+                        if (!HealthManager.Instance.UnLimitHp)
+                            stageModel.ReduceItem(7, 1);
                         TxtItem2.text = "0";
-                        //TxtItem2.text = this.GetUtility<SaveDataUtility>().GetItemNum(7).ToString();
                     });
                     break;
 
                 case 8:
-                    //Debug.Log("可以使用道具");
                     // 索引列表用于随机洗牌
                     List<int> _indices = Enumerable.Range(0, botter.waters.Count).ToList();
                     do
@@ -518,7 +496,6 @@ namespace QFramework.Example
                             (_indices[i], _indices[randIndex]) = (_indices[randIndex], _indices[i]);
                         }
                     }
-                    //while (Enumerable.SequenceEqual(indices, Enumerable.Range(0, botter.waters.Count)));//只考虑索引不考虑值不太准确
                     while (Enumerable.SequenceEqual(_indices.Select(i => botter.waters[i]), botter.waters));
 
                     List<int> _newWaters = new List<int>();
@@ -541,26 +518,21 @@ namespace QFramework.Example
                     {
                         var useColor = botter.waters[i] - 1;
                         if (useColor < 1000)
-                        {
                             botter.waterImg[i].SetColorState(ItemType.UseColor, LevelManager.Instance.waterColor[useColor]);
-                        }
                         else
-                        {
-                            // 根据道具类型设置对应的显示和动画
                             botter.waterImg[i].SetColorState((ItemType)botter.waters[i], LevelManager.Instance.ItemColor);
-                        }
                     }
+
                     //修改水面位置，修改水面颜色并播放水面动画
                     botter.SetNowSpinePos(botter.waters.Count);
                     botter.PlaySpineWaitAnim();
                     botter.CheckWaterItem();
 
-                    //存在小问题，和黑水块交换位置时(不是交换到第一块)，也会触发动画
                     botter.SetHideShow(true);
                     LevelManager.Instance.HideItemSelect();
 
-                    this.GetUtility<SaveDataUtility>().ReduceItemNum(8);
-                    //TxtItem3.text = this.GetUtility<SaveDataUtility>().GetItemNum(8).ToString();
+                    if (!HealthManager.Instance.UnLimitHp)
+                        stageModel.ReduceItem(8, 1);
                     TxtItem3.text = "0";
                     //Debug.Log("打乱顺序成功");
                     break;
@@ -606,57 +578,20 @@ namespace QFramework.Example
         /// </summary>
         private void SetItem()
         {
-            var saveU = this.GetUtility<SaveDataUtility>();
-            BtnAddStepBack.gameObject.SetActive(saveU.GetItemNum(1) <= 0);
-            TxtRefreshNum.text = saveU.GetItemNum(1).ToString();
+            BtnAddStepBack.gameObject.SetActive(stageModel.ItemDic[1] <= 0);
+            TxtRefreshNum.text = stageModel.ItemDic[1].ToString();
 
-            BtnAddRemove.gameObject.SetActive(saveU.GetItemNum(2) <= 0);
-            TxtRemoveHideNum.text = saveU.GetItemNum(2).ToString();
+            BtnAddRemove.gameObject.SetActive(stageModel.ItemDic[2] <= 0);
+            TxtRemoveHideNum.text = stageModel.ItemDic[2].ToString();
 
-            BtnAddAddBottle.gameObject.SetActive(saveU.GetItemNum(3) <= 0);
-            TxtAddBottleNum.text = saveU.GetItemNum(3).ToString();
+            BtnAddAddBottle.gameObject.SetActive(stageModel.ItemDic[3] <= 0);
+            TxtAddBottleNum.text = stageModel.ItemDic[3].ToString();
 
-            BtnAddHalfBottle.gameObject.SetActive(saveU.GetItemNum(4) <= 0);
-            TxtAddHalfBottleNum.text = saveU.GetItemNum(4).ToString();
+            BtnAddHalfBottle.gameObject.SetActive(stageModel.ItemDic[4] <= 0);
+            TxtAddHalfBottleNum.text = stageModel.ItemDic[4].ToString();
 
-            BtnAddRemoveBottle.gameObject.SetActive(saveU.GetItemNum(5) <= 0);
-            TxtRemoveAllNum.text = saveU.GetItemNum(5).ToString();
-        }
-
-        /// <summary>
-        /// 使用道具后的回调，更新对应道具剩余数量
-        /// </summary>
-        void UseItemUpdateNum(int itemId)
-        {
-            var saveU = this.GetUtility<SaveDataUtility>();
-            switch (itemId)
-            {
-                case 1:
-                    saveU.ReduceItemNum(1);
-                    BtnAddStepBack.gameObject.SetActive(saveU.GetItemNum(1) <= 0);
-                    TxtRefreshNum.text = saveU.GetItemNum(1).ToString();
-                    break;
-                case 2:
-                    saveU.ReduceItemNum(2);
-                    BtnAddRemove.gameObject.SetActive(saveU.GetItemNum(2) <= 0);
-                    TxtRemoveHideNum.text = saveU.GetItemNum(2).ToString();
-                    break;
-                case 3:
-                    saveU.ReduceItemNum(3);
-                    BtnAddAddBottle.gameObject.SetActive(saveU.GetItemNum(3) <= 0);
-                    TxtAddBottleNum.text = saveU.GetItemNum(3).ToString();
-                    break;
-                case 4:
-                    saveU.ReduceItemNum(4);
-                    BtnAddHalfBottle.gameObject.SetActive(saveU.GetItemNum(4) <= 0);
-                    TxtAddHalfBottleNum.text = saveU.GetItemNum(4).ToString();
-                    break;
-                case 5:
-                    saveU.ReduceItemNum(5);
-                    BtnAddRemoveBottle.gameObject.SetActive(saveU.GetItemNum(5) <= 0);
-                    TxtRemoveAllNum.text = saveU.GetItemNum(5).ToString();
-                    break;
-            }
+            BtnAddRemoveBottle.gameObject.SetActive(stageModel.ItemDic[5] <= 0);
+            TxtRemoveAllNum.text = stageModel.ItemDic[5].ToString();
         }
 
         #endregion

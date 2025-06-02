@@ -76,6 +76,7 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
+                return half4(1, 0, 0, 1);
                 clip(_FillHeight - i.positionWS.y);
                 const half4 main = _Color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 return main;
@@ -126,7 +127,8 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
 
             float4 UnlitFragment(Varyings i) : SV_Target
             {
-                clip(_FillHeight - i.positionWS.y);
+                //return float4(1, 0, 0, 1);
+                //clip(_FillHeight - i.positionWS.y);
                 //clip(-1);
                 float4 mainTex = _Color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 return mainTex;

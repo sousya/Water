@@ -394,6 +394,8 @@ MonoBehaviour:
   - {fileID: 3409483459927715680}
   - {fileID: 1780947409726232399}
   - {fileID: 873212456605445193}
+  ImgCoinWinProcess: {fileID: 5746700751567630935}
+  TxtCoinWinProgress: {fileID: 653153729423445515}
   BtnClose: {fileID: 5821182617835892991}
   ImgBox: {fileID: 4778741037391993547}
   BtnInfo: {fileID: 4175734599873356182}
@@ -4384,8 +4386,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 61.7, y: -64.7}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 4.6, y: -62.4}
+  m_SizeDelta: {x: 94.7543, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1824234842813595437
 CanvasRenderer:
@@ -4415,7 +4417,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1/10
+  m_text: 0/10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 208e9584476388c4f8af09c3bae661bb, type: 2}
   m_sharedMaterial: {fileID: 2695514029084683534, guid: 208e9584476388c4f8af09c3bae661bb, type: 2}
@@ -4442,15 +4444,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -4501,7 +4503,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2971751293327342223
 RectTransform:
   m_ObjectHideFlags: 0

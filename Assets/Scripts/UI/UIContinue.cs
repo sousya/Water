@@ -58,6 +58,9 @@ namespace QFramework.Example
                 {
                     CoinManager.Instance.CostCoin(RESTART_COST, () =>
                     {
+                        string _del = $"重置关卡:{this.GetUtility<SaveDataUtility>().GetLevelClear()}," +
+                            $"当前关卡进度:{this.GetUtility<SaveDataUtility>().GetLevelClear()}";
+                        AnalyticsManager.Instance.SendLevelEvent(_del);
                         LevelManager.Instance.RefreshLevel();
                     });
                     CloseSelf();

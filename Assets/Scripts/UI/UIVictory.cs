@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using QFramework;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace QFramework.Example
 {
@@ -14,6 +15,7 @@ namespace QFramework.Example
 		{
 			return GameMainArc.Interface;
 		}
+
 		protected override void OnInit(IUIData uiData = null)
 		{
 			mData = uiData as UIVictoryData ?? new UIVictoryData();
@@ -22,7 +24,10 @@ namespace QFramework.Example
 
 		protected override void OnOpen(IUIData uiData = null)
 		{
-		}
+			string _del = $"用户通过关卡:{this.GetUtility<SaveDataUtility>().GetLevelClear() - 1}," +
+				$"当前关卡进度:{this.GetUtility<SaveDataUtility>().GetLevelClear()}";
+			AnalyticsManager.Instance.SendLevelEvent(_del);
+        }
 
 		protected override void OnShow()
 		{
@@ -56,7 +61,8 @@ namespace QFramework.Example
 		IEnumerator WaitClose()
         {
 			yield return new WaitForSeconds(3f);
-			UIKit.OpenPanel<UIGetCoin>();
+			
+            UIKit.OpenPanel<UIGetCoin>();
 			CloseSelf();
         }
     }

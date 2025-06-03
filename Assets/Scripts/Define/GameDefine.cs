@@ -11,12 +11,18 @@ namespace GameDefine
         public const int RecoveryTime = 1800;
 
         public const int ITEM_COUNT = 8;
-        public const int COUNTINUE_WIN_NUM_ItemGift = 3;
+        public const int CONTINUE_WIN_NUM_COIN = 10;
+        public const int WIN_COINS = 20;
+
+        public const string ANALYTICS_EVENT_LEVEL_COMPLETE = "level_complete";
+        public const string LEVEL = "level";
+        public const string DETAILS = "details";
 
         //关卡引导
         public static readonly Dictionary<int, (string, string)> GuideLevelInfo = new Dictionary<int, (string, string)>
         {
             { 1, ("Make the water in the water bottle the same color", "GuideAnim_1") },
+            { 2, ("Only pour water into the same color", "GuideAnim_2") },
             { 3, ("Synthesize water of the same color as the blocking gem to lift the blocking cloth", "GuideAnim_3") },
             { 11, ("Combining two brooms can remove water of the same color", "GuideAnim_11") },
             { 16, ("Combining two potion bottles can change 4 water of the same color", "GuideAnim_16") },

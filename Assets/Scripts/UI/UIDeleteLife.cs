@@ -13,6 +13,7 @@ namespace QFramework.Example
         {
             return GameMainArc.Interface;
         }
+
         protected override void OnInit(IUIData uiData = null)
 		{
 			mData = uiData as UIDeleteLifeData ?? new UIDeleteLifeData();

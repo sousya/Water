@@ -18,7 +18,7 @@ public class AnalyticsManager : MonoSingleton<AnalyticsManager>, ICanGetUtility,
             AnalyticsService.Instance.StartDataCollection();
             //Debug.Log("Analytics 数据收集已启动");
 
-            TestSendEvent();
+            //TestSendEvent();
         }
         catch (System.Exception e)
         {
@@ -28,15 +28,28 @@ public class AnalyticsManager : MonoSingleton<AnalyticsManager>, ICanGetUtility,
 
     }
 
-    public void SendServerEvent(string eventName, Dictionary<string, object> parameters)
+    public void SendLevelEvent(string del)
+    {
+        Dictionary<string, object> _levelEvent = new Dictionary<string, object>
+        {
+            { GameDefine.GameConst.LEVEL, this.GetUtility<SaveDataUtility>().GetLevelClear()},
+            { GameDefine.GameConst.DETAILS, del}
+        };
+        SendServerEvent(GameDefine.GameConst.ANALYTICS_EVENT_LEVEL_COMPLETE, _levelEvent);
+    }
+
+    private void SendServerEvent(string eventName, Dictionary<string, object> parameters)
     {
         // 旧版-已弃用
         //AnalyticsService.Instance.CustomData(eventName, parameters);
 
-        // 新版-发送自定义事件方法 示例
-        var customEvent = new CustomEvent("level_complete");
-        customEvent["level"] = 5;
-        customEvent["time_spent"] = 120.5f;
+        // 新版-发送自定义事件方法
+        // 传递的键需要在Unity Analytics中预先定义
+        var customEvent = new CustomEvent(eventName);
+        foreach (var pair in parameters)
+        {
+            customEvent[pair.Key] = pair.Value;
+        }
 
         // 发送事件
         AnalyticsService.Instance.RecordEvent(customEvent);

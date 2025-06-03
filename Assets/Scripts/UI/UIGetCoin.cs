@@ -7,12 +7,15 @@ namespace QFramework.Example
 	public class UIGetCoinData : UIPanelData
 	{
 	}
-	public partial class UIGetCoin : UIPanel, ICanSendEvent, ICanGetUtility
+	public partial class UIGetCoin : UIPanel, ICanSendEvent, ICanGetUtility, ICanGetModel
     {
+        private StageModel stageModel;
+
         public IArchitecture GetArchitecture()
         {
             return GameMainArc.Interface;
         }
+
         protected override void OnInit(IUIData uiData = null)
 		{
 			mData = uiData as UIGetCoinData ?? new UIGetCoinData();
@@ -21,13 +24,14 @@ namespace QFramework.Example
 		
 		protected override void OnOpen(IUIData uiData = null)
 		{
+            stageModel = this.GetModel<StageModel>();   
         }
 
         protected override void OnShow()
         {
 			BindClick();
-
-			TxtLevel.text = "Level " + (this.GetUtility<SaveDataUtility>().GetLevelClear() - 1).ToString();
+            TxtCoin.text = ((int)(GameDefine.GameConst.WIN_COINS * stageModel.GoldCoinsMultiple)).ToString();
+            TxtLevel.text = "Level " + (this.GetUtility<SaveDataUtility>().GetLevelClear() - 1).ToString();
         }
 		
 		protected override void OnHide()
@@ -36,7 +40,8 @@ namespace QFramework.Example
 		
 		protected override void OnClose()
 		{
-		}
+            stageModel = null;
+        }
 
 		void BindClick()
 		{

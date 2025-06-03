@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:12d4f85f-679b-49e7-99b7-5b054705fe29
+	// Generate Id:c93fafa2-64a7-498e-9b83-a9e57b6c5df8
 	public partial class UIGetCoin
 	{
 		public const string Name = "UIGetCoin";
@@ -17,8 +17,6 @@ namespace QFramework.Example
 		[SerializeField]
 		public UnityEngine.UI.Button BtnContinue;
 		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtRetry;
-		[SerializeField]
 		public UnityEngine.UI.Button BtnClose;
 		
 		private UIGetCoinData mPrivateData = null;
@@ -28,7 +26,6 @@ namespace QFramework.Example
 			TxtCoin = null;
 			TxtLevel = null;
 			BtnContinue = null;
-			TxtRetry = null;
 			BtnClose = null;
 			
 			mData = null;

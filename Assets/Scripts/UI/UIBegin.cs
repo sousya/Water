@@ -7,6 +7,7 @@ using System.Collections;
 using DG.Tweening;
 using System.Linq;
 using System;
+using TMPro;
 
 namespace QFramework.Example
 {
@@ -40,6 +41,7 @@ namespace QFramework.Example
         private readonly float initPosY = 15f;                      // 按钮的初始位置
         #endregion
 
+        private TextMeshProUGUI mTxtCoinAdd;
         private StageModel stageModel;
 
         protected override void OnInit(IUIData uiData = null)
@@ -58,6 +60,7 @@ namespace QFramework.Example
         protected override void OnShow()
         {
             stageModel = this.GetModel<StageModel>();
+            mTxtCoinAdd = TxtCoinAdd.GetComponent<TextMeshProUGUI>();
 
             BindBtn();
             RegisterEvent();
@@ -349,6 +352,10 @@ namespace QFramework.Example
 
             this.RegisterEvent<ReturnMainEvent>(e =>
             {
+                string _del = $"用户退出关卡:{this.GetUtility<SaveDataUtility>().GetLevelClear()}," +
+                $"当前关卡进度:{this.GetUtility<SaveDataUtility>().GetLevelClear()}";
+                AnalyticsManager.Instance.SendLevelEvent(_del);
+
                 StartOrOverChangePanel(false, true);
                 SetScene();
                 InitBeginMenuButton();
@@ -662,11 +669,12 @@ namespace QFramework.Example
 
             yield return new WaitForSeconds(1.5f);
             SetStar();
+            mTxtCoinAdd.text = $"+{GameConst.WIN_COINS * stageModel.GoldCoinsMultiple}";
             TxtCoinAdd.Play("TxtUp");
             coinFx.Play(10);
 
             yield return new WaitForSeconds(1.5f);
-            CoinManager.Instance.AddCoin(20);
+            CoinManager.Instance.AddCoin((int)(GameConst.WIN_COINS * stageModel.GoldCoinsMultiple));
         }
 
         /// <summary>

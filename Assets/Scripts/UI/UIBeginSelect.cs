@@ -21,7 +21,13 @@ namespace QFramework.Example
         [SerializeField] private GameObject[] selectImgs;
         [SerializeField] private TextMeshProUGUI[] itemNumTxts;
 
+        [Header("consecutive_coin")]
+        [SerializeField] private Image ImgCoinWinProcess;
+        [SerializeField] private TextMeshProUGUI TxtCoinWinProgress;
+
         private StageModel stageModel;
+
+        private const int CONTINUE_WIN_NUM_ItemGift = 3;
 
         public IArchitecture GetArchitecture()
         {
@@ -161,21 +167,29 @@ namespace QFramework.Example
         }
 
         /// <summary>
-        /// 更新连胜和奖励图标
+        /// 更新连胜相关显示
         /// </summary>
         void UpdateWinNum()
         {
-            int _winNum = stageModel.CountinueWinNum;
-            TxtProgress.text = $"{_winNum} / {GameDefine.GameConst.COUNTINUE_WIN_NUM_ItemGift}";
-            ImgProgress.fillAmount = _winNum * 1f / GameDefine.GameConst.COUNTINUE_WIN_NUM_ItemGift;
+            int _curWinNum = stageModel.CountinueWinNum;
+
+            int _winNum_Gift = _curWinNum > CONTINUE_WIN_NUM_ItemGift ? CONTINUE_WIN_NUM_ItemGift : _curWinNum;
+            int _winNum_Coin = _curWinNum > GameDefine.GameConst.CONTINUE_WIN_NUM_COIN ? GameDefine.GameConst.CONTINUE_WIN_NUM_COIN : _curWinNum;
+
+            TxtProgress.text = $"{_winNum_Gift} / {CONTINUE_WIN_NUM_ItemGift}";
+            ImgProgress.fillAmount = _winNum_Gift * 1f / CONTINUE_WIN_NUM_ItemGift;
+
+            TxtCoinWinProgress.text = $"{_winNum_Coin}/{GameDefine.GameConst.CONTINUE_WIN_NUM_COIN}";
+            //0.081f * 连胜次数 + 0.095f映射值(1-10连胜映射公式)
+            ImgCoinWinProcess.fillAmount = 0.081f * _winNum_Coin + 0.095f;
 
             //0-3胜，更新图标
-            if (_winNum == 0 || _winNum == 1)
+            if (_winNum_Gift == 0 || _winNum_Gift == 1)
             {
                 ImgBox.sprite = giftSprites[0];
                 return;
             }
-            ImgBox.sprite = giftSprites[_winNum - 1];
+            ImgBox.sprite = giftSprites[_winNum_Gift - 1];
         }
 
         /// <summary>

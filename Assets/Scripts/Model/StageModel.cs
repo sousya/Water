@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using QFramework;
 using GameDefine;
+using Unity.VisualScripting;
 
 public class StageModel : AbstractModel
 {
     public BindableDictionary<int, int> ItemDic;
 
     public int CountinueWinNum => mCountinueWinNum.Value;
+
     private BindableProperty<int> mCountinueWinNum;
+
+    private float mGoldCoinsMultiple = 1;
+    public float GoldCoinsMultiple => mGoldCoinsMultiple;
 
     private const string ITEM_SIGN = "g_WaterSceneItem";
     private const string COUNTINUE_WIN_NUM_SIGN = "g_WaterCountinueWinNum";
@@ -74,13 +79,14 @@ public class StageModel : AbstractModel
 
     public void AddCountinueWinNum()
     {
-        int tempNum = mCountinueWinNum.Value;
-        tempNum++;
-        //mCountinueWinNum.Value = tempNum < GameConst.MAX_COUNTINUE_WIN_NUM ? tempNum : GameConst.MAX_COUNTINUE_WIN_NUM;
+        mCountinueWinNum.Value++;
+        //大于10连胜生效(不含10连胜/本次过关不生效)
+        mGoldCoinsMultiple = mCountinueWinNum.Value > GameConst.CONTINUE_WIN_NUM_COIN ? 1.5f : 1;
     }
 
     public void ResetCountinueWinNum()
     {
         mCountinueWinNum.Value = 0;
+        mGoldCoinsMultiple = 1;
     }
 }

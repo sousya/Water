@@ -72,11 +72,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         clearHide,          // 消除藤蔓动画 
         limitColorSpine;    // 消除颜色限制动画
 
-    public GameObject finishGo,  // 完成状态动画对象
-        bottleOne,  // 容量1的瓶子UI
-        bottleTwo,  // 容量2的瓶子UI
-        bottleThree,// 容量3的瓶子UI 
-        bottleFour; // 容量4的瓶子UI
+    // 完成状态动画对象
+    public GameObject finishGo;  
    
     // 当前顶部水块的索引
     public int topIdx
@@ -119,6 +116,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public void Init(BottleProperty property, int idx)
     {
         originProperty = property;
+        //配置初始容量
+        //maxNum = property.numCake;
+
         isFinish = false; isFreeze = false; isClearHideAnim = false;
         finishGo.SetActive(isFinish);
         bubbleSpine.gameObject.SetActive(false);
@@ -440,13 +440,16 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public bool CheckMoveIn(int color)
     {
         var top = GetMoveOutTop();
+
         if (isClearHide || isNearHide || isFinish || GetLeftEmpty() == 0 || (limitColor != 0 && limitColor != color))
         {
             return false;
         }
 
-        if (color < 1000)///判断非道具
+        ///color非道具
+        if (color < 1000)
         {
+            ///color == top 且 top不为空
             if (color != top && top != 0)
             {
                 return false;
@@ -454,13 +457,16 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
         else
         {
-            if (top > 1000)////判断自身顶部是否为道具 
+            ////判断自身顶部是否为道具 
+            if (top > 1000)
             {
-                return top == color;////相同道具才可放置
+                ////相同道具才可放置
+                return top == color;
             }
             else
             {
-                return true;
+                ///color是道具，top不是道具
+                return false;   
             }
         }
 
@@ -1650,10 +1656,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     /// </summary>
     public void SetMaxBottle()
     {
-        bottleOne.SetActive(maxNum == 1);
-        bottleTwo.SetActive(maxNum == 2);
-        bottleThree.SetActive(maxNum == 3);
-        bottleFour.SetActive(maxNum == 4);
         ImgBottleOne.gameObject.SetActive(maxNum == 1);
         ImgBottleTwo.gameObject.SetActive(maxNum == 2);
         ImgBottleThree.gameObject.SetActive(maxNum == 3);

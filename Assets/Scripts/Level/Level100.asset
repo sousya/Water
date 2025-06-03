@@ -104,7 +104,7 @@ MonoBehaviour:
     isNearHide: 0
     isFreeze: 0
   gameType: 0
-  clearList: 010000000300000007000000080000000a000000
+  clearList: 010000000300000007000000080000000a00000003000000
   hideList: 
   bombNum: 0
   countDownNum: 0

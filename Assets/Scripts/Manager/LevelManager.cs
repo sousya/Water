@@ -354,13 +354,9 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
 
             //前五关(前五关应该不统计连胜)
             if (levelId < 5)
-            {
                 StartGame(levelId + 1);
-            }
             else
-            {
                 UIKit.OpenPanel<UIVictory>();
-            }
 
             // 连胜计数
             stageModel.AddCountinueWinNum();
@@ -753,12 +749,12 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     /// <param name="levelInfo"></param>
     public void InitBottle(LevelCreateCtrl levelInfo)
     {
-
         for (int i = 0; i < levelInfo.bottles.Count; i++)
         {
             var bottle = nowBottles[i];
-            bottle.Init(levelInfo.bottles[i], i);
+            //瓶子还没做初始配置，直接全部设置4（要改）
             bottle.maxNum = 4;
+            bottle.Init(levelInfo.bottles[i], i);
         }
     }
 

@@ -33,7 +33,7 @@ MonoBehaviour:
     isFreeze: 0
   - waterSet: 03000000d507000007000000
     isHide: 000000
-    waterItem: 00000000000000000000000000000000
+    waterItem: 000000000000000000000000
     numCake: 4
     limitColor: 0
     lockType: 1

@@ -37,7 +37,7 @@ public class LevelCreateCtrl : ScriptableObject
         public List<bool> isHide = new List<bool>();
         // 每层水的附加状态（如冰块、炸弹等）
         public List<WaterItem> waterItem = new List<WaterItem>();
-        // 不确定
+        // 最大水层数
         public int numCake;
         // 限制往瓶子倒水的颜色-同水颜色编号（0 表示无限制）
         public int limitColor;

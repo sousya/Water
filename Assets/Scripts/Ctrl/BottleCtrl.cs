@@ -616,7 +616,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
 
         var color = GetMoveOutTop();
-        MoveToOtherAnim(other, color);
+        MoveToOtherAnim(other, topIdx, moveNum, color);
         PlayOutAnim(moveNum, topIdx, color);
 
         for (int i = 0; i < moveNum; i++)
@@ -1220,7 +1220,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     }
 
-    public void MoveToOtherAnim(BottleCtrl other, int useColor = -1)
+    public void MoveToOtherAnim(BottleCtrl other, int topIndex, int numWater, int useColor = -1)
     {
         isPlayAnim = true;
         var bottleRenderUpdate = bottleAnim.GetComponent<BottleRenderUpdate>();
@@ -1228,7 +1228,10 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
         if (useColor < 1000)
         {
-            bottleAnim.Play("BottleOut");
+            topIndex += 1;
+            string bottleAnimName = $"BottleOut{topIndex}_{topIndex - numWater}";
+            bottleAnim.Play(bottleAnimName);
+            Debug.LogWarning(bottleAnimName);
         }
         else
         {

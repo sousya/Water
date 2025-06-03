@@ -13,6 +13,7 @@ public class BottleRenderUpdate : MonoBehaviour
     public Image MaskImage;
 
     public int bottleIndex = 1;
+    public GameObject waterTopSurface;
 
     private Material _material;
     private Vector3 _waterScale;
@@ -46,16 +47,28 @@ public class BottleRenderUpdate : MonoBehaviour
         _waterScale = WaterSpine.localScale;
         var waterSpineMaterial = new Material(WaterSpine.GetComponent<SkeletonGraphic>().material);
         waterSpineMaterial.SetFloat("_StencilWater", bottleIndex);
+        //waterSpineMaterial.SetFloat("_StencilCompWater", (int)UnityEngine.Rendering.CompareFunction.Equal);
         waterSpineMaterial.SetFloat("_StencilCompWater", (int)UnityEngine.Rendering.CompareFunction.Equal);
         WaterSpine.GetComponent<SkeletonGraphic>().material = waterSpineMaterial;
     }
 
-    public void Update()
+    public void LateUpdate()
     {
         WaterSpine.rotation = Quaternion.identity;
         transform.rotation.ToAngleAxis(out float angle, out _);
-        var oneDivCos = 1.0f / Mathf.Max(Mathf.Cos(angle * Mathf.Deg2Rad), 0.001f);
+        var oneDivCos = 1.0f / Mathf.Max(Mathf.Cos(angle * Mathf.Deg2Rad), 0.1f);
         WaterSpine.localScale = new Vector3(oneDivCos *_waterScale.x, _waterScale.y, _waterScale.z);
+
+        // 设置最高水位线
+        var waterHeightClip = waterTopSurface.transform.position.y;
+        foreach (var waterRenderUpdater in waterRenders)
+        {
+            waterRenderUpdater.FillHeightClip = waterHeightClip;
+        }
+        var position = WaterSpine.position;
+        var waterSpineHeight = Mathf.Min(position.y, waterHeightClip);
+        position = new Vector3(position.x, waterSpineHeight, position.z);
+        WaterSpine.position = position;
     }
 
     // 移动的瓶子，最后渲染

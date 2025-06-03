@@ -128,7 +128,7 @@ Shader "Water/2D/Sprite-Lit-Default-Water"
             float4 UnlitFragment(Varyings i) : SV_Target
             {
                 //return float4(1, 0, 0, 1);
-                //clip(_FillHeight - i.positionWS.y);
+                clip(_FillHeight - i.positionWS.y);
                 //clip(-1);
                 float4 mainTex = _Color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 return mainTex;

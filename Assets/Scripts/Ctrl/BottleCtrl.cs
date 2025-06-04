@@ -1231,7 +1231,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             topIndex += 1;
             string bottleAnimName = $"BottleOut{topIndex}_{topIndex - numWater}";
             bottleAnim.Play(bottleAnimName);
-            Debug.LogWarning(bottleAnimName);
+            //Debug.LogWarning(bottleAnimName);
         }
         else
         {

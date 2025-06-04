@@ -19,18 +19,41 @@ public class WaterRenderUpdate : MonoBehaviour
     private Material _material;
     private Image _image;
     private float _fillAmount;
+
+    private void ValidMaterial()
+    {
+        if (_material)
+        {
+            return;
+        }
+
+        if (!_meshRenderer)
+        {
+            _meshRenderer = GetComponent<MeshRenderer>();
+        }
+        _material = _meshRenderer.material;
+    }
     
     public Color WaterColor
     {
-        get => _material.GetColor(MainColor);
-        set => _material.SetColor(MainColor, value);
+        get
+        {
+            ValidMaterial();
+            return _material.GetColor(MainColor);
+        }
+        set
+        {
+            ValidMaterial();
+            _material.SetColor(MainColor, value);
+        }
     }
-    
+
     public float FillHeightClip
     {
         set
         {
             //Debug.Log(value + "-----------------");
+            ValidMaterial();
             _material.SetFloat("_FillHeight", Mathf.Min(value, FillAmount));
         }
     }
@@ -48,19 +71,32 @@ public class WaterRenderUpdate : MonoBehaviour
 
     public float Stencil
     {
-        get => _material.GetFloat("_StencilRef");
+        get
+        {
+            ValidMaterial();
+            return _material.GetFloat("_StencilRef");
+        }
         set
         {
+            ValidMaterial();
             _material.SetFloat("_StencilRef", value);
         }
     }
-    
+
     public int RenderQueue
     {
-        get => _material.renderQueue;
-        set => _material.renderQueue = value;
+        get
+        {
+            ValidMaterial();
+            return _material.renderQueue;
+        }
+        set
+        {
+            ValidMaterial();
+            _material.renderQueue = value;
+        }
     }
-    
+
     // Start is called before the first frame update
     void OnEnable()
     {

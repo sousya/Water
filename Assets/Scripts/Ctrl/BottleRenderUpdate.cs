@@ -1,7 +1,9 @@
 
 using System;
+using QFramework;
 using Spine.Unity;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class BottleRenderUpdate : MonoBehaviour
@@ -14,9 +16,13 @@ public class BottleRenderUpdate : MonoBehaviour
 
     public int bottleIndex = 1;
     public GameObject waterTopSurface;
+    public Transform fillWaterTransform;
+    public Transform fillWaterPosition; // 固定倒水的位置
 
     private Material _material;
     private Vector3 _waterScale;
+    
+    private BottleCtrl _otherBottle = null;
     public void Start()
     {
         _material = new Material(MaskImage.material);
@@ -69,12 +75,20 @@ public class BottleRenderUpdate : MonoBehaviour
         var waterSpineHeight = Mathf.Min(position.y, waterHeightClip);
         position = new Vector3(position.x, waterSpineHeight, position.z);
         WaterSpine.position = position;
+        
+        // 设置fill water效果的位置
+        if (fillWaterTransform != null && _otherBottle != null)
+        {
+            fillWaterTransform.localRotation = Quaternion.Inverse(transform.rotation);
+            fillWaterTransform.position = new Vector3(_otherBottle.transform.position.x, fillWaterPosition.position.y, fillWaterPosition.position.z);
+        }
     }
 
     // 移动的瓶子，最后渲染
-    public void SetMoveBottleRenderState(bool isMove)
+    public void SetMoveBottleRenderState(bool isMove, BottleCtrl otherBottle = null)
     {
         var transparentRenderQueue = isMove ? 3100 : 3000;
+        _otherBottle = otherBottle;
 
         foreach (var waterRenderUpdater in waterRenders)
         {

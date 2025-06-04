@@ -1224,7 +1224,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     {
         isPlayAnim = true;
         var bottleRenderUpdate = bottleAnim.GetComponent<BottleRenderUpdate>();
-        bottleRenderUpdate.SetMoveBottleRenderState(true);
+        bottleRenderUpdate.SetMoveBottleRenderState(true, other);
 
         if (useColor < 1000)
         {

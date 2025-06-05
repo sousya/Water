@@ -1,8 +1,11 @@
 
 using System;
+using System.Collections.Generic;
 using QFramework;
 using Spine.Unity;
+using UnityEditor.VersionControl;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -18,6 +21,7 @@ public class BottleRenderUpdate : MonoBehaviour
     public GameObject waterTopSurface;
     public Transform fillWaterTransform;
     public Transform fillWaterPosition; // 固定倒水的位置
+    public Transform[] corners;
 
     private Material _material;
     private Vector3 _waterScale;
@@ -60,21 +64,12 @@ public class BottleRenderUpdate : MonoBehaviour
 
     public void LateUpdate()
     {
-        WaterSpine.rotation = Quaternion.identity;
-        transform.rotation.ToAngleAxis(out float angle, out _);
-        var oneDivCos = 1.0f / Mathf.Max(Mathf.Cos(angle * Mathf.Deg2Rad), 0.1f);
-        WaterSpine.localScale = new Vector3(oneDivCos *_waterScale.x, _waterScale.y, _waterScale.z);
-
         // 设置最高水位线
         var waterHeightClip = waterTopSurface.transform.position.y;
         foreach (var waterRenderUpdater in waterRenders)
         {
             waterRenderUpdater.FillHeightClip = waterHeightClip;
         }
-        var position = WaterSpine.position;
-        var waterSpineHeight = Mathf.Min(position.y, waterHeightClip);
-        position = new Vector3(position.x, waterSpineHeight, position.z);
-        WaterSpine.position = position;
         
         // 设置fill water效果的位置
         if (fillWaterTransform != null && _otherBottle != null)
@@ -82,6 +77,30 @@ public class BottleRenderUpdate : MonoBehaviour
             fillWaterTransform.localRotation = Quaternion.Inverse(transform.rotation);
             fillWaterTransform.position = new Vector3(_otherBottle.transform.position.x, fillWaterPosition.position.y, fillWaterPosition.position.z);
         }
+        
+        // 计算顶部spine的位置和缩放
+        WaterSpine.rotation = Quaternion.identity;
+        var position = WaterSpine.position;
+        var waterSpineHeight = Mathf.Min(position.y, waterHeightClip);
+        Vector2 point1 = new Vector2(-1, waterSpineHeight);
+        Vector2 point2 = new Vector2(1, waterSpineHeight);
+
+        List<Vector2> intesectionPoints = new List<Vector2>();
+        for (int i = 0; i < 4; i++)
+        {
+            bool bIntersect = LineIntersection.GetLineSegmentIntersection(point1, point2, new Vector2(corners[i].position.x, corners[i].position.y),
+                new Vector2(corners[(i + 1) % 4].position.x, corners[(i + 1) % 4].position.y), out Vector2 intersectionPoint);
+            if (bIntersect)
+            {
+                intesectionPoints.Add(intersectionPoint);
+            }
+        }
+        
+        Assert.IsTrue(intesectionPoints.Count == 2);
+        
+        position = new Vector3((intesectionPoints[0].x + intesectionPoints[1].x) * 0.5f, waterSpineHeight, position.z);
+        WaterSpine.localScale = new Vector3(Mathf.Abs(intesectionPoints[1].x - intesectionPoints[0].x) / 1.688f, 1, 1);
+        WaterSpine.position = position;
     }
 
     // 移动的瓶子，最后渲染

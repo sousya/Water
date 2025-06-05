@@ -14,6 +14,7 @@ public class BottleRenderUpdate : MonoBehaviour
     public WaterRenderUpdate[] waterRenders;
     public SkeletonGraphic[] Brooms;
     public Transform WaterSpine;
+    public Transform WaterSpinePos;
     public Image BotteImage;
     public Image MaskImage;
 
@@ -80,7 +81,7 @@ public class BottleRenderUpdate : MonoBehaviour
         
         // 计算顶部spine的位置和缩放
         WaterSpine.rotation = Quaternion.identity;
-        var position = WaterSpine.position;
+        var position = WaterSpinePos.position;
         var waterSpineHeight = Mathf.Min(position.y, waterHeightClip);
         Vector2 point1 = new Vector2(-1, waterSpineHeight);
         Vector2 point2 = new Vector2(1, waterSpineHeight);

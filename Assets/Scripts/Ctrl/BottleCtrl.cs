@@ -1168,7 +1168,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     IEnumerator CoroutinePlayOutAnim(int num, int useIdx, int useColor)
     {
         //yield return new WaitForSeconds(1f);
-        float fillAlltime = 0.46f;
+        float fillAlltime = 0.35f;
         yield return new WaitForSeconds(fillAlltime);
         //float fillAlltime = 1.33f;
         spineGo.gameObject.SetActive(true);

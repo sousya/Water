@@ -51,6 +51,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     public Transform
         spineGo,      // 倒水过程水花动画父节点(当前水面位置)
+        spineGoPosition, // 专门用于计算spine位置的替代品
         modelGo,      // 瓶子初始点位
         leftMovePlace,// 向该瓶子倒水时的目标位置 
         freezeGo;     // 藤曼底座节点  
@@ -622,7 +623,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
 
         var color = GetMoveOutTop();
-        MoveToOtherAnim(other, color);
+        MoveToOtherAnim(other, topIdx, moveNum, color);
         PlayOutAnim(moveNum, topIdx, color);
 
         for (int i = 0; i < moveNum; i++)
@@ -1019,7 +1020,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         {
             spineGo.gameObject.SetActive(true);
             SetNowSpinePos(startIdx);
-            spineGo.DOMove(spineNode[topIdx + 1].position, fillAlltime).SetEase(Ease.Linear);
+            spineGoPosition.DOMove(spineNode[topIdx + 1].position, fillAlltime).SetEase(Ease.Linear);
         }
         else
         {
@@ -1159,7 +1160,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             }
         }
 
-        spineGo.localPosition = spineNode[useNode].localPosition;
+        spineGoPosition.localPosition = spineNode[useNode].localPosition;
     }
 
     /// <summary>
@@ -1174,7 +1175,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     IEnumerator CoroutinePlayOutAnim(int num, int useIdx, int useColor)
     {
         //yield return new WaitForSeconds(1f);
-        float fillAlltime = 0.46f;
+        float fillAlltime = 0.35f;
         yield return new WaitForSeconds(fillAlltime);
         //float fillAlltime = 1.33f;
         spineGo.gameObject.SetActive(true);
@@ -1183,7 +1184,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         //Debug.Log("移动终点  " + useIdx + " " + num);
         if (useColor > 1000)
         {
-            spineGo.transform.localPosition = spineNode[useIdx + 1 - num].localPosition;
+            spineGoPosition.transform.localPosition = spineNode[useIdx + 1 - num].localPosition;
             if (topIdx < 0)
             {
                 spineGo.gameObject.SetActive(false);
@@ -1191,7 +1192,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
         else
         {
-            spineGo.DOLocalMove(spineNode[useIdx + 1 - num].localPosition, fillAlltime).SetEase(Ease.Linear).OnComplete(() =>
+            spineGoPosition.DOLocalMove(spineNode[useIdx + 1 - num].localPosition, fillAlltime).SetEase(Ease.Linear).OnComplete(() =>
             {
                 if (topIdx < 0)
                 {
@@ -1226,13 +1227,18 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     }
 
-    public void MoveToOtherAnim(BottleCtrl other, int useColor = -1)
+    public void MoveToOtherAnim(BottleCtrl other, int topIndex, int numWater, int useColor = -1)
     {
         isPlayAnim = true;
+        var bottleRenderUpdate = bottleAnim.GetComponent<BottleRenderUpdate>();
+        bottleRenderUpdate.SetMoveBottleRenderState(true, other);
 
         if (useColor < 1000)
         {
-            bottleAnim.Play("BottleOut");
+            topIndex += 1;
+            string bottleAnimName = $"BottleOut{topIndex}_{topIndex - numWater}";
+            bottleAnim.Play(bottleAnimName);
+            //Debug.LogWarning(bottleAnimName);
         }
         else
         {
@@ -1248,9 +1254,11 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
                 modelGo.transform.DOMove(other.leftMovePlace.position, 0.62f).SetEase(Ease.Linear).OnComplete(() =>
                 {
+                    SetNowSpinePos(topIndex - numWater);
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         isPlayAnim = false;
+                        bottleRenderUpdate.SetMoveBottleRenderState(false);
                     });
                 });
             }
@@ -1261,6 +1269,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         isPlayAnim = false;
+                        bottleRenderUpdate.SetMoveBottleRenderState(false);
                     });
                 });
             }

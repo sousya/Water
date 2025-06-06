@@ -1828,10 +1828,6 @@ MonoBehaviour:
   clearHide: {fileID: 5669543852491119425}
   limitColorSpine: {fileID: 448550283297706188}
   finishGo: {fileID: 7187312058495922299}
-  bottleOne: {fileID: 1769298332377128169}
-  bottleTwo: {fileID: 8739748503694806377}
-  bottleThree: {fileID: 4066077261779982770}
-  bottleFour: {fileID: 3444484630310263884}
   bottle: {fileID: 7716752635147297431}
 --- !u!1 &5298736985974411833
 GameObject:
@@ -3329,7 +3325,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8199118424742450151
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3348,7 +3344,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -6.0000243, y: -181}
+  m_AnchoredPosition: {x: -6.0000243, y: -11}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2659771953755740935

@@ -47,6 +47,11 @@ namespace QAssetBundle
         public const string BundleName = "uibuyitem_prefab";
         public const string UIBuyItem = "UIBuyItem";
     }
+    public class Uibuypacksuccess_prefab
+    {
+        public const string BundleName = "uibuypacksuccess_prefab";
+        public const string UIBuyPackSuccess = "UIBuyPackSuccess";
+    }
     public class Uicontinue_prefab
     {
         public const string BundleName = "uicontinue_prefab";

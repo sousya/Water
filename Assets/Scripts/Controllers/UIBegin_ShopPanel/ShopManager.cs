@@ -91,12 +91,14 @@ namespace QFramework.Example
             HealthManager.Instance.SetUnLimitHp(_packSo.UnlimitedHp);
             //无限道具
             //...暂用体力时长
+
+            UIKit.OpenPanel<UIBuyPackSuccess>();
             UIKit.ClosePanel<UIShop>();
         }
 
         private void PlayAnimaton()
         {
-            Debug.Log("购买成功回调动画");
+            //Debug.Log("购买成功回调动画");
         }
 
         public IArchitecture GetArchitecture()

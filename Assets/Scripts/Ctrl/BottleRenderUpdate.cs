@@ -33,6 +33,8 @@ public class BottleRenderUpdate : MonoBehaviour
         _material = new Material(MaskImage.material);
         _material.SetFloat("_StencilRef", bottleIndex);
         MaskImage.material = _material;
+
+        BotteImage.material = new Material(BotteImage.material);
         
         foreach (var waterRenderUpdater in waterRenders)
         {

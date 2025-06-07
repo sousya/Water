@@ -65,13 +65,14 @@ public class BottleWaterCtrl : MonoBehaviour
     {
         //StartCoroutine(CoroutinePlayFillAnim());
 
-        broomItemGo.SetActive(false);
-        createItemGo.SetActive(false);
-        changeItemGo.SetActive(false);
+
         if (time == 0)
         {
             waterImg.fillAmount = 0;
             gameObject.SetActive(false);
+            broomItemGo.SetActive(false);
+            createItemGo.SetActive(false);
+            changeItemGo.SetActive(false);
         }
         else
         {
@@ -79,6 +80,9 @@ public class BottleWaterCtrl : MonoBehaviour
             waterImg.DOFillAmount(0, time).SetEase(Ease.Linear).OnComplete(() =>
             {
                 gameObject.SetActive(false);
+                broomItemGo.SetActive(false);
+                createItemGo.SetActive(false);
+                changeItemGo.SetActive(false);
             });
         }
 

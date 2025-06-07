@@ -120,5 +120,21 @@ public class BottleRenderUpdate : MonoBehaviour
         MaskImage.material.renderQueue = transparentRenderQueue - 1;
         WaterSpine.GetComponent<SkeletonGraphic>().material.renderQueue = transparentRenderQueue;
         BotteImage.material.renderQueue = transparentRenderQueue + 1;
+        
+        foreach (var skeletonGraphic in Brooms)
+        {
+            var material = new Material(skeletonGraphic.material);
+            material.SetFloat("_Stencil", bottleIndex);
+            material.SetFloat("_StencilOp", ((int)UnityEngine.Rendering.StencilOp.Keep) * 1.0f);
+            material.SetFloat("_StencilComp", ((int)UnityEngine.Rendering.CompareFunction.Disabled) * 1.0f);
+            material.renderQueue = transparentRenderQueue + 1;
+            skeletonGraphic.material = material;
+            //skeletonGraphic.TrimRenderers();
+            var skeletonSubmeshGraphics = skeletonGraphic.gameObject.GetComponentsInChildren<SkeletonSubmeshGraphic>();
+            foreach (var skeletonSubmeshGraphic in skeletonSubmeshGraphics)
+            {
+                skeletonSubmeshGraphic.material = material;
+            }
+        }
     }
 }

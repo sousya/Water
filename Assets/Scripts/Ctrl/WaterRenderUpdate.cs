@@ -12,26 +12,36 @@ public class WaterRenderUpdate : MonoBehaviour
     public Transform[] waterSurface;
     public bool bBottom = false;
     public Transform bottleTransform;
-    public int bottleIndex; // 作为stencil标记使用，从1开始。
+    public Image blackWater;// 黑水的效果。
     private Mesh _mesh;
-    private MeshRenderer _meshRenderer;
-    private MeshFilter _meshFilter;
-    private Material _material;
+    private MeshRenderer _meshRenderer = null;
+    private MeshFilter _meshFilter = null;
+    private Material _material = null;
     private Image _image;
     private float _fillAmount;
+    private Material _blackWaterMaterial = null;
+    private MeshRenderer _blackWaterRenderer = null;
+    private MeshFilter _blackWaterFilter = null;
 
     private void ValidMaterial()
     {
-        if (_material)
+        if (!_material)
         {
-            return;
+            if (!_meshRenderer)
+            {
+                _meshRenderer = GetComponent<MeshRenderer>();
+            }
+            _material = _meshRenderer.material;
         }
 
-        if (!_meshRenderer)
+        if (!_blackWaterMaterial)
         {
-            _meshRenderer = GetComponent<MeshRenderer>();
+            if (!_blackWaterRenderer)
+            {
+                _blackWaterRenderer = blackWater.GetComponent<MeshRenderer>();
+            }
+            _blackWaterMaterial = _blackWaterRenderer.material;
         }
-        _material = _meshRenderer.material;
     }
     
     public Color WaterColor
@@ -80,6 +90,7 @@ public class WaterRenderUpdate : MonoBehaviour
         {
             ValidMaterial();
             _material.SetFloat("_StencilRef", value);
+            _blackWaterMaterial.SetFloat("_StencilRef", value);
         }
     }
 
@@ -94,6 +105,7 @@ public class WaterRenderUpdate : MonoBehaviour
         {
             ValidMaterial();
             _material.renderQueue = value;
+            _blackWaterMaterial.renderQueue = value + 1;
         }
     }
 
@@ -103,8 +115,13 @@ public class WaterRenderUpdate : MonoBehaviour
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
         _mesh = new Mesh();
-        _material = _meshRenderer.material;
         _image = GetComponent<Image>();
+        
+        _blackWaterRenderer = blackWater.GetComponent<MeshRenderer>();
+        _blackWaterFilter = blackWater.GetComponent<MeshFilter>();
+        ValidMaterial();
+        _blackWaterMaterial.color = Color.black;
+        _blackWaterMaterial.renderQueue = 3001;
     }
 
     // Update is called once per frame
@@ -160,5 +177,8 @@ public class WaterRenderUpdate : MonoBehaviour
         {
             this.FillAmount = _image.fillAmount;
         }
+        
+        // 黑水的mesh同时设置
+        _blackWaterFilter.mesh = _mesh;
     }
 }

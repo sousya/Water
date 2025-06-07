@@ -12,8 +12,14 @@ Shader "Spine/SkeletonGraphic"
 		[HideInInspector][Enum(UnityEngine.Rendering.CompareFunction)] _StencilCompWater ("Stencil Comparison", Float) = 8
 		[HideInInspector] _StencilWater ("Stencil ID", Float) = 0
 		[HideInInspector][Enum(UnityEngine.Rendering.StencilOp)] _StencilOpWater ("Stencil Operation", Float) = 0
+		
+		[HideInInspector][Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Float) = 8
+		[HideInInspector] _Stencil ("Stencil ID", Float) = 0
+		[HideInInspector][Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Float) = 0
+		
 		[HideInInspector] _StencilWriteMask ("Stencil Write Mask", Float) = 255
 		[HideInInspector] _StencilReadMask ("Stencil Read Mask", Float) = 255
+		
 
 		[HideInInspector] _ColorMask ("Color Mask", Float) = 15
 

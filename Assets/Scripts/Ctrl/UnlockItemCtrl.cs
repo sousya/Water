@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnlockItemCtrl : MonoBehaviour, ICanGetUtility, ICanSendEvent, ICanGetModel
+public class UnlockItemCtrl : MonoBehaviour, ICanGetUtility
 {
     public IArchitecture GetArchitecture()
     {
@@ -17,18 +17,6 @@ public class UnlockItemCtrl : MonoBehaviour, ICanGetUtility, ICanSendEvent, ICan
     public Image ImgIcon;
     public Button BtnUnlock;
 
-    private StageModel stageModel;
-
-    void Start()
-    {
-        stageModel = this.GetModel<StageModel>();
-    }
-
-    void OnDestroy()
-    {
-        stageModel = null;     
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -36,16 +24,26 @@ public class UnlockItemCtrl : MonoBehaviour, ICanGetUtility, ICanSendEvent, ICan
     /// <param name="num">取值范围1-5</param>
     public void SetItem(int scene, int num)
     {
-        IReadOnlyList<Sprite> useScene = null;
-        IReadOnlyList<string> useStr = null;
-
-        //场景从1开始计算
-        int _index = scene - 1;
-
-        if (_index >= 0 && _index < LevelManager.Instance.SceneUnLockSOs.Count)
+        List<Sprite> useScene = null;
+        List<string> useStr = null;
+        switch(scene)
         {
-            useScene = LevelManager.Instance.SceneUnLockSOs[_index].SceneSprites;
-            useStr = LevelManager.Instance.SceneUnLockSOs[_index].ScenePartName;
+            case 1:
+                useScene = LevelManager.Instance.scene1;
+                useStr = LevelManager.Instance.scenePartName1;
+                break;
+            case 2:
+                useScene = LevelManager.Instance.scene2;
+                useStr = LevelManager.Instance.scenePartName2;
+                break;
+            case 3:
+                useScene = LevelManager.Instance.scene3;
+                useStr = LevelManager.Instance.scenePartName3;
+                break;
+            case 4:
+                useScene = LevelManager.Instance.scene4;
+                useStr = LevelManager.Instance.scenePartName4;
+                break;
         }
         
         ImgIcon.sprite = useScene[num - 1];
@@ -55,26 +53,18 @@ public class UnlockItemCtrl : MonoBehaviour, ICanGetUtility, ICanSendEvent, ICan
         BtnUnlock.onClick.RemoveAllListeners();
         BtnUnlock.onClick.AddListener(() =>
         {
-            var nowStar = this.GetUtility<SaveDataUtility>().GetLevelClear() - 1;
+            var nowStar = this.GetUtility<SaveDataUtility>().GetLevelClear() -1;   // -1
             var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
             var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
             var offset = nowStar - LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow);
-            //Debug.Log("已有星星：" + nowStar);
-            //Debug.Log("使用星星：" + LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow));
-            //Debug.Log("剩下星星：" + offset);
-            //Debug.Log("需要星星：" + LevelManager.Instance.GetPartNeedStar(scene, num));
+            //Debug.Log("解锁面板-已有星星：" + nowStar);
+            //Debug.Log("解锁面板-使用星星：" + LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow));
+            //Debug.Log("解锁面板-剩下星星：" + offset);
+            //Debug.Log("解锁面板-需要星星：" + LevelManager.Instance.GetPartNeedStar(scene, num));
             //剩余星星足够解锁部件 大于等于 
             if (offset >= LevelManager.Instance.GetPartNeedStar(scene, num))
             {
-                this.GetUtility<SaveDataUtility>().SetScenePartRecord(num);
-                if(num == GameDefine.GameConst.SCENE_PART_COUNT)
-                    stageModel.SceneBoxUnlock = true;
-
-                this.SendEvent<UnlockSceneEvent>(new UnlockSceneEvent() 
-                { 
-                    part = num ,
-                    scene = scene 
-                });
+                LevelManager.Instance.UnlockScene(scene, num);
                 UIKit.ClosePanel<UIUnlockScene>();
             }
             else

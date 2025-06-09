@@ -6,7 +6,6 @@ Shader "Water/2D/Sprite-Lit-Default_StencilMask"
         _MaskTex("Mask", 2D) = "white" {}
         _NormalMap("Normal Map", 2D) = "bump" {}
         _StencilRef("Stencil Reference", Float) = 1.0
-        _Stencil("为了解决报错，专门加的一个变量", Float) = 0.0
 		[Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp("Stencil Comparison", Float) = 8 // Set to Always as default
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.

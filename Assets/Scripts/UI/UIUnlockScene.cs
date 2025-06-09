@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using QFramework;
 using System.Collections;
-using GameDefine;
-using UnityEditor.Rendering;
 
 namespace QFramework.Example
 {
@@ -13,11 +11,9 @@ namespace QFramework.Example
 
     public partial class UIUnlockScene : UIPanel, ICanGetUtility, ICanRegisterEvent, ICanSendEvent, ICanGetModel
     {
-        [SerializeField] private UnlockItemCtrl UnlockItem;
-        private StageModel stageModel;
-        private SaveDataUtility saveData;
-
         public Animator boxAnim;
+
+        private StageModel stageModel;
 
         public IArchitecture GetArchitecture()
         {
@@ -37,7 +33,6 @@ namespace QFramework.Example
         protected override void OnShow()
         {
             stageModel = this.GetModel<StageModel>();
-            saveData = this.GetUtility<SaveDataUtility>();
 
             SetScene();
             BtnClose.onClick.RemoveAllListeners();
@@ -49,41 +44,80 @@ namespace QFramework.Example
             BtnBox.onClick.RemoveAllListeners();
             BtnBox.onClick.AddListener(() =>
             {
-                if (stageModel.SceneBoxUnlock)
+                var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
+                if (partNow == 5)
+                {
                     StartCoroutine(OpenBox());
+                }
                 else
+                {
                     ImgReward.gameObject.SetActive(!ImgReward.gameObject.activeSelf);
+                }
             });
         }
 
         void SetScene()
         {
-            var sceneNow = saveData.GetSceneRecord();
-            var partNow = saveData.GetScenePartRecord();
-            var overUnlock = saveData.GetOverUnLock();
-            //Debug.Log("是否未开启：" + stageModel.SceneBoxUnlock);
-            //Debug.Log("是否完成解锁：" + overUnlock);
-
-            // 全部场景解锁完且宝箱已开，停留在最后一个场景
-            if (!stageModel.SceneBoxUnlock && overUnlock)
+            var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
+            var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
+            bool.TryParse(this.GetUtility<SaveDataUtility>().GetOverUnLock(), out bool overUnlock);
+            if (overUnlock)
             {
-                UnlockItem.Hide();
+                ImgUnlockItem1.Hide();
+                ImgUnlockItem2.Hide();
+                ImgUnlockItem3.Hide();
+                ImgUnlockItem4.Hide();
+                ImgUnlockItem5.Hide();
                 ImgProgress.fillAmount = 0;
                 TxtImgprogress.text = "0 / 5";
+                BtnBox.interactable = false;
                 return;
             }
 
             ImgProgress.fillAmount = partNow / 5f;
             TxtImgprogress.text = partNow + " / 5";
-
-            // 传递需解锁的场景和建筑索引
-            if (partNow < GameConst.SCENE_PART_COUNT)
+            if (partNow < 5)
             {
-                UnlockItem.Show();
-                UnlockItem.SetItem(sceneNow, partNow + 1);
+                ImgUnlockItem1.gameObject.SetActive(partNow + 1 == 1);
+                ImgUnlockItem2.gameObject.SetActive(partNow + 1 == 2);
+                ImgUnlockItem3.gameObject.SetActive(partNow + 1 == 3);
+                ImgUnlockItem4.gameObject.SetActive(partNow + 1 == 4);
+                ImgUnlockItem5.gameObject.SetActive(partNow + 1 == 5);
             }
             else
-                UnlockItem.Hide();
+            {
+                ImgUnlockItem1.Hide();
+                ImgUnlockItem2.Hide();
+                ImgUnlockItem3.Hide();
+                ImgUnlockItem4.Hide();
+                ImgUnlockItem5.Hide();
+            }
+            /*else
+            {
+                ImgUnlockItem2.gameObject.SetActive(false);
+                ImgUnlockItem3.gameObject.SetActive(false);
+                ImgUnlockItem4.gameObject.SetActive(false);
+                ImgUnlockItem5.gameObject.SetActive(false);
+                if (this.GetUtility<SaveDataUtility>().GetSceneBox() == sceneNow)
+                {
+                    ImgUnlockItem1.gameObject.SetActive(true);
+                    //sceneNow++;//当前只有四个场景
+                    sceneNow = sceneNow + 1 > 4 ? 4 : sceneNow + 1;
+                    TxtImgprogress.text = 0 + " / 5";
+                    ImgProgress.fillAmount = 0;
+
+                }
+                else
+                {
+                    ImgUnlockItem1.gameObject.SetActive(false);
+                }
+            }*/
+
+            ImgUnlockItem1.SetItem(sceneNow, 1);
+            ImgUnlockItem2.SetItem(sceneNow, 2);
+            ImgUnlockItem3.SetItem(sceneNow, 3);
+            ImgUnlockItem4.SetItem(sceneNow, 4);
+            ImgUnlockItem5.SetItem(sceneNow, 5);
         }
 
         /// <summary>
@@ -94,9 +128,6 @@ namespace QFramework.Example
         {
             //避免打断下面逻辑
             BtnClose.interactable = false;
-            BtnBox.interactable = false;
-            stageModel.SceneBoxUnlock = false; 
-
             //增加道具
             for (int i = 1; i <= GameDefine.GameConst.ITEM_COUNT; i++)
             {
@@ -104,18 +135,28 @@ namespace QFramework.Example
             }
             
             boxAnim.Play("BoxOpen");
-
-            bool overUnlock = saveData.GetOverUnLock();
+            bool overUnlock = CheckOverUnLock(this.GetUtility<SaveDataUtility>().GetSceneRecord(),
+                this.GetUtility<SaveDataUtility>().GetScenePartRecord());
             if (!overUnlock)
-                saveData.SetScenePartRecord(0);
-            saveData.SetSceneRecord(saveData.GetSceneRecord() + 1);
-
+                this.GetUtility<SaveDataUtility>().SetScenePartRecord(0);
 
             yield return new WaitForSeconds(1f);
             this.SendEvent<RewardSceneEvent>();
             BtnClose.interactable = true;
-            BtnBox.interactable = true;
             CloseSelf();
+        }
+
+        private bool CheckOverUnLock(int sceneNow ,int partNow)
+        {
+            if (sceneNow == 4 && partNow == 5)
+            {
+                //Debug.Log("当前解锁进度已满");
+
+                this.GetUtility<SaveDataUtility>().SetOverUnLock(true);
+                return true;
+            }
+
+            return false;
         }
 
         protected override void OnHide()

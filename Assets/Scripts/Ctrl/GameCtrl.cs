@@ -72,7 +72,6 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
                 {
                     if (bottle.OnSelect(true))
                     {
-                        AudioKit.PlaySound("resources://Audio/SelectBottle");
                         FirstBottle = bottle;
                     }
 
@@ -103,8 +102,8 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
                         FirstBottle.MoveTo(SecondBottle);
                         FirstBottle = null;
                         SecondBottle = null;
-                        AudioKit.PlaySound("resources://Audio/PourWaterSound");
                         //LevelManager.Instance.AddMoveNum();//步数统计.暂时无用
+                        //this.SendEvent<MoveCakeEvent>();//未使用
                     }
                     else
                     {

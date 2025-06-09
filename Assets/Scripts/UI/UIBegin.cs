@@ -21,10 +21,9 @@ namespace QFramework.Example
             return GameMainArc.Interface;
         }
 
-        public GameObject LevelNode;
-        public GameObject[] SceneNodes;
-        public ScenePartCtrl[] scenePartCtrls;
+        public GameObject LevelNode, SceneNode1, SceneNode2, SceneNode3, SceneNode4;
 
+        public ScenePartCtrl ScenePart1, ScenePart2, ScenePart3, ScenePart4;
         public ParticleTargetMoveCtrl coinFx, starFx;
 
         #region BottomMenuSetting
@@ -44,7 +43,6 @@ namespace QFramework.Example
 
         private TextMeshProUGUI mTxtCoinAdd;
         private StageModel stageModel;
-        private SaveDataUtility saveData;
 
         protected override void OnInit(IUIData uiData = null)
         {
@@ -62,8 +60,6 @@ namespace QFramework.Example
         protected override void OnShow()
         {
             stageModel = this.GetModel<StageModel>();
-            saveData = this.GetUtility<SaveDataUtility>();
-
             mTxtCoinAdd = TxtCoinAdd.GetComponent<TextMeshProUGUI>();
 
             BindBtn();
@@ -74,7 +70,7 @@ namespace QFramework.Example
             //InitBeginMenuButton();//有需要初始化可以使用
 
             //启动游戏时，处于前五关会直接开始游戏，需要更新UI
-            var levelNow = saveData.GetLevelClear();
+            var levelNow = this.GetUtility<SaveDataUtility>().GetLevelClear();
             if (levelNow <= 5)
             {
                 StartOrOverChangePanel(true, false);
@@ -94,7 +90,7 @@ namespace QFramework.Example
 
         private void Update()
         {
-            if (HealthManager.Instance.UnLimitHp || !HealthManager.Instance.IsMaxHp)
+            if (TxtTime.gameObject.activeSelf)
             {
                 TxtTime.text = HealthManager.Instance.UnLimitHp ?
                     HealthManager.Instance.UnLimitHpTimeStr :
@@ -113,8 +109,6 @@ namespace QFramework.Example
 
             BtnStepBack.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
-
                 if (!LevelManager.Instance.isPlayFxAnim && GameCtrl.Instance.IsPouring)
                 {
                     if (stageModel.ItemDic[1] <= 0)
@@ -195,29 +189,7 @@ namespace QFramework.Example
                     }
                     if (LevelManager.Instance.CheckAllDebuff())
                     {
-                        LevelManager.Instance.RemoveAll(() =>
-                        {
-                            //清空操作记录的障碍(避免回退恢复)
-                            foreach (var bottle in LevelManager.Instance.nowBottles)
-                            {
-                                foreach (var record in bottle.moveRecords)
-                                {
-                                    record.isFreeze = false;
-                                    record.isClearHide = false;
-                                    record.isNearHide = false;
-
-                                    for (int i = 0; i < record.hideWaters.Count; i++)
-                                    {
-                                        record.hideWaters[i] = false;
-                                    }
-
-                                    for (int i = 0; i < record.waterItems.Count; i++)
-                                    {
-                                        record.waterItems[i] = WaterItem.None;
-                                    }
-                                }
-                            }
-                        });
+                        LevelManager.Instance.RemoveAll();
                         stageModel.ReduceItem(5, 1);
                     }
                 }
@@ -380,12 +352,12 @@ namespace QFramework.Example
 
             this.RegisterEvent<ReturnMainEvent>(e =>
             {
-                string _del = $"用户退出关卡:{saveData.GetLevelClear()}," +
-                $"当前关卡进度:{saveData.GetLevelClear()}";
+                string _del = $"用户退出关卡:{this.GetUtility<SaveDataUtility>().GetLevelClear()}," +
+                $"当前关卡进度:{this.GetUtility<SaveDataUtility>().GetLevelClear()}";
                 AnalyticsManager.Instance.SendLevelEvent(_del);
 
                 StartOrOverChangePanel(false, true);
-                //SetScene();
+                SetScene();
                 InitBeginMenuButton();
                 HealthManager.Instance.UseHp();
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
@@ -397,7 +369,7 @@ namespace QFramework.Example
 
             this.RegisterEvent<GameStartEvent>(e =>
             {
-                LevelManager.Instance.StartGame(saveData.GetLevelClear());
+                LevelManager.Instance.StartGame(this.GetUtility<SaveDataUtility>().GetLevelClear());
                 StartOrOverChangePanel(true, false);
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
@@ -664,9 +636,9 @@ namespace QFramework.Example
         /// </summary>
         void SetStar()
         {
-            var nowStar = saveData.GetLevelClear() - 1;
-            var sceneNow = saveData.GetSceneRecord();
-            var partNow = saveData.GetScenePartRecord();
+            var nowStar = this.GetUtility<SaveDataUtility>().GetLevelClear() - 1;
+            var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
+            var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
             //可以记录一个已使用星星数量
             var useStar = LevelManager.Instance.GetUnlockNeedStar(sceneNow, partNow);
             TxtStar.text = (nowStar - useStar).ToString();
@@ -681,8 +653,10 @@ namespace QFramework.Example
         {
             TxtHeart.text = HealthManager.Instance.UnLimitHp ? "∞" : HealthManager.Instance.NowHp.ToString();
 
-            if (!HealthManager.Instance.UnLimitHp && HealthManager.Instance.IsMaxHp)
-                TxtTime.text = "FULL";
+            if (HealthManager.Instance.UnLimitHp || !HealthManager.Instance.IsMaxHp)
+                TxtTime.Show();
+            else
+                TxtTime.Hide();
         }
 
         /// <summary>
@@ -708,36 +682,52 @@ namespace QFramework.Example
         /// </summary>
         void SetScene()
         {
+            //Debug.Log("更新场景");
             SetStar();
-            var sceneNow = saveData.GetSceneRecord();
-            var partNow = saveData.GetScenePartRecord();
-            
+            var levelNow = this.GetUtility<SaveDataUtility>().GetLevelClear();
+            var sceneNow = this.GetUtility<SaveDataUtility>().GetSceneRecord();
+            var partNow = this.GetUtility<SaveDataUtility>().GetScenePartRecord();
             TxtArea.text = "Area " + sceneNow;
 
-            //解锁完成(锁定最后一个场景)
-            if (saveData.GetOverUnLock())
+            //启用场景
+            switch (sceneNow)
             {
-                ImgProgress.fillAmount = 0;
-                TxtImgprogress.text = 0 + " / 5";
-
-                var _scene = LevelManager.Instance.SceneUnLockSOs.Count() - 1;
-                SceneNodes[_scene].Show();
-                SetScenePart(_scene, partNow);
-                return;
+                case 1:
+                    SceneNode1.SetActive(true);
+                    SceneNode2.SetActive(false);
+                    SceneNode3.SetActive(false);
+                    SceneNode4.SetActive(false);
+                    break;
+                case 2:
+                    SceneNode1.SetActive(false);
+                    SceneNode2.SetActive(true);
+                    SceneNode3.SetActive(false);
+                    SceneNode4.SetActive(false);
+                    break;
+                case 3:
+                    SceneNode1.SetActive(false);
+                    SceneNode2.SetActive(false);
+                    SceneNode3.SetActive(true);
+                    SceneNode4.SetActive(false);
+                    break;
+                case 4:
+                    SceneNode1.SetActive(false);
+                    SceneNode2.SetActive(false);
+                    SceneNode3.SetActive(false);
+                    SceneNode4.SetActive(true);
+                    break;
             }
-
-            //未全部解锁
-            for (int i = 0; i < SceneNodes.Length; i++)
-            {
-                //场景从1开始计算
-                if ((i + 1) == sceneNow)
-                    SceneNodes[i].Show();
-                else
-                    SceneNodes[i].Hide();
-            }
-
             ImgProgress.fillAmount = partNow / 5f;
             TxtImgprogress.text = partNow + " / 5";
+
+            //解锁完成(暂用效果)
+            if (bool.Parse(this.GetUtility<SaveDataUtility>().GetOverUnLock()))
+            {
+                TxtArea.text = "Area " + 5;
+                ImgProgress.fillAmount = 0;
+                TxtImgprogress.text = 0 + " / 5";
+                return;
+            }
 
             SetScenePart(sceneNow, partNow);
         }
@@ -749,14 +739,37 @@ namespace QFramework.Example
         /// <param name="partNow"></param>
         void SetScenePart(int scene, int partNow)
         {
-            //场景从1开始计算
-            int _index = scene - 1;
-            if (_index >= 0 && _index < scenePartCtrls.Length)
+            switch (scene)
             {
-                for (int j = 0; j < scenePartCtrls[_index].SceneParts.Length; j++)
-                {
-                    scenePartCtrls[_index].SceneParts[j].SetActive(partNow > j);
-                }
+                case 1:
+                    ScenePart1.ScenePart1.SetActive(partNow >= 1);
+                    ScenePart1.ScenePart2.SetActive(partNow >= 2);
+                    ScenePart1.ScenePart3.SetActive(partNow >= 3);
+                    ScenePart1.ScenePart4.SetActive(partNow >= 4);
+                    ScenePart1.ScenePart5.SetActive(partNow >= 5);
+                    break;
+                case 2:
+                    ScenePart2.ScenePart1.SetActive(partNow >= 1);
+                    ScenePart2.ScenePart2.SetActive(partNow >= 2);
+                    ScenePart2.ScenePart3.SetActive(partNow >= 3);
+                    ScenePart2.ScenePart4.SetActive(partNow >= 4);
+                    ScenePart2.ScenePart5.SetActive(partNow >= 5);
+                    break;
+                case 3:
+                    ScenePart3.ScenePart1.SetActive(partNow >= 1);
+                    ScenePart3.ScenePart2.SetActive(partNow >= 2);
+                    ScenePart3.ScenePart3.SetActive(partNow >= 3);
+                    ScenePart3.ScenePart4.SetActive(partNow >= 4);
+                    ScenePart3.ScenePart5.SetActive(partNow >= 5);
+                    break;
+                case 4:
+                    ScenePart4.ScenePart1.SetActive(partNow >= 1);
+                    ScenePart4.ScenePart2.SetActive(partNow >= 2);
+                    ScenePart4.ScenePart3.SetActive(partNow >= 3);
+                    ScenePart4.ScenePart4.SetActive(partNow >= 4);
+                    ScenePart4.ScenePart5.SetActive(partNow >= 5);
+                    break;
+
             }
         }
 
@@ -767,11 +780,20 @@ namespace QFramework.Example
         /// <param name="num"></param>
         void ShowFx(int scene, int num)
         {
-            //场景从1开始计算
-            int _index = scene - 1;
-            if (_index >= 0 && _index < scenePartCtrls.Length)
+            switch (scene)
             {
-                StartCoroutine(scenePartCtrls[_index].ShowUnlock(num));
+                case 1:
+                    StartCoroutine(ScenePart1.ShowUnlock(num));
+                    break;
+                case 2:
+                    StartCoroutine(ScenePart2.ShowUnlock(num));
+                    break;
+                case 3:
+                    StartCoroutine(ScenePart3.ShowUnlock(num));
+                    break;
+                case 4:
+                    StartCoroutine(ScenePart4.ShowUnlock(num));
+                    break;
             }
         }
 

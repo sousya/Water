@@ -1604,16 +1604,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LevelNode: {fileID: 8295161506069374507}
-  SceneNodes:
-  - {fileID: 8231654832984208276}
-  - {fileID: 7396104685721069655}
-  - {fileID: 2086316895877533715}
-  - {fileID: 1356046616838616079}
-  scenePartCtrls:
-  - {fileID: 1807364146875276608}
-  - {fileID: 7683760583286762468}
-  - {fileID: 8660478310495001720}
-  - {fileID: 1856272295933640326}
+  SceneNode1: {fileID: 8231654832984208276}
+  SceneNode2: {fileID: 7396104685721069655}
+  SceneNode3: {fileID: 2086316895877533715}
+  SceneNode4: {fileID: 1356046616838616079}
+  ScenePart1: {fileID: 1807364146875276608}
+  ScenePart2: {fileID: 7683760583286762468}
+  ScenePart3: {fileID: 8660478310495001720}
+  ScenePart4: {fileID: 1856272295933640326}
   coinFx: {fileID: 4192289755092124865}
   starFx: {fileID: 7386107850048871920}
   bottomMenuBtns:
@@ -5524,11 +5522,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3290505468752637054}
-  - {fileID: 4322360343822484362}
-  - {fileID: 2496135549446448498}
-  - {fileID: 6108967675489968134}
   - {fileID: 3475067697461836123}
+  - {fileID: 6108967675489968134}
+  - {fileID: 4322360343822484362}
   - {fileID: 7815340085222382674}
+  - {fileID: 2496135549446448498}
   m_Father: {fileID: 6626328542745944175}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5548,18 +5546,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09018318629d7004b8c84ee642580439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneParts:
-  - {fileID: 9050747249189921427}
-  - {fileID: 6825131937138134146}
-  - {fileID: 8462733120855194400}
-  - {fileID: 3171334653923080884}
-  - {fileID: 8927875530763575730}
-  SceneImgs:
-  - {fileID: 7856944440216497519}
-  - {fileID: 6492205436752710966}
-  - {fileID: 8222235975185981979}
-  - {fileID: 799602656194059576}
-  - {fileID: 3382161709111323684}
+  ScenePart1: {fileID: 9050747249189921427}
+  ScenePart2: {fileID: 6825131937138134146}
+  ScenePart3: {fileID: 8462733120855194400}
+  ScenePart4: {fileID: 3171334653923080884}
+  ScenePart5: {fileID: 8927875530763575730}
+  SceneImg1: {fileID: 7856944440216497519}
+  SceneImg2: {fileID: 6492205436752710966}
+  SceneImg3: {fileID: 8222235975185981979}
+  SceneImg4: {fileID: 799602656194059576}
+  SceneImg5: {fileID: 3382161709111323684}
   shine: {fileID: 2100000, guid: 1bac885a6ecd96e4489be1553b2696c4, type: 2}
 --- !u!1 &1366886978996068548
 GameObject:
@@ -9107,10 +9103,10 @@ RectTransform:
   m_Children:
   - {fileID: 2388526957447095170}
   - {fileID: 4658732926735937998}
-  - {fileID: 5891754301590302866}
+  - {fileID: 2515596981611311644}
   - {fileID: 2890782587953163305}
   - {fileID: 6175140590045776548}
-  - {fileID: 2515596981611311644}
+  - {fileID: 5891754301590302866}
   m_Father: {fileID: 6626328542745944175}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -9130,18 +9126,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09018318629d7004b8c84ee642580439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneParts:
-  - {fileID: 4601519598417312618}
-  - {fileID: 6919663676125057058}
-  - {fileID: 6460215604779604486}
-  - {fileID: 7414265218473207465}
-  - {fileID: 1475549061922652240}
-  SceneImgs:
-  - {fileID: 4690200879569860020}
-  - {fileID: 1349977576315181137}
-  - {fileID: 6305454897806549871}
-  - {fileID: 4188330384255422150}
-  - {fileID: 6977741397746702464}
+  ScenePart1: {fileID: 4601519598417312618}
+  ScenePart2: {fileID: 6919663676125057058}
+  ScenePart3: {fileID: 6460215604779604486}
+  ScenePart4: {fileID: 7414265218473207465}
+  ScenePart5: {fileID: 1475549061922652240}
+  SceneImg1: {fileID: 4690200879569860020}
+  SceneImg2: {fileID: 1349977576315181137}
+  SceneImg3: {fileID: 6305454897806549871}
+  SceneImg4: {fileID: 4188330384255422150}
+  SceneImg5: {fileID: 6977741397746702464}
   shine: {fileID: 2100000, guid: 1bac885a6ecd96e4489be1553b2696c4, type: 2}
 --- !u!1 &2128616531091998489
 GameObject:
@@ -24519,7 +24513,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6460215604779604486}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -28856,9 +28850,9 @@ RectTransform:
   - {fileID: 9219249555654694397}
   - {fileID: 848508269322190209}
   - {fileID: 3550448714938483612}
-  - {fileID: 1701941950019244821}
-  - {fileID: 874513234549232514}
   - {fileID: 8155194866868275930}
+  - {fileID: 874513234549232514}
+  - {fileID: 1701941950019244821}
   m_Father: {fileID: 6626328542745944175}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -28878,18 +28872,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09018318629d7004b8c84ee642580439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneParts:
-  - {fileID: 8493733505437887504}
-  - {fileID: 3870952520697403930}
-  - {fileID: 733040741149187347}
-  - {fileID: 1284777600733493354}
-  - {fileID: 3915269356207990620}
-  SceneImgs:
-  - {fileID: 8829063430838753933}
-  - {fileID: 384951773696546508}
-  - {fileID: 146082012276880574}
-  - {fileID: 1432810417035624390}
-  - {fileID: 5746318695861028447}
+  ScenePart1: {fileID: 8493733505437887504}
+  ScenePart2: {fileID: 3870952520697403930}
+  ScenePart3: {fileID: 733040741149187347}
+  ScenePart4: {fileID: 1284777600733493354}
+  ScenePart5: {fileID: 3915269356207990620}
+  SceneImg1: {fileID: 8829063430838753933}
+  SceneImg2: {fileID: 384951773696546508}
+  SceneImg3: {fileID: 146082012276880574}
+  SceneImg4: {fileID: 1432810417035624390}
+  SceneImg5: {fileID: 5746318695861028447}
   shine: {fileID: 2100000, guid: 1bac885a6ecd96e4489be1553b2696c4, type: 2}
 --- !u!1 &7396219126279661877
 GameObject:
@@ -31466,9 +31458,9 @@ RectTransform:
   - {fileID: 314517925144298215}
   - {fileID: 4570478530832010960}
   - {fileID: 7932800192272696911}
-  - {fileID: 2019098194974345681}
   - {fileID: 5970152137344699233}
   - {fileID: 932578790824977974}
+  - {fileID: 2019098194974345681}
   m_Father: {fileID: 6626328542745944175}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -31488,18 +31480,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09018318629d7004b8c84ee642580439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneParts:
-  - {fileID: 6563133751180000173}
-  - {fileID: 294323286721455888}
-  - {fileID: 8643479414923879788}
-  - {fileID: 1822760873597045732}
-  - {fileID: 7344990071208150440}
-  SceneImgs:
-  - {fileID: 1089307210562296863}
-  - {fileID: 5182676620883051681}
-  - {fileID: 2251190366039510274}
-  - {fileID: 3417305667836629161}
-  - {fileID: 5513704705802865799}
+  ScenePart1: {fileID: 6563133751180000173}
+  ScenePart2: {fileID: 294323286721455888}
+  ScenePart3: {fileID: 8643479414923879788}
+  ScenePart4: {fileID: 1822760873597045732}
+  ScenePart5: {fileID: 7344990071208150440}
+  SceneImg1: {fileID: 1089307210562296863}
+  SceneImg2: {fileID: 5182676620883051681}
+  SceneImg3: {fileID: 2251190366039510274}
+  SceneImg4: {fileID: 3417305667836629161}
+  SceneImg5: {fileID: 5513704705802865799}
   shine: {fileID: 2100000, guid: 1bac885a6ecd96e4489be1553b2696c4, type: 2}
 --- !u!1 &8282162215805357822
 GameObject:

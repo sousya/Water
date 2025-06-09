@@ -3,43 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using QFramework;
 using GameDefine;
+using Unity.VisualScripting;
 
 public class StageModel : AbstractModel
 {
     public BindableDictionary<int, int> ItemDic;
 
-    //连胜
     public int CountinueWinNum => mCountinueWinNum.Value;
+
     private BindableProperty<int> mCountinueWinNum;
 
-    //金币倍率
-    public float GoldCoinsMultiple => mGoldCoinsMultiple;
     private float mGoldCoinsMultiple = 1;
-
-    //静音
-    public bool VolumeSetting
-    {
-        get => stroge.LoadBoolValue(VOLUME_SETTING_SIGN, true);
-        set => stroge.SaveBool(VOLUME_SETTING_SIGN, value);
-    }
-
-    //场景解锁宝箱(True宝箱未开)
-    public bool SceneBoxUnlock
-    {
-        get => stroge.LoadBoolValue(SCENE_UNLOCK_BOX_SIGN, false);
-        set => stroge.SaveBool(SCENE_UNLOCK_BOX_SIGN, value);
-    }
+    public float GoldCoinsMultiple => mGoldCoinsMultiple;
 
     private const string ITEM_SIGN = "g_WaterSceneItem";
     private const string COUNTINUE_WIN_NUM_SIGN = "g_WaterCountinueWinNum";
-    private const string VOLUME_SETTING_SIGN = "g_WaterVolumeSetting";
-    private const string SCENE_UNLOCK_BOX_SIGN = "g_WaterSceneLockBox";
-
-    private SaveDataUtility stroge;
 
     protected override void OnInit()
     {
-        stroge = this.GetUtility<SaveDataUtility>();
+        var stroge = this.GetUtility<SaveDataUtility>();
 
         ItemDic = new BindableDictionary<int, int>();
         mCountinueWinNum = new BindableProperty<int>();

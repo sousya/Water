@@ -7,10 +7,13 @@ using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static LevelCreateCtrl;
+using static UnityEngine.GraphicsBuffer;
 
 public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegisterEvent
 {
@@ -48,7 +51,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     public Transform
         spineGo,      // 倒水过程水花动画父节点(当前水面位置)
-        spineGoPosition, // 专门用于计算spine位置的替代品
         modelGo,      // 瓶子初始点位
         leftMovePlace,// 向该瓶子倒水时的目标位置 
         freezeGo;     // 藤曼底座节点  
@@ -143,7 +145,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             bottle.waterImg.fillAmount = 1;
         }
 
-        /*for (int i = 0; i < waters.Count; i++)
+        for (int i = 0; i < waters.Count; i++)
         {
             if (isClearHide || isNearHide || waterItems[i] == WaterItem.Ice)
             {
@@ -152,7 +154,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     LevelManager.Instance.cantClearColorList.Add(waters[i]);
                 }
             }
-        }*/
+        }
 
         for (int i = 0; i < waters.Count; i++)
         {
@@ -179,7 +181,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                 LevelManager.Instance.iceBottles.Add(this);
             }
         }
-        //CheckFinish();
+        CheckFinish();
 
         freezeGo.gameObject.SetActive(isFreeze);
         if (limitColor != 0)
@@ -306,7 +308,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
         if (isFreeze)
         {
-            AudioKit.PlaySound("resources://Audio/ThornBase");
             freezeSpine.AnimationState.SetAnimation(0, "attack", false);
         }
 
@@ -438,20 +439,17 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     public bool CheckMoveIn(int color)
     {
-        if (topIdx < 0)
-            return true;
-
         var top = GetMoveOutTop();
-        
+
         if (isClearHide || isNearHide || isFinish || GetLeftEmpty() == 0 || (limitColor != 0 && limitColor != color))
         {
             return false;
         }
 
-        //color非道具
+        ///color非道具
         if (color < 1000)
         {
-            //color == top 且 top不为空
+            ///color == top 且 top不为空
             if (color != top && top != 0)
             {
                 return false;
@@ -459,15 +457,15 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
         else
         {
-            //判断自身顶部是否为道具 
+            ////判断自身顶部是否为道具 
             if (top > 1000)
             {
-                //相同道具才可放置
+                ////相同道具才可放置
                 return top == color;
             }
             else
             {
-                //color是道具，top不是道具
+                ///color是道具，top不是道具
                 return false;   
             }
         }
@@ -481,10 +479,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     /// <param name="idx"></param>
     public void CheckNearHide(int idx)
     {
-        if (Mathf.Abs(bottleIdx - idx) == 1 
-            && LevelManager.Instance.nowBottles[idx].isUp == isUp
-            && isNearHide)//只判定isNearHide的瓶子
+        if (Mathf.Abs(bottleIdx - idx) == 1 && LevelManager.Instance.nowBottles[idx].isUp == isUp)
         {
+            //可以修改为只判定isNearHide的瓶子(目前是左右瓶均进入判定)
             foreach (var item in waters)
             {
                 LevelManager.Instance.cantChangeColorList.Remove(item);
@@ -497,7 +494,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     }
 
     /// <summary>
-    /// 藤曼瓶消除动画表现相关
+    /// 临近(荆棘)消除动画表现相关
     /// </summary>
     /// <param name="nowait"></param>
     /// <returns></returns>
@@ -506,9 +503,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         if (!nowait)
         {
             yield return new WaitForSeconds(2f);
-            AudioKit.PlaySound("resources://Audio/TengMan");
         }
-        nearHide.AnimationState.SetAnimation(0, "attack", false);//jingji_xiaoshi
+        nearHide.AnimationState.SetAnimation(0, "jingji_xiaoshi", false);
         yield return new WaitForSeconds(1.7f);
         nearHide.gameObject.SetActive(false);
         isNearHide = false;
@@ -545,8 +541,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     {
         isClearHideAnim = true;
         yield return new WaitForSeconds(1.5f);
-        AudioKit.PlaySound("resources://Audio/MagicCloth");
-
         //加入事件
         TrackEntry trackEntry = null;
         if (unlockClear > 0 && unlockClear < (int)EDisapearAnim.IDLE_MAX)
@@ -628,7 +622,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
 
         var color = GetMoveOutTop();
-        MoveToOtherAnim(other, topIdx, moveNum, color);
+        MoveToOtherAnim(other, color);
         PlayOutAnim(moveNum, topIdx, color);
 
         for (int i = 0; i < moveNum; i++)
@@ -727,7 +721,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             if (waterItems[i] == WaterItem.BreakIce)
             {
                 var breakTo = LevelManager.Instance.BreakIce();
-                
+
                 StartCoroutine(waterImg[i].BreakIce(breakTo));
                 waterItems[i] = WaterItem.None;
                 CheckWaterItem();
@@ -756,12 +750,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
 
         yield return new WaitForSeconds(0.8f);
-        AudioKit.PlaySound("resources://Audio/Finish");
-        StartCoroutine(PlayBottleCapSound());
 
         if (isFreeze)
         {
-            AudioKit.PlaySound("resources://Audio/ThornBase");
             freezeSpine.AnimationState.SetAnimation(0, "attack", false);
         }
 
@@ -790,17 +781,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             // 如果当前没有动画，直接设置动画
             bubbleSpine.AnimationState.SetAnimation(0, "maopao", false);
         }
-
-    }
-
-    /// <summary>
-    /// 播放瓶盖声音
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator PlayBottleCapSound()
-    {
-        yield return new WaitForSeconds(1f);
-        AudioKit.PlaySound("resources://Audio/BottleCap");
 
     }
 
@@ -1039,7 +1019,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         {
             spineGo.gameObject.SetActive(true);
             SetNowSpinePos(startIdx);
-            spineGoPosition.DOMove(spineNode[topIdx + 1].position, fillAlltime).SetEase(Ease.Linear);
+            spineGo.DOMove(spineNode[topIdx + 1].position, fillAlltime).SetEase(Ease.Linear);
         }
         else
         {
@@ -1179,7 +1159,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             }
         }
 
-        spineGoPosition.localPosition = spineNode[useNode].localPosition;
+        spineGo.localPosition = spineNode[useNode].localPosition;
     }
 
     /// <summary>
@@ -1194,7 +1174,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     IEnumerator CoroutinePlayOutAnim(int num, int useIdx, int useColor)
     {
         //yield return new WaitForSeconds(1f);
-        float fillAlltime = 0.35f;
+        float fillAlltime = 0.46f;
         yield return new WaitForSeconds(fillAlltime);
         //float fillAlltime = 1.33f;
         spineGo.gameObject.SetActive(true);
@@ -1203,7 +1183,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         //Debug.Log("移动终点  " + useIdx + " " + num);
         if (useColor > 1000)
         {
-            spineGoPosition.transform.localPosition = spineNode[useIdx + 1 - num].localPosition;
+            spineGo.transform.localPosition = spineNode[useIdx + 1 - num].localPosition;
             if (topIdx < 0)
             {
                 spineGo.gameObject.SetActive(false);
@@ -1211,7 +1191,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
         else
         {
-            spineGoPosition.DOLocalMove(spineNode[useIdx + 1 - num].localPosition, fillAlltime).SetEase(Ease.Linear).OnComplete(() =>
+            spineGo.DOLocalMove(spineNode[useIdx + 1 - num].localPosition, fillAlltime).SetEase(Ease.Linear).OnComplete(() =>
             {
                 if (topIdx < 0)
                 {
@@ -1246,18 +1226,13 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     }
 
-    public void MoveToOtherAnim(BottleCtrl other, int topIndex, int numWater, int useColor = -1)
+    public void MoveToOtherAnim(BottleCtrl other, int useColor = -1)
     {
         isPlayAnim = true;
-        var bottleRenderUpdate = bottleAnim.GetComponent<BottleRenderUpdate>();
-        bottleRenderUpdate.SetMoveBottleRenderState(true, other);
 
         if (useColor < 1000)
         {
-            topIndex += 1;
-            string bottleAnimName = $"BottleOut{topIndex}_{topIndex - numWater}";
-            bottleAnim.Play(bottleAnimName);
-            //Debug.LogWarning(bottleAnimName);
+            bottleAnim.Play("BottleOut");
         }
         else
         {
@@ -1273,11 +1248,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
                 modelGo.transform.DOMove(other.leftMovePlace.position, 0.62f).SetEase(Ease.Linear).OnComplete(() =>
                 {
-                    SetNowSpinePos(topIndex - numWater);
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         isPlayAnim = false;
-                        bottleRenderUpdate.SetMoveBottleRenderState(false);
                     });
                 });
             }
@@ -1288,7 +1261,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         isPlayAnim = false;
-                        bottleRenderUpdate.SetMoveBottleRenderState(false);
                     });
                 });
             }
@@ -1397,7 +1369,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         for (int i = 0; i < waters.Count; i++)
         {
             var waterColor = waters[i];
-            
+
             if (waterColor > 1000)
             {
                 if (itemId == 0)
@@ -1522,7 +1494,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     }
 
     /// <summary>
-    /// 移除单色道具动画
+    /// 换色道具动画
     /// </summary>
     /// <param name="color"></param>
     /// <param name="fromPos"></param>

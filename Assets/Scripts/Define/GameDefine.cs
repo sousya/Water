@@ -7,12 +7,12 @@ namespace GameDefine
 {
     public static class GameConst
     {
+        public const int MaxVitality = 5;
+        public const int RecoveryTime = 1800;
+
         public const int ITEM_COUNT = 8;
         public const int CONTINUE_WIN_NUM_COIN = 10;
         public const int WIN_COINS = 20;
-
-        //场景建筑
-        public const int SCENE_PART_COUNT = 5;
 
         public const string ANALYTICS_EVENT_LEVEL_COMPLETE = "level_complete";
         public const string LEVEL = "level";

@@ -59,6 +59,7 @@ MonoBehaviour:
   TxtCoin: {fileID: 6360206476417884229}
   TxtLevel: {fileID: 7868696725972223795}
   BtnContinue: {fileID: 8053888781378025406}
+  TxtRetry: {fileID: 8358099270260089936}
   BtnClose: {fileID: 5821182617835892991}
 --- !u!1 &888913818859536631
 GameObject:
@@ -234,7 +235,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1009,7 +1010,7 @@ GameObject:
   - component: {fileID: 443579175140691794}
   - component: {fileID: 7652138058246805683}
   m_Layer: 5
-  m_Name: Mask
+  m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:a192e93a-07a1-44ac-a413-a7a5d046c2ac
+	// Generate Id:aee74efa-d555-4165-8bd9-b0dc44441160
 	public partial class UIUnlockScene
 	{
 		public const string Name = "UIUnlockScene";
@@ -21,15 +21,7 @@ namespace QFramework.Example
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtImgprogress;
 		[SerializeField]
-		public UnlockItemCtrl ImgUnlockItem5;
-		[SerializeField]
-		public UnlockItemCtrl ImgUnlockItem4;
-		[SerializeField]
-		public UnlockItemCtrl ImgUnlockItem3;
-		[SerializeField]
-		public UnlockItemCtrl ImgUnlockItem2;
-		[SerializeField]
-		public UnlockItemCtrl ImgUnlockItem1;
+		public TMPro.TextMeshProUGUI TxtComingSoon;
 		[SerializeField]
 		public UnityEngine.RectTransform ImgReward;
 		
@@ -42,11 +34,7 @@ namespace QFramework.Example
 			ImgProgressBg = null;
 			ImgProgress = null;
 			TxtImgprogress = null;
-			ImgUnlockItem5 = null;
-			ImgUnlockItem4 = null;
-			ImgUnlockItem3 = null;
-			ImgUnlockItem2 = null;
-			ImgUnlockItem1 = null;
+			TxtComingSoon = null;
 			ImgReward = null;
 			
 			mData = null;

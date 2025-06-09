@@ -61,6 +61,7 @@ public class CoinManager : MonoSingleton<CoinManager>, ICanSendEvent, ICanGetUti
     /// <param name="action">Callback</param>
     public void AddCoin(int addValue,Action action = null)
     {
+        AudioKit.PlaySound("resources://Audio/AddCoin");
         coin += addValue;
         SaveCoinNum(coin);
     }

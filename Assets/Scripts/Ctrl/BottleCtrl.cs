@@ -7,13 +7,10 @@ using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static LevelCreateCtrl;
-using static UnityEngine.GraphicsBuffer;
 
 public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegisterEvent
 {
@@ -181,7 +178,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                 LevelManager.Instance.iceBottles.Add(this);
             }
         }
-        CheckFinish();
+        //CheckFinish();
 
         freezeGo.gameObject.SetActive(isFreeze);
         if (limitColor != 0)
@@ -308,6 +305,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
         if (isFreeze)
         {
+            AudioKit.PlaySound("resources://Audio/ThornBase");
             freezeSpine.AnimationState.SetAnimation(0, "attack", false);
         }
 
@@ -439,17 +437,20 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     public bool CheckMoveIn(int color)
     {
-        var top = GetMoveOutTop();
+        if (topIdx < 0)
+            return true;
 
+        var top = GetMoveOutTop();
+        
         if (isClearHide || isNearHide || isFinish || GetLeftEmpty() == 0 || (limitColor != 0 && limitColor != color))
         {
             return false;
         }
 
-        ///color非道具
+        //color非道具
         if (color < 1000)
         {
-            ///color == top 且 top不为空
+            //color == top 且 top不为空
             if (color != top && top != 0)
             {
                 return false;
@@ -457,15 +458,15 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
         else
         {
-            ////判断自身顶部是否为道具 
+            //判断自身顶部是否为道具 
             if (top > 1000)
             {
-                ////相同道具才可放置
+                //相同道具才可放置
                 return top == color;
             }
             else
             {
-                ///color是道具，top不是道具
+                //color是道具，top不是道具
                 return false;   
             }
         }
@@ -479,9 +480,10 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     /// <param name="idx"></param>
     public void CheckNearHide(int idx)
     {
-        if (Mathf.Abs(bottleIdx - idx) == 1 && LevelManager.Instance.nowBottles[idx].isUp == isUp)
+        if (Mathf.Abs(bottleIdx - idx) == 1 
+            && LevelManager.Instance.nowBottles[idx].isUp == isUp
+            && isNearHide)//只判定isNearHide的瓶子
         {
-            //可以修改为只判定isNearHide的瓶子(目前是左右瓶均进入判定)
             foreach (var item in waters)
             {
                 LevelManager.Instance.cantChangeColorList.Remove(item);
@@ -494,7 +496,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     }
 
     /// <summary>
-    /// 临近(荆棘)消除动画表现相关
+    /// 藤曼瓶消除动画表现相关
     /// </summary>
     /// <param name="nowait"></param>
     /// <returns></returns>
@@ -503,8 +505,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         if (!nowait)
         {
             yield return new WaitForSeconds(2f);
+            AudioKit.PlaySound("resources://Audio/TengMan");
         }
-        nearHide.AnimationState.SetAnimation(0, "jingji_xiaoshi", false);
+        nearHide.AnimationState.SetAnimation(0, "attack", false);//jingji_xiaoshi
         yield return new WaitForSeconds(1.7f);
         nearHide.gameObject.SetActive(false);
         isNearHide = false;
@@ -541,6 +544,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     {
         isClearHideAnim = true;
         yield return new WaitForSeconds(1.5f);
+        AudioKit.PlaySound("resources://Audio/MagicCloth");
+
         //加入事件
         TrackEntry trackEntry = null;
         if (unlockClear > 0 && unlockClear < (int)EDisapearAnim.IDLE_MAX)
@@ -721,7 +726,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             if (waterItems[i] == WaterItem.BreakIce)
             {
                 var breakTo = LevelManager.Instance.BreakIce();
-
+                
                 StartCoroutine(waterImg[i].BreakIce(breakTo));
                 waterItems[i] = WaterItem.None;
                 CheckWaterItem();
@@ -750,9 +755,12 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
 
         yield return new WaitForSeconds(0.8f);
+        AudioKit.PlaySound("resources://Audio/Finish");
+        StartCoroutine(PlayBottleCapSound());
 
         if (isFreeze)
         {
+            AudioKit.PlaySound("resources://Audio/ThornBase");
             freezeSpine.AnimationState.SetAnimation(0, "attack", false);
         }
 
@@ -781,6 +789,17 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             // 如果当前没有动画，直接设置动画
             bubbleSpine.AnimationState.SetAnimation(0, "maopao", false);
         }
+
+    }
+
+    /// <summary>
+    /// 播放瓶盖声音
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator PlayBottleCapSound()
+    {
+        yield return new WaitForSeconds(1f);
+        AudioKit.PlaySound("resources://Audio/BottleCap");
 
     }
 
@@ -1494,7 +1513,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     }
 
     /// <summary>
-    /// 换色道具动画
+    /// 移除单色道具动画
     /// </summary>
     /// <param name="color"></param>
     /// <param name="fromPos"></param>

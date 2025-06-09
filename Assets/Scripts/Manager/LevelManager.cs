@@ -9,8 +9,6 @@ using static LevelCreateCtrl;
 using System.Collections;
 using Spine.Unity;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEngine.Experimental.AI;
 
 [MonoSingletonPath("[Level]/LevelManager")]
 public class LevelManager : MonoBehaviour,IController, ICanSendEvent
@@ -26,6 +24,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     public List<BottleCtrl> nowBottles = new List<BottleCtrl>();
 
     public List<BottleCtrl> iceBottles = new List<BottleCtrl>();
+    [SerializeField] private Transform BottomBottleNode;
     [SerializeField] private List<BottleCtrl> bottles = new List<BottleCtrl>();
     public List<BottleCtrl> topBottle = new List<BottleCtrl>();
     public List<BottleCtrl> bottomBottle = new List<BottleCtrl>();
@@ -57,10 +56,13 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     public bool ISPlayingHideAnim => playingHideAnimCount == 0;//playingHideAnimCount 遮挡布播放计数
     public BottleCtrl nowHalf;
 
-    public List<Sprite> scene1, scene2, scene3, scene4;
-    public List<string> scenePartName1, scenePartName2, scenePartName3, scenePartName4;
-    public List<int> needScene1, needScene2, needScene3, needScene4;
-    public List<int> needScenePart1, needScenePart2, needScenePart3, needScenePart4;
+    //public List<Sprite> scene1, scene2, scene3, scene4;
+    //public List<string> scenePartName1, scenePartName2, scenePartName3, scenePartName4;
+    //public List<int> needScene1, needScene2, needScene3, needScene4;
+    //public List<int> needScenePart1, needScenePart2, needScenePart3, needScenePart4;
+
+    public List<SceneUnLockSO> SceneUnLockSOs;
+
     public Material selectMaterial;
     public GameObject hideBg;
     //携带的道具
@@ -86,6 +88,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     private void Start()
     {
         //UIKit.OpenPanel<UIBegin>(UILevel.Common);
+        AudioKit.PlayMusic("resources://Audio/BG_BGM");
 
         //清空携带道具
         StringEventSystem.Global.Register("ClearTakeItem", () =>
@@ -282,6 +285,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     /// <returns></returns>
     IEnumerator AddColor(Vector3 fromPos)
     {
+        AudioKit.PlaySound("resources://Audio/AddColor");
+
         yield return new WaitForSeconds(1f);
         var bottleList = GetMakeColorBottle();
         List<BottleCtrl> useBottles = new List<BottleCtrl>();
@@ -349,6 +354,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
             yield return new WaitForSeconds(4);
 
             //Debug.Log("开始播放胜利结算");
+            AudioKit.PlaySound("resources://Audio/Victory");
             UIKit.ClosePanel<UIMask>();
             this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
 
@@ -390,6 +396,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     /// <param name="target"></param>
     public void ChangeColor(int from, int to, Transform target)
     {
+        AudioKit.PlaySound("resources://Audio/ChangeColor");
         if (clearList.Contains(from))
         {
             clearList.Remove(from);
@@ -436,6 +443,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     {
         isPlayFxAnim = true;
         yield return new WaitForSeconds(1f);
+        AudioKit.PlaySound("resources://Audio/BroomBullet");
 
         foreach (var bottle in nowBottles)
         {
@@ -467,6 +475,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
             bottle.RemoveAllOneColor(color, removeColorBottles.Count == 1);
         }
 
+        StartCoroutine(WaitCheckFinish());
         UIKit.ClosePanel<UIMask>();
     }
 
@@ -511,11 +520,58 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     /// <param name="isHalf"></param>
     public void AddBottle(bool isHalf, Action action)
     {
-        if (nowBottles.Count < (topBottle.Count + bottomBottle.Count) || nowHalf != null)
+        //增加瓶子时一定会激活底部瓶子节点
+        if (!BottomBottleNode.gameObject.activeSelf)
+            BottomBottleNode.Show();
+
+        // 半瓶道具逻辑
+        if (isHalf)
+        {
+            if (nowHalf == null || nowHalf.maxNum == 4)
+            {
+                // 新开一个半瓶
+                if (nowBottles.Count < (topBottle.Count + bottomBottle.Count))
+                {
+                    UseItemAddBottle();
+                    MoveAndAddBottle(true, action);
+                }
+            }
+            else
+            {
+                // 直接增加容量
+                nowHalf.maxNum++;
+                nowHalf.SetMaxBottle();
+                if (nowHalf.maxNum == 4)
+                    nowHalf = null;
+                action?.Invoke();
+            }
+            return;
+        }
+
+        // 整瓶道具逻辑
+        if (!isHalf)
+        {
+            if (nowHalf != null && nowHalf.maxNum < 4)
+            {
+                // 补满半瓶
+                nowHalf.maxNum = 4;
+                nowHalf.SetMaxBottle();
+                nowHalf = null;
+                action?.Invoke();
+                return;
+            }
+            if (nowBottles.Count < (topBottle.Count + bottomBottle.Count))
+            {
+                UseItemAddBottle();
+                MoveAndAddBottle(false, action);
+            }
+        }
+
+        /*if (nowBottles.Count < (topBottle.Count + bottomBottle.Count) || nowHalf != null)
         {
             UseItemAddBottle();
             MoveAndAddBottle(isHalf, action);
-        }
+        }*/
     }
 
     /// <summary>
@@ -593,7 +649,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     public void MoveAndAddBottle(bool isHalf, Action action)
     {
         var num = nowBottles.Count;
-
+        
         //初始化瓶子-更新索引
         if (isHalf)
         {
@@ -610,7 +666,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
                     nowHalf = null;
             }
         }
-        else    //整瓶
+        //整瓶
+        else
         {
             nowBottles[num - 1].Init(emptyBottle, nowBottles[num - 1].bottleIdx);
             nowBottles[num - 1].maxNum = 4;
@@ -689,6 +746,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         //Debug.Log("关卡重置初始化/首次进入关卡初始化");
         ShowBottleGo();
         InitBottle(levelInfo);
+        BottleLayoutRefresh();
 
         //当前有连胜，去黑水瓶生效
         int WinNum = stageModel.CountinueWinNum;
@@ -778,6 +836,24 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         //this.SendEvent<GameStartEvent>();
 
         GameCtrl.Instance.InitGameCtrl();
+    }
+
+    /// <summary>
+    /// 刷新瓶子布局
+    /// </summary>
+    /// 取决于第二列是否有瓶子
+    private void BottleLayoutRefresh()
+    {
+        var active = false;
+        foreach (RectTransform child in BottomBottleNode)
+        {
+            if (child.gameObject.activeSelf)
+            {
+                active = true;
+                break;
+            }
+        }
+        BottomBottleNode.gameObject.SetActive(active);
     }
 
     #endregion
@@ -938,6 +1014,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
 
     IEnumerator ShowMahoujinCoroutine()
     {
+        AudioKit.PlaySound("resources://Audio/MagicCircle");
+
         isPlayFxAnim = true;
         mahoujinGo.SetActive(true);
         mahoujinSpine.AnimationState.SetEmptyAnimation(0, 0f);
@@ -960,48 +1038,29 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     /// <returns></returns>
     public int GetUnlockNeedStar(int scene, int num)
     {
-        List<int> useList = null;
-        switch (scene)
+        IReadOnlyList<int> _useList = null;
+        int _index = scene - 1;
+        if (_index >= 0 && _index < SceneUnLockSOs.Count)
         {
-            case 1:
-                useList = needScene1;
-                break;
-            case 2:
-                useList = needScene2;
-                break;
-            case 3:
-                useList = needScene3;
-                break;
-            case 4:
-                useList = needScene4;
-                break;
+            _useList = SceneUnLockSOs[_index].SceneNeedStarCount;
         }
 
+        // num==0时，首场景返回0，其它场景返回上一个场景的最后一个部件总需星数
         if (num == 0)
         {
             if (scene == 1)
-            {
                 return 0;
-            }
-            else
-            {
-                switch (scene)
-                {
-                    case 2:
-                        useList = needScene1;
-                        break;
-                    case 3:
-                        useList = needScene2;
-                        break;
-                    case 4:
-                        useList = needScene3;
-                        break;
-                }
-                return useList[4];
 
+            int prevIndex = _index - 1;
+            if (prevIndex >= 0 && prevIndex < SceneUnLockSOs.Count)
+            {
+                var prevList = SceneUnLockSOs[prevIndex].SceneNeedStarCount;
+                return prevList[prevList.Count - 1];
             }
         }
-        return useList[num - 1];
+
+        // 正常返回当前部件所需星数(可能越界)
+        return _useList[num - 1];
     }
 
     /// <summary>
@@ -1012,48 +1071,19 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     /// <returns></returns>
     public int GetPartNeedStar(int scene, int num)
     {
-        List<int> useList = null;
-        switch (scene)
+        IReadOnlyList<int> _useList = null;
+        int _index = scene - 1;
+        if (_index >= 0 && _index < SceneUnLockSOs.Count)
+            _useList = SceneUnLockSOs[_index].ScenePartNeedStar;
+        else
         {
-            case 1:
-                useList = needScenePart1;
-                break;
-            case 2:
-                useList = needScenePart2;
-                break;
-            case 3:
-                useList = needScenePart3;
-                break;
-            case 4:
-                useList = needScenePart4;
-                break;
+            //Debug.Log("越界，设为最后一个场景");
+            _useList = SceneUnLockSOs[SceneUnLockSOs.Count - 1].ScenePartNeedStar;
         }
-        return num == 0 ? useList[0] : useList[num - 1];
-        //return useList[num - 1];//有时会传入0
+
+        return num == 0 ? _useList[0] : _useList[num - 1];
     }
-
-    /// <summary>
-    /// 解锁场景部件
-    /// </summary>
-    /// <param name="scene"></param>
-    /// <param name="num"></param>
-    public void UnlockScene(int scene, int num)
-    {
-        UnlockSceneEvent e = new UnlockSceneEvent();
-        e.scene = scene;
-        e.part = num;
-           
-        this.GetUtility<SaveDataUtility>().SetSceneRecord(scene);
-        this.GetUtility<SaveDataUtility>().SetScenePartRecord(num);
-
-        //需要先保存数据，然后在发送事件，因为后面的逻辑需要更新UI，重新读取数据，
-        this.SendEvent<UnlockSceneEvent>(e);
-
-        //在发送完事件之后，处理完解锁动画更新数据
-        if (num == 5)
-            this.GetUtility<SaveDataUtility>().SetSceneRecord(scene + 1);
-    }
-
+   
     /// <summary>
     /// 道具选择(替换背景，更换瓶子材质)
     /// </summary>

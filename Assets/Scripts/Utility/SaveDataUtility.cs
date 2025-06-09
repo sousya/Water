@@ -22,6 +22,19 @@ public class SaveDataUtility : IUtility, ICanSendEvent
         return PlayerPrefs.GetInt(key, defaultValue);
     }
 
+    public void SaveBool(string key,bool value)
+    {
+        if (value)
+            PlayerPrefs.SetInt(key, 1);
+        else
+            PlayerPrefs.SetInt(key, 0);
+    }
+
+    public bool LoadBoolValue(string key, bool defaultValue = true)
+    {
+        var value = PlayerPrefs.GetInt(key, defaultValue ? 1 : 0);
+        return value == 1;
+    }
 
     public void SaveLevel(int level)
     {
@@ -62,65 +75,12 @@ public class SaveDataUtility : IUtility, ICanSendEvent
             return true;
         }
     }
-    public void SaveOrder(int level)
-    {
-        PlayerPrefs.SetInt("g_ClearWaterOrder", level);
-
-    }
-
-    public int GetOrder()
-    {
-        int clearLevel = PlayerPrefs.GetInt("g_ClearWaterOrder", 1);
-
-        return clearLevel;
-    }
-    public void SaveJigsaw(int level)
-    {
-        int clearLevel = PlayerPrefs.GetInt("g_ClearWaterJigsaw", 0);
-        int clearNowLevel = (int)Mathf.Pow(2, level - 1);
-        clearLevel = clearLevel | clearNowLevel;
-        PlayerPrefs.SetInt("g_ClearWaterJigsaw", clearLevel);
-    }
-
-    public bool GetJigsaw(int level)
-    {
-        int clearLevel = PlayerPrefs.GetInt("g_ClearWaterJigsaw", 0);
-        int checkLevel = (int)Mathf.Pow(2, level - 1);
-        int isClear = clearLevel & checkLevel;
-        if (isClear == 0)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
 
     public string GetSelectLanguage()
     {
         string language =  PlayerPrefs.GetString("g_WaterLanguage", "-1");
 
         return language;
-    }
-
-    public void SaveShowOrderBegin()
-    {
-        PlayerPrefs.SetInt("g_WaterOrderBegin", 1);
-    }
-
-    public bool GetShowOrderBegin()
-    {
-        return PlayerPrefs.GetInt("g_WaterOrderBegin", 0) == 1;
-    }
-    public void SaveShowOrderEnd()
-    {
-        PlayerPrefs.SetInt("g_WaterOrderEnd", 1);
-    }
-
-    public bool GetShowOrderEnd()
-    {
-        return PlayerPrefs.GetInt("g_WaterOrderEnd", 0) == 1;
     }
 
     public void SaveSelectLanguage(LanguageType languageType)
@@ -157,101 +117,13 @@ public class SaveDataUtility : IUtility, ICanSendEvent
         return false;
     }
 
-    public void SaveClickChallenge(bool click)
+    public bool GetOverUnLock()
     {
-        if(click)
-        {
-            PlayerPrefs.SetInt("g_WaterClickChallenge", 1);
-        }
-        else
-        {
-            PlayerPrefs.SetInt("g_WaterClickChallenge", 0);
-        }
-    }
-
-    public bool GetClickChallenge()
-    {
-        if(PlayerPrefs.GetInt("g_WaterClickChallenge", 0) == 1)
+        if (GetSceneRecord() > LevelManager.Instance.SceneUnLockSOs.Count)
         {
             return true;
         }
-
         return false;
-    }
-    public void SaveSeven(bool click)
-    {
-        if(click)
-        {
-            PlayerPrefs.SetInt("g_WaterSeven", 1);
-        }
-        else
-        {
-            PlayerPrefs.SetInt("g_WaterSeven", 0);
-        }
-    }
-
-    public bool GetSeven()
-    {
-        if(PlayerPrefs.GetInt("g_WaterSeven", 0) == 1)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public void SetRankTime()
-    {
-        DateTime now = DateTime.UtcNow + TimeSpan.FromSeconds(259201);
-        PlayerPrefs.SetString("g_WaterRankTimeEnd", now.ToString());
-    }
-
-    public string GetLeftTime()
-    {
-        DateTime now = DateTime.Now;
-        //long unixTimestamp = (now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
-        string endTime = PlayerPrefs.GetString("g_WaterRankTimeEnd", (DateTime.UtcNow + TimeSpan.FromSeconds(259201)).ToString());
-        DateTime end = DateTime.Parse(endTime);
-        var leftSt = end - DateTime.UtcNow;
-        DateTime left = new DateTime();
-        if (leftSt.TotalSeconds > 0)
-        {
-            left += leftSt;
-        }
-        //left.AddSeconds(endTimeSecond);
-        return (left.Day - 1) + "D " + left.ToLongTimeString();
-    }
-
-    public int GetOrAddMoreStar(int star = 0)
-    {
-        var total = PlayerPrefs.GetInt("g_WaterMoreStar", 0);
-        total += star;
-        PlayerPrefs.SetInt("g_WaterMoreStar", total);
-        return total;
-    }
-
-    public bool SetOrGetIsTipMain(int isTip = -1)
-    {
-        if(isTip != -1)
-        {
-            PlayerPrefs.SetInt("g_WaterIsTipMain", isTip);
-        }
-        return PlayerPrefs.GetInt("g_WaterIsTipMain", 0) == 1;
-    }
-
-
-    /// <summary>
-    /// 标志所有建筑解锁完成
-    /// </summary>
-    /// <param name="sign"></param>
-    public void SetOverUnLock(bool sign)
-    {
-        PlayerPrefs.SetString("g_OverUnLock", sign.ToString());
-    }
-
-    public string GetOverUnLock()
-    {
-       return PlayerPrefs.GetString("g_OverUnLock", "false");
     }
 
     public void SetSceneRecord(int scene)
@@ -266,7 +138,7 @@ public class SaveDataUtility : IUtility, ICanSendEvent
     public int GetSceneRecord()
     {
         int scene = PlayerPrefs.GetInt("g_WaterSceneRecord", 1);
-        return scene > 4 ? 4 : scene;
+        return scene;
     }
 
     public void SetScenePartRecord(int scene)
@@ -281,22 +153,5 @@ public class SaveDataUtility : IUtility, ICanSendEvent
     public int GetScenePartRecord()
     {
         return PlayerPrefs.GetInt("g_WaterScenePartRecord", 0); 
-    }
-
-    /// <summary>
-    /// 设置宝箱编号(用于确定哪个场景的宝箱)
-    /// </summary>
-    /// <param name="scene"></param>
-    public void SetSceneBox(int scene)
-    {
-        PlayerPrefs.SetInt("g_WaterSceneBoxRecord", scene);
-    }
-    /// <summary>
-    /// 获取宝箱编号
-    /// </summary>
-    /// <returns></returns>
-    public int GetSceneBox()
-    {
-        return PlayerPrefs.GetInt("g_WaterSceneBoxRecord", 0);  
     }
 }

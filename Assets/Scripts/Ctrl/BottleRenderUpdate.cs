@@ -3,10 +3,8 @@ using System;
 using System.Collections.Generic;
 using QFramework;
 using Spine.Unity;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class BottleRenderUpdate : MonoBehaviour

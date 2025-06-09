@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     public List<LevelCreateCtrl> levels = new List<LevelCreateCtrl>();
     public List<int> clearList = new List<int>();
     //带有阻碍的颜色(魔法布，藤曼，冰冻)
-    public List<int> cantClearColorList = new List<int>();
+    //public List<int> cantClearColorList = new List<int>();
     public List<int> cantChangeColorList = new List<int>();
     public List<BottleCtrl> nowBottles = new List<BottleCtrl>();
 
@@ -421,7 +421,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         foreach (var color in clearList)
         {
             //if (!cantClearColorList.Contains(color))
-            if (!cantChangeColorList.Contains(color))
+            if (!cantChangeColorList.Contains(color)) 
             {
                 ret.Add(color);
             }
@@ -690,7 +690,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     /// <param name="id"></param>
     public void StartGame(int id)
     {
-        cantClearColorList.Clear();
+        //cantClearColorList.Clear();
         cantChangeColorList.Clear();
         hideBottleList.Clear();
         levelId = id;
@@ -826,7 +826,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         hideColor = new List<int>(nowLevel.hideList);
         changeList = new List<ChangePair>(nowLevel.changeList);
         hideBottleList.Clear();
-        cantClearColorList.Clear();
+        //cantClearColorList.Clear();
 
         nowHalf = null;
         InitLevels(nowLevel);
@@ -937,12 +937,16 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     /// <summary>
     /// 清除所有附加道具
     /// </summary>
-    public void RemoveAll()
+    /// <param name="action">主动道具调用可传入委托</param>
+    public void RemoveAll(Action action = null)
     {
         foreach (var bottle in nowBottles)
         {
             bottle.SetNormal();
         }
+        cantChangeColorList.Clear();
+
+        action?.Invoke();
     }
 
     /// <summary>

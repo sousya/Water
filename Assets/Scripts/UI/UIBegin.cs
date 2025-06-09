@@ -113,6 +113,8 @@ namespace QFramework.Example
 
             BtnStepBack.onClick.AddListener(() =>
             {
+                AudioKit.PlaySound("resources://Audio/BtnSound");
+
                 if (!LevelManager.Instance.isPlayFxAnim && GameCtrl.Instance.IsPouring)
                 {
                     if (stageModel.ItemDic[1] <= 0)
@@ -193,7 +195,29 @@ namespace QFramework.Example
                     }
                     if (LevelManager.Instance.CheckAllDebuff())
                     {
-                        LevelManager.Instance.RemoveAll();
+                        LevelManager.Instance.RemoveAll(() =>
+                        {
+                            //Çå¿Õ²Ù×÷¼ÇÂ¼µÄÕÏ°­(±ÜÃâ»ØÍË»Ö¸´)
+                            foreach (var bottle in LevelManager.Instance.nowBottles)
+                            {
+                                foreach (var record in bottle.moveRecords)
+                                {
+                                    record.isFreeze = false;
+                                    record.isClearHide = false;
+                                    record.isNearHide = false;
+
+                                    for (int i = 0; i < record.hideWaters.Count; i++)
+                                    {
+                                        record.hideWaters[i] = false;
+                                    }
+
+                                    for (int i = 0; i < record.waterItems.Count; i++)
+                                    {
+                                        record.waterItems[i] = WaterItem.None;
+                                    }
+                                }
+                            }
+                        });
                         stageModel.ReduceItem(5, 1);
                     }
                 }

@@ -143,7 +143,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             bottle.waterImg.fillAmount = 1;
         }
 
-        for (int i = 0; i < waters.Count; i++)
+        /*for (int i = 0; i < waters.Count; i++)
         {
             if (isClearHide || isNearHide || waterItems[i] == WaterItem.Ice)
             {
@@ -152,7 +152,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     LevelManager.Instance.cantClearColorList.Add(waters[i]);
                 }
             }
-        }
+        }*/
 
         for (int i = 0; i < waters.Count; i++)
         {
@@ -1397,7 +1397,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         for (int i = 0; i < waters.Count; i++)
         {
             var waterColor = waters[i];
-
+            
             if (waterColor > 1000)
             {
                 if (itemId == 0)

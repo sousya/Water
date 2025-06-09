@@ -104,35 +104,12 @@ public class BottleRenderUpdate : MonoBehaviour
         WaterSpine.position = position;
     }
 
-    // 移动的瓶子，最后渲染
+    // 移动的瓶子，最后渲染（改变）
     public void SetMoveBottleRenderState(bool isMove, BottleCtrl otherBottle = null)
     {
-        var transparentRenderQueue = isMove ? 3100 : 3000;
         _otherBottle = otherBottle;
-
-        foreach (var waterRenderUpdater in waterRenders)
-        {
-            waterRenderUpdater.RenderQueue = transparentRenderQueue;
-        }
-
-        MaskImage.material.renderQueue = transparentRenderQueue - 1;
-        WaterSpine.GetComponent<SkeletonGraphic>().material.renderQueue = transparentRenderQueue;
-        BotteImage.material.renderQueue = transparentRenderQueue + 1;
-        
-        foreach (var skeletonGraphic in Brooms)
-        {
-            var material = new Material(skeletonGraphic.material);
-            material.SetFloat("_Stencil", bottleIndex);
-            material.SetFloat("_StencilOp", ((int)UnityEngine.Rendering.StencilOp.Keep) * 1.0f);
-            material.SetFloat("_StencilComp", ((int)UnityEngine.Rendering.CompareFunction.Disabled) * 1.0f);
-            material.renderQueue = transparentRenderQueue + 1;
-            skeletonGraphic.material = material;
-            //skeletonGraphic.TrimRenderers();
-            var skeletonSubmeshGraphics = skeletonGraphic.gameObject.GetComponentsInChildren<SkeletonSubmeshGraphic>();
-            foreach (var skeletonSubmeshGraphic in skeletonSubmeshGraphics)
-            {
-                skeletonSubmeshGraphic.material = material;
-            }
-        }
+        var localPosition = transform.localPosition;
+        transform.localPosition = isMove ? new Vector3(localPosition.x, localPosition.y, -1) 
+            : new Vector3(localPosition.x, localPosition.y, 0);
     }
 }

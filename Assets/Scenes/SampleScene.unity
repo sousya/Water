@@ -18839,8 +18839,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 1
+  far clip plane: 20
   field of view: 26.991467
   orthographic: 1
   orthographic size: 15.8
@@ -18886,7 +18886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RenderShadows: 1
+  m_RenderShadows: 0
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
@@ -37663,7 +37663,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ab2b253902ac07f478d80a10e526c0d6, type: 2}
   - {fileID: 11400000, guid: be251cc9d5159e14fad006904efaab59, type: 2}
   clearList: 
-  cantClearColorList: 
   cantChangeColorList: 
   nowBottles: []
   iceBottles: []
@@ -37755,6 +37754,7 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
+    isFinish: 0
   gameCanvas: {fileID: 1628571911}
   changeList: []
   createFx:

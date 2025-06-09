@@ -117,7 +117,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         //配置初始容量
         //maxNum = property.numCake;
 
-        isFinish = false; isFreeze = false; isClearHideAnim = false;
+        isFinish = property.isFinish; 
+        isClearHideAnim = false;
         finishGo.SetActive(isFinish);
         bubbleSpine.gameObject.SetActive(false);
 
@@ -182,7 +183,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         //CheckFinish();
 
         freezeGo.gameObject.SetActive(isFreeze);
-        if (limitColor != 0)
+        //!isFinish针对回退时是否触发
+        if (limitColor != 0 && !isFinish)
         {
             limitColorSpine.gameObject.SetActive(true);
             if (limitColor > 0 && limitColor < (int)EIdleAnim.IDLE_MAX)
@@ -310,7 +312,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             freezeSpine.AnimationState.SetAnimation(0, "attack", false);
         }
 
-        if (limitColor != 0)
+        if (limitColor != 0 && !isFinish)
         {
             if (limitColor > 0 && limitColor < (int)ECombimeAnim.IDLE_MAX)
             {
@@ -438,11 +440,11 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     public bool CheckMoveIn(int color)
     {
-        if (topIdx < 0)
+        if (topIdx < 0 && limitColor == 0)
             return true;
 
         var top = GetMoveOutTop();
-        
+
         if (isClearHide || isNearHide || isFinish || GetLeftEmpty() == 0 || (limitColor != 0 && limitColor != color))
         {
             return false;
@@ -1639,6 +1641,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         record.isNearHide = isNearHide;
         record.isClearHide = isClearHide;
         record.isFreeze = isFreeze;
+        record.limitColor = limitColor;
         record.waters = new List<int>(waters);
         record.hideWaters = new List<bool>(hideWaters);
         record.waterItems = new List<WaterItem>(waterItems);
@@ -1663,16 +1666,19 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         temp.isFreeze = record.isFreeze;
         temp.isNearHide = record.isNearHide;
         temp.isClearHide = record.isClearHide;
+        temp.isFinish = record.isFinish;
+        temp.limitColor = record.limitColor;
+
         temp.waterSet = new List<int>(record.waters);
         temp.isHide = new List<bool>(record.hideWaters);
         temp.waterItem = new List<WaterItem>(record.waterItems);
 
         temp.numCake = originProperty.numCake;
-        temp.limitColor = originProperty.limitColor;
+        //temp.limitColor = originProperty.limitColor;
         temp.lockType = originProperty.lockType;
 
         Init(temp, bottleIdx);
-        isFinish = record.isFinish;
+        //isFinish = record.isFinish;
 
         moveRecords.Remove(record);
         finishGo.SetActive(isFinish);

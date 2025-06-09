@@ -1117,6 +1117,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
 public class BottleRecord
 {
     public bool isFinish, isFreeze, isClearHide, isNearHide;
+    public int limitColor;
     public List<int> waters = new List<int>();
     public List<bool> hideWaters = new List<bool>();
     public List<WaterItem> waterItems = new List<WaterItem>();

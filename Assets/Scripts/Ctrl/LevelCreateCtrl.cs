@@ -45,6 +45,7 @@ public class LevelCreateCtrl : ScriptableObject
         public int lockType;
         // 三种障碍(遮挡布，大型藤曼，底部藤曼)
         public bool isClearHide, isNearHide, isFreeze;
+        public bool isFinish;
     }
     // 需要清除的颜色列表（关卡目标）
     public List<int> clearList;

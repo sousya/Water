@@ -144,17 +144,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
         for (int i = 0; i < waters.Count; i++)
         {
-            if (isClearHide || isNearHide || waterItems[i] == WaterItem.Ice)
-            {
-                if (!LevelManager.Instance.cantClearColorList.Contains(waters[i]))
-                {
-                    LevelManager.Instance.cantClearColorList.Add(waters[i]);
-                }
-            }
-        }
-
-        for (int i = 0; i < waters.Count; i++)
-        {
             var color = waters[i];
             if (isClearHide || isNearHide || waterItems[i] == WaterItem.Ice)
             {

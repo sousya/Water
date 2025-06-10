@@ -921,7 +921,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3446497621610047684}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ButtonSoundExtension, Assembly-CSharp
+        m_MethodName: PlayButtonClickSound
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &763001163486231423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1135,7 +1147,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8928475807108837177}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ButtonSoundExtension, Assembly-CSharp
+        m_MethodName: PlayButtonClickSound
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3741712686002207628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1276,7 +1300,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6399051510898252645}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ButtonSoundExtension, Assembly-CSharp
+        m_MethodName: PlayButtonClickSound
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &392049105547198850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1626,7 +1662,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7652138058246805683}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ButtonSoundExtension, Assembly-CSharp
+        m_MethodName: PlayButtonClickSound
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7717210827230292751
 MonoBehaviour:
   m_ObjectHideFlags: 0

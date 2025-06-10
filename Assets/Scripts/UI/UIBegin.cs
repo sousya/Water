@@ -128,8 +128,6 @@ namespace QFramework.Example
 
             BtnRemoveHide.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
-
                 if (!LevelManager.Instance.isPlayFxAnim && GameCtrl.Instance.IsPouring)
                 {
                     if (stageModel.ItemDic[2] <= 0)
@@ -151,8 +149,6 @@ namespace QFramework.Example
 
             BtnAddBottle.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
-
                 if (!LevelManager.Instance.isPlayFxAnim && GameCtrl.Instance.IsPouring)
                 {
                     if (stageModel.ItemDic[3] <= 0)
@@ -170,8 +166,6 @@ namespace QFramework.Example
 
             BtnHalfBottle.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
-
                 if (!LevelManager.Instance.isPlayFxAnim && GameCtrl.Instance.IsPouring)
                 {
                     if (stageModel.ItemDic[4] <= 0)
@@ -189,8 +183,6 @@ namespace QFramework.Example
 
             BtnRemoveAll.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
-
                 if (!LevelManager.Instance.isPlayFxAnim && GameCtrl.Instance.IsPouring)
                 {
                     if (stageModel.ItemDic[5] <= 0)
@@ -233,32 +225,24 @@ namespace QFramework.Example
             BtnStart.onClick.RemoveAllListeners();
             BtnStart.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
-
                 UIKit.OpenPanel<UIBeginSelect>();
             });
 
             BtnReturn.onClick.RemoveAllListeners();
             BtnReturn.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
-
                 UIKit.OpenPanel<UIRetry>();
             });
 
             BtnHeart.onClick.RemoveAllListeners();
             BtnHeart.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
-
                 UIKit.OpenPanel<UIMoreLife>();
             });
 
             BtnArea.onClick.RemoveAllListeners();
             BtnArea.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
-
                 UIKit.OpenPanel<UIUnlockScene>();
             });
 
@@ -277,17 +261,14 @@ namespace QFramework.Example
 
             BtnItem1.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
                 UseItem(6, BtnItem1);
             });
             BtnItem2.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
                 UseItem(7, BtnItem2);
             });
             BtnItem3.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
                 LevelManager.Instance.ShowItemSelect();
                 GameCtrl.Instance.SeletedItem(bottele => { UseItem(8, BtnItem3, bottele); });
             });
@@ -295,7 +276,6 @@ namespace QFramework.Example
             BtnHead.onClick.RemoveAllListeners();
             BtnHead.onClick.AddListener(() =>
             {
-                AudioKit.PlaySound("resources://Audio/BtnSound");
                 UIKit.OpenPanel("UIPersonal");
             });
 
@@ -310,7 +290,6 @@ namespace QFramework.Example
             {
                 btn.onClick.AddListener(() =>
                 {
-                    AudioKit.PlaySound("resources://Audio/BtnSound");
                     int index = bottomMenuBtns.IndexOf(btn);
                     //«–ªªΩÁ√Ê
                     ChangePanel(index);

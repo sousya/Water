@@ -53,13 +53,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     public SkeletonGraphic mahoujinSpine;
     bool isFinish = false, isBomb = false, isCountDown = false, isTimeCountDown = false;
     public bool isPlayAnim, isPlayFxAnim;
-    public bool ISPlayingHideAnim => playingHideAnimCount == 0;//playingHideAnimCount 遮挡布播放计数
+    public bool ISPlayingHideAnim => playingHideAnimCount == 0;//playingHideAnimCount 播放计数
     public BottleCtrl nowHalf;
-
-    //public List<Sprite> scene1, scene2, scene3, scene4;
-    //public List<string> scenePartName1, scenePartName2, scenePartName3, scenePartName4;
-    //public List<int> needScene1, needScene2, needScene3, needScene4;
-    //public List<int> needScenePart1, needScenePart2, needScenePart3, needScenePart4;
 
     public List<SceneUnLockSO> SceneUnLockSOs;
 
@@ -748,11 +743,12 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         InitBottle(levelInfo);
         BottleLayoutRefresh();
 
-        //当前有连胜，去黑水瓶生效
-        int WinNum = stageModel.CountinueWinNum;
-        //Debug.Log("当前连胜次数:" + WinNum);
-        if (WinNum > 0)
-            StringEventSystem.Global.Send("StreakWinItem", WinNum);
+        //连胜去黑水(暂去)
+        ////当前有连胜，去黑水瓶生效
+        //int WinNum = stageModel.CountinueWinNum;
+        ////Debug.Log("当前连胜次数:" + WinNum);
+        //if (WinNum > 0)
+        //    StringEventSystem.Global.Send("StreakWinItem", WinNum);
 
         //关卡引导判断
         if (GameDefine.GameConst.GuideLevelInfo.TryGetValue(levelId ,out (string guideText,string guideAnimName) value))

@@ -37663,7 +37663,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ab2b253902ac07f478d80a10e526c0d6, type: 2}
   - {fileID: 11400000, guid: be251cc9d5159e14fad006904efaab59, type: 2}
   clearList: 
-  cantClearColorList: 
   cantChangeColorList: 
   nowBottles: []
   iceBottles: []
@@ -37755,6 +37754,7 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
+    isFinish: 0
   gameCanvas: {fileID: 1628571911}
   changeList: []
   createFx:

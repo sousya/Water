@@ -190,7 +190,6 @@ MonoBehaviour:
   BtnCoinBuy: {fileID: 4146399528330977761}
   TxtCoinCost: {fileID: 8579018427514295900}
   BtnAD: {fileID: 2767235790847506716}
-  TxtHeart2: {fileID: 7387552318391699345}
 --- !u!1 &1131428141828574028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1163,7 +1162,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1430765630858642222}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ButtonSoundExtension, Assembly-CSharp
+        m_MethodName: PlayButtonClickSound
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1050753987991166866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1512,7 +1523,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 998904308223713959}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ButtonSoundExtension, Assembly-CSharp
+        m_MethodName: PlayButtonClickSound
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4075903820264428610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1652,7 +1675,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8343426380494336896}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ButtonSoundExtension, Assembly-CSharp
+        m_MethodName: PlayButtonClickSound
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4217381811412709962
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ using GameDefine;
 
 public class StageModel : AbstractModel
 {
+    //道具字典
     public BindableDictionary<int, int> ItemDic;
 
     //连胜

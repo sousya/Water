@@ -5,28 +5,37 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:c93fafa2-64a7-498e-9b83-a9e57b6c5df8
+	// Generate Id:670f12ca-7b68-4368-899c-d3d706f8389e
 	public partial class UIGetCoin
 	{
 		public const string Name = "UIGetCoin";
 		
 		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtCoin;
+		public UnityEngine.UI.Button BtnClose;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI TxtLevel;
 		[SerializeField]
-		public UnityEngine.UI.Button BtnContinue;
+		public TMPro.TextMeshProUGUI TxtCoin;
 		[SerializeField]
-		public UnityEngine.UI.Button BtnClose;
+		public UnityEngine.GameObject ImgProcessNode;
+		[SerializeField]
+		public UnityEngine.UI.Image ImgProcess;
+		[SerializeField]
+		public TMPro.TextMeshProUGUI TxtProcess;
+		[SerializeField]
+		public UnityEngine.UI.Button BtnContinue;
 		
 		private UIGetCoinData mPrivateData = null;
 		
 		protected override void ClearUIComponents()
 		{
-			TxtCoin = null;
-			TxtLevel = null;
-			BtnContinue = null;
 			BtnClose = null;
+			TxtLevel = null;
+			TxtCoin = null;
+			ImgProcessNode = null;
+			ImgProcess = null;
+			TxtProcess = null;
+			BtnContinue = null;
 			
 			mData = null;
 		}

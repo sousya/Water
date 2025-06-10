@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using QFramework;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,7 +26,7 @@ public class ScenePartCtrl : MonoBehaviour
     public IEnumerator WaterShine()
     {
         float shineTime = -0.2f;
-
+        AudioKit.PlaySound("resources://Audio/BuildShine");
         while (shineTime <= 2f)
         {
             shineTime += 0.05f * 1;

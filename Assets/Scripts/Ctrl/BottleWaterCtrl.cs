@@ -442,7 +442,7 @@ public class BottleWaterCtrl : MonoBehaviour
         bottle.UnlockIceWater();
     }
     
-    public void SetColorState(GameDefine.ItemType itemType, Color inColor)
+    public void SetColorState(GameDefine.ItemType itemType, Color inColor, bool isTopWater)
     {
         this.color = inColor;
         
@@ -455,9 +455,13 @@ public class BottleWaterCtrl : MonoBehaviour
         if (fieldInfo.GetCustomAttribute(typeof(WaterColorState), false) is not WaterColorState attribute) 
             return;
         broomItemGo.SetActive(attribute.BroomItemActive);
+        broomItemGo.transform.Find("Top").gameObject.SetActive(isTopWater);
         createItemGo.SetActive(attribute.CreateItemActive);
+        createItemGo.transform.Find("Top").gameObject.SetActive(isTopWater);
         changeItemGo.SetActive(attribute.ChangeItemActive);
+        changeItemGo.transform.Find("Top").gameObject.SetActive(isTopWater);
         magnetItemGo.SetActive(attribute.MagnetItemActive);
+        magnetItemGo.transform.Find("Top").gameObject.SetActive(isTopWater);
         if (attribute.SpineAnim.IsNullOrEmpty() == false && attribute.SpineType > EColorStateSpineType.None && attribute.SpineType < EColorStateSpineType.Max)
         {
             switch (attribute.SpineType)

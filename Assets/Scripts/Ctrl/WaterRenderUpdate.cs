@@ -144,10 +144,10 @@ public class WaterRenderUpdate : MonoBehaviour
         
         ValidMaterial();
         _blackWaterMaterial.color = Color.black;
-        _blackWaterMaterial.renderQueue = 3001;
+        _blackWaterMaterial.renderQueue = 2902;
         _blackWaterMaterial.SetFloat("_FillHeight", 1000);
         
-        _iceEffectMaterial.renderQueue = 3001;
+        _iceEffectMaterial.renderQueue = 2902;
         _iceEffectMaterial.SetFloat("_FillHeight", 1000);
     }
 

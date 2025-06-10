@@ -911,7 +911,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                 hideWaters[i] = false;
             }
         }
-
+        
         // 遍历每层水块，设置颜色和状态
         for (int i = 0; i < waters.Count; i++)
         {
@@ -921,13 +921,13 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             if (useColor < 1000)
             {
                 //Debug.Log("UseColor " + useColor);
-                waterImg[i].SetColorState(ItemType.UseColor, LevelManager.Instance.waterColor[useColor]);
+                waterImg[i].SetColorState(ItemType.UseColor, LevelManager.Instance.waterColor[useColor], topIdx == i);
             }
             // 特殊道具水块
             else
             {
                 // 根据道具类型设置对应的显示和动画
-                waterImg[i].SetColorState((ItemType)waters[i], LevelManager.Instance.ItemColor);
+                waterImg[i].SetColorState((ItemType)waters[i], LevelManager.Instance.ItemColor, topIdx == i);
             }
 
             //将隐藏水块显示

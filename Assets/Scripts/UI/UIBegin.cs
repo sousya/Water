@@ -552,9 +552,9 @@ namespace QFramework.Example
                     {
                         var useColor = botter.waters[i] - 1;
                         if (useColor < 1000)
-                            botter.waterImg[i].SetColorState(ItemType.UseColor, LevelManager.Instance.waterColor[useColor]);
+                            botter.waterImg[i].SetColorState(ItemType.UseColor, LevelManager.Instance.waterColor[useColor], i == botter.topIdx);
                         else
-                            botter.waterImg[i].SetColorState((ItemType)botter.waters[i], LevelManager.Instance.ItemColor);
+                            botter.waterImg[i].SetColorState((ItemType)botter.waters[i], LevelManager.Instance.ItemColor, i == botter.topIdx);
                     }
 
                     //修改水面位置，修改水面颜色并播放水面动画

@@ -109,7 +109,7 @@ public class BottleRenderUpdate : MonoBehaviour
     {
         _otherBottle = otherBottle;
         var localPosition = transform.localPosition;
-        transform.localPosition = isMove ? new Vector3(localPosition.x, localPosition.y, -1) 
+        transform.localPosition = isMove ? new Vector3(localPosition.x, localPosition.y, -100) 
             : new Vector3(localPosition.x, localPosition.y, 0);
     }
 }

@@ -97,7 +97,7 @@ Shader "UI/FillWater"
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
                 float4 vPosition = UnityObjectToClipPos(v.vertex);
-                OUT.worldPosition = v.vertex;//mul(unity_ObjectToWorld, float4(v.vertex.xyz, 1.0));
+                OUT.worldPosition = mul(unity_ObjectToWorld, float4(v.vertex.xyz, 1.0));
                 OUT.vertex = vPosition;
 
                 float2 pixelSize = vPosition.w;

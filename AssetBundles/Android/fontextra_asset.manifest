@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2618327080
+CRC: 3442080701
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 02c4f4385414ac4cbee4c77cc7c2600b
+    Hash: a8167dd2821c6f46dd6f4733d73bb0c8
   TypeTreeHash:
     serializedVersion: 2
     Hash: 533ddedb5ba977670584d2c1db0f7fc3
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 02c4f4385414ac4cbee4c77cc7c2600b
+    Hash: a8167dd2821c6f46dd6f4733d73bb0c8
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -44,5 +44,5 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.TextCoreFontEngineModule
   ClassName: UnityEngine.TextCore.GlyphRect
 Assets:
-- Assets/Resources/Font/FontExtra.asset
+- Assets/Resources/Font/_DEL/FontExtra.asset
 Dependencies: []

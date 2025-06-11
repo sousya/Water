@@ -20,7 +20,7 @@ namespace QAssetBundle
     public class Font
     {
         public const string BundleName = "font";
-        public const string SourceHanSansCNBold_SDF_OutLine = "SourceHanSansCN-Bold SDF OutLine";
+        public const string SourceHanSansCNBold_SDF_Blue = "SourceHanSansCN-Bold SDF Blue";
     }
     public class Fontall_asset
     {
@@ -91,6 +91,11 @@ namespace QAssetBundle
     {
         public const string BundleName = "uipersonal_prefab";
         public const string UIPersonal = "UIPersonal";
+    }
+    public class Uipropmask_prefab
+    {
+        public const string BundleName = "uipropmask_prefab";
+        public const string UIPropMask = "UIPropMask";
     }
     public class Uiretry_prefab
     {

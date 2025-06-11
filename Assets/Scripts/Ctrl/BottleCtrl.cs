@@ -528,7 +528,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             {
                 hasUnlockHidePlayed = true;
                 ++LevelManager.Instance.playingHideAnimCount;
-                UIKit.OpenPanel<UIMask>(UILevel.PopUI);
+                UIKit.OpenPanel<UIPropMask>(UILevel.PopUI);
                 foreach (var item in waters)
                 {
                     LevelManager.Instance.cantChangeColorList.Remove(item);
@@ -561,12 +561,11 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             trackEntry.Complete += (entry) =>
             {
                 clearHide.gameObject.SetActive(false);
-                isClearHideAnim = false; 
+                isClearHideAnim = false;
                 --LevelManager.Instance.playingHideAnimCount;
-                //计数为0且未过关(15关较为特殊)
-                if (LevelManager.Instance.ISPlayingHideAnim && LevelManager.Instance.clearList.Count != 0)
+                if (LevelManager.Instance.ISPlayingHideAnim)
                 {
-                    UIKit.ClosePanel<UIMask>();
+                    UIKit.ClosePanel<UIPropMask>();
                 }
             };
         }

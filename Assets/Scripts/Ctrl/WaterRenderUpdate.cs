@@ -112,21 +112,29 @@ public class WaterRenderUpdate : MonoBehaviour
         }
     }
 
-    public int RenderQueue
+    public int SortingOrder
     {
-        get
-        {
-            ValidMaterial();
-            return _material.renderQueue;
-        }
         set
         {
-            ValidMaterial();
-            _material.renderQueue = value;
-            _blackWaterMaterial.renderQueue = value + 1;
-            _iceEffectMaterial.renderQueue = value + 1;
+            _meshRenderer.sortingOrder = value;
         }
     }
+
+    // public int RenderQueue
+    // {
+    //     get
+    //     {
+    //         ValidMaterial();
+    //         return _material.renderQueue;
+    //     }
+    //     set
+    //     {
+    //         ValidMaterial();
+    //         _material.renderQueue = value;
+    //         _blackWaterMaterial.renderQueue = value + 1;
+    //         _iceEffectMaterial.renderQueue = value + 1;
+    //     }
+    // }
 
     // Start is called before the first frame update
     void OnEnable()

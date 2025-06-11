@@ -24,10 +24,13 @@ public class BottleRenderUpdate : MonoBehaviour
 
     private Material _material;
     private Vector3 _waterScale;
+    private BottleCtrl _bottleCtrl;
     
     private BottleCtrl _otherBottle = null;
     public void Start()
     {
+        _bottleCtrl = transform.parent.GetComponent<BottleCtrl>();
+        
         _material = new Material(MaskImage.material);
         _material.SetFloat("_StencilRef", bottleIndex);
         MaskImage.material = _material;
@@ -103,13 +106,52 @@ public class BottleRenderUpdate : MonoBehaviour
         WaterSpine.localScale = new Vector3(Mathf.Abs(intesectionPoints[1].x - intesectionPoints[0].x) / 1.688f, 1, 1);
         WaterSpine.position = position;
     }
+    
+    public float GetBottleBottomY()
+    {
+        // 获取瓶子底部的Y坐标
+        //Debug.LogError(corners[3].position.y);
+        return corners[3].position.y;
+    }
+    
+    public void SetWaterSortingOrder(int order)
+    {
+        foreach (var waterRenderUpdater in waterRenders)
+        {
+            waterRenderUpdater.SortingOrder = order;
+        }
+    }
 
     // 移动的瓶子，最后渲染（改变）
     public void SetMoveBottleRenderState(bool isMove, BottleCtrl otherBottle = null)
     {
         _otherBottle = otherBottle;
-        var localPosition = transform.localPosition;
-        transform.localPosition = isMove ? new Vector3(localPosition.x, localPosition.y, -100) 
-            : new Vector3(localPosition.x, localPosition.y, 0);
+        if (isMove)
+        {
+            _bottleCtrl.GetComponent<Canvas>().sortingOrder = 1;
+            SetWaterSortingOrder(1);
+            if (_otherBottle != null)
+            {
+                _otherBottle.GetComponent<Canvas>().sortingOrder = 2;
+                
+                var bottleRender = _otherBottle.GetComponentInChildren<BottleRenderUpdate>();
+                bottleRender.SetWaterSortingOrder(2);
+                _bottleCtrl.ImgWaterDown.material.SetFloat("_ClipHeight", bottleRender.GetBottleBottomY());
+            }
+        }
+        else
+        {
+            _bottleCtrl.GetComponent<Canvas>().sortingOrder = 0;
+            SetWaterSortingOrder(0);
+            if (_otherBottle != null)
+            {
+                _otherBottle.GetComponent<Canvas>().sortingOrder = 0;
+                
+                var bottleRender = _otherBottle.GetComponentInChildren<BottleRenderUpdate>();
+                bottleRender.SetWaterSortingOrder(0);
+                _bottleCtrl.ImgWaterDown.material.SetFloat("_ClipHeight", -1000.0f);
+            }
+        }
+        
     }
 }

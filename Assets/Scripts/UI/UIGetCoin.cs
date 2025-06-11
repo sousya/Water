@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using QFramework;
-using System.Linq.Expressions;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace QFramework.Example
 {
@@ -54,15 +55,7 @@ namespace QFramework.Example
                     if (getReward >= 0 && getReward < rewardPackSO.Length)
                     {
                         var _packSO = rewardPackSO[getReward];
-                        RewardItemManager.Instance.PrepareSlotLayout(_packSO.ItemReward.Count);
-                        foreach (var item in _packSO.ItemReward)
-                        {
-                            stageModel.AddItem(item.ItemIndex, item.Quantity);
-                            //注意 rewardSprites 是否越界
-                            RewardItemManager.Instance.PlayRewardAnim(rewardSprites[item.ItemIndex - 1], item.ItemIndex, item.Quantity);
-                        }
-                        //else
-                        //    Debug.Log($"数组越界 getReward:{ getReward }");
+                        StartCoroutine(PlayAnimaton(_packSO));
                     }
                 }
 
@@ -104,23 +97,26 @@ namespace QFramework.Example
         {
             this.SendEvent<LevelClearEvent>(new LevelClearEvent());
             CloseSelf();
-            /*if (getReward >= 0 && getReward < rewardPackSO.Length)
-            {
-                var _packSO = rewardPackSO[getReward];
-                RewardItemManager.Instance.PrepareSlotLayout(_packSO.ItemReward.Count);
-                foreach (var item in _packSO.ItemReward)
-                {
-                    stageModel.AddItem(item.ItemIndex, item.Quantity);
-                    //注意 rewardSprites 是否越界
-                    RewardItemManager.Instance.PlayRewardAnim(rewardSprites[item.ItemIndex - 1], item.ItemIndex, item.Quantity);
-                }
-                //else
-                //    Debug.Log($"数组越界 getReward:{ getReward }");
-
-                this.SendEvent<LevelClearEvent>(new LevelClearEvent());
-                CloseSelf();
-            }*/
-           
         }
-	}
+
+        private IEnumerator PlayAnimaton(GiftPackSO _packSO)
+        {
+            RewardItemManager.Instance.PrepareSlotLayout(_packSO.ItemReward.Count);
+            var _actionList = new List<System.Action>();
+            foreach (var item in _packSO.ItemReward)
+            {
+                stageModel.AddItem(item.ItemIndex, item.Quantity);
+                //注意 rewardSprites 是否越界
+                _actionList.Add(RewardItemManager.Instance.PlayRewardInit(rewardSprites[item.ItemIndex - 1], item.ItemIndex, item.Quantity));
+            }
+            //else
+            //    Debug.Log($"数组越界 getReward:{ getReward }");
+
+            foreach (var item in _actionList)
+            {
+                item?.Invoke();
+                yield return new WaitForSeconds(0.2f);
+            }
+        }
+    }
 }

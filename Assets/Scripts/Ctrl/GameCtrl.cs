@@ -80,7 +80,7 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
                 else if (SecondBottle == null)
                 {
 
-                    if (bottle != FirstBottle && bottle.OnSelect(false))
+                    if (bottle != FirstBottle)// && bottle.OnSelect(false)
                     {
                         SecondBottle = bottle;
                     }

@@ -3,6 +3,7 @@ using QFramework;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System;
+using System.Collections;
 
 namespace QFramework.Example
 {
@@ -79,7 +80,7 @@ namespace QFramework.Example
         /// </summary>
         private void OnPaySuccess(GiftPackSO _packSo)
         {
-            PlayAnimaton(_packSo);
+            StartCoroutine(PlayAnimaton(_packSo));
 
             //金币发放
             CoinManager.Instance.AddCoin(_packSo.Coins);
@@ -98,16 +99,23 @@ namespace QFramework.Example
             UIKit.ClosePanel<UIShop>();
         }
 
-        private void PlayAnimaton(GiftPackSO _packSo)
+        private IEnumerator PlayAnimaton(GiftPackSO _packSo)
         {
             //Debug.Log("购买成功回调动画");
             RewardItemManager.Instance.PrepareSlotLayout(_packSo.ItemReward.Count);
+            var _actionList = new List<Action>();
             foreach (var item in _packSo.ItemReward)
             {
                 if (item.ItemIndex - 1 < mRewardSprites.Length && item.ItemIndex - 1 >= 0)
-                    RewardItemManager.Instance.PlayRewardAnim(mRewardSprites[item.ItemIndex - 1], item.ItemIndex, item.Quantity);
+                    _actionList.Add(RewardItemManager.Instance.PlayRewardInit(mRewardSprites[item.ItemIndex - 1], item.ItemIndex, item.Quantity));
                 else
                     Debug.LogWarning($"ItemIndex {item.ItemIndex} 超出奖励道具索引范围");
+            }
+
+            foreach (var item in _actionList)
+            {
+                item?.Invoke();
+                yield return new WaitForSeconds(0.2f);
             }
         }
 

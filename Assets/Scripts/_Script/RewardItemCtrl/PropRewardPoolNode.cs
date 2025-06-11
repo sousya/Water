@@ -39,11 +39,9 @@ public class PropRewardPoolNode : MonoBehaviour
         propNumText.text = "X" + itemNum;
         propImage.rectTransform.localScale = propImage.rectTransform.localScale * _scale;
         propImage.rectTransform.anchoredPosition = pos;
-
-        MoveOffScreen();
     }
 
-    private void MoveOffScreen()
+    public void MoveOffScreen()
     {
         ActionKit.Delay(0.8f, () =>
         {
@@ -51,7 +49,7 @@ public class PropRewardPoolNode : MonoBehaviour
             Vector2 offScreenPos = new Vector2(0, -Screen.height - rectTransform.rect.height * 0.5f);
 
             rectTransform.DOAnchorPos(offScreenPos, 0.8f)
-                .SetEase(Ease.InSine)
+                .SetEase(Ease.InQuart)
                 .OnComplete(() =>
                 {
                     RewardItemManager.Instance.RewardPool.Recycle(propImage);

@@ -32,6 +32,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public int maxNum = 4,  
         limitColor = 0,     // 限制可倒入的颜色(0表示无限制)
         unlockClear = 0;    // 解锁魔法布的颜色编号
+    // 用于接水次数计数
+    private int ReceiveCount = 0;
 
     // 水块颜色、黑水块标志、每层水块的附加状态(结冰、破冰)、水块脚本引用
     public List<int> waters = new List<int>();
@@ -89,21 +91,13 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     void Start()
     {
-        bottle.onClick.AddListener(OnSelected);
+        bottle.onClick.AddListener(OnSelectedClick);
 
         //初始化瓶子位置
         this.RegisterEvent<GameStartEvent>(e =>
         {
             OnCancelSelect();
         }).UnRegisterWhenGameObjectDestroyed(gameObject);
-    }
-
-    private void OnSelected()
-    {
-        if (!isPlayAnim && !LevelManager.Instance.isPlayFxAnim)
-        {
-            GameCtrl.Instance.OnSelect(this);
-        }
     }
 
     /// <summary>
@@ -114,6 +108,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     public void Init(BottleProperty property, int idx)
     {
         originProperty = property;
+
+        ReceiveCount = 0;
         //配置初始容量
         //maxNum = property.numCake;
 
@@ -143,17 +139,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         {
             bottle.waterImg.fillAmount = 1;
         }
-
-        /*for (int i = 0; i < waters.Count; i++)
-        {
-            if (isClearHide || isNearHide || waterItems[i] == WaterItem.Ice)
-            {
-                if (!LevelManager.Instance.cantClearColorList.Contains(waters[i]))
-                {
-                    LevelManager.Instance.cantClearColorList.Add(waters[i]);
-                }
-            }
-        }*/
 
         for (int i = 0; i < waters.Count; i++)
         {
@@ -373,13 +358,21 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         isPlayAnim = false;
     }
 
+    private void OnSelectedClick()
+    {
+        if (!isPlayAnim && !LevelManager.Instance.isPlayFxAnim)
+        {
+            GameCtrl.Instance.OnSelect(this);
+        }
+    }
+
     /// <summary>
     /// 判断是否能选中 如果能 则选中
     /// </summary>
     /// <returns></returns>
     public bool OnSelect(bool needUp)
     {
-        if ((isFreeze && needUp) || isClearHide || isNearHide || isFinish || isClearHideAnim)
+        if ((isFreeze && needUp) || isClearHide || isNearHide || isFinish || isClearHideAnim || ReceiveCount != 0)
         {
             return false;
         }
@@ -1030,7 +1023,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         if (BottleHasItem())
             UIKit.OpenPanel<UIMask>(UILevel.PopUI);
 
-        isPlayAnim = true;
+        //isPlayAnim = true;
+        ++ReceiveCount;
+
         float fillAlltime = 0.46f;
         yield return new WaitForSeconds(fillAlltime);
         SetBottleColor();
@@ -1068,8 +1063,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             yield return new WaitForSeconds(fillTime);
         }
 
-        isPlayAnim = false;
-        
+        //isPlayAnim = false;
+        --ReceiveCount;
+
         CheckItem();
 
         CheckFill();

@@ -52,14 +52,16 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
     /// <param name="sprite"></param>
     /// <param name="itemID"></param>
     /// <param name="itemNum"></param>
+    /// <returns>返回道具飞出屏外的方法(用于间隔飞行)</returns>
     /// 调用前先调用 PrepareSlotLayout 设置本轮道具数量
-    public void PlayRewardAnim(Sprite sprite ,int itemID ,int itemNum)
+    public System.Action PlayRewardInit(Sprite sprite ,int itemID ,int itemNum)
     {
         var image = RewardPool.Allocate();
         image.TryGetComponent(out PropRewardPoolNode _node);
         if (_node == null)
             _node = image.gameObject.AddComponent<PropRewardPoolNode>();
         _node.Init(sprite, SetRandomScreenPosition(image), itemID, itemNum);
+        return ()=> _node.MoveOffScreen();
     }
 
     /// <summary>

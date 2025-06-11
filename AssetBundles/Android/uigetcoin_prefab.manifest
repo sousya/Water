@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2059337421
+CRC: 4071864943
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3e40293612d1093a4b614f07830a682b
+    Hash: b6f3e90635beff6ef3c1ba25c26da6aa
   TypeTreeHash:
     serializedVersion: 2
-    Hash: ad5b68ea1a4a4ee0027d4839e75661b4
+    Hash: 371f3e969797f021847f5ff1dd3eae23
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 3e40293612d1093a4b614f07830a682b
+    Hash: b6f3e90635beff6ef3c1ba25c26da6aa
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -31,6 +31,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 41af467769a5a6c41b484ef48ed521f0, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 422b13cb71426c24ba1edaf570ba83b8, type: 3}
 - Class: 115
   Script: {instanceID: 0}
@@ -43,6 +45,8 @@ ClassTypes:
 - Class: 687078895
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: ItemReward
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.FaceInfo_Legacy
 - AssemblyName: Unity.TextMeshPro

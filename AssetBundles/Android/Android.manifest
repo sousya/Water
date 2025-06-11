@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 4245653988
+CRC: 2315105301
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -79,4 +79,7 @@ AssetBundleManifest:
       Dependencies: {}
     Info_19:
       Name: uibuypacksuccess_prefab
+      Dependencies: {}
+    Info_20:
+      Name: uipropmask_prefab
       Dependencies: {}

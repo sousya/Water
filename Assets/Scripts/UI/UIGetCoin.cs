@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using QFramework;
+using System.Linq.Expressions;
 
 namespace QFramework.Example
 {
@@ -10,6 +11,8 @@ namespace QFramework.Example
 	public partial class UIGetCoin : UIPanel, ICanSendEvent, ICanGetUtility, ICanGetModel
     {
         [SerializeField] private GiftPackSO[] rewardPackSO;
+        //按道具顺序排序
+        [SerializeField] private Sprite[] rewardSprites;    
         private StageModel stageModel;
         private SaveDataUtility saveDataUtility;
         private int curLevel;
@@ -46,7 +49,22 @@ namespace QFramework.Example
                 ImgProcessNode.Show();
                 int _progress = (curLevel - STAR_LEVEL + 1) % REWARD_INTERVAL;
                 if (_progress == 0)
+                {
                     getReward = ((curLevel - STAR_LEVEL + 1) / REWARD_INTERVAL) - 1;//减一计算索引
+                    if (getReward >= 0 && getReward < rewardPackSO.Length)
+                    {
+                        var _packSO = rewardPackSO[getReward];
+                        RewardItemManager.Instance.PrepareSlotLayout(_packSO.ItemReward.Count);
+                        foreach (var item in _packSO.ItemReward)
+                        {
+                            stageModel.AddItem(item.ItemIndex, item.Quantity);
+                            //注意 rewardSprites 是否越界
+                            RewardItemManager.Instance.PlayRewardAnim(rewardSprites[item.ItemIndex - 1], item.ItemIndex, item.Quantity);
+                        }
+                        //else
+                        //    Debug.Log($"数组越界 getReward:{ getReward }");
+                    }
+                }
 
                 int _displayedProgress = _progress == 0 ? REWARD_INTERVAL : _progress;
                 TxtProcess.text = $"{_displayedProgress} / {REWARD_INTERVAL}";
@@ -84,21 +102,25 @@ namespace QFramework.Example
 
         void BackUIBegin()
         {
-            if (getReward >= 0 && getReward < rewardPackSO.Length)
-            {
-                var _packSO = rewardPackSO[getReward];
-                foreach (var item in _packSO.ItemReward)
-                {
-                    stageModel.AddItem(item.ItemIndex,item.Quantity);
-                }
-                //使用对象池+DoTween播放动画
-                Debug.Log("播放动画");
-            }
-            //else
-            //    Debug.Log($"数组越界 getReward:{ getReward }");
-
             this.SendEvent<LevelClearEvent>(new LevelClearEvent());
             CloseSelf();
+            /*if (getReward >= 0 && getReward < rewardPackSO.Length)
+            {
+                var _packSO = rewardPackSO[getReward];
+                RewardItemManager.Instance.PrepareSlotLayout(_packSO.ItemReward.Count);
+                foreach (var item in _packSO.ItemReward)
+                {
+                    stageModel.AddItem(item.ItemIndex, item.Quantity);
+                    //注意 rewardSprites 是否越界
+                    RewardItemManager.Instance.PlayRewardAnim(rewardSprites[item.ItemIndex - 1], item.ItemIndex, item.Quantity);
+                }
+                //else
+                //    Debug.Log($"数组越界 getReward:{ getReward }");
+
+                this.SendEvent<LevelClearEvent>(new LevelClearEvent());
+                CloseSelf();
+            }*/
+           
         }
 	}
 }

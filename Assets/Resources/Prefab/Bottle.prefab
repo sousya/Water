@@ -4406,8 +4406,16 @@ PrefabInstance:
       propertyPath: m_RenderingLayerMask
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3535467310983358392, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}
+      propertyPath: m_Maskable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3763177170642793450, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4296455248431480023, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}
+      propertyPath: m_Maskable
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4712498587624630819, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}
@@ -4452,6 +4460,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5803998616557358016, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}
       propertyPath: m_PreserveAspect
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6393443696710230058, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}
+      propertyPath: m_Maskable
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6441030854448008612, guid: 4823c63080f17044aab0ce0f897bbe9e, type: 3}

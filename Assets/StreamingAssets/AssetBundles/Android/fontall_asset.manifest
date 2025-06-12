@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3368423053
+CRC: 1258350535
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d8ec759f3830f4991c4bdf99b84bf0df
+    Hash: d98bff49b92273373c68fcd91d2b0698
   TypeTreeHash:
     serializedVersion: 2
     Hash: 533ddedb5ba977670584d2c1db0f7fc3
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: d8ec759f3830f4991c4bdf99b84bf0df
+    Hash: d98bff49b92273373c68fcd91d2b0698
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -45,5 +45,4 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.TextCore.GlyphRect
 Assets:
 - Assets/Resources/Font/FontAll.asset
-Dependencies:
-- E:/U GitHub Project/Water/AssetBundles/Android/fontextra_asset
+Dependencies: []

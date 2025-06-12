@@ -87,7 +87,6 @@ namespace QFramework.Example
             foreach (var item in _packSo.ItemReward)
             {
                 stageModel.AddItem(item.ItemIndex, item.Quantity);
-
             }
             //无限体力发放
             HealthManager.Instance.SetUnLimitHp(_packSo.UnlimitedHp);
@@ -95,7 +94,10 @@ namespace QFramework.Example
             //...暂用体力时长
 
             UIKit.OpenPanel<UIBuyPackSuccess>();
-            UIKit.ClosePanel<UIShop>();
+            ActionKit.Delay(1, () =>
+            {
+                UIKit.ClosePanel<UIShop>();//延迟1s等待协程结束关闭
+            }).Start(this);
         }
 
         public IArchitecture GetArchitecture()

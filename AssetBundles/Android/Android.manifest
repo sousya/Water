@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2849963185
+CRC: 1007571115
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -28,58 +28,54 @@ AssetBundleManifest:
         Dependency_0: fontall_asset
         Dependency_1: font
     Info_6:
-      Name: fontextra_asset
-      Dependencies: {}
-    Info_7:
       Name: uiunlockscene_prefab
       Dependencies:
         Dependency_0: fontall_asset
         Dependency_1: font
-    Info_8:
+    Info_7:
       Name: fontall_asset
-      Dependencies:
-        Dependency_0: fontextra_asset
-    Info_9:
+      Dependencies: {}
+    Info_8:
       Name: uiretry_prefab
       Dependencies:
         Dependency_0: fontall_asset
-    Info_10:
+    Info_9:
       Name: uilessstar_prefab
       Dependencies:
         Dependency_0: fontall_asset
-    Info_11:
+    Info_10:
       Name: font
       Dependencies: {}
-    Info_12:
+    Info_11:
       Name: uideletelife_prefab
       Dependencies:
         Dependency_0: fontall_asset
-    Info_13:
+    Info_12:
       Name: uicontinue_prefab
       Dependencies:
         Dependency_0: fontall_asset
-    Info_14:
+    Info_13:
       Name: uigetcoin_prefab
       Dependencies:
         Dependency_0: fontall_asset
         Dependency_1: font
-    Info_15:
+    Info_14:
       Name: uimask_prefab
       Dependencies: {}
-    Info_16:
+    Info_15:
       Name: uipersonal_prefab
       Dependencies:
         Dependency_0: font
-    Info_17:
+    Info_16:
       Name: uishop_prefab
       Dependencies:
         Dependency_0: font
-    Info_18:
+    Info_17:
       Name: uiguideanimpop_prefab
       Dependencies: {}
-    Info_19:
+    Info_18:
       Name: uibuypacksuccess_prefab
       Dependencies: {}
-    Info_20:
+    Info_19:
       Name: uipropmask_prefab
       Dependencies: {}

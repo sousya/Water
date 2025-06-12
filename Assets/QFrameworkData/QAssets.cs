@@ -27,11 +27,6 @@ namespace QAssetBundle
         public const string BundleName = "fontall_asset";
         public const string FontAll = "FontAll";
     }
-    public class Fontextra_asset
-    {
-        public const string BundleName = "fontextra_asset";
-        public const string FontExtra = "FontExtra";
-    }
     public class Uibegin_prefab
     {
         public const string BundleName = "uibegin_prefab";

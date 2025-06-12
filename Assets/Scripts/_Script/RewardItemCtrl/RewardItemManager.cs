@@ -7,27 +7,28 @@ using Unity.VisualScripting;
 
 public class RewardItemManager : MonoSingleton<RewardItemManager>
 {
+    [SerializeField] private Sprite[] RewardSprites;
+    [SerializeField] private Animator BoxAnimator;
+    [SerializeField] private Button BtnContinue;
+    [SerializeField] private RectTransform mRectTransformPar;
+    [SerializeField] private ParticleTargetMoveCtrl CoinParticle;
     public SimpleObjectPool<Image> RewardPool;
-    private RectTransform mRectTransformPar;
+
+    private RectTransform mMask;
 
     private List<int> availableSlots;
+    private List<System.Action> actionList;
     // 每轮动态传入
     private int slotCount;
-
-    private const int X_MIN = -300;
-    private const int X_MAX = 300;
-    private const int Y_MIN = 700;
-    private const int Y_MAX = 850;
+    private bool addCoin;
+    private const int YAXIS = 800;
 
     public override void OnSingletonInit()
     {
-        mRectTransformPar = new GameObject("PropNodePar", typeof(RectTransform))
-            .GetComponent<RectTransform>();
-        mRectTransformPar.SetParent(this.transform, false);
-        mRectTransformPar.anchorMin = Vector2.zero;
-        mRectTransformPar.anchorMax = Vector2.one;
-        mRectTransformPar.offsetMin = Vector2.zero;
-        mRectTransformPar.offsetMax = Vector2.zero;
+        mMask = BoxAnimator.transform.parent.GetComponent<RectTransform>();
+
+        actionList = new List<System.Action>();
+        availableSlots = new List<int>();
 
         RewardPool = new SimpleObjectPool<Image>(
         () =>
@@ -44,57 +45,75 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
             img.rectTransform.localScale = Vector3.one;
         },
         initCount: 10);
+
+        BtnContinue.onClick.AddListener(() =>
+        {
+            StartCoroutine(ContinueClickEvent());
+        });
     }
 
-    /// <summary>
-    /// 播放奖励道具的飞出动画
-    /// </summary>
-    /// <param name="sprite"></param>
-    /// <param name="itemID"></param>
-    /// <param name="itemNum"></param>
-    /// <returns>返回道具飞出屏外的方法(用于间隔飞行)</returns>
-    /// 调用前先调用 PrepareSlotLayout 设置本轮道具数量
-    public System.Action PlayRewardInit(Sprite sprite ,int itemID ,int itemNum)
+    public IEnumerator PlayRewardAnim(GiftPackSO packSO ,bool addCoin = false)
     {
-        var image = RewardPool.Allocate();
-        image.TryGetComponent(out PropRewardPoolNode _node);
-        if (_node == null)
-            _node = image.gameObject.AddComponent<PropRewardPoolNode>();
-        _node.Init(sprite, SetRandomScreenPosition(image), itemID, itemNum);
-        return ()=> _node.MoveOffScreen();
-    }
+        this.addCoin = addCoin;
+        mMask.Show();
 
-    /// <summary>
-    /// 设置本轮道具数量
-    /// </summary>
-    /// <param name="count"></param>
-    public void PrepareSlotLayout(int count)
-    {
-        availableSlots = new List<int>();
-        slotCount = count;
+        slotCount = packSO.ItemReward.Count;
         availableSlots.Clear();
+        actionList.Clear();
         for (int i = 0; i < slotCount; i++)
             availableSlots.Add(i);
+
+        BoxAnimator.Show();
+
+        BoxAnimator.Play("BoxOpen");
+        yield return new WaitForSeconds(1f); // 等待盒子打开动画完成
+        BtnContinue.Show();
+        BoxAnimator.Hide();
+
+        foreach (var item in packSO.ItemReward)
+        {
+            var image = RewardPool.Allocate();
+            image.TryGetComponent(out PropRewardPoolNode _node);
+            if (_node == null)
+                _node = image.gameObject.AddComponent<PropRewardPoolNode>();
+            _node.Init(RewardSprites[item.ItemIndex - 1], SetRandomScreenPosition(image), item.ItemIndex, item.Quantity);
+            actionList.Add(() => _node.MoveOffScreen());
+        }
+    }
+
+    private IEnumerator ContinueClickEvent()
+    {
+        foreach (var item in actionList)
+        {
+            item?.Invoke();
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        BtnContinue.Hide();
+        mMask.Hide();
+
+        if (addCoin)
+            CoinParticle.Play(100);
     }
 
     private Vector2 SetRandomScreenPosition(Image propImage)
     {
         if (availableSlots.Count == 0)
         {
-            Debug.LogWarning("先调用 PrepareSlotLayout！");
+            Debug.LogWarning("槽位用尽，请先调用 PrepareSlotLayout！");
             return Vector2.zero;
         }
 
-        float slotWidth = (X_MAX - X_MIN) / slotCount;
-
-        // 抽一个槽
+        // 抽一个槽位索引
         int slotIndex = availableSlots[Random.Range(0, availableSlots.Count)];
         availableSlots.Remove(slotIndex);
 
-        float slotXStart = X_MIN + slotWidth * slotIndex;
-        float randX = Random.Range(slotXStart, slotXStart + slotWidth);
-        float randY = Random.Range(Y_MIN, Y_MAX);
+        // 每个道具间隔 200，整体居中
+        float spacing = 200f;
+        float x = slotIndex * spacing - (slotCount - 1) * spacing * 0.5f;
 
-        return new Vector2(randX, randY);
+        // 超过5个道具分两排补充位置
+
+        return new Vector2(x, YAXIS);
     }
 }

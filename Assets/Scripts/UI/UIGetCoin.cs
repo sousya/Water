@@ -12,16 +12,17 @@ namespace QFramework.Example
 	public partial class UIGetCoin : UIPanel, ICanSendEvent, ICanGetUtility, ICanGetModel
     {
         [SerializeField] private GiftPackSO[] rewardPackSO;
-        //按道具顺序排序
-        [SerializeField] private Sprite[] rewardSprites;    
+        [SerializeField] private Sprite[] unlockSprites;
         private StageModel stageModel;
         private SaveDataUtility saveDataUtility;
-        private int curLevel;
         private int getReward;
 
         private const int STAR_LEVEL = 6;
         private const int END_LEVEL = 97;
-        public const int REWARD_INTERVAL = 7;
+        private const int REWARD_INTERVAL = 7;
+
+        private readonly int[] UNLOCKLEVEL = new int[] { 7, 11, 16, 21, 24, 31, 51, 61, 91 };
+
         public IArchitecture GetArchitecture()
         {
             return GameMainArc.Interface;
@@ -41,31 +42,18 @@ namespace QFramework.Example
 
         protected override void OnShow()
         {
-            getReward = -1;
-            //过关后会记录当前关卡为下一关(减一表示通过的关卡)
-            curLevel = saveDataUtility.GetLevelClear() - 1;
-            //6-97关显示(通过97关之后不显示)
-            if (curLevel >= STAR_LEVEL && curLevel < END_LEVEL)
-            {
-                ImgProcessNode.Show();
-                int _progress = (curLevel - STAR_LEVEL + 1) % REWARD_INTERVAL;
-                if (_progress == 0)
-                {
-                    getReward = ((curLevel - STAR_LEVEL + 1) / REWARD_INTERVAL) - 1;//减一计算索引
-                    if (getReward >= 0 && getReward < rewardPackSO.Length)
-                    {
-                        var _packSO = rewardPackSO[getReward];
-                        StartCoroutine(PlayAnimaton(_packSO));
-                    }
-                }
-
-                int _displayedProgress = _progress == 0 ? REWARD_INTERVAL : _progress;
-                TxtProcess.text = $"{_displayedProgress} / {REWARD_INTERVAL}";
-                ImgProcess.fillAmount = (float)_displayedProgress / REWARD_INTERVAL;
-            }
             BindClick();
-            TxtCoin.text = ((int)(GameDefine.GameConst.WIN_COINS * stageModel.GoldCoinsMultiple)).ToString();
-            TxtLevel.text = "Level " + curLevel.ToString();
+            getReward = -1;
+            
+
+            UpdateBoxProcessNode();
+            UpdateUnlockProcessNode();
+
+
+            //ImgUnlockProcessNode.Show();
+            //ImgUnlock.sprite = unlockSprites[0];
+            //TxtUnlockProcess.text = curLevel.ToString();
+            //ImgUnlockProcess.fillAmount = 0f;
         }
 		
 		protected override void OnHide()
@@ -99,24 +87,64 @@ namespace QFramework.Example
             CloseSelf();
         }
 
-        private IEnumerator PlayAnimaton(GiftPackSO _packSO)
+        private void UpdateBoxProcessNode()
         {
-            RewardItemManager.Instance.PrepareSlotLayout(_packSO.ItemReward.Count);
-            var _actionList = new List<System.Action>();
-            foreach (var item in _packSO.ItemReward)
+            //过关后会记录当前关卡为下一关(减一表示通过的关卡)
+            int curLevel = saveDataUtility.GetLevelClear() - 1;
+            //6-97关显示(通过97关之后不显示)
+            if (curLevel >= STAR_LEVEL && curLevel < END_LEVEL)
             {
-                stageModel.AddItem(item.ItemIndex, item.Quantity);
-                //注意 rewardSprites 是否越界
-                _actionList.Add(RewardItemManager.Instance.PlayRewardInit(rewardSprites[item.ItemIndex - 1], item.ItemIndex, item.Quantity));
-            }
-            //else
-            //    Debug.Log($"数组越界 getReward:{ getReward }");
+                ImgBoxProcessNode.Show();
+                int _progress = (curLevel - STAR_LEVEL + 1) % REWARD_INTERVAL;
+                if (_progress == 0)
+                {
+                    getReward = ((curLevel - STAR_LEVEL + 1) / REWARD_INTERVAL) - 1;//减一计算索引
+                    if (getReward >= 0 && getReward < rewardPackSO.Length)
+                    {
+                        var _packSO = rewardPackSO[getReward];
+                        StartCoroutine(RewardItemManager.Instance.PlayRewardAnim(_packSO));
+                    }
+                }
 
-            foreach (var item in _actionList)
-            {
-                item?.Invoke();
-                yield return new WaitForSeconds(0.2f);
+                int _displayedProgress = _progress == 0 ? REWARD_INTERVAL : _progress;
+                TxtProcess.text = $"{_displayedProgress} / {REWARD_INTERVAL}";
+                ImgProcess.fillAmount = (float)_displayedProgress / REWARD_INTERVAL;
             }
+            TxtCoin.text = ((int)(GameDefine.GameConst.WIN_COINS * stageModel.GoldCoinsMultiple)).ToString();
+            TxtLevel.text = "Level " + curLevel.ToString();
+        }
+
+        private void UpdateUnlockProcessNode()
+        {
+            int curLevel = saveDataUtility.GetLevelClear();
+
+            // 找到下一个解锁目标
+            for (int i = 0; i < UNLOCKLEVEL.Length; i++)
+            {
+                if (curLevel <= UNLOCKLEVEL[i])
+                {
+                    ImgUnlockProcessNode.Show();
+
+                    ImgUnlock.sprite = unlockSprites[i];
+
+                    if (curLevel == UNLOCKLEVEL[i])
+                    {
+                        // 已达成解锁目标，满进度
+                        TxtUnlockProcess.text = $"{UNLOCKLEVEL[i]} / {UNLOCKLEVEL[i]}";
+                        ImgUnlockProcess.fillAmount = 1f;
+                    }
+                    else
+                    {
+                        // 解锁中，进度计算
+                        TxtUnlockProcess.text = $"{curLevel} / {UNLOCKLEVEL[i]}";
+                        ImgUnlockProcess.fillAmount = (float)curLevel / UNLOCKLEVEL[i];
+                    }
+
+                    return;
+                }
+            }
+            // 所有机制已解锁，隐藏解锁UI
+            ImgUnlockProcessNode.Hide();
         }
     }
 }

@@ -117,6 +117,8 @@ public class WaterRenderUpdate : MonoBehaviour
         set
         {
             _meshRenderer.sortingOrder = value;
+            _blackWaterRenderer.sortingOrder = value;
+            _iceEffectRenderer.sortingOrder = value;
         }
     }
 

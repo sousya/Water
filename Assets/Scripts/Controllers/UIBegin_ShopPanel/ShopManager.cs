@@ -10,7 +10,6 @@ namespace QFramework.Example
 	public partial class ShopManager : ViewController, IController
 	{
         [SerializeField] private List<Button> buyGiftPackBtns;
-        [SerializeField] private Sprite[] mRewardSprites; //按道具顺序排序 
 
         private GooglePayManager googlePay;
         private Dictionary<string ,Action> giftPackBuySuccessActions;
@@ -80,7 +79,7 @@ namespace QFramework.Example
         /// </summary>
         private void OnPaySuccess(GiftPackSO _packSo)
         {
-            StartCoroutine(PlayAnimaton(_packSo));
+            StartCoroutine(RewardItemManager.Instance.PlayRewardAnim(_packSo,true));
 
             //金币发放
             CoinManager.Instance.AddCoin(_packSo.Coins);
@@ -97,26 +96,6 @@ namespace QFramework.Example
 
             UIKit.OpenPanel<UIBuyPackSuccess>();
             UIKit.ClosePanel<UIShop>();
-        }
-
-        private IEnumerator PlayAnimaton(GiftPackSO _packSo)
-        {
-            //Debug.Log("购买成功回调动画");
-            RewardItemManager.Instance.PrepareSlotLayout(_packSo.ItemReward.Count);
-            var _actionList = new List<Action>();
-            foreach (var item in _packSo.ItemReward)
-            {
-                if (item.ItemIndex - 1 < mRewardSprites.Length && item.ItemIndex - 1 >= 0)
-                    _actionList.Add(RewardItemManager.Instance.PlayRewardInit(mRewardSprites[item.ItemIndex - 1], item.ItemIndex, item.Quantity));
-                else
-                    Debug.LogWarning($"ItemIndex {item.ItemIndex} 超出奖励道具索引范围");
-            }
-
-            foreach (var item in _actionList)
-            {
-                item?.Invoke();
-                yield return new WaitForSeconds(0.2f);
-            }
         }
 
         public IArchitecture GetArchitecture()

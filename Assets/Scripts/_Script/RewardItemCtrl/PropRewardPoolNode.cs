@@ -43,18 +43,14 @@ public class PropRewardPoolNode : MonoBehaviour
 
     public void MoveOffScreen()
     {
-        ActionKit.Delay(0.8f, () =>
-        {
-            RectTransform rectTransform = propImage.rectTransform;
-            Vector2 offScreenPos = new Vector2(0, -Screen.height - rectTransform.rect.height * 0.5f);
+        RectTransform rectTransform = propImage.rectTransform;
+        Vector2 offScreenPos = new Vector2(0, -Screen.height - rectTransform.rect.height * 0.5f);
 
-            rectTransform.DOAnchorPos(offScreenPos, 0.8f)
-                .SetEase(Ease.InQuart)
-                .OnComplete(() =>
-                {
-                    RewardItemManager.Instance.RewardPool.Recycle(propImage);
-                });
-
-        }).Start(this);
+        rectTransform.DOAnchorPos(offScreenPos, 0.8f)
+            .SetEase(Ease.InQuart)
+            .OnComplete(() =>
+            {
+                RewardItemManager.Instance.RewardPool.Recycle(propImage);
+            });
     }
 }

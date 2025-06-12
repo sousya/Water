@@ -20,7 +20,6 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
     private List<System.Action> actionList;
     // 每轮动态传入
     private int slotCount;
-    private bool addCoin;
     private const int YAXIS = 800;
 
     public override void OnSingletonInit()
@@ -48,13 +47,13 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
 
         BtnContinue.onClick.AddListener(() =>
         {
+            BtnContinue.interactable = false;
             StartCoroutine(ContinueClickEvent());
         });
     }
 
     public IEnumerator PlayRewardAnim(GiftPackSO packSO ,bool addCoin = false)
     {
-        this.addCoin = addCoin;
         mMask.Show();
 
         slotCount = packSO.ItemReward.Count;
@@ -67,7 +66,11 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
 
         BoxAnimator.Play("BoxOpen");
         yield return new WaitForSeconds(1f); // 等待盒子打开动画完成
-        BtnContinue.Show();
+        if (packSO.ItemReward.Count != 0)
+            BtnContinue.Show();
+        else
+            mMask.Hide();
+
         BoxAnimator.Hide();
 
         foreach (var item in packSO.ItemReward)
@@ -79,6 +82,8 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
             _node.Init(RewardSprites[item.ItemIndex - 1], SetRandomScreenPosition(image), item.ItemIndex, item.Quantity);
             actionList.Add(() => _node.MoveOffScreen());
         }
+        if (addCoin)
+            CoinParticle.Play(100);
     }
 
     private IEnumerator ContinueClickEvent()
@@ -90,10 +95,8 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
         }
 
         BtnContinue.Hide();
+        BtnContinue.interactable = true;
         mMask.Hide();
-
-        if (addCoin)
-            CoinParticle.Play(100);
     }
 
     private Vector2 SetRandomScreenPosition(Image propImage)

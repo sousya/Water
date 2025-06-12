@@ -690,16 +690,15 @@ namespace QFramework.Example
         /// <returns></returns>
         IEnumerator ShowFx()
         {
-            starFx.Play(10);
-
-            yield return new WaitForSeconds(1.5f);
-            SetStar();
             mTxtCoinAdd.text = $"+{GameConst.WIN_COINS * stageModel.GoldCoinsMultiple}";
             TxtCoinAdd.Play("TxtUp");
             coinFx.Play(10);
-
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(0.5f);
             CoinManager.Instance.AddCoin((int)(GameConst.WIN_COINS * stageModel.GoldCoinsMultiple));
+
+            starFx.Play(10);
+            yield return new WaitForSeconds(0.5f);
+            SetStar();
         }
 
         /// <summary>

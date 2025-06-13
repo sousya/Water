@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using QFramework;
 using System.Collections.Generic;
 using System.Collections;
+using DG.Tweening;
 
 namespace QFramework.Example
 {
@@ -44,16 +45,9 @@ namespace QFramework.Example
         {
             BindClick();
             getReward = -1;
-            
 
             UpdateBoxProcessNode();
             UpdateUnlockProcessNode();
-
-
-            //ImgUnlockProcessNode.Show();
-            //ImgUnlock.sprite = unlockSprites[0];
-            //TxtUnlockProcess.text = curLevel.ToString();
-            //ImgUnlockProcess.fillAmount = 0f;
         }
 		
 		protected override void OnHide()
@@ -96,6 +90,18 @@ namespace QFramework.Example
             {
                 ImgBoxProcessNode.Show();
                 int _progress = (curLevel - STAR_LEVEL + 1) % REWARD_INTERVAL;
+                int _displayedProgress = _progress == 0 ? REWARD_INTERVAL : _progress;
+                TxtProcess.text = $"{_displayedProgress} / {REWARD_INTERVAL}";
+                // 初始化进度条
+                int _startValue = _displayedProgress - 1;
+                ImgProcess.fillAmount = (float)_startValue / REWARD_INTERVAL;
+
+                ActionKit.Delay(0.1f, () =>
+                {
+                    float targetValue = (float)_displayedProgress / REWARD_INTERVAL;
+                    ImgProcess.DOFillAmount(targetValue, 0.5f).SetEase(Ease.OutQuad);
+                }).Start(this);
+
                 if (_progress == 0)
                 {
                     getReward = ((curLevel - STAR_LEVEL + 1) / REWARD_INTERVAL) - 1;//减一计算索引
@@ -105,10 +111,6 @@ namespace QFramework.Example
                         StartCoroutine(RewardItemManager.Instance.PlayRewardAnim(_packSO));
                     }
                 }
-
-                int _displayedProgress = _progress == 0 ? REWARD_INTERVAL : _progress;
-                TxtProcess.text = $"{_displayedProgress} / {REWARD_INTERVAL}";
-                ImgProcess.fillAmount = (float)_displayedProgress / REWARD_INTERVAL;
             }
             TxtCoin.text = ((int)(GameDefine.GameConst.WIN_COINS * stageModel.GoldCoinsMultiple)).ToString();
             TxtLevel.text = "Level " + curLevel.ToString();
@@ -124,25 +126,32 @@ namespace QFramework.Example
                 if (curLevel <= UNLOCKLEVEL[i])
                 {
                     ImgUnlockProcessNode.Show();
-
                     ImgUnlock.sprite = unlockSprites[i];
 
-                    if (curLevel == UNLOCKLEVEL[i])
+                    int prevUnlock = (i == 0) ? 0 : UNLOCKLEVEL[i - 1]; // 上一个解锁点
+                    int totalNeeded = UNLOCKLEVEL[i] - prevUnlock;      // 需要完成的关卡数
+                    int currentProgress = curLevel - prevUnlock;        // 当前进度
+
+                    if (currentProgress > totalNeeded)
+                        currentProgress = totalNeeded;
+
+                    TxtUnlockProcess.text = $"{currentProgress} / {totalNeeded}";
+
+                    int startValue = currentProgress - 1;
+                    ImgUnlockProcess.fillAmount = (float)startValue / totalNeeded; ;
+
+                    ActionKit.Delay(0.1f, () =>
                     {
-                        // 已达成解锁目标，满进度
-                        TxtUnlockProcess.text = $"{UNLOCKLEVEL[i]} / {UNLOCKLEVEL[i]}";
-                        ImgUnlockProcess.fillAmount = 1f;
-                    }
-                    else
-                    {
-                        // 解锁中，进度计算
-                        TxtUnlockProcess.text = $"{curLevel} / {UNLOCKLEVEL[i]}";
-                        ImgUnlockProcess.fillAmount = (float)curLevel / UNLOCKLEVEL[i];
-                    }
+                        float targetValue = (float)currentProgress / totalNeeded;
+                        ImgUnlockProcess.DOFillAmount(targetValue, 0.5f).SetEase(Ease.OutQuad);
+                        //ImgUnlockProcess.fillAmount = (float)currentProgress / totalNeeded;
+                    }).Start(this);
+                   
 
                     return;
                 }
             }
+
             // 所有机制已解锁，隐藏解锁UI
             ImgUnlockProcessNode.Hide();
         }

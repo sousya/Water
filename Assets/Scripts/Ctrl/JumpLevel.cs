@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using QFramework;
+using QFramework.Example;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ public class JumpLevel : MonoBehaviour ,ICanSendEvent, ICanGetUtility
 {
     public TMP_InputField inputField;
     public Button button;
-
+    public Button Btnfinish;
     public IArchitecture GetArchitecture()
     {
         return GameMainArc.Interface;
@@ -24,6 +25,11 @@ public class JumpLevel : MonoBehaviour ,ICanSendEvent, ICanGetUtility
             this.GetUtility<SaveDataUtility>().SaveLevel(int.Parse(inputField.text));
             //this.SendEvent<GameStartEvent>();
             //GameCtrl.Instance.InitGameCtrl();
+        });
+
+        Btnfinish.onClick.AddListener(() =>
+        {
+            StartCoroutine(LevelManager.Instance.TestFinish());
         });
     }
 

@@ -332,6 +332,31 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     }
 
     /// <summary>
+    /// 测试用方法
+    /// </summary>
+    public IEnumerator TestFinish()
+    {
+        isFinish = true;
+        //Debug.Log("胜利");
+        UIKit.OpenPanel<UIMask>(UILevel.PopUI);
+        yield return new WaitForSeconds(1);
+
+        //Debug.Log("开始播放胜利结算");
+        AudioKit.PlaySound("resources://Audio/Victory");
+        UIKit.ClosePanel<UIMask>();
+        this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
+
+        //前五关(前五关应该不统计连胜)
+        if (levelId < 5)
+            StartGame(levelId + 1);
+        else
+            UIKit.OpenPanel<UIVictory>();
+
+        // 连胜计数
+        stageModel.AddCountinueWinNum();
+    }
+
+    /// <summary>
     /// 胜利后&胜利动画后逻辑处理
     /// </summary>
     /// <param name="clearColor"></param>

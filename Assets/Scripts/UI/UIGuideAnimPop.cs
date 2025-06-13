@@ -19,8 +19,8 @@ namespace QFramework.Example
 
 		protected override void OnOpen(IUIData uiData = null)
 		{
-            GuideText.text = mData.GuideText;
-            GuideAni.Play(mData.GuideAnimName);
+            TxtGuide.text = mData.GuideText;
+			GuideAni.Play(mData.GuideAnimName);
 
 			LevelManager.Instance.hideBg.Show();
         }

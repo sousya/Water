@@ -34,7 +34,7 @@ public class GameCtrl : MonoBehaviour, ICanSendEvent
 
     void Start()
     {
-
+        //Application.targetFrameRate = 5;
     }
 
     /// <summary>

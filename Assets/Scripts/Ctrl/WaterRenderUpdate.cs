@@ -30,6 +30,8 @@ public class WaterRenderUpdate : MonoBehaviour
     private MeshRenderer _iceEffectRenderer = null;
     private MeshFilter _iceEffectFilter = null;
     private Material _iceEffectMaterial = null;
+    
+    private readonly Vector3[] _verts = new Vector3[4];
 
     private void ValidMaterial()
     {
@@ -82,6 +84,7 @@ public class WaterRenderUpdate : MonoBehaviour
             //Debug.Log(value + "-----------------");
             ValidMaterial();
             _material.SetFloat("_FillHeight", Mathf.Min(value, FillAmount));
+            //_material.SetFloat("_FillHeight", value);
         }
     }
 
@@ -90,9 +93,16 @@ public class WaterRenderUpdate : MonoBehaviour
         get => _fillAmount;
         set
         {
-            float newValue = waterSurface[1].position.y - waterSurface[0].position.y;
-            newValue = newValue * value + waterSurface[0].position.y;
-            _fillAmount = newValue;
+            if (value >= 1.0f)
+            {
+                _fillAmount = 1000.0f;
+            }
+            else
+            {
+                float newValue = waterSurface[1].position.y - waterSurface[0].position.y;
+                newValue = newValue * value + waterSurface[0].position.y;
+                _fillAmount = newValue;
+            }
         }
     }
 
@@ -144,6 +154,19 @@ public class WaterRenderUpdate : MonoBehaviour
         _meshRenderer = GetComponent<MeshRenderer>();
         _meshFilter = GetComponent<MeshFilter>();
         _mesh = new Mesh();
+        _mesh.MarkDynamic();
+        
+        _mesh.SetVertices(_verts);
+        _mesh.triangles = new int[] {0, 1, 2, 0, 2, 3};
+        _mesh.uv = new Vector2[]
+        {
+            new Vector2(0, 0),
+            new Vector2(1, 0),
+            new Vector2(1, 1),
+            new Vector2(0, 1)
+        };
+        
+        
         _image = GetComponent<Image>();
         
         _blackWaterRenderer = blackWater.GetComponent<MeshRenderer>();
@@ -159,6 +182,10 @@ public class WaterRenderUpdate : MonoBehaviour
         
         _iceEffectMaterial.renderQueue = 2902;
         _iceEffectMaterial.SetFloat("_FillHeight", 1000);
+        
+        _meshFilter.mesh = _mesh;
+        _iceEffectFilter.mesh = _mesh;
+        _blackWaterFilter.mesh = _mesh;
     }
 
     // Update is called once per frame
@@ -187,7 +214,7 @@ public class WaterRenderUpdate : MonoBehaviour
             bottomCenter = new Vector3(bottomCenter.x, bottomRight.y, 0);//bottomRight - new Vector3(halfWaterWidth, 0, 0);
         }
 
-        var verts = new Vector3[4];
+        var verts = _verts;
         verts[0] = bottomCenter + new Vector3(-halfWaterWidth,  0, 0);
         verts[1] = bottomCenter + new Vector3(halfWaterWidth,  0, 0);
         verts[2] = topCenter + new Vector3(halfWaterWidth,  0, 0);
@@ -197,28 +224,13 @@ public class WaterRenderUpdate : MonoBehaviour
         verts[0].y = Mathf.Min(verts[0].y, verts[3].y);
         verts[1].y = Mathf.Min(verts[1].y, verts[2].y);
 
-        _mesh.vertices = verts;
-        _mesh.triangles = new int[] {0, 1, 2, 0, 2, 3};
-        _mesh.uv = new Vector2[]
-        {
-            new Vector2(0, 0),
-            new Vector2(1, 0),
-            new Vector2(1, 1),
-            new Vector2(0, 1)
-        };
-        _mesh.UploadMeshData(false);
-        _meshFilter.mesh = _mesh;
+        _mesh.SetVertices(verts);
+
         
         // fillAmount
         if (_image != null)
         {
             this.FillAmount = _image.fillAmount;
         }
-        
-        // 黑水的mesh同时设置
-        _blackWaterFilter.mesh = _mesh;
-        
-        // 冰块mesh也需要设置
-        _iceEffectFilter.mesh = _mesh;
     }
 }

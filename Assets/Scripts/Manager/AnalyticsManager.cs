@@ -8,6 +8,10 @@ using UnityEngine;
 [MonoSingletonPath("[Analytics]/AnalyticsManager")]
 public class AnalyticsManager : MonoSingleton<AnalyticsManager>, ICanGetUtility, ICanSendEvent
 {
+    private const string ANALYTICS_EVENT_LEVEL_COMPLETE = "level_complete";
+    private const string LEVEL = "level";
+    private const string DETAILS = "details";
+
     private async void Start()
     {
         try
@@ -17,8 +21,6 @@ public class AnalyticsManager : MonoSingleton<AnalyticsManager>, ICanGetUtility,
 
             AnalyticsService.Instance.StartDataCollection();
             //Debug.Log("Analytics 数据收集已启动");
-
-            //TestSendEvent();
         }
         catch (System.Exception e)
         {
@@ -32,18 +34,14 @@ public class AnalyticsManager : MonoSingleton<AnalyticsManager>, ICanGetUtility,
     {
         Dictionary<string, object> _levelEvent = new Dictionary<string, object>
         {
-            { GameDefine.GameConst.LEVEL, this.GetUtility<SaveDataUtility>().GetLevelClear()},
-            { GameDefine.GameConst.DETAILS, del}
+            { LEVEL, this.GetUtility<SaveDataUtility>().GetLevelClear()},
+            { DETAILS, del}
         };
-        SendServerEvent(GameDefine.GameConst.ANALYTICS_EVENT_LEVEL_COMPLETE, _levelEvent);
+        SendServerEvent(ANALYTICS_EVENT_LEVEL_COMPLETE, _levelEvent);
     }
 
     private void SendServerEvent(string eventName, Dictionary<string, object> parameters)
     {
-        // 旧版-已弃用
-        //AnalyticsService.Instance.CustomData(eventName, parameters);
-
-        // 新版-发送自定义事件方法
         // 传递的键需要在Unity Analytics中预先定义
         var customEvent = new CustomEvent(eventName);
         foreach (var pair in parameters)
@@ -54,19 +52,7 @@ public class AnalyticsManager : MonoSingleton<AnalyticsManager>, ICanGetUtility,
         // 发送事件
         AnalyticsService.Instance.RecordEvent(customEvent);
     }
-
-    public void TestSendEvent()
-    {
-        //传递的键需要在Unity Analytics中预先定义
-        var customEvent = new CustomEvent("completeLevel");
-        customEvent["level"] = 5;
-        customEvent["details"] = "自定义测试事件";
-
-        // 发送事件
-        AnalyticsService.Instance.RecordEvent(customEvent);
-        //Debug.Log("发送自定义数据分析事件");
-    }
-
+   
     public IArchitecture GetArchitecture()
     {
         return GameMainArc.Interface;

@@ -14,10 +14,6 @@ namespace GameDefine
         //场景建筑
         public const int SCENE_PART_COUNT = 5;
 
-        public const string ANALYTICS_EVENT_LEVEL_COMPLETE = "level_complete";
-        public const string LEVEL = "level";
-        public const string DETAILS = "details";
-
         //关卡引导
         public static readonly Dictionary<int, (string, string)> GuideLevelInfo = new Dictionary<int, (string, string)>
         {

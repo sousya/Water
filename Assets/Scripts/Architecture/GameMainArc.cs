@@ -52,5 +52,6 @@ public class GameMainArc : Architecture<GameMainArc>
         HealthManager healthManager = HealthManager.Instance;
         TenjinManager tenjinManager = TenjinManager.Instance;
         TopOnADManager topOnADManager = TopOnADManager.Instance;
+        AvatarManager avatarManager = AvatarManager.Instance;
     }
 }

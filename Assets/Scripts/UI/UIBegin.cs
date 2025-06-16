@@ -68,6 +68,7 @@ namespace QFramework.Example
 
             BindBtn();
             RegisterEvent();
+            SetAvatar();
             SetVitality();
             SetCoin();
             SetStar();
@@ -82,6 +83,7 @@ namespace QFramework.Example
                 BottomMenuBtns.Hide();
             }
             SetScene();
+            
         }
 
         protected override void OnHide()
@@ -400,6 +402,12 @@ namespace QFramework.Example
                 StartOrOverChangePanel(true, false);
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
+            this.RegisterEvent<AvatarEvent>(e =>
+            {
+                BtnHead.GetComponent<Image>().sprite = AvatarManager.Instance.GetAvatarSprite(true, e.AvatarId);
+                ImgHeadFrame.sprite = AvatarManager.Instance.GetAvatarSprite(false, e.AvatarFrameId);
+            }).UnRegisterWhenGameObjectDestroyed(this);
+
             StringEventSystem.Global.Register("StreakWinItem", (int count) =>
             {
                 ClearBottleBlackWater(count);
@@ -644,6 +652,12 @@ namespace QFramework.Example
             ImgItem6.gameObject.SetActive(true);
             ImgItem7.gameObject.SetActive(true);
             ImgItem8.gameObject.SetActive(true);
+        }
+
+        private void SetAvatar()
+        {
+            BtnHead.GetComponent<Image>().sprite = AvatarManager.Instance.GetAvatarSprite(true);
+            ImgHeadFrame.sprite = AvatarManager.Instance.GetAvatarSprite(false);
         }
 
         /// <summary>

@@ -15,6 +15,7 @@ public class SaveDataUtility : IUtility, ICanSendEvent
     public void SaveInt(string key,int value)
     {
         PlayerPrefs.SetInt(key, value);
+        PlayerPrefs.Save();
     }
 
     public int LoadIntValue(string key, int defaultValue = 0)
@@ -28,6 +29,7 @@ public class SaveDataUtility : IUtility, ICanSendEvent
             PlayerPrefs.SetInt(key, 1);
         else
             PlayerPrefs.SetInt(key, 0);
+        PlayerPrefs.Save();
     }
 
     public bool LoadBoolValue(string key, bool defaultValue = true)

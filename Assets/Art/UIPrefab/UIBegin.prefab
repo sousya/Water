@@ -1721,6 +1721,7 @@ MonoBehaviour:
   RewardCoinFx: {fileID: 8551956026047486763}
   TxtCoinAdd: {fileID: 930514672117400420}
   BtnHead: {fileID: 8572141549526072884}
+  ImgHeadFrame: {fileID: 3286103140019070658}
   BtnSelect: {fileID: 2874973331090683755}
   ImgSelected: {fileID: 120620133163915858}
   BottomMenuBtns: {fileID: 7415087224644484512}
@@ -12123,6 +12124,7 @@ GameObject:
   - component: {fileID: 8381108729846024122}
   - component: {fileID: 3992498258039376726}
   - component: {fileID: 3286103140019070658}
+  - component: {fileID: 8488785547543258500}
   m_Layer: 0
   m_Name: ImgHeadFrame
   m_TagString: Untagged
@@ -12187,6 +12189,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8488785547543258500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2797689355458454605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MarkType: 0
+  CustomComponentName: ImgHeadFrame
+  CustomComment: 
+  mComponentName: UnityEngine.UI.Image
 --- !u!1 &2833357993769361050
 GameObject:
   m_ObjectHideFlags: 0

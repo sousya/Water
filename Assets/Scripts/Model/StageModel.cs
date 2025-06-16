@@ -35,6 +35,7 @@ public class StageModel : AbstractModel
     private const string COUNTINUE_WIN_NUM_SIGN = "g_WaterCountinueWinNum";
     private const string VOLUME_SETTING_SIGN = "g_WaterVolumeSetting";
     private const string SCENE_UNLOCK_BOX_SIGN = "g_WaterSceneLockBox";
+    private const int WIN_STREAK_BEGIN_LEVEL = 7;
 
     private SaveDataUtility stroge;
 
@@ -98,7 +99,9 @@ public class StageModel : AbstractModel
 
     public void AddCountinueWinNum()
     {
-        mCountinueWinNum.Value++;
+        if (stroge.GetLevelClear() > WIN_STREAK_BEGIN_LEVEL)
+            mCountinueWinNum.Value++;
+
         //大于10连胜生效(不含10连胜/本次过关不生效)
         mGoldCoinsMultiple = mCountinueWinNum.Value > GameConst.CONTINUE_WIN_NUM_COIN ? 1.5f : 1;
     }

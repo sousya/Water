@@ -7,7 +7,7 @@ namespace QFramework.Example
 	public class UIPersonalData : UIPanelData
 	{
 	}
-	public partial class UIPersonal : UIPanel
+	public partial class UIPersonal : UIPanel, ICanRegisterEvent
 	{
 		protected override void OnInit(IUIData uiData = null)
 		{
@@ -17,14 +17,29 @@ namespace QFramework.Example
 		
 		protected override void OnOpen(IUIData uiData = null)
 		{
-			BtnClose.onClick.RemoveAllListeners();
+			//注册修改事件
+			this.RegisterEvent<AvatarEvent>(e =>
+			{
+                BtnHead.GetComponent<Image>().sprite = AvatarManager.Instance.GetAvatarSprite(true, e.AvatarId);
+                ImgHeadFrame.sprite = AvatarManager.Instance.GetAvatarSprite(false, e.AvatarFrameId);
+            }).UnRegisterWhenGameObjectDestroyed(this);
+
+            //读取初始头像和头像框
+            BtnHead.GetComponent<Image>().sprite = AvatarManager.Instance.GetAvatarSprite(true);
+			ImgHeadFrame.sprite = AvatarManager.Instance.GetAvatarSprite(false);
+
+            BtnHead.onClick.AddListener(() =>
+			{
+				UIKit.OpenPanel<UIChooseAvatar>();
+			});
+
 			BtnClose.onClick.AddListener(() =>
             {
                 UIKit.ClosePanel(this);
             });
         }
-		
-		protected override void OnShow()
+
+        protected override void OnShow()
 		{
 		}
 		
@@ -34,6 +49,13 @@ namespace QFramework.Example
 		
 		protected override void OnClose()
 		{
-		}
-	}
+            BtnClose.onClick.RemoveAllListeners();
+            BtnHead.onClick.RemoveAllListeners();
+        }
+
+        public IArchitecture GetArchitecture()
+        {
+            return GameMainArc.Interface;
+        }
+    }
 }

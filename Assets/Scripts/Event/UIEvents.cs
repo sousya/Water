@@ -14,66 +14,9 @@ public struct LevelStartEvent
 {
 }
 
-public struct UpdateReturnEvent
-{
-
-}
-public struct TeachEvent
-{
-    public int step;
-}
-public struct TipEvent
-{
-    public string tipStr;
-}
-
-public struct LoadEnd
-{
-
-}
-
-public struct BeginLevelEvent
-{
-
-}
-
-public struct ShowChallengeEvent
-{
-
-}
-
-public struct ShowJigsawEvent
-{
-
-}
-
-public struct RefreshUnlockLevel
-{
-
-}
-
 public struct LevelClearEvent
 {
 
-}
-
-public struct ShowOrderEnd
-{
-
-}
-
-public struct MoveCakeEvent
-{
-
-}
-
-public struct CakeUnlock
-{
-    public int keyType;
-
-    public BottleCtrl from;
-
-    public int idx;
 }
 
 public struct CoinChangeEvent
@@ -111,6 +54,13 @@ public struct ReturnMainEvent
 public struct RefreshItemEvent
 {
 }
+
 public struct GameStartEvent
 {
+}
+
+public struct AvatarEvent
+{
+    public int AvatarId;
+    public int AvatarFrameId;
 }

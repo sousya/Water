@@ -97,9 +97,10 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         if (levelId <= 5)
         {
             StartGame(levelId);
+            UIKit.OpenPanel<UIGameNode>();
         }
-
-        UIKit.OpenPanel<UIBegin>();
+        else
+            UIKit.OpenPanel<UIBegin>();
 
     }
 
@@ -739,8 +740,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         nowBottles.Clear();
 
         nowHalf = null;
-        InitLevels(levelInfo);
 
+        InitLevels(levelInfo);
     }
 
     /// <summary>
@@ -748,6 +749,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     /// </summary>
     public void InitLevels(LevelCreateCtrl levelInfo)
     {
+        this.SendEvent<LevelStartEvent>();
+
         //清空操作记录 
         foreach (var bottle in bottles)
         {
@@ -785,10 +788,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
             {
                 UIKit.ClosePanel<UIGuideAnimPop>();
             }).Start(this);
-            
         }
-
-        this.SendEvent<LevelStartEvent>();
     }
 
     /// <summary>

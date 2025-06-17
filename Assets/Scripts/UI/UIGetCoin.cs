@@ -77,6 +77,8 @@ namespace QFramework.Example
 
         void BackUIBegin()
         {
+            UIKit.ClosePanel<UIGameNode>();
+            UIKit.OpenPanel<UIBegin>();
             this.SendEvent<LevelClearEvent>(new LevelClearEvent());
             CloseSelf();
         }

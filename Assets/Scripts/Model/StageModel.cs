@@ -15,7 +15,7 @@ public class StageModel : AbstractModel
 
     //金币倍率
     public float GoldCoinsMultiple => mGoldCoinsMultiple;
-    private float mGoldCoinsMultiple = 1;
+    private float mGoldCoinsMultiple = 1;//还要增加一个2倍金币的Buff
 
     //静音
     public bool VolumeSetting

@@ -7,8 +7,10 @@ namespace QFramework.Example
 	public class UIDeleteLifeData : UIPanelData
 	{
 	}
-	public partial class UIDeleteLife : UIPanel, ICanSendEvent, ICanGetUtility, ICanGetModel
+	public partial class UIDeleteLife : UIPanel, ICanSendEvent, IController
     {
+		private SaveDataUtility saveData;
+
         public IArchitecture GetArchitecture()
         {
             return GameMainArc.Interface;
@@ -26,14 +28,21 @@ namespace QFramework.Example
 		
 		protected override void OnShow()
 		{
-			BtnClose.onClick.AddListener(() =>
+            saveData = this.GetUtility<SaveDataUtility>();
+            BtnClose.onClick.AddListener(() =>
 			{
                 CloseSelf();
             });
 			BtnQuit.onClick.AddListener(() =>
 			{
-				LevelManager.Instance.InitBottle();
-                this.SendEvent<ReturnMainEvent>();
+                string _del = $"用户退出关卡:{saveData.GetLevelClear()}," +
+                $"当前关卡进度:{saveData.GetLevelClear()}";
+                AnalyticsManager.Instance.SendLevelEvent(_del);
+
+                HealthManager.Instance.UseHp();
+				UIKit.ClosePanel<UIGameNode>();
+				UIKit.OpenPanel<UIBegin>();
+
                 this.GetModel<StageModel>().ResetCountinueWinNum();
                 CloseSelf();
             });
@@ -45,6 +54,8 @@ namespace QFramework.Example
 		
 		protected override void OnClose()
 		{
-		}
-	}
+			BtnQuit.onClick.RemoveAllListeners();
+            saveData = null;
+        }
+    }
 }

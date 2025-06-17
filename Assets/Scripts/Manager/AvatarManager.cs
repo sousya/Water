@@ -28,8 +28,6 @@ public class AvatarManager : MonoSingleton<AvatarManager> ,ICanRegisterEvent, IC
             SetAvatar(e.AvatarId , AVATAR_SIGN);
             SetAvatar(e.AvatarFrameId, AVATAR_FRAME_SIGN);
         });
-
-        Debug.Log(mAvatarSprites.ContainsKey(11));
     }
 
     public Sprite GetAvatarSprite(bool isAvatar,int id)

@@ -46,7 +46,8 @@ namespace QFramework.Example
 
 		void ShowAnim()
 		{
-			AnimGo.Play("victoryAnim");
+			//目前不播放
+			//AnimGo.Play("victoryAnim");
 			HornGo1.Play("hornRotation");
 			HornGo2.Play("hornRotation");
 			HornGo3.Play("hornRotation");

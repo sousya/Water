@@ -5,61 +5,11 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:5f54bf4e-3e58-4cd0-b368-dda23d20acd7
+	// Generate Id:ad123ed6-fd22-49f2-9471-ac13cffab9ea
 	public partial class UIBegin
 	{
 		public const string Name = "UIBegin";
 		
-		[SerializeField]
-		public UnityEngine.UI.Button BtnStepBack;
-		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtRefreshNum;
-		[SerializeField]
-		public UnityEngine.UI.Image BtnAddStepBack;
-		[SerializeField]
-		public UnityEngine.UI.Button BtnRemoveHide;
-		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtRemoveHideNum;
-		[SerializeField]
-		public UnityEngine.UI.Image BtnAddRemove;
-		[SerializeField]
-		public UnityEngine.UI.Button BtnAddBottle;
-		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtAddBottleNum;
-		[SerializeField]
-		public UnityEngine.UI.Image BtnAddAddBottle;
-		[SerializeField]
-		public UnityEngine.UI.Button BtnHalfBottle;
-		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtAddHalfBottleNum;
-		[SerializeField]
-		public UnityEngine.UI.Image BtnAddHalfBottle;
-		[SerializeField]
-		public UnityEngine.UI.Button BtnRemoveAll;
-		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtRemoveAllNum;
-		[SerializeField]
-		public UnityEngine.UI.Image BtnAddRemoveBottle;
-		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtLevel;
-		[SerializeField]
-		public UnityEngine.UI.Button BtnMenu;
-		[SerializeField]
-		public UnityEngine.UI.Button BtnReturn;
-		[SerializeField]
-		public UnityEngine.UI.Image BtnItemBg;
-		[SerializeField]
-		public UnityEngine.UI.Button BtnItem1;
-		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtItem1;
-		[SerializeField]
-		public UnityEngine.UI.Button BtnItem2;
-		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtItem2;
-		[SerializeField]
-		public UnityEngine.UI.Button BtnItem3;
-		[SerializeField]
-		public TMPro.TextMeshProUGUI TxtItem3;
 		[SerializeField]
 		public UnityEngine.UI.ScrollRect ShopScrollView;
 		[SerializeField]
@@ -147,31 +97,6 @@ namespace QFramework.Example
 		
 		protected override void ClearUIComponents()
 		{
-			BtnStepBack = null;
-			TxtRefreshNum = null;
-			BtnAddStepBack = null;
-			BtnRemoveHide = null;
-			TxtRemoveHideNum = null;
-			BtnAddRemove = null;
-			BtnAddBottle = null;
-			TxtAddBottleNum = null;
-			BtnAddAddBottle = null;
-			BtnHalfBottle = null;
-			TxtAddHalfBottleNum = null;
-			BtnAddHalfBottle = null;
-			BtnRemoveAll = null;
-			TxtRemoveAllNum = null;
-			BtnAddRemoveBottle = null;
-			TxtLevel = null;
-			BtnMenu = null;
-			BtnReturn = null;
-			BtnItemBg = null;
-			BtnItem1 = null;
-			TxtItem1 = null;
-			BtnItem2 = null;
-			TxtItem2 = null;
-			BtnItem3 = null;
-			TxtItem3 = null;
 			ShopScrollView = null;
 			BtnStart = null;
 			TxtStart = null;

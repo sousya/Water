@@ -18,6 +18,7 @@ public class GameMainArc : Architecture<GameMainArc>
     void RegisterModels()
     {
         RegisterModel(new StageModel());
+        RegisterModel(new PotionActivityModel());
     }
 
     void RegisterUtilitys()

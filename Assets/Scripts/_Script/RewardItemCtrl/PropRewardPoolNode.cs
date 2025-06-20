@@ -9,8 +9,6 @@ public class PropRewardPoolNode : MonoBehaviour
 {
     private Image propImage;
     private TextMeshProUGUI propNumText;
-    // 道具ID大于5的图标较大
-    private const int INTERVAL = 5;
 
     private void Awake()
     {
@@ -23,21 +21,13 @@ public class PropRewardPoolNode : MonoBehaviour
     /// </summary>
     /// <param name="sprite"></param>
     /// <param name="pos"></param>
-    /// <param name="itemID"></param>
     /// <param name="itemNum"></param>
-    public void Init(Sprite sprite,Vector2 pos,int itemID ,int itemNum)
+    public void Init(Sprite sprite, Vector2 pos, int itemNum, bool specialRewards)
     {
         //先启用调用Awake
         this.Show();
         propImage.sprite = sprite;
-        float _scale;
-        if (itemID > INTERVAL)
-            _scale = Random.Range(0.95f, 1f);
-        else 
-            _scale = Random.Range(0.95f, 1.1f);
-
-        propNumText.text = "X" + itemNum;
-        propImage.rectTransform.localScale = propImage.rectTransform.localScale * _scale;
+        propNumText.text = specialRewards ? itemNum + "min" : "X" + itemNum;
         propImage.rectTransform.anchoredPosition = pos;
     }
 

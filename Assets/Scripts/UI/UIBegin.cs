@@ -8,6 +8,7 @@ using DG.Tweening;
 using System.Linq;
 using System;
 using TMPro;
+using static Spine.Unity.Editor.SkeletonBaker.BoneWeightContainer;
 
 namespace QFramework.Example
 {
@@ -21,9 +22,11 @@ namespace QFramework.Example
             return GameMainArc.Interface;
         }
 
-        //public GameObject LevelNode;
         public GameObject[] SceneNodes;
         public ScenePartCtrl[] scenePartCtrls;
+
+        public RectTransform[] ItemBeginPos;
+        public Image[] ImgItems;
 
         public ParticleTargetMoveCtrl coinFx, starFx;
 
@@ -60,6 +63,18 @@ namespace QFramework.Example
             saveData = this.GetUtility<SaveDataUtility>();
             LevelManager.Instance.InitBottle();
             mTxtCoinAdd = TxtCoinAdd.GetComponent<TextMeshProUGUI>();
+           
+
+            if (saveData.GetLevelClear() <= 5)
+            {
+                BottomMenuBtns.Hide();
+                HomeNode.Hide();
+            }
+
+            else if (saveData.GetLevelClear() > GameConst.WIN_STREAK_BEGIN_LEVEL)
+            {
+                PotionActivity();
+            }
         }
 
         protected override void OnShow()
@@ -70,7 +85,6 @@ namespace QFramework.Example
             SetVitality();
             SetCoin();
             SetStar();
-            InitBeginMenuButton();
             SetScene();
         }
 
@@ -100,7 +114,6 @@ namespace QFramework.Example
             {
                 UIKit.OpenPanel<UIBeginSelect>();
             });
-            
 
             BtnHeart.onClick.RemoveAllListeners();
             BtnHeart.onClick.AddListener(() =>
@@ -118,7 +131,6 @@ namespace QFramework.Example
             //获取完奖励回调 
             BtnGetReward.onClick.AddListener(() =>
             {
-                //更新场景，
                 SetScene();
                 StartCoroutine(FlyReward());
             });
@@ -129,6 +141,7 @@ namespace QFramework.Example
                 UIKit.OpenPanel("UIPersonal");
             });
 
+            BtnCoin.onClick.RemoveAllListeners();
             BtnCoin.onClick.AddListener(() =>
             {
                 //跳转商店
@@ -138,47 +151,47 @@ namespace QFramework.Example
             //底部区域按钮监听
             foreach (var btn in bottomMenuBtns)
             {
+                btn.onClick.RemoveAllListeners();
                 btn.onClick.AddListener(() =>
                 {
-                    int index = bottomMenuBtns.IndexOf(btn);
-                    //切换界面
-                    ChangePanel(index);
-                    if (nowButton != index)
-                    {
-                        for (int i = 0; i < bottomMenuRect.Count; i++)
-                        {
-                            var rt = bottomMenuBtns[i].GetComponent<RectTransform>();
-                            if (i == index)
-                            {
-                                //设置选中效果
-                                rt.localScale = new Vector3(minScaleValue, minScaleValue, minScaleValue);
-                                rt.DOScale(new Vector3(maxScaleValue, maxScaleValue, 1), 0.1f);
-                                rt.DOLocalMoveY(targetPosY, 0.1f);
-                                bottomMenuRect[index].sizeDelta = SELECTED;
-                            }
-                            else
-                            {
-                                //设置未选中效果
-                                rt.DOScale(Vector3.one, 0.2f);
-                                rt.DOLocalMoveY(initPosY, 0.2f);
-                                bottomMenuRect[i].sizeDelta = NSELECTED;
-                            }
-
-                        }
-                        //等待一帧
-                        ActionKit.DelayFrame(1, () =>
-                        {
-                            //同步按钮中心位置(可以设置按钮下的字体显示)
-                            for (int i = 0; i < bottomMenuBtns.Count; i++)
-                            {
-                                var rt = bottomMenuBtns[i].GetComponent<RectTransform>();
-                                rt.DOLocalMoveX(bottomMenuRect[i].localPosition.x, 0.2f);
-                            }
-                            //更新滑动块
-                            selectedImg.DOMove(bottomMenuRect[index].position, 0.1f);
-                            nowButton = index;
-                        }).Start(this);
-                    }
+                   int index = bottomMenuBtns.IndexOf(btn);
+                   //切换界面
+                   ChangePanel(index);
+                   if (nowButton != index)
+                   {
+                       for (int i = 0; i < bottomMenuRect.Count; i++)
+                       {
+                           var rt = bottomMenuBtns[i].GetComponent<RectTransform>();
+                           if (i == index)
+                           {
+                               //设置选中效果
+                               rt.localScale = new Vector3(minScaleValue, minScaleValue, minScaleValue);
+                               rt.DOScale(new Vector3(maxScaleValue, maxScaleValue, 1), 0.1f);
+                               rt.DOLocalMoveY(targetPosY, 0.1f);
+                               bottomMenuRect[index].sizeDelta = SELECTED;
+                           }
+                           else
+                           {
+                               //设置未选中效果
+                               rt.DOScale(Vector3.one, 0.2f);
+                               rt.DOLocalMoveY(initPosY, 0.2f);
+                               bottomMenuRect[i].sizeDelta = NSELECTED;
+                           }
+                       }
+                       //等待一帧
+                       ActionKit.DelayFrame(1, () =>
+                       {
+                           //同步按钮中心位置(可以设置按钮下的字体显示)
+                           for (int i = 0; i < bottomMenuBtns.Count; i++)
+                           {
+                               var rt = bottomMenuBtns[i].GetComponent<RectTransform>();
+                               rt.DOLocalMoveX(bottomMenuRect[i].localPosition.x, 0.2f);
+                           }
+                           //更新滑动块
+                           selectedImg.DOMove(bottomMenuRect[index].position, 0.1f);
+                           nowButton = index;
+                       }).Start(this);
+                   }
                 });
             }
         }
@@ -189,7 +202,16 @@ namespace QFramework.Example
             //胜利结算=》返回主页事件
             this.RegisterEvent<LevelClearEvent>(e =>
             {
+                BottomMenuBtns.Show();
+                HomeNode.Show();
                 StartCoroutine(ShowFx());
+
+            }).UnRegisterWhenGameObjectDestroyed(gameObject);
+
+            this.RegisterEvent<ReturnMainEvent>(e =>
+            {
+                BottomMenuBtns.Show();
+                HomeNode.Show();
 
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
@@ -218,7 +240,8 @@ namespace QFramework.Example
             {
                 UIKit.OpenPanel<UIGameNode>();
                 LevelManager.Instance.StartGame(saveData.GetLevelClear());
-                CloseSelf();
+                BottomMenuBtns.Hide();
+                HomeNode.Hide();
 
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
@@ -232,6 +255,11 @@ namespace QFramework.Example
             {
                 InitBeginMenuButton(0);
 
+            }).UnRegisterWhenGameObjectDestroyed(gameObject);
+
+            StringEventSystem.Global.Register("StartPotionActivity", () =>
+            {
+                PotionActivity();
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
@@ -264,22 +292,6 @@ namespace QFramework.Example
         }
 
         #endregion
-
-        /// <summary>
-        /// 解锁建筑宝箱奖励
-        /// </summary>
-        void ShowReward()
-        {
-            RewardNode.gameObject.SetActive(true);
-            ImgItem1.gameObject.SetActive(true);
-            ImgItem2.gameObject.SetActive(true);
-            ImgItem3.gameObject.SetActive(true);
-            ImgItem4.gameObject.SetActive(true);
-            ImgItem5.gameObject.SetActive(true);
-            ImgItem6.gameObject.SetActive(true);
-            ImgItem7.gameObject.SetActive(true);
-            ImgItem8.gameObject.SetActive(true);
-        }
 
         private void SetAvatar()
         {
@@ -350,7 +362,7 @@ namespace QFramework.Example
             SetStar();
             var sceneNow = saveData.GetSceneRecord();
             var partNow = saveData.GetScenePartRecord();
-            
+
             TxtArea.text = "Area " + sceneNow;
 
             //解锁完成(锁定最后一个场景)
@@ -415,6 +427,19 @@ namespace QFramework.Example
         }
 
         /// <summary>
+        /// 解锁建筑宝箱奖励
+        /// </summary>
+        void ShowReward()
+        {
+            RewardNode.gameObject.SetActive(true);
+
+            foreach (var item in ImgItems)
+            {
+                item.Show();
+            }
+        }
+
+        /// <summary>
         /// 道具飞行效果(完成回调)
         /// </summary>
         /// <returns></returns>
@@ -422,65 +447,38 @@ namespace QFramework.Example
         {
             RewardNode.gameObject.SetActive(false);
 
-            ImgItem1.transform.DOMove(Target.transform.position, 1f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ImgItem1.gameObject.SetActive(false);
-                    ImgItem1.transform.position = Begin1.transform.position;
-                });
-            yield return new WaitForSeconds(0.2f);
-            ImgItem2.transform.DOMove(Target.transform.position, 1f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ImgItem2.gameObject.SetActive(false);
-                    ImgItem2.transform.position = Begin2.transform.position;
-                });
-            yield return new WaitForSeconds(0.2f);
-            ImgItem3.transform.DOMove(Target.transform.position, 1f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ImgItem3.gameObject.SetActive(false);
-                    ImgItem3.transform.position = Begin3.transform.position;
-                });
-            yield return new WaitForSeconds(0.2f);
-            ImgItem4.transform.DOMove(Target.transform.position, 1f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ImgItem4.gameObject.SetActive(false);
-                    ImgItem4.transform.position = Begin4.transform.position;
-                });
-            yield return new WaitForSeconds(0.2f);
-            ImgItem5.transform.DOMove(Target.transform.position, 1f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ImgItem5.gameObject.SetActive(false);
-                    ImgItem5.transform.position = Begin5.transform.position;
-                });
-            yield return new WaitForSeconds(0.2f);
-            ImgItem6.transform.DOMove(Target.transform.position, 1f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ImgItem6.gameObject.SetActive(false);
-                    ImgItem6.transform.position = Begin6.transform.position;
-                });
-            yield return new WaitForSeconds(0.2f);
-            ImgItem7.transform.DOMove(Target.transform.position, 1f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ImgItem7.gameObject.SetActive(false);
-                    ImgItem7.transform.position = Begin7.transform.position;
-                });
-            yield return new WaitForSeconds(0.2f);
-            ImgItem8.transform.DOMove(Target.transform.position, 1f).SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ImgItem8.gameObject.SetActive(false);
-                    ImgItem8.transform.position = Begin8.transform.position;
-                });
+            for (int i = 0; i < ImgItems.Length; i++)
+            {
+                int index = i;
+                ImgItems[index].transform.DOMove(Target.transform.position, 1f).SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        ImgItems[index].Hide();
+                        ImgItems[index].transform.position = ItemBeginPos[index].transform.position;
+                    });
+
+                yield return new WaitForSeconds(0.2f);
+            }
 
             RewardCoinFx.Play(10);
             yield return new WaitForSeconds(1.5f);
             CoinManager.Instance.AddCoin(200);
+        }
+
+        /// <summary>
+        /// 连胜活动
+        /// </summary>
+        private void PotionActivity()
+        {
+            //CountDownTimerManager.Instance.ResetTimer(GameConst.POTION_ACTIVITY_SIGN, 10);
+            CountDownTimerManager.Instance.StartTimer(GameConst.POTION_ACTIVITY_SIGN, 1440f);
+
+            if (!CountDownTimerManager.Instance.IsTimerFinished(GameConst.POTION_ACTIVITY_SIGN))
+            {
+                var potionNode = Resources.Load("Prefab/PotionActivityNode");
+                var node = Instantiate(potionNode, HomeNode.transform);
+                //Debug.Log("剩余时长：" + CountDownTimerManager.Instance.GetRemainingTimeText(GameConst.POTION_ACTIVITY_SIGN));
+            }
         }
     }
 }

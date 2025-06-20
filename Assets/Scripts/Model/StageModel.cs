@@ -14,8 +14,17 @@ public class StageModel : AbstractModel
     private BindableProperty<int> mCountinueWinNum;
 
     //金币倍率
-    public float GoldCoinsMultiple => mGoldCoinsMultiple;
-    private float mGoldCoinsMultiple = 1;//还要增加一个2倍金币的Buff
+    public float GoldCoinsMultiple
+    {
+        get
+        {
+            if (!CountDownTimerManager.Instance.IsTimerFinished(GameConst.DOUBLE_COIN_SIGN))
+                return DOUBLE_COIN;
+
+            else return mGoldCoinsMultiple;
+        }
+    }
+    private float mGoldCoinsMultiple = 1;
 
     //静音
     public bool VolumeSetting
@@ -35,7 +44,8 @@ public class StageModel : AbstractModel
     private const string COUNTINUE_WIN_NUM_SIGN = "g_WaterCountinueWinNum";
     private const string VOLUME_SETTING_SIGN = "g_WaterVolumeSetting";
     private const string SCENE_UNLOCK_BOX_SIGN = "g_WaterSceneLockBox";
-    private const int WIN_STREAK_BEGIN_LEVEL = 7;
+    
+    private const int DOUBLE_COIN = 2;
 
     private SaveDataUtility stroge;
 
@@ -99,7 +109,7 @@ public class StageModel : AbstractModel
 
     public void AddCountinueWinNum()
     {
-        if (stroge.GetLevelClear() > WIN_STREAK_BEGIN_LEVEL)
+        if (stroge.GetLevelClear() > GameConst.WIN_STREAK_BEGIN_LEVEL)
             mCountinueWinNum.Value++;
 
         //大于10连胜生效(不含10连胜/本次过关不生效)

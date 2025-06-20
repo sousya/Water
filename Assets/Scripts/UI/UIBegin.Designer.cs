@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.Example
 {
-	// Generate Id:ad123ed6-fd22-49f2-9471-ac13cffab9ea
+	// Generate Id:4706d08e-b10d-4e14-b383-355c6dca0bae
 	public partial class UIBegin
 	{
 		public const string Name = "UIBegin";
@@ -47,38 +47,6 @@ namespace QFramework.Example
 		[SerializeField]
 		public RectTransform Target;
 		[SerializeField]
-		public RectTransform Begin8;
-		[SerializeField]
-		public RectTransform Begin7;
-		[SerializeField]
-		public RectTransform Begin6;
-		[SerializeField]
-		public RectTransform Begin5;
-		[SerializeField]
-		public RectTransform Begin4;
-		[SerializeField]
-		public RectTransform Begin3;
-		[SerializeField]
-		public RectTransform Begin2;
-		[SerializeField]
-		public RectTransform Begin1;
-		[SerializeField]
-		public UnityEngine.UI.Image ImgItem8;
-		[SerializeField]
-		public UnityEngine.UI.Image ImgItem7;
-		[SerializeField]
-		public UnityEngine.UI.Image ImgItem6;
-		[SerializeField]
-		public UnityEngine.UI.Image ImgItem5;
-		[SerializeField]
-		public UnityEngine.UI.Image ImgItem4;
-		[SerializeField]
-		public UnityEngine.UI.Image ImgItem3;
-		[SerializeField]
-		public UnityEngine.UI.Image ImgItem2;
-		[SerializeField]
-		public UnityEngine.UI.Image ImgItem1;
-		[SerializeField]
 		public ParticleTargetMoveCtrl RewardCoinFx;
 		[SerializeField]
 		public UnityEngine.Animator TxtCoinAdd;
@@ -115,22 +83,6 @@ namespace QFramework.Example
 			RewardNode = null;
 			BtnGetReward = null;
 			Target = null;
-			Begin8 = null;
-			Begin7 = null;
-			Begin6 = null;
-			Begin5 = null;
-			Begin4 = null;
-			Begin3 = null;
-			Begin2 = null;
-			Begin1 = null;
-			ImgItem8 = null;
-			ImgItem7 = null;
-			ImgItem6 = null;
-			ImgItem5 = null;
-			ImgItem4 = null;
-			ImgItem3 = null;
-			ImgItem2 = null;
-			ImgItem1 = null;
 			RewardCoinFx = null;
 			TxtCoinAdd = null;
 			BtnHead = null;

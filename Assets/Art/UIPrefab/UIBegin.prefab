@@ -1207,7 +1207,6 @@ GameObject:
   - component: {fileID: 4828928197183454977}
   - component: {fileID: 2413519392343623732}
   - component: {fileID: 5337558724569299861}
-  - component: {fileID: 2311293058475959209}
   m_Layer: 5
   m_Name: ImgItem1
   m_TagString: Untagged
@@ -1272,22 +1271,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2311293058475959209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 337039996334624741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: CoinFx
-  CustomComment: 
-  mComponentName: UnityEngine.UI.Image
 --- !u!1 &442727062668734366
 GameObject:
   m_ObjectHideFlags: 0
@@ -1476,7 +1459,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 215c4b2b95ca233409d301534028ddf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LevelNode: {fileID: 0}
   SceneNodes:
   - {fileID: 8231654832984208276}
   - {fileID: 7396104685721069655}
@@ -1487,6 +1469,24 @@ MonoBehaviour:
   - {fileID: 7683760583286762468}
   - {fileID: 8660478310495001720}
   - {fileID: 1856272295933640326}
+  ItemBeginPos:
+  - {fileID: 6333942491573693714}
+  - {fileID: 3238045006056688246}
+  - {fileID: 170020333142310185}
+  - {fileID: 1535764638079468464}
+  - {fileID: 7525060011415704150}
+  - {fileID: 7787381122485805956}
+  - {fileID: 4350060153174666661}
+  - {fileID: 7360242903654813503}
+  ImgItems:
+  - {fileID: 2862523698067542630}
+  - {fileID: 1957158145743213782}
+  - {fileID: 3704533555504282319}
+  - {fileID: 6189390936556312754}
+  - {fileID: 428726344852567689}
+  - {fileID: 2405285795244615617}
+  - {fileID: 2594772662666726111}
+  - {fileID: 5337558724569299861}
   coinFx: {fileID: 4192289755092124865}
   starFx: {fileID: 7386107850048871920}
   bottomMenuBtns:
@@ -1508,31 +1508,6 @@ MonoBehaviour:
   - {fileID: 7006334614415111171}
   - {fileID: 9060759588701663668}
   selectedImg: {fileID: 7953295699732432002}
-  BtnStepBack: {fileID: 0}
-  TxtRefreshNum: {fileID: 0}
-  BtnAddStepBack: {fileID: 0}
-  BtnRemoveHide: {fileID: 0}
-  TxtRemoveHideNum: {fileID: 0}
-  BtnAddRemove: {fileID: 0}
-  BtnAddBottle: {fileID: 0}
-  TxtAddBottleNum: {fileID: 0}
-  BtnAddAddBottle: {fileID: 0}
-  BtnHalfBottle: {fileID: 0}
-  TxtAddHalfBottleNum: {fileID: 0}
-  BtnAddHalfBottle: {fileID: 0}
-  BtnRemoveAll: {fileID: 0}
-  TxtRemoveAllNum: {fileID: 0}
-  BtnAddRemoveBottle: {fileID: 0}
-  TxtLevel: {fileID: 0}
-  BtnMenu: {fileID: 0}
-  BtnReturn: {fileID: 0}
-  BtnItemBg: {fileID: 0}
-  BtnItem1: {fileID: 0}
-  TxtItem1: {fileID: 0}
-  BtnItem2: {fileID: 0}
-  TxtItem2: {fileID: 0}
-  BtnItem3: {fileID: 0}
-  TxtItem3: {fileID: 0}
   ShopScrollView: {fileID: 3682217519987241380}
   BtnStart: {fileID: 8738590673913242107}
   TxtStart: {fileID: 7305947681278794043}
@@ -1551,22 +1526,6 @@ MonoBehaviour:
   RewardNode: {fileID: 2582419062625738819}
   BtnGetReward: {fileID: 5940379452355502362}
   Target: {fileID: 3673929480520105807}
-  Begin8: {fileID: 6333942491573693714}
-  Begin7: {fileID: 3238045006056688246}
-  Begin6: {fileID: 170020333142310185}
-  Begin5: {fileID: 1535764638079468464}
-  Begin4: {fileID: 7525060011415704150}
-  Begin3: {fileID: 7787381122485805956}
-  Begin2: {fileID: 4350060153174666661}
-  Begin1: {fileID: 7360242903654813503}
-  ImgItem8: {fileID: 2862523698067542630}
-  ImgItem7: {fileID: 1957158145743213782}
-  ImgItem6: {fileID: 3704533555504282319}
-  ImgItem5: {fileID: 6189390936556312754}
-  ImgItem4: {fileID: 428726344852567689}
-  ImgItem3: {fileID: 2405285795244615617}
-  ImgItem2: {fileID: 2594772662666726111}
-  ImgItem1: {fileID: 5337558724569299861}
   RewardCoinFx: {fileID: 8551956026047486763}
   TxtCoinAdd: {fileID: 930514672117400420}
   BtnHead: {fileID: 8572141549526072884}
@@ -3463,7 +3422,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4350060153174666661}
-  - component: {fileID: 2458876126997706048}
   m_Layer: 5
   m_Name: Begin2
   m_TagString: Untagged
@@ -3490,22 +3448,6 @@ RectTransform:
   m_AnchoredPosition: {x: -193, y: 178}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2458876126997706048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1157848911388832502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: Begin8
-  CustomComment: 
-  mComponentName: 
 --- !u!1 &1169207063669915549
 GameObject:
   m_ObjectHideFlags: 0
@@ -4233,7 +4175,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1535764638079468464}
-  - component: {fileID: 7312438930541555989}
   m_Layer: 5
   m_Name: Begin5
   m_TagString: Untagged
@@ -4260,22 +4201,6 @@ RectTransform:
   m_AnchoredPosition: {x: -372.5, y: 324.75}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7312438930541555989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1355787776730021723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: Begin8
-  CustomComment: 
-  mComponentName: 
 --- !u!1 &1356046616838616079
 GameObject:
   m_ObjectHideFlags: 0
@@ -7874,7 +7799,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 170020333142310185}
-  - component: {fileID: 9051966472801158226}
   m_Layer: 5
   m_Name: Begin6
   m_TagString: Untagged
@@ -7901,22 +7825,6 @@ RectTransform:
   m_AnchoredPosition: {x: 192.5, y: 478.75}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &9051966472801158226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2194398348216513769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: Begin8
-  CustomComment: 
-  mComponentName: 
 --- !u!1 &2230680999609977474
 GameObject:
   m_ObjectHideFlags: 0
@@ -11427,7 +11335,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3238045006056688246}
-  - component: {fileID: 2245327282591613221}
   m_Layer: 5
   m_Name: Begin7
   m_TagString: Untagged
@@ -11454,22 +11361,6 @@ RectTransform:
   m_AnchoredPosition: {x: -189, y: 478.75}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2245327282591613221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3527829879890535844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: Begin8
-  CustomComment: 
-  mComponentName: 
 --- !u!1 &3553458710513670924
 GameObject:
   m_ObjectHideFlags: 0
@@ -14679,7 +14570,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6333942491573693714}
-  - component: {fileID: 4758787279791738802}
   m_Layer: 5
   m_Name: Begin8
   m_TagString: Untagged
@@ -14706,22 +14596,6 @@ RectTransform:
   m_AnchoredPosition: {x: 5.75, y: 614}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4758787279791738802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4613360799224687169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: Begin8
-  CustomComment: 
-  mComponentName: RectTransform
 --- !u!1 &4636423452034344543
 GameObject:
   m_ObjectHideFlags: 0
@@ -15185,7 +15059,6 @@ GameObject:
   - component: {fileID: 6170873386506727951}
   - component: {fileID: 7675358489266371752}
   - component: {fileID: 1957158145743213782}
-  - component: {fileID: 2245407048925171223}
   m_Layer: 5
   m_Name: ImgItem7
   m_TagString: Untagged
@@ -15250,22 +15123,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2245407048925171223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4785808707917978331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: CoinFx
-  CustomComment: 
-  mComponentName: UnityEngine.UI.Image
 --- !u!1 &4843927594701300423
 GameObject:
   m_ObjectHideFlags: 0
@@ -18079,7 +17936,6 @@ GameObject:
   - component: {fileID: 4430584258054722350}
   - component: {fileID: 5352883662520537315}
   - component: {fileID: 6189390936556312754}
-  - component: {fileID: 3236704571993031200}
   m_Layer: 5
   m_Name: ImgItem5
   m_TagString: Untagged
@@ -18144,22 +18000,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3236704571993031200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5513210203331326700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: CoinFx
-  CustomComment: 
-  mComponentName: UnityEngine.UI.Image
 --- !u!1 &5523933955951055159
 GameObject:
   m_ObjectHideFlags: 0
@@ -18765,7 +18605,6 @@ GameObject:
   - component: {fileID: 2707778107925827778}
   - component: {fileID: 139295822920956233}
   - component: {fileID: 2405285795244615617}
-  - component: {fileID: 7936213983118506647}
   m_Layer: 5
   m_Name: ImgItem3
   m_TagString: Untagged
@@ -18830,22 +18669,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7936213983118506647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5710127237132297215}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: CoinFx
-  CustomComment: 
-  mComponentName: UnityEngine.UI.Image
 --- !u!1 &5843110733740308631
 GameObject:
   m_ObjectHideFlags: 0
@@ -21915,7 +21738,6 @@ GameObject:
   - component: {fileID: 842904230012899166}
   - component: {fileID: 5055005617523632659}
   - component: {fileID: 428726344852567689}
-  - component: {fileID: 7636817615376775670}
   m_Layer: 5
   m_Name: ImgItem4
   m_TagString: Untagged
@@ -21980,22 +21802,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7636817615376775670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6727911786446484921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: CoinFx
-  CustomComment: 
-  mComponentName: UnityEngine.UI.Image
 --- !u!1 &6728966573475647876
 GameObject:
   m_ObjectHideFlags: 0
@@ -22479,7 +22285,6 @@ GameObject:
   - component: {fileID: 6008178086582238956}
   - component: {fileID: 4152636664657750920}
   - component: {fileID: 2862523698067542630}
-  - component: {fileID: 2949225652026262500}
   m_Layer: 5
   m_Name: ImgItem8
   m_TagString: Untagged
@@ -22544,22 +22349,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2949225652026262500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6880971026932284268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: CoinFx
-  CustomComment: 
-  mComponentName: UnityEngine.UI.Image
 --- !u!1 &6919663676125057058
 GameObject:
   m_ObjectHideFlags: 0
@@ -25113,7 +24902,6 @@ GameObject:
   - component: {fileID: 7591265425378724343}
   - component: {fileID: 5959492766121081889}
   - component: {fileID: 3704533555504282319}
-  - component: {fileID: 7072805589828192078}
   m_Layer: 5
   m_Name: ImgItem6
   m_TagString: Untagged
@@ -25178,22 +24966,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7072805589828192078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7557928800547422558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: CoinFx
-  CustomComment: 
-  mComponentName: UnityEngine.UI.Image
 --- !u!1 &7651957544958760910
 GameObject:
   m_ObjectHideFlags: 0
@@ -25581,7 +25353,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7360242903654813503}
-  - component: {fileID: 3539963182799074604}
   m_Layer: 5
   m_Name: Begin1
   m_TagString: Untagged
@@ -25608,22 +25379,6 @@ RectTransform:
   m_AnchoredPosition: {x: 199.5, y: 178}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3539963182799074604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7844407984902417865}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: Begin8
-  CustomComment: 
-  mComponentName: 
 --- !u!1 &7857382623003266223
 GameObject:
   m_ObjectHideFlags: 0
@@ -25798,7 +25553,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7787381122485805956}
-  - component: {fileID: 1319129914927568110}
   m_Layer: 5
   m_Name: Begin3
   m_TagString: Untagged
@@ -25825,22 +25579,6 @@ RectTransform:
   m_AnchoredPosition: {x: 350, y: 324.75}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1319129914927568110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7930766382193659750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: Begin8
-  CustomComment: 
-  mComponentName: 
 --- !u!1 &7998417527858903573
 GameObject:
   m_ObjectHideFlags: 0
@@ -27702,7 +27440,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7525060011415704150}
-  - component: {fileID: 7344251582827704476}
   m_Layer: 5
   m_Name: Begin4
   m_TagString: Untagged
@@ -27729,22 +27466,6 @@ RectTransform:
   m_AnchoredPosition: {x: 9, y: 324.75}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7344251582827704476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8504637786635152670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: Begin8
-  CustomComment: 
-  mComponentName: 
 --- !u!1 &8516245105944249882
 GameObject:
   m_ObjectHideFlags: 0
@@ -27890,7 +27611,6 @@ GameObject:
   - component: {fileID: 6074088708949643627}
   - component: {fileID: 4880878712246847842}
   - component: {fileID: 2594772662666726111}
-  - component: {fileID: 2212753752017660890}
   m_Layer: 5
   m_Name: ImgItem2
   m_TagString: Untagged
@@ -27955,22 +27675,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2212753752017660890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8556916184438555940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MarkType: 0
-  CustomComponentName: CoinFx
-  CustomComment: 
-  mComponentName: UnityEngine.UI.Image
 --- !u!1 &8558468697917434794
 GameObject:
   m_ObjectHideFlags: 0
@@ -29856,6 +29560,10 @@ PrefabInstance:
       propertyPath: delayTime
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1355872291493161149, guid: 544b08d11a2763d48aac8bd3d0502aca, type: 3}
+      propertyPath: speedAddDelta
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3747259537710899435, guid: 544b08d11a2763d48aac8bd3d0502aca, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
       value: 1.5
@@ -29978,9 +29686,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 4186611091227900001}
     m_Modifications:
     - target: {fileID: 1355872291493161149, guid: 544b08d11a2763d48aac8bd3d0502aca, type: 3}
+      propertyPath: speed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1355872291493161149, guid: 544b08d11a2763d48aac8bd3d0502aca, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 3673929480520105807}
+    - target: {fileID: 1355872291493161149, guid: 544b08d11a2763d48aac8bd3d0502aca, type: 3}
+      propertyPath: delayTime
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3747259537710899435, guid: 544b08d11a2763d48aac8bd3d0502aca, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
       value: 1.5

@@ -13,6 +13,9 @@ namespace GameDefine
 
         //场景建筑
         public const int SCENE_PART_COUNT = 5;
+        public const int WIN_STREAK_BEGIN_LEVEL = 7;
+        public const string DOUBLE_COIN_SIGN = "DoubleCoin";
+        public const string POTION_ACTIVITY_SIGN = "PotionActivity";
 
         //关卡引导
         public static readonly Dictionary<int, (string, string)> GuideLevelInfo = new Dictionary<int, (string, string)>

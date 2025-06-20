@@ -41,9 +41,8 @@ namespace QFramework.Example
 
                 HealthManager.Instance.UseHp();
 				UIKit.ClosePanel<UIGameNode>();
-				UIKit.OpenPanel<UIBegin>();
-
                 this.GetModel<StageModel>().ResetCountinueWinNum();
+                this.SendEvent<ReturnMainEvent>(new ReturnMainEvent());
                 CloseSelf();
             });
 		}

@@ -7,7 +7,6 @@ using Unity.VisualScripting;
 
 public class RewardItemManager : MonoSingleton<RewardItemManager>
 {
-    [SerializeField] private Sprite[] RewardSprites;
     [SerializeField] private Animator BoxAnimator;
     [SerializeField] private Button BtnContinue;
     [SerializeField] private RectTransform mRectTransformPar;
@@ -18,6 +17,8 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
 
     private List<int> availableSlots;
     private List<System.Action> actionList;
+    private System.Action openBoxCallBack;
+
     // 每轮动态传入
     private int slotCount;
     private const int YAXIS = 800;
@@ -52,11 +53,12 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
         });
     }
 
-    public IEnumerator PlayRewardAnim(GiftPackSO packSO ,bool addCoin = false)
+    public IEnumerator PlayRewardAnim(IPackSoInterface packSO ,bool addCoin = false ,System.Action call = null)
     {
-        mMask.Show();
+        openBoxCallBack = call;
 
-        slotCount = packSO.ItemReward.Count;
+        mMask.Show();
+        slotCount = packSO.ItemReward.Count + packSO.SpecialRewards.Count;
         availableSlots.Clear();
         actionList.Clear();
         for (int i = 0; i < slotCount; i++)
@@ -66,7 +68,7 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
 
         BoxAnimator.Play("BoxOpen");
         yield return new WaitForSeconds(1f); // 等待盒子打开动画完成
-        if (packSO.ItemReward.Count != 0)
+        if (packSO.ItemReward.Count != 0 || packSO.SpecialRewards.Count != 0)
             BtnContinue.Show();
         else
             mMask.Hide();
@@ -79,9 +81,19 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
             image.TryGetComponent(out PropRewardPoolNode _node);
             if (_node == null)
                 _node = image.gameObject.AddComponent<PropRewardPoolNode>();
-            _node.Init(RewardSprites[item.ItemIndex - 1], SetRandomScreenPosition(image), item.ItemIndex, item.Quantity);
+            _node.Init(item.RewardSprite, SetRandomScreenPosition(image), item.Quantity, false);
             actionList.Add(() => _node.MoveOffScreen());
         }
+        foreach (var item in packSO.SpecialRewards) 
+        {
+            var image = RewardPool.Allocate();
+            image.TryGetComponent(out PropRewardPoolNode _node);
+            if (_node == null)
+                _node = image.gameObject.AddComponent<PropRewardPoolNode>();
+            _node.Init(item.RewardSprite, SetRandomScreenPosition(image), item.Duration, true);
+            actionList.Add(() => _node.MoveOffScreen());
+        }
+
         if (addCoin)
             CoinParticle.Play(100);
     }
@@ -97,6 +109,12 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
         BtnContinue.Hide();
         BtnContinue.interactable = true;
         mMask.Hide();
+
+        if(openBoxCallBack != null)
+        {
+            openBoxCallBack?.Invoke();
+            openBoxCallBack = null;
+        }
     }
 
     private Vector2 SetRandomScreenPosition(Image propImage)
@@ -111,8 +129,8 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
         int slotIndex = availableSlots[Random.Range(0, availableSlots.Count)];
         availableSlots.Remove(slotIndex);
 
-        // 每个道具间隔 200，整体居中
-        float spacing = 200f;
+        // 每个道具间隔 210，整体居中
+        float spacing = 210f;
         float x = slotIndex * spacing - (slotCount - 1) * spacing * 0.5f;
 
         // 超过5个道具分两排补充位置

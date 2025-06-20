@@ -1,0 +1,194 @@
+using UnityEngine;
+using QFramework;
+using DG.Tweening;
+using UnityEngine.UI;
+using GameDefine;
+
+namespace QFramework.Example
+{
+    public partial class PotionActivityNode : ViewController
+    {
+        private int mCacheProgress;
+        private int mCacheGoal;
+
+        private PotionActivityModel potionActivityModel;
+        private StageModel stageModel;
+
+        private Sequence mProgressSequence;
+
+        //五档连胜积分
+        private readonly int[] TARGER_GOALS = new int[] { 140, 500, 500, 500, 500 };
+        //五档积分底框位置
+        private readonly int[] TARGER_POSX = new int[] { -280, -140, 0, 140, 280 };
+
+        [SerializeField] private PotionActivityPackSO[] potionActivityPackSO;
+
+        private void Awake()
+        {
+            stageModel = this.GetModel<StageModel>();
+            potionActivityModel = this.GetModel<PotionActivityModel>();
+            mCacheProgress = potionActivityModel.PotionActivityProgress;
+            mCacheGoal = potionActivityModel.PotionActivityGoal;
+            TextProgress.text = $"{mCacheGoal}/{TARGER_GOALS[mCacheProgress]}";
+            ImgProgressBar.fillAmount = (float)mCacheGoal / TARGER_GOALS[mCacheProgress];
+            Selected.localPosition = new Vector3(TARGER_POSX[potionActivityModel.WinStreakLevel], Selected.localPosition.y, 0);
+        }
+
+        private void OnEnable()
+        {
+            if (potionActivityModel.PotionActivityGoal >= TARGER_GOALS[mCacheProgress])
+            {
+                //需要遮罩等动画播放完
+                UIKit.OpenPanel<UIMask>(UILevel.PopUI);
+            }
+           
+            //更新位置
+            if (!CountDownTimerManager.Instance.IsTimerFinished(GameConst.POTION_ACTIVITY_SIGN))
+            {
+                Selected.DOLocalMoveX(TARGER_POSX[potionActivityModel.WinStreakLevel], 1f)
+                .OnComplete(DoUpdateProgress);
+            }
+            else
+            {
+                //走动画逻辑触发
+                DoUpdateProgress();
+                //活动结束且积分满足，跳过动画直接走领奖逻辑
+                //CheckOpenBox(potionActivityModel.PotionActivityGoal);
+            }
+        }
+
+        private void Start()
+        {
+            //首次启用调用一次
+            CheckOpenBox(mCacheGoal);
+        }
+
+        private void Update()
+        {
+            if (!gameObject.activeSelf) return;
+
+            if (!CountDownTimerManager.Instance.IsTimerFinished(GameDefine.GameConst.POTION_ACTIVITY_SIGN))
+            {
+                TextTimer.text = CountDownTimerManager.Instance.GetRemainingTimeText(GameDefine.GameConst.POTION_ACTIVITY_SIGN);
+            }
+            else
+            {
+                TextTimer.text = "00:00:00";
+                //极端情况:积分足够且正好活动结束
+                if (potionActivityModel.PotionActivityGoal < TARGER_GOALS[mCacheProgress])
+                {
+                    Destroy(gameObject);
+                    return;
+                }
+            }
+        }
+
+        private void OnDisable()
+        {
+            mProgressSequence?.Kill();
+        }
+
+        /// <summary>
+        /// 更新文本、进度条
+        /// </summary>
+        private void DoUpdateProgress()
+        {
+            //获取当前进度和目标
+            var _tempGoal = potionActivityModel.PotionActivityGoal;
+
+            if (_tempGoal != mCacheGoal)
+            {
+                int _startValue = mCacheGoal;
+                mProgressSequence?.Kill();
+                mProgressSequence = DOTween.Sequence();
+                mProgressSequence.Join(
+                DOTween.To(() => _startValue, x =>
+                {
+                    _startValue = x;
+                    TextProgress.text = $"{_startValue}/{TARGER_GOALS[mCacheProgress]}";
+                }, _tempGoal, 1f));
+
+                mProgressSequence.Join(
+                ImgProgressBar.DOFillAmount((float)_tempGoal / TARGER_GOALS[mCacheProgress], 1f));
+
+                mProgressSequence.OnComplete(() =>
+                {
+                    mCacheGoal = _tempGoal;
+                    CheckOpenBox(_tempGoal);
+                });
+                mProgressSequence.Play();
+
+                //使用容器控制
+                /*
+                mCacheGoal = _tempGoal;
+                //等待动画完成
+                ActionKit.Delay(1f, () =>
+                {
+                    CheckOpenBox(_tempGoal);
+                }).Start(this);
+                */
+            }
+        }
+
+        private void CheckOpenBox(int _tempGoal)
+        {
+            //判断是否开箱
+            if (_tempGoal >= TARGER_GOALS[mCacheProgress])
+            {
+                UIKit.ClosePanel<UIMask>();
+                StartCoroutine(
+                RewardItemManager.Instance.PlayRewardAnim(
+                    potionActivityPackSO[mCacheProgress],
+                    potionActivityPackSO[mCacheProgress].Coins != 0,
+                    () =>
+                    {
+                        //奖励发放
+                        foreach (var item in potionActivityPackSO[mCacheProgress].ItemReward)
+                        {
+                            stageModel.AddItem(item.ItemIndex, item.Quantity);
+                        }
+
+                        foreach (var item in potionActivityPackSO[mCacheProgress].SpecialRewards)
+                        {
+                            switch (item.SpecialRewardType)
+                            {
+                                case SpecialRewardsType.RemoveAds:
+                                    Debug.Log("去除广告逻辑暂空");
+                                    break;
+                                case SpecialRewardsType.DoubleCoin:
+                                    CountDownTimerManager.Instance.AddTimer(GameDefine.GameConst.DOUBLE_COIN_SIGN, item.Duration);
+                                    break;
+                                case SpecialRewardsType.UnlimitedHp:
+                                    HealthManager.Instance.SetUnLimitHp(item.Duration);
+                                    break;
+                            }
+                        }
+
+                        if (potionActivityPackSO[mCacheProgress].Coins != 0)
+                            CoinManager.Instance.AddCoin(potionActivityPackSO[mCacheProgress].Coins);
+
+                        //活动进度更新
+                        potionActivityModel.ReducePotionActivityGoal(TARGER_GOALS[mCacheProgress]);
+                        potionActivityModel.AddPotionActivityProgress();
+                        mCacheProgress = potionActivityModel.PotionActivityProgress;
+
+                        //越界(最后一档连胜)销毁节点
+                        if (mCacheProgress >= TARGER_GOALS.Length)
+                        {
+                            //Debug.Log("已越界，销毁节点");
+                            Destroy(gameObject);
+                            return;
+                        }
+
+                        //未越界,重置进度
+                        _tempGoal = potionActivityModel.PotionActivityGoal;
+                        mCacheGoal = _tempGoal;
+                        TextProgress.text = $"{_tempGoal}/{TARGER_GOALS[mCacheProgress]}";
+                        ImgProgressBar.fillAmount = (float)_tempGoal / TARGER_GOALS[mCacheProgress];
+
+                        ActionKit.DelayFrame(1, () => CheckOpenBox(potionActivityModel.PotionActivityGoal)).Start(this);
+                    }));
+            }
+        }
+    }
+}

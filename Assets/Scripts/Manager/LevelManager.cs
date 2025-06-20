@@ -95,14 +95,13 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         emptyBottle.numCake = 4;
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();
 
+        UIKit.OpenPanel<UIBegin>();
+
         if (levelId <= 5)
         {
             StartGame(levelId);
             UIKit.OpenPanel<UIGameNode>();
         }
-        else
-            UIKit.OpenPanel<UIBegin>();
-
     }
 
     /// <summary>
@@ -353,6 +352,12 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         else
             UIKit.OpenPanel<UIVictory>();
 
+        //通过第七关开启连胜活动
+        if (this.GetUtility<SaveDataUtility>().GetLevelClear() == 8)
+        {
+            StringEventSystem.Global.Send("StartPotionActivity");
+        }
+
         // 连胜计数
         stageModel.AddCountinueWinNum();
     }
@@ -379,7 +384,6 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
             UIKit.ClosePanel<UIMask>();
             this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
 
-            //前五关(前五关应该不统计连胜)
             if (levelId < 5)
                 StartGame(levelId + 1);
             else

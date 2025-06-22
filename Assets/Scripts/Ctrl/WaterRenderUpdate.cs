@@ -122,6 +122,20 @@ public class WaterRenderUpdate : MonoBehaviour
         }
     }
 
+    public int RenderQueue
+    {
+        get
+        {
+            ValidMaterial();
+            return _material.renderQueue;
+        }
+        set
+        {
+            ValidMaterial();
+            _material.renderQueue = value;
+        }
+    }
+
     public int SortingOrder
     {
         set

@@ -36,10 +36,12 @@ public class BottleRenderUpdate : MonoBehaviour
         MaskImage.material = _material;
 
         BotteImage.material = new Material(BotteImage.material);
-        
+
+        int i = 0;
         foreach (var waterRenderUpdater in waterRenders)
         {
             waterRenderUpdater.Stencil = bottleIndex;
+            waterRenderUpdater.RenderQueue = 2901 + i;
         }
         
         foreach (var skeletonGraphic in Brooms)

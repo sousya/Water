@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class WaterRenderUpdate : MonoBehaviour
 {
     private static readonly int MainColor = Shader.PropertyToID("_Color");
-    private const float HALF_WATAER_WIDTH = 2.0f * 0.5f;
+    private const float HALF_WATAER_WIDTH = 2.5f * 0.5f;
     private const float CORRECT_WATER_SURFACE = 0.4f;
     public Transform[] waterSurface;
     public bool bBottom = false;

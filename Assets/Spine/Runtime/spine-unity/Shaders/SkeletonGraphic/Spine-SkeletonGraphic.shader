@@ -20,6 +20,9 @@ Shader "Spine/SkeletonGraphic"
 		[HideInInspector] _StencilWriteMask ("Stencil Write Mask", Float) = 255
 		[HideInInspector] _StencilReadMask ("Stencil Read Mask", Float) = 255
 		
+		[HideInInspector] _StencilWriteMaskWater ("Stencil Write Mask", Float) = 255
+		[HideInInspector] _StencilReadMaskWater ("Stencil Read Mask", Float) = 255
+		
 
 		[HideInInspector] _ColorMask ("Color Mask", Float) = 15
 
@@ -53,8 +56,8 @@ Shader "Spine/SkeletonGraphic"
 			Ref [_StencilWater]
 			Comp [_StencilCompWater]
 			Pass [_StencilOpWater]
-			ReadMask [_StencilReadMask]
-			WriteMask [_StencilWriteMask]
+			ReadMask [_StencilReadMaskWater]
+			WriteMask [_StencilWriteMaskWater]
 		}
 
 		Cull Off

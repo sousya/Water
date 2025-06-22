@@ -37,11 +37,11 @@ public class BottleRenderUpdate : MonoBehaviour
 
         BotteImage.material = new Material(BotteImage.material);
 
-        int i = 0;
+        //int i = 0;
         foreach (var waterRenderUpdater in waterRenders)
         {
             waterRenderUpdater.Stencil = bottleIndex;
-            waterRenderUpdater.RenderQueue = 2901 + i;
+            //waterRenderUpdater.RenderQueue = 2901 + i++;
         }
         
         foreach (var skeletonGraphic in Brooms)
@@ -65,6 +65,7 @@ public class BottleRenderUpdate : MonoBehaviour
         waterSpineMaterial.SetFloat("_StencilWater", bottleIndex);
         //waterSpineMaterial.SetFloat("_StencilCompWater", (int)UnityEngine.Rendering.CompareFunction.Equal);
         waterSpineMaterial.SetFloat("_StencilCompWater", (int)UnityEngine.Rendering.CompareFunction.Equal);
+        waterSpineMaterial.SetFloat("_StencilReadMaskWater", 255);
         WaterSpine.GetComponent<SkeletonGraphic>().material = waterSpineMaterial;
     }
 

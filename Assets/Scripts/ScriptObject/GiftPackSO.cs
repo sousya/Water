@@ -7,7 +7,6 @@ using UnityEngine;
 public class GiftPackSO : ScriptableObject, IPackSoInterface
 {
     //后续吧无限体力和无广告的奖励放到SpecialReward中
-    //可以考虑吧精灵放到表中，不需要外部维护
     [Header("道具ID")]
     [SerializeField] private string PackID;
     [Header("礼包内容")]
@@ -46,5 +45,6 @@ public class ItemReward
     // 只读属性
     public int ItemIndex => itemIndex;
     public int Quantity => quantity;
+    //会有生命周期问题(使用前需缓存)
     public Sprite RewardSprite => rewardSprite;
 }

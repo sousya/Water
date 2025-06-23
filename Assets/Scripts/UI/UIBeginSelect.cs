@@ -83,7 +83,7 @@ namespace QFramework.Example
                 int _itemId = i + startID;
                 addItemBtns[i].onClick.AddListener(() =>
                 {
-                    if (!HealthManager.Instance.UnLimitHp)
+                    if (CountDownTimerManager.Instance.IsTimerFinished(GameDefine.GameConst.UNLIMIT_ITEM_SIGN))
                         UIKit.OpenPanel<UIBuyItem>(UILevel.Common, new UIBuyItemData() { item = _itemId });
                 });
             }
@@ -95,7 +95,7 @@ namespace QFramework.Example
 
                 selectBtns[i].onClick.AddListener(() =>
                 {
-                    if (stageModel.ItemDic[_itemId] > 0 && !HealthManager.Instance.UnLimitHp) 
+                    if (stageModel.ItemDic[_itemId] > 0 && CountDownTimerManager.Instance.IsTimerFinished(GameDefine.GameConst.UNLIMIT_ITEM_SIGN)) 
                     {
                         var show = !selectImgs[_tempIndex].gameObject.activeSelf;
                         selectImgs[_tempIndex].gameObject.SetActive(show);
@@ -197,7 +197,7 @@ namespace QFramework.Example
         /// </summary>
         void UpdateItem()
         {
-            if (HealthManager.Instance.UnLimitHp)
+            if (!CountDownTimerManager.Instance.IsTimerFinished(GameDefine.GameConst.UNLIMIT_ITEM_SIGN))
             {
                 UnLimitNode.Show();
                 AddItemIfNotExists(6);

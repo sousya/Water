@@ -16,6 +16,7 @@ namespace GameDefine
         public const int WIN_STREAK_BEGIN_LEVEL = 7;
         public const string DOUBLE_COIN_SIGN = "DoubleCoin";
         public const string POTION_ACTIVITY_SIGN = "PotionActivity";
+        public const string UNLIMIT_ITEM_SIGN = "UnLimitItenEndTime";
 
         //关卡引导
         public static readonly Dictionary<int, (string, string)> GuideLevelInfo = new Dictionary<int, (string, string)>

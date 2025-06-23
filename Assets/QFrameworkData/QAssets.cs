@@ -62,6 +62,11 @@ namespace QAssetBundle
         public const string BundleName = "uideletelife_prefab";
         public const string UIDeleteLife = "UIDeleteLife";
     }
+    public class Uigamenode_prefab
+    {
+        public const string BundleName = "uigamenode_prefab";
+        public const string UIGameNode = "UIGameNode";
+    }
     public class Uigetcoin_prefab
     {
         public const string BundleName = "uigetcoin_prefab";

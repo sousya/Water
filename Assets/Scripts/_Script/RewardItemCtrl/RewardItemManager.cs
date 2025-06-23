@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 
 public class RewardItemManager : MonoSingleton<RewardItemManager>
 {
+    [SerializeField] private Sprite[] RewardSprites;
     [SerializeField] private Animator BoxAnimator;
     [SerializeField] private Button BtnContinue;
     [SerializeField] private RectTransform mRectTransformPar;
@@ -81,7 +82,7 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
             image.TryGetComponent(out PropRewardPoolNode _node);
             if (_node == null)
                 _node = image.gameObject.AddComponent<PropRewardPoolNode>();
-            _node.Init(item.RewardSprite, SetRandomScreenPosition(image), item.Quantity, false);
+            _node.Init(RewardSprites[item.ItemIndex - 1], SetRandomScreenPosition(image), item.Quantity, false);
             actionList.Add(() => _node.MoveOffScreen());
         }
         foreach (var item in packSO.SpecialRewards) 

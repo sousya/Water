@@ -8,7 +8,6 @@ using DG.Tweening;
 using System.Linq;
 using System;
 using TMPro;
-using static Spine.Unity.Editor.SkeletonBaker.BoneWeightContainer;
 
 namespace QFramework.Example
 {
@@ -470,6 +469,7 @@ namespace QFramework.Example
         /// </summary>
         private void PotionActivity()
         {
+            //Debug.Log("ÊµÀý»î¶¯");
             //CountDownTimerManager.Instance.ResetTimer(GameConst.POTION_ACTIVITY_SIGN, 10);
             CountDownTimerManager.Instance.StartTimer(GameConst.POTION_ACTIVITY_SIGN, 1440f);
 

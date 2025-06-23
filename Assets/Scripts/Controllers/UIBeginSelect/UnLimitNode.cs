@@ -9,9 +9,13 @@ public class UnLimitNode : MonoBehaviour
 
     void Update()
     {
-        foreach (var txt in countDownTxts)
+        if (!CountDownTimerManager.Instance.IsTimerFinished(GameDefine.GameConst.UNLIMIT_ITEM_SIGN))
         {
-            txt.text = HealthManager.Instance.UnLimitHpTimeStr;
+            foreach (var txt in countDownTxts)
+            {
+                txt.text = CountDownTimerManager.Instance.GetRemainingTimeText(GameDefine.GameConst.UNLIMIT_ITEM_SIGN);
+                //txt.text = HealthManager.Instance.UnLimitHpTimeStr;
+            }
         }
     }
 }

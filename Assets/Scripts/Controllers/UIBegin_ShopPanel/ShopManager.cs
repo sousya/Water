@@ -91,8 +91,7 @@ namespace QFramework.Example
             //无限体力发放
             HealthManager.Instance.SetUnLimitHp(_packSo.UnlimitedHp);
             //无限道具
-            //...暂用体力时长
-
+            CountDownTimerManager.Instance.AddTimer(GameDefine.GameConst.UNLIMIT_ITEM_SIGN, _packSo.UnlimitedHp);
             UIKit.OpenPanel<UIBuyPackSuccess>();
             ActionKit.Delay(1, () =>
             {

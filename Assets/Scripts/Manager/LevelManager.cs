@@ -351,12 +351,6 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         else
             UIKit.OpenPanel<UIVictory>();
 
-        //通过第七关开启连胜活动
-        if (this.GetUtility<SaveDataUtility>().GetLevelClear() == 8)
-        {
-            StringEventSystem.Global.Send("StartPotionActivity");
-        }
-
         // 连胜计数
         stageModel.AddCountinueWinNum();
     }

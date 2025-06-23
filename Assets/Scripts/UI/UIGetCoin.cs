@@ -115,6 +115,11 @@ namespace QFramework.Example
                     {
                         var _packSO = rewardPackSO[getReward];
                         StartCoroutine(RewardItemManager.Instance.PlayRewardAnim(_packSO));
+
+                        foreach (var item in _packSO.ItemReward)
+                        {
+                            stageModel.AddItem(item.ItemIndex, item.Quantity);
+                        }
                     }
                 }
             }

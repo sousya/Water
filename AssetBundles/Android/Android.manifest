@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2759610861
+CRC: 564131079
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -83,3 +83,7 @@ AssetBundleManifest:
       Name: uichooseavatar_prefab
       Dependencies:
         Dependency_0: font
+    Info_21:
+      Name: uigamenode_prefab
+      Dependencies:
+        Dependency_0: fontall_asset

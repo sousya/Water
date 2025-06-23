@@ -11,6 +11,7 @@ namespace QFramework.Example
         private int mCacheProgress;
         private int mCacheGoal;
 
+        private CountDownTimerManager countDownTimerManager;
         private PotionActivityModel potionActivityModel;
         private StageModel stageModel;
 
@@ -27,6 +28,7 @@ namespace QFramework.Example
         {
             stageModel = this.GetModel<StageModel>();
             potionActivityModel = this.GetModel<PotionActivityModel>();
+            countDownTimerManager = CountDownTimerManager.Instance;
             mCacheProgress = potionActivityModel.PotionActivityProgress;
             mCacheGoal = potionActivityModel.PotionActivityGoal;
             TextProgress.text = $"{mCacheGoal}/{TARGER_GOALS[mCacheProgress]}";
@@ -43,7 +45,7 @@ namespace QFramework.Example
             }
            
             //更新位置
-            if (!CountDownTimerManager.Instance.IsTimerFinished(GameConst.POTION_ACTIVITY_SIGN))
+            if (!countDownTimerManager.IsTimerFinished(GameConst.POTION_ACTIVITY_SIGN))
             {
                 Selected.DOLocalMoveX(TARGER_POSX[potionActivityModel.WinStreakLevel], 1f)
                 .OnComplete(DoUpdateProgress);
@@ -67,9 +69,9 @@ namespace QFramework.Example
         {
             if (!gameObject.activeSelf) return;
 
-            if (!CountDownTimerManager.Instance.IsTimerFinished(GameDefine.GameConst.POTION_ACTIVITY_SIGN))
+            if (!countDownTimerManager.IsTimerFinished(GameDefine.GameConst.POTION_ACTIVITY_SIGN))
             {
-                TextTimer.text = CountDownTimerManager.Instance.GetRemainingTimeText(GameDefine.GameConst.POTION_ACTIVITY_SIGN);
+                TextTimer.text = countDownTimerManager.GetRemainingTimeText(GameDefine.GameConst.POTION_ACTIVITY_SIGN);
             }
             else
             {
@@ -85,7 +87,18 @@ namespace QFramework.Example
 
         private void OnDisable()
         {
+            Selected.DOKill();
             mProgressSequence?.Kill();
+            mProgressSequence = null;
+
+            if (!countDownTimerManager.IsTimerFinished(GameConst.POTION_ACTIVITY_SIGN))
+            {
+                mCacheProgress = potionActivityModel.PotionActivityProgress;
+                mCacheGoal = potionActivityModel.PotionActivityGoal;
+                TextProgress.text = $"{mCacheGoal}/{TARGER_GOALS[mCacheProgress]}";
+                ImgProgressBar.fillAmount = (float)mCacheGoal / TARGER_GOALS[mCacheProgress];
+                Selected.localPosition = new Vector3(TARGER_POSX[potionActivityModel.WinStreakLevel], Selected.localPosition.y, 0);
+            }
         }
 
         /// <summary>
@@ -99,7 +112,7 @@ namespace QFramework.Example
             if (_tempGoal != mCacheGoal)
             {
                 int _startValue = mCacheGoal;
-                mProgressSequence?.Kill();
+
                 mProgressSequence = DOTween.Sequence();
                 mProgressSequence.Join(
                 DOTween.To(() => _startValue, x =>
@@ -156,7 +169,7 @@ namespace QFramework.Example
                                     Debug.Log("去除广告逻辑暂空");
                                     break;
                                 case SpecialRewardsType.DoubleCoin:
-                                    CountDownTimerManager.Instance.AddTimer(GameDefine.GameConst.DOUBLE_COIN_SIGN, item.Duration);
+                                    countDownTimerManager.AddTimer(GameDefine.GameConst.DOUBLE_COIN_SIGN, item.Duration);
                                     break;
                                 case SpecialRewardsType.UnlimitedHp:
                                     HealthManager.Instance.SetUnLimitHp(item.Duration);

@@ -229,7 +229,7 @@ namespace QFramework.Example
                 case 6:
                     LevelManager.Instance.AddBottle(true, () =>
                     {
-                        if (!HealthManager.Instance.UnLimitHp)
+                        if (CountDownTimerManager.Instance.IsTimerFinished(GameDefine.GameConst.UNLIMIT_ITEM_SIGN))//!HealthManager.Instance.UnLimitHp
                             stageModel.ReduceItem(6, 1);
                         TxtItem1.text = "0";
                     });
@@ -240,7 +240,7 @@ namespace QFramework.Example
                         return;
                     ClearBottleBlackWater(2, true, () =>
                     {
-                        if (!HealthManager.Instance.UnLimitHp)
+                        if (CountDownTimerManager.Instance.IsTimerFinished(GameDefine.GameConst.UNLIMIT_ITEM_SIGN))
                             stageModel.ReduceItem(7, 1);
                         TxtItem2.text = "0";
                     });
@@ -292,7 +292,7 @@ namespace QFramework.Example
                     botter.SetHideShow(true);
                     LevelManager.Instance.HideItemSelect();
 
-                    if (!HealthManager.Instance.UnLimitHp)
+                    if (CountDownTimerManager.Instance.IsTimerFinished(GameDefine.GameConst.UNLIMIT_ITEM_SIGN))
                         stageModel.ReduceItem(8, 1);
                     TxtItem3.text = "0";
                     //Debug.Log("¥Ú¬“À≥–Ú≥…π¶");
@@ -350,7 +350,8 @@ namespace QFramework.Example
             {
                 int itemId = itemIds[i];
 
-                bool active = (takeItems.Contains(itemId) && CheckHaveItem(itemId)) || HealthManager.Instance.UnLimitHp;
+                bool active = (takeItems.Contains(itemId) && CheckHaveItem(itemId)) 
+                    || !CountDownTimerManager.Instance.IsTimerFinished(GameDefine.GameConst.UNLIMIT_ITEM_SIGN);
                 buttons[i].interactable = active;
                 texts[i].text = active ? "1" : "0";
             }

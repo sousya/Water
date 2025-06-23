@@ -44,7 +44,7 @@ public class StageModel : AbstractModel
     private const string COUNTINUE_WIN_NUM_SIGN = "g_WaterCountinueWinNum";
     private const string VOLUME_SETTING_SIGN = "g_WaterVolumeSetting";
     private const string SCENE_UNLOCK_BOX_SIGN = "g_WaterSceneLockBox";
-    
+
     private const int DOUBLE_COIN = 2;
 
     private SaveDataUtility stroge;

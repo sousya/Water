@@ -17,6 +17,7 @@ namespace GameDefine
         public const string DOUBLE_COIN_SIGN = "DoubleCoin";
         public const string POTION_ACTIVITY_SIGN = "PotionActivity";
         public const string UNLIMIT_ITEM_SIGN = "UnLimitItenEndTime";
+        public const string RANKA_ACTIVITY_SIGN = "RankAActivity";
 
         //关卡引导
         public static readonly Dictionary<int, (string, string)> GuideLevelInfo = new Dictionary<int, (string, string)>

@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 564131079
+CRC: 3186908230
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -87,3 +87,6 @@ AssetBundleManifest:
       Name: uigamenode_prefab
       Dependencies:
         Dependency_0: fontall_asset
+    Info_22:
+      Name: uiranka_prefab
+      Dependencies: {}

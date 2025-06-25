@@ -47,10 +47,6 @@ namespace QFramework.Example
             BindClick();
             getReward = -1;
 
-            //通过第七关开启连胜活动
-            if (this.GetUtility<SaveDataUtility>().GetLevelClear() == 8)
-                StringEventSystem.Global.Send("StartPotionActivity");
-
             UpdateBoxProcessNode();
             UpdateUnlockProcessNode();
         }
@@ -125,13 +121,6 @@ namespace QFramework.Example
             }
             TxtCoin.text = ((int)(GameDefine.GameConst.WIN_COINS * stageModel.GoldCoinsMultiple)).ToString();
             TxtLevel.text = "Level " + curLevel.ToString();
-
-            //连胜活动开启状态
-            if (!CountDownTimerManager.Instance.IsTimerFinished(GameConst.POTION_ACTIVITY_SIGN))
-            {
-                var potionActivityModel = this.GetModel<PotionActivityModel>();
-                potionActivityModel.AddPotionActivityGoal();
-            }
         }
 
         private void UpdateUnlockProcessNode()

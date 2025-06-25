@@ -1,4 +1,6 @@
+using GameDefine;
 using QFramework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -13,26 +15,28 @@ public class GameMainArc : Architecture<GameMainArc>
         RegisterUtilitys();
         RegisterSystems();
         CreateInstance();
+        ActivityStart();
     }
 
-    void RegisterModels()
+    private void RegisterModels()
     {
         RegisterModel(new StageModel());
         RegisterModel(new PotionActivityModel());
+        RegisterModel(new RankDataModel());
     }
 
-    void RegisterUtilitys()
+    private void RegisterUtilitys()
     {
         RegisterUtility(new SaveDataUtility());
         RegisterUtility(new LanguageUtility());
     }
 
-    void RegisterSystems()
+    private void RegisterSystems()
     {
     }
 
     //单例构建
-    void CreateInstance()
+    private void CreateInstance()
     {
         TextManager textManager = TextManager.Instance;
 
@@ -54,5 +58,14 @@ public class GameMainArc : Architecture<GameMainArc>
         TenjinManager tenjinManager = TenjinManager.Instance;
         TopOnADManager topOnADManager = TopOnADManager.Instance;
         AvatarManager avatarManager = AvatarManager.Instance;
+    }
+
+    //活动开启
+    private void ActivityStart()
+    {
+        var saveData = this.GetUtility<SaveDataUtility>();
+        if (saveData.GetLevelClear() > GameConst.WIN_STREAK_BEGIN_LEVEL)
+            CountDownTimerManager.Instance.StartTimer(GameConst.RANKA_ACTIVITY_SIGN, 1440f);
+
     }
 }

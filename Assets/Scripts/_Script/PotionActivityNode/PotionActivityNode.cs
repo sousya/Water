@@ -95,8 +95,11 @@ namespace QFramework.Example
             {
                 mCacheProgress = potionActivityModel.PotionActivityProgress;
                 mCacheGoal = potionActivityModel.PotionActivityGoal;
-                TextProgress.text = $"{mCacheGoal}/{TARGER_GOALS[mCacheProgress]}";
-                ImgProgressBar.fillAmount = (float)mCacheGoal / TARGER_GOALS[mCacheProgress];
+                if (mCacheProgress >= 0 && mCacheProgress < TARGER_GOALS.Length)
+                {
+                    TextProgress.text = $"{mCacheGoal}/{TARGER_GOALS[mCacheProgress]}";
+                    ImgProgressBar.fillAmount = (float)mCacheGoal / TARGER_GOALS[mCacheProgress];
+                }
                 Selected.localPosition = new Vector3(TARGER_POSX[potionActivityModel.WinStreakLevel], Selected.localPosition.y, 0);
             }
         }

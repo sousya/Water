@@ -3,15 +3,19 @@ using UnityEngine.UI;
 using QFramework;
 using System.Collections;
 using System.Collections.Generic;
+using GameDefine;
 
 namespace QFramework.Example
 {
 	public class UIVictoryData : UIPanelData
 	{
 	}
-	public partial class UIVictory : UIPanel, ICanSendEvent, ICanGetUtility
-	{
-		public IArchitecture GetArchitecture()
+	public partial class UIVictory : UIPanel, ICanSendEvent, ICanGetUtility, ICanGetModel
+    {
+		private int mLastRankingScore;
+		private bool mRankingEnd;
+
+        public IArchitecture GetArchitecture()
 		{
 			return GameMainArc.Interface;
 		}
@@ -31,7 +35,26 @@ namespace QFramework.Example
 
 		protected override void OnShow()
 		{
-			ShowAnim();
+            //通过第七关开启连胜活动
+            if (this.GetUtility<SaveDataUtility>().GetLevelClear() == 8)
+            {
+                StringEventSystem.Global.Send("StartPotionActivity");
+                //开启排行榜活动
+                CountDownTimerManager.Instance.StartTimer(GameConst.RANKA_ACTIVITY_SIGN, 1440f);
+            }
+            //避免界面停留时过期
+            mRankingEnd = CountDownTimerManager.Instance.IsTimerFinished(GameConst.RANKA_ACTIVITY_SIGN);
+
+            //连胜活动开启/排行榜开启状态
+            if (!CountDownTimerManager.Instance.IsTimerFinished(GameConst.POTION_ACTIVITY_SIGN)
+                || !mRankingEnd)
+            {
+                var potionActivityModel = this.GetModel<PotionActivityModel>();
+				mLastRankingScore = potionActivityModel.PotionActivityTotalGoal;
+                potionActivityModel.AddPotionActivityGoal();
+            }
+
+            ShowAnim();
 			TxtLevel.text = (this.GetUtility<SaveDataUtility>().GetLevelClear() - 1).ToString();
 			StartCoroutine(WaitClose());
         }
@@ -62,8 +85,11 @@ namespace QFramework.Example
 		IEnumerator WaitClose()
         {
 			yield return new WaitForSeconds(3f);
-			
-            UIKit.OpenPanel<UIGetCoin>();
+			if (!mRankingEnd)
+			{
+				UIKit.OpenPanel<UIRankA>(new UIRankAData { LastRankScore = mLastRankingScore});
+			}else
+				UIKit.OpenPanel<UIGetCoin>();
 			CloseSelf();
         }
     }

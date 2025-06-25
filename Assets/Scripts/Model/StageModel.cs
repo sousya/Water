@@ -111,7 +111,7 @@ public class StageModel : AbstractModel
     {
         if (stroge.GetLevelClear() > GameConst.WIN_STREAK_BEGIN_LEVEL)
             mCountinueWinNum.Value++;
-
+        
         //大于10连胜生效(不含10连胜/本次过关不生效)
         mGoldCoinsMultiple = mCountinueWinNum.Value > GameConst.CONTINUE_WIN_NUM_COIN ? 1.5f : 1;
     }

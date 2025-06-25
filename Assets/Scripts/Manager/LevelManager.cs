@@ -346,14 +346,14 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         UIKit.ClosePanel<UIMask>();
         this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
 
+        // 连胜计数
+        stageModel.AddCountinueWinNum();
+
         //前五关(前五关应该不统计连胜)
         if (levelId < 5)
             StartGame(levelId + 1);
         else
             UIKit.OpenPanel<UIVictory>();
-
-        // 连胜计数
-        stageModel.AddCountinueWinNum();
     }
 
     /// <summary>
@@ -378,13 +378,13 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
             UIKit.ClosePanel<UIMask>();
             this.GetUtility<SaveDataUtility>().SaveLevel(levelId + 1);
 
+            // 连胜计数
+            stageModel.AddCountinueWinNum();
+
             if (levelId < 5)
                 StartGame(levelId + 1);
             else
                 UIKit.OpenPanel<UIVictory>();
-
-            // 连胜计数
-            stageModel.AddCountinueWinNum();
         }
         else
             yield return null;

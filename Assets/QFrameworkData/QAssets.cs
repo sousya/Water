@@ -102,6 +102,11 @@ namespace QAssetBundle
         public const string BundleName = "uipropmask_prefab";
         public const string UIPropMask = "UIPropMask";
     }
+    public class Uiranka_prefab
+    {
+        public const string BundleName = "uiranka_prefab";
+        public const string UIRankA = "UIRankA";
+    }
     public class Uiretry_prefab
     {
         public const string BundleName = "uiretry_prefab";

@@ -472,8 +472,9 @@ namespace QFramework.Example
             //Debug.Log("ÊµÀý»î¶¯");
             //CountDownTimerManager.Instance.ResetTimer(GameConst.POTION_ACTIVITY_SIGN, 10);
             CountDownTimerManager.Instance.StartTimer(GameConst.POTION_ACTIVITY_SIGN, 1440f);
-
-            if (!CountDownTimerManager.Instance.IsTimerFinished(GameConst.POTION_ACTIVITY_SIGN))
+            var potionActivityModel = this.GetModel<PotionActivityModel>();
+            if (!CountDownTimerManager.Instance.IsTimerFinished(GameConst.POTION_ACTIVITY_SIGN) &&
+                 !potionActivityModel.PotionActivityProgressEnd)
             {
                 var potionNode = Resources.Load("Prefab/PotionActivityNode");
                 var node = Instantiate(potionNode, HomeNode.transform);

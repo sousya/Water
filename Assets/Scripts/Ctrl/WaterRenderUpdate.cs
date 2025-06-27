@@ -229,10 +229,10 @@ public class WaterRenderUpdate : MonoBehaviour
         }
 
         var verts = _verts;
-        verts[0] = bottomCenter + new Vector3(-halfWaterWidth,  0, 0);
-        verts[1] = bottomCenter + new Vector3(halfWaterWidth,  0, 0);
-        verts[2] = topCenter + new Vector3(halfWaterWidth,  0, 0);
-        verts[3] = topCenter + new Vector3(-halfWaterWidth,  0, 0);
+        verts[0] = bottomCenter + new Vector3(-halfWaterWidth, 0, 0);
+        verts[1] = bottomCenter + new Vector3(halfWaterWidth, 0, 0);
+        verts[2] = topCenter + new Vector3(halfWaterWidth, 0, 0);
+        verts[3] = topCenter + new Vector3(-halfWaterWidth, 0, 0);
         verts[1].x = verts[2].x;
         verts[3].x = verts[0].x;
         verts[0].y = Mathf.Min(verts[0].y, verts[3].y);
@@ -240,11 +240,65 @@ public class WaterRenderUpdate : MonoBehaviour
 
         _mesh.SetVertices(verts);
 
-        
+
         // fillAmount
         if (_image != null)
         {
             this.FillAmount = _image.fillAmount;
         }
     }
+
+    /* void LateUpdate()
+    {
+        if (waterSurface.Length < 2)
+        {
+            Debug.LogError("Set Water Surface!!");
+            return;
+        }
+
+        Quaternion rotation = bottleTransform.rotation;
+        rotation.ToAngleAxis(out float angle, out Vector3 axis);
+
+        Vector3 localAxis = transform.InverseTransformDirection(axis);
+        float signedAngle = angle * Mathf.Sign(localAxis.z); // -180 到 +180
+
+        float sin = Mathf.Sin(signedAngle * Mathf.Deg2Rad);
+        float cos = Mathf.Cos(signedAngle * Mathf.Deg2Rad);
+        float oneDivCos = 1.0f / Mathf.Max(cos, 0.001f);
+
+        Vector3 topCenter = waterSurface[1].position;
+        Vector3 bottomCenter = waterSurface[0].position;
+
+        topCenter.y += CORRECT_WATER_SURFACE * sin;
+
+        float halfWaterWidth = HALF_WATAER_WIDTH * oneDivCos;
+
+        if (bBottom)
+        {
+            Vector3 bottomRight = bottomCenter + transform.right * HALF_WATAER_WIDTH;
+            bottomCenter = new Vector3(bottomCenter.x, bottomRight.y, 0);
+        }
+
+        var verts = _verts;
+
+        float xSign = signedAngle >= 0 ? -1f : 1f;
+
+        verts[0] = bottomCenter + new Vector3(xSign * -halfWaterWidth, 0, 0);
+        verts[1] = bottomCenter + new Vector3(xSign * halfWaterWidth, 0, 0);
+        verts[2] = topCenter + new Vector3(xSign * halfWaterWidth, 0, 0);
+        verts[3] = topCenter + new Vector3(xSign * -halfWaterWidth, 0, 0);
+
+        // 顶点修正
+        verts[1].x = verts[2].x;
+        verts[3].x = verts[0].x;
+        verts[0].y = Mathf.Min(verts[0].y, verts[3].y);
+        verts[1].y = Mathf.Min(verts[1].y, verts[2].y);
+
+        _mesh.SetVertices(verts);
+
+        if (_image != null)
+        {
+            this.FillAmount = _image.fillAmount;
+        }
+    }*/
 }

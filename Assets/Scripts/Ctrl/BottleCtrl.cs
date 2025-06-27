@@ -1180,7 +1180,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     }
 
     /// <summary>
-    /// 倒水动画
+    /// 水位上升/下降效果
     /// </summary>
     /// <param name="num"></param>
     public void PlayOutAnim(int num, int useIdx, int useColor)
@@ -1245,14 +1245,19 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     public void MoveToOtherAnim(BottleCtrl other, int topIndex, int numWater, int useColor = -1)
     {
+        //获取移动终点
+        var (_targetPos, _dir) = GetMoveToPos(transform, other.transform ,other.leftMovePlace);
+
         isPlayAnim = true;
         var bottleRenderUpdate = bottleAnim.GetComponent<BottleRenderUpdate>();
+        //水柱相关
         bottleRenderUpdate.SetMoveBottleRenderState(true, other);
 
         if (useColor < 1000)
         {
             topIndex += 1;
-            string bottleAnimName = $"BottleOut{topIndex}_{topIndex - numWater}";
+            //瓶身倾斜动画
+            string bottleAnimName = $"BottleOut{topIndex}_{topIndex - numWater}{_dir}";
             bottleAnim.Play(bottleAnimName);
             //Debug.LogWarning(bottleAnimName);
         }
@@ -1260,14 +1265,16 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         {
             bottleAnim.Play("BottleItemOut");
         }
+
         //modelGo.transform.DOMove(other.leftMovePlace.position, 0.67f).SetEase(Ease.Linear).OnComplete(() =>
-        modelGo.transform.DOMove(other.leftMovePlace.position, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
-        {
+        //移动到目标点位
+        modelGo.transform.DOMove(_targetPos, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
+        {// other.leftMovePlace.position
             SetDownWaterSp(useColor);
             if (useColor < 1000) ////非道具动画播放
             {
                 PlayWaterDown();
-
+                /*//停留效果
                 modelGo.transform.DOMove(other.leftMovePlace.position, 0.62f).SetEase(Ease.Linear).OnComplete(() =>
                 {
                     SetNowSpinePos(topIndex - numWater);
@@ -1276,21 +1283,109 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                         isPlayAnim = false;
                         bottleRenderUpdate.SetMoveBottleRenderState(false);
                     });
-                });
+                });*/
+
+                ActionKit.Delay(0.62f, () =>
+                {
+                    SetNowSpinePos(topIndex - numWater);
+                    //回归原点
+                    modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
+                    {
+                        isPlayAnim = false;
+                        bottleRenderUpdate.SetMoveBottleRenderState(false);
+                    });
+                }).Start(this);
             }
             else
             {
-                modelGo.transform.DOMove(other.leftMovePlace.position, 0.4f).SetEase(Ease.Linear).OnComplete(() =>
+                /*modelGo.transform.DOMove(other.leftMovePlace.position, 0.4f).SetEase(Ease.Linear).OnComplete(() =>
                 {
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         isPlayAnim = false;
                         bottleRenderUpdate.SetMoveBottleRenderState(false);
                     });
-                });
+                });*/
+                //道具等待时长0.4
+                ActionKit.Delay(0.4f, () =>
+                {
+                    //回归原点
+                    modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
+                    {
+                        isPlayAnim = false;
+                        bottleRenderUpdate.SetMoveBottleRenderState(false);
+                    });
+                }).Start(this);
             }
 
         });
+    }
+
+    /// <summary>
+    /// 获取移动方向和位置
+    /// </summary>
+    /// <param name="thisBottle"></param>
+    /// <param name="targetBottle"></param>
+    /// <param name="moveToTram"></param>
+    /// <returns></returns>
+    private (Vector3 pos, string dir) GetMoveToPos(Transform thisBottle ,Transform targetBottle ,Transform moveToTram)
+    {
+        // 要用本地坐标取镜像在转为世界坐标
+        Vector3 _targetPos = moveToTram.localPosition;
+        string _dir;
+
+        var thisParent = thisBottle.parent;
+        var targetParent = targetBottle.parent;
+        bool isSameRow = thisParent == targetParent;
+        int targetRowActiveCount = GetActiveSiblingCount(targetParent);
+
+        // 同一排直接比较 postion.x
+        if (isSameRow)
+        {
+            if (thisBottle.position.x >= targetBottle.position.x)
+            {
+                Debug.Log("向左移动、取镜像");
+                _targetPos.x *= -1f;
+                _dir = "_Left";
+            }
+            else
+            {
+                Debug.Log("向右移动、取原值");
+                _dir = "_Right";
+            }
+        }
+        // 不同排,采用左右各一半区分向左向右
+        else
+        {
+            int activeCount = targetRowActiveCount;
+            int targetIndex = targetBottle.GetSiblingIndex();
+            int mid = activeCount / 2;
+
+            if (targetIndex < mid)
+            {
+                Debug.Log("向左移动，取镜像");
+                _targetPos.x *= -1f;
+                _dir = "_Left";
+            }
+            else
+            {
+                Debug.Log("向右移动，取原值");
+                _dir = "_Right";
+            }
+        }
+
+        return (moveToTram.parent.TransformPoint(_targetPos), _dir);
+    }
+
+    private int GetActiveSiblingCount(Transform parent)
+    {
+        int count = 0;
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            if (parent.GetChild(i).gameObject.activeSelf)
+                count++;
+        }
+        return count;
     }
 
     public void PlayWaterDown()

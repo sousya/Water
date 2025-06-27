@@ -1,4 +1,4 @@
-// Generate Id:e831a8b1-61e1-453f-8cf7-d43abd5d43ae
+// Generate Id:8c244da8-ec78-411d-bf3c-97f29f778236
 using UnityEngine;
 
 // 1.请在菜单 编辑器扩展/Namespace Settings 里设置命名空间
@@ -12,6 +12,8 @@ namespace QFramework.Example
 		public TMPro.TextMeshProUGUI TextProgress;
 		
 		public UnityEngine.RectTransform Selected;
+		
+		public TMPro.TextMeshProUGUI TxtCurLevel;
 		
 		public TMPro.TextMeshProUGUI TextTimer;
 		

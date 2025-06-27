@@ -24,7 +24,7 @@ public class PotionActivityModel : AbstractModel, ICanGetModel
     public bool PotionActivityProgressEnd => mPotionActivityProgress.Value >= MAX_PROGRESS;
 
     //五档连胜所加积分
-    private int WinStreakPoints => stageModel.CountinueWinNum switch
+    public int WinStreakPoints => stageModel.CountinueWinNum switch
     {
         >= 5 => 100,
         4 => 25,

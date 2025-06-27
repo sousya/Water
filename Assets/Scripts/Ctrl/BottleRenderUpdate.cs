@@ -81,10 +81,20 @@ public class BottleRenderUpdate : MonoBehaviour
         // 设置fill water效果的位置
         if (fillWaterTransform != null && _otherBottle != null)
         {
+            //fillWaterTransform.localRotation = Quaternion.Inverse(transform.rotation);
+            //fillWaterTransform.position = new Vector3(_otherBottle.transform.position.x, fillWaterPosition.position.y, fillWaterPosition.position.z);
+
+            bool isPourLeft = _otherBottle.transform.position.x < transform.position.x;
             fillWaterTransform.localRotation = Quaternion.Inverse(transform.rotation);
-            fillWaterTransform.position = new Vector3(_otherBottle.transform.position.x, fillWaterPosition.position.y, fillWaterPosition.position.z);
+            Vector3 localPos = transform.InverseTransformPoint(fillWaterPosition.position);
+            if (isPourLeft)
+                localPos.x = -localPos.x;
+            fillWaterTransform.position = transform.TransformPoint(localPos);
+            Vector3 localScale = fillWaterTransform.localScale;
+            localScale.x = Mathf.Abs(localScale.x) * (isPourLeft ? -1 : 1);
+            fillWaterTransform.localScale = localScale;
         }
-        
+
         // 计算顶部spine的位置和缩放
         WaterSpine.rotation = Quaternion.identity;
         var position = WaterSpinePos.position;

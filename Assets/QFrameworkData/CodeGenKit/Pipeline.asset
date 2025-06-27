@@ -29,6 +29,9 @@ MonoBehaviour:
       PathToRoot: LevelNode/Selected
       MemberName: Selected
     - TypeName: TMPro.TextMeshProUGUI
+      PathToRoot: Icon2/TxtCurLevel
+      MemberName: TxtCurLevel
+    - TypeName: TMPro.TextMeshProUGUI
       PathToRoot: ImgTimerBg/TextTimer
       MemberName: TextTimer
     ScriptsFolder: Assets/Scripts/_Script/PotionActivityNode

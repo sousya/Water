@@ -9,6 +9,7 @@ using static LevelCreateCtrl;
 using System.Collections;
 using Spine.Unity;
 using System.Linq;
+using UnityEngine.UI;
 
 [MonoSingletonPath("[Level]/LevelManager")]
 public class LevelManager : MonoBehaviour,IController, ICanSendEvent
@@ -24,7 +25,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     public List<BottleCtrl> nowBottles = new List<BottleCtrl>();
 
     public List<BottleCtrl> iceBottles = new List<BottleCtrl>();
-    [SerializeField] private Transform BottomBottleNode;
+    [SerializeField] private HorizontalLayoutGroup BottomBottleLayoutGroup;
+    [SerializeField] private HorizontalLayoutGroup TopBottleLayoutGroup;
     [SerializeField] private List<BottleCtrl> bottles = new List<BottleCtrl>();
     public List<BottleCtrl> topBottle = new List<BottleCtrl>();
     public List<BottleCtrl> bottomBottle = new List<BottleCtrl>();
@@ -540,8 +542,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     public void AddBottle(bool isHalf, Action action)
     {
         //增加瓶子时一定会激活底部瓶子节点
-        if (!BottomBottleNode.gameObject.activeSelf)
-            BottomBottleNode.Show();
+        if (!BottomBottleLayoutGroup.gameObject.activeSelf)
+            BottomBottleLayoutGroup.Show();
 
         // 半瓶道具逻辑
         if (isHalf)
@@ -633,11 +635,13 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
                 //索引刚好对应下一个要激活的瓶子
                 bottomBottle[bomAc].Show();
                 nowBottles.Add(bottomBottle[bomAc]);
+                UpdateButtomLayoutSpcing();
             }
             else
             {
                 topBottle[topAc].Show();
                 nowBottles.Add(topBottle[topAc]);
+                UpdapeTopLayoutSpcing();
             }
 
             int temp = 0;
@@ -697,6 +701,45 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
 
         //对瓶子列表重新排序(整个流程应该都是通过索引找瓶子，排序不改数据也不对)
         nowBottles = nowBottles.OrderBy(bottle => bottle.bottleIdx).ToList();
+    }
+    
+    private const float SPACING_UNIT = -100f;
+    /// <summary>
+    /// 更新上方瓶子布局间距
+    /// </summary>
+    private void UpdapeTopLayoutSpcing()
+    {
+        if (TopBottleLayoutGroup == null) return;
+
+        int activeCount = GetActiveChildCount(TopBottleLayoutGroup.transform);
+        TopBottleLayoutGroup.spacing = (8 - activeCount) * SPACING_UNIT;
+    }
+
+    /// <summary>
+    /// 更新下方瓶子布局间距
+    /// </summary>
+    private void UpdateButtomLayoutSpcing()
+    {
+        if (BottomBottleLayoutGroup == null) return;
+
+        int activeCount = GetActiveChildCount(BottomBottleLayoutGroup.transform);
+        BottomBottleLayoutGroup.spacing = (8 - activeCount) * SPACING_UNIT;
+    }
+
+    /// <summary>
+    /// 获取激活的子物体数量
+    /// </summary>
+    private int GetActiveChildCount(Transform parent)
+    {
+        int count = 0;
+        foreach (Transform child in parent)
+        {
+            if (child.gameObject.activeSelf)
+            {
+                count++;
+            }
+        }
+        return count;
     }
 
     #endregion
@@ -768,7 +811,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         ShowBottleGo();
         InitBottle(levelInfo);
         BottleLayoutRefresh();
-
+        UpdapeTopLayoutSpcing();
+        UpdateButtomLayoutSpcing();
         //连胜去黑水(暂去)
         ////当前有连胜，去黑水瓶生效
         //int WinNum = stageModel.CountinueWinNum;
@@ -858,13 +902,13 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     }
 
     /// <summary>
-    /// 刷新瓶子布局
+    /// 刷新瓶子布局(根节点)
     /// </summary>
     /// 取决于第二列是否有瓶子
     private void BottleLayoutRefresh()
     {
         var active = false;
-        foreach (RectTransform child in BottomBottleNode)
+        foreach (RectTransform child in BottomBottleLayoutGroup.transform)
         {
             if (child.gameObject.activeSelf)
             {
@@ -872,7 +916,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
                 break;
             }
         }
-        BottomBottleNode.gameObject.SetActive(active);
+        BottomBottleLayoutGroup.gameObject.SetActive(active);
     }
 
     #endregion

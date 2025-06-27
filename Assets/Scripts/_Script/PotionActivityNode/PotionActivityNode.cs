@@ -34,6 +34,8 @@ namespace QFramework.Example
             TextProgress.text = $"{mCacheGoal}/{TARGER_GOALS[mCacheProgress]}";
             ImgProgressBar.fillAmount = (float)mCacheGoal / TARGER_GOALS[mCacheProgress];
             Selected.localPosition = new Vector3(TARGER_POSX[potionActivityModel.WinStreakLevel], Selected.localPosition.y, 0);
+            TxtCurLevel.text = potionActivityModel.WinStreakPoints == 0 ? 
+                $"X1" : $"X{potionActivityModel.WinStreakPoints}";
         }
 
         private void OnEnable()
@@ -48,7 +50,12 @@ namespace QFramework.Example
             if (!countDownTimerManager.IsTimerFinished(GameConst.POTION_ACTIVITY_SIGN))
             {
                 Selected.DOLocalMoveX(TARGER_POSX[potionActivityModel.WinStreakLevel], 1f)
-                .OnComplete(DoUpdateProgress);
+                .OnComplete(() =>
+                {
+                    TxtCurLevel.text = potionActivityModel.WinStreakPoints == 0 ?
+                    $"X1" : $"X{potionActivityModel.WinStreakPoints}";
+                    DoUpdateProgress();
+                });
             }
             else
             {
@@ -101,6 +108,9 @@ namespace QFramework.Example
                     ImgProgressBar.fillAmount = (float)mCacheGoal / TARGER_GOALS[mCacheProgress];
                 }
                 Selected.localPosition = new Vector3(TARGER_POSX[potionActivityModel.WinStreakLevel], Selected.localPosition.y, 0);
+                TxtCurLevel.text = potionActivityModel.WinStreakPoints == 0 ?
+                    $"X1" : $"X{potionActivityModel.WinStreakPoints}";
+                DoUpdateProgress();
             }
         }
 

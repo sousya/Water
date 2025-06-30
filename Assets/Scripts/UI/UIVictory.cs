@@ -36,7 +36,7 @@ namespace QFramework.Example
 		protected override void OnShow()
 		{
             //通过第七关开启连胜活动
-            if (this.GetUtility<SaveDataUtility>().GetLevelClear() == 8)
+            if (this.GetUtility<SaveDataUtility>().GetLevelClear() == GameConst.WIN_STREAK_BEGIN_LEVEL)
             {
                 StringEventSystem.Global.Send("StartPotionActivity");
                 //开启排行榜活动

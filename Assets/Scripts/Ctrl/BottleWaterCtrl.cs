@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 public class BottleWaterCtrl : MonoBehaviour
 {
-    public SkeletonGraphic spine, broomSpine, createSpine, changeSpine, magnetSpine, changeShineSpine, thunderSpine, broomAfterSpine, fireRuneSpine;
+    public SkeletonGraphic spine, broomSpine, createSpine, changeSpine, magnetSpine, changeShineSpine, thunderSpine, broomAfterSpine, fireRuneSpine,starBlackWater;
     public GameObject spineGo, HideGo, broomItemGo, createItemGo, changeItemGo, magnetItemGo, thunderGo, broomAfterGo, wenhaoFxGo, iceGo;
     public Animator anim;
     public Image waterImg;
@@ -480,5 +480,16 @@ public class BottleWaterCtrl : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void PlayStarBlackWaterEffect()
+    {
+        HideGo.SetActive(false);
+        starBlackWater.Show();
+        TrackEntry entry = starBlackWater.AnimationState.SetAnimation(0, "attack", false);
+        entry.Complete += (trackEntry) =>
+        {
+            starBlackWater.Hide();
+        };
     }
 }

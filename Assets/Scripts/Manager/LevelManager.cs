@@ -813,12 +813,19 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         BottleLayoutRefresh();
         UpdapeTopLayoutSpcing();
         UpdateButtomLayoutSpcing();
-        //连胜去黑水(暂去)
-        ////当前有连胜，去黑水瓶生效
-        //int WinNum = stageModel.CountinueWinNum;
-        ////Debug.Log("当前连胜次数:" + WinNum);
-        //if (WinNum > 0)
-        //    StringEventSystem.Global.Send("StreakWinItem", WinNum);
+        //连胜去黑水
+        int WinNum = stageModel.CountinueWinNum > GameConst.MAX_GIFT_STREAK_WIN ? GameConst.MAX_GIFT_STREAK_WIN : stageModel.CountinueWinNum;
+        if (WinNum > 0)
+        {
+            if (levelId == GameConst.WIN_STREAK_BEGIN_LEVEL)
+            {
+                UIKit.OpenPanel<UIStreakWinGuide>(UILevel.PopUI);
+            }
+            else
+                //后面要改成生成粒子往下移动，然后释放效果(还需要遮罩，去黑方法要分离)
+                //修改事件即可
+                StringEventSystem.Global.Send("StreakWinItem", WinNum);
+        }
 
         //关卡引导判断
         if (GameDefine.GameConst.GuideLevelInfo.TryGetValue(levelId ,out (string guideText,string guideAnimName) value))

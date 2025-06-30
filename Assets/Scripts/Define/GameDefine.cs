@@ -13,7 +13,8 @@ namespace GameDefine
 
         //场景建筑
         public const int SCENE_PART_COUNT = 5;
-        public const int WIN_STREAK_BEGIN_LEVEL = 7;
+        public const int WIN_STREAK_BEGIN_LEVEL = 8;
+        public const int MAX_GIFT_STREAK_WIN = 3;
         public const string DOUBLE_COIN_SIGN = "DoubleCoin";
         public const string POTION_ACTIVITY_SIGN = "PotionActivity";
         public const string UNLIMIT_ITEM_SIGN = "UnLimitItenEndTime";

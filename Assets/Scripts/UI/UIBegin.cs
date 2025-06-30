@@ -70,7 +70,7 @@ namespace QFramework.Example
                 HomeNode.Hide();
             }
 
-            else if (saveData.GetLevelClear() > GameConst.WIN_STREAK_BEGIN_LEVEL)
+            else if (saveData.GetLevelClear() >= GameConst.WIN_STREAK_BEGIN_LEVEL)
             {
                 PotionActivity();
             }

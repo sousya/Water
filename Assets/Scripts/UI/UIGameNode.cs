@@ -210,7 +210,7 @@ namespace QFramework.Example
 
             StringEventSystem.Global.Register("StreakWinItem", (int count) =>
             {
-                ClearBottleBlackWater(count);
+                ClearBottleBlackWater(count ,useItem:false);
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
@@ -309,7 +309,7 @@ namespace QFramework.Example
         /// <param name="count">祛除的瓶子数量</param>
         /// <param name="effctNow">是否立即生效</param>
         /// <param name="action">回调(道具使用时传入)</param>
-        private void ClearBottleBlackWater(int count, bool effctNow = false, Action action = null)
+        private void ClearBottleBlackWater(int count, bool effctNow = false, Action action = null, bool useItem = true)
         {
             if (LevelManager.Instance.hideBottleList.Count > 0)
             {
@@ -322,11 +322,16 @@ namespace QFramework.Example
                 }
                 foreach (var item in tempList)
                 {
-                    for (int i = 0; i < item.hideWaters.Count; i++)
+                    if (!useItem)
+                        item.StarSetHideShow();
+                    else
                     {
-                        item.hideWaters[i] = false;
+                        for (int i = 0; i < item.hideWaters.Count; i++)
+                        {
+                            item.hideWaters[i] = false;
+                        }
+                        item.SetHideShow(effctNow);
                     }
-                    item.SetHideShow(effctNow);
                     LevelManager.Instance.hideBottleList.Remove(item);
                 }
 

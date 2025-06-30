@@ -109,7 +109,7 @@ public class StageModel : AbstractModel
 
     public void AddCountinueWinNum()
     {
-        if (stroge.GetLevelClear() > GameConst.WIN_STREAK_BEGIN_LEVEL)
+        if (stroge.GetLevelClear() >= GameConst.WIN_STREAK_BEGIN_LEVEL)
             mCountinueWinNum.Value++;
         
         //大于10连胜生效(不含10连胜/本次过关不生效)

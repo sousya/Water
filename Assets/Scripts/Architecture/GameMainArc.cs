@@ -64,7 +64,7 @@ public class GameMainArc : Architecture<GameMainArc>
     private void ActivityStart()
     {
         var saveData = this.GetUtility<SaveDataUtility>();
-        if (saveData.GetLevelClear() > GameConst.WIN_STREAK_BEGIN_LEVEL)
+        if (saveData.GetLevelClear() >= GameConst.WIN_STREAK_BEGIN_LEVEL)
             CountDownTimerManager.Instance.StartTimer(GameConst.RANKA_ACTIVITY_SIGN, 1440f);
 
     }

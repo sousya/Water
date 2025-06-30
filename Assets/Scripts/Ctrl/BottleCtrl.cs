@@ -19,10 +19,11 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         return GameMainArc.Interface;
     }
 
-    //  已完成、藤曼底座、魔法布遮挡、藤曼、播放动画状态
+    //  已完成、藤曼底座、遮挡布、藤曼、播放动画状态
     public bool isFinish, isFreeze, isClearHide, isNearHide, isPlayAnim;
     //  播放去除动画、正在解锁
     [SerializeField] private bool isClearHideAnim, hasUnlockHidePlayed = false;
+    [SerializeField] private Image bottleClickMask;
 
     // 区分上下排
     public bool isUp;       
@@ -55,7 +56,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         leftMovePlace,// 向该瓶子倒水时的目标位置 
         freezeGo;     // 藤曼底座节点  
 
-    //  瓶子整体动画控制器，模拟倒水动画控制器
     public Animator bottleAnim, fillWaterGoAnim;
 
     public SkeletonGraphic 
@@ -975,6 +975,21 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     }
 
     /// <summary>
+    /// 星星特效去除黑水
+    /// </summary>
+    public void StarSetHideShow()
+    {
+        for (int i = 0; i < hideWaters.Count; i++)
+        {
+            if (hideWaters[i])
+            {
+                waterImg[i].PlayStarBlackWaterEffect();
+                hideWaters[i] = false;
+            }
+        }
+    }
+
+    /// <summary>
     /// 判断水块道具
     /// </summary>
     public void CheckWaterItem()
@@ -1259,7 +1274,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             //瓶身倾斜动画
             string bottleAnimName = $"BottleOut{topIndex}_{topIndex - numWater}{_dir}";
             bottleAnim.Play(bottleAnimName);
-            //Debug.LogWarning(bottleAnimName);
+            //Debug.Log(bottleAnimName);
         }
         else
         {
@@ -1268,23 +1283,13 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
         //modelGo.transform.DOMove(other.leftMovePlace.position, 0.67f).SetEase(Ease.Linear).OnComplete(() =>
         //移动到目标点位
+        bottleClickMask.raycastTarget = false;
         modelGo.transform.DOMove(_targetPos, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
-        {// other.leftMovePlace.position
+        {
             SetDownWaterSp(useColor);
             if (useColor < 1000) ////非道具动画播放
             {
                 PlayWaterDown();
-                /*//停留效果
-                modelGo.transform.DOMove(other.leftMovePlace.position, 0.62f).SetEase(Ease.Linear).OnComplete(() =>
-                {
-                    SetNowSpinePos(topIndex - numWater);
-                    modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
-                    {
-                        isPlayAnim = false;
-                        bottleRenderUpdate.SetMoveBottleRenderState(false);
-                    });
-                });*/
-
                 ActionKit.Delay(0.62f, () =>
                 {
                     SetNowSpinePos(topIndex - numWater);
@@ -1293,19 +1298,12 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     {
                         isPlayAnim = false;
                         bottleRenderUpdate.SetMoveBottleRenderState(false);
+                        bottleClickMask.raycastTarget = true;
                     });
                 }).Start(this);
             }
             else
             {
-                /*modelGo.transform.DOMove(other.leftMovePlace.position, 0.4f).SetEase(Ease.Linear).OnComplete(() =>
-                {
-                    modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
-                    {
-                        isPlayAnim = false;
-                        bottleRenderUpdate.SetMoveBottleRenderState(false);
-                    });
-                });*/
                 //道具等待时长0.4
                 ActionKit.Delay(0.4f, () =>
                 {
@@ -1314,6 +1312,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     {
                         isPlayAnim = false;
                         bottleRenderUpdate.SetMoveBottleRenderState(false);
+                        bottleClickMask.raycastTarget = true;
                     });
                 }).Start(this);
             }
@@ -1344,13 +1343,13 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         {
             if (thisBottle.position.x >= targetBottle.position.x)
             {
-                Debug.Log("向左移动、取镜像");
+                //Debug.Log("向左移动、取镜像");
                 _targetPos.x *= -1f;
                 _dir = "_Left";
             }
             else
             {
-                Debug.Log("向右移动、取原值");
+                //Debug.Log("向右移动、取原值");
                 _dir = "_Right";
             }
         }
@@ -1363,13 +1362,13 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
             if (targetIndex < mid)
             {
-                Debug.Log("向左移动，取镜像");
+                //Debug.Log("向左移动，取镜像");
                 _targetPos.x *= -1f;
                 _dir = "_Left";
             }
             else
             {
-                Debug.Log("向右移动，取原值");
+                //Debug.Log("向右移动，取原值");
                 _dir = "_Right";
             }
         }
@@ -1418,30 +1417,6 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     /// <returns></returns>
     public bool BottleHasItem()
     {
-        /*// 仅作用魔法阵
-        int itemId = 0;
-        int itemPlace = 0;
-
-        for (int i = 0; i < waters.Count; i++)
-        {
-            int waterColor = waters[i];
-
-            if (waterColor == (int)ItemType.MagnetItem)
-            {
-                if (itemId == 0)
-                {
-                    itemId = waterColor;
-                    itemPlace = i;
-                }
-                else if (itemId == waterColor && i - itemPlace == 1)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;*/
-
         //作用所有道具
         int itemId = 0;
         int itemPlace = 0;

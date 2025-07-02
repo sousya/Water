@@ -703,7 +703,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         nowBottles = nowBottles.OrderBy(bottle => bottle.bottleIdx).ToList();
     }
     
-    private const float SPACING_UNIT = -100f;
+    private const float SPACING_UNIT = -170f;
     /// <summary>
     /// 更新上方瓶子布局间距
     /// </summary>
@@ -822,8 +822,6 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
                 UIKit.OpenPanel<UIStreakWinGuide>(UILevel.PopUI);
             }
             else
-                //后面要改成生成粒子往下移动，然后释放效果(还需要遮罩，去黑方法要分离)
-                //修改事件即可
                 StringEventSystem.Global.Send("StreakWinItem", WinNum);
         }
 

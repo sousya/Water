@@ -378,7 +378,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         }
         if (needUp)
         {
-            modelGo.transform.localPosition += Vector3.up * 100;
+            modelGo.transform.DOLocalMoveY(modelGo.transform.localPosition.y + 100f, 2f / 30f);
         }
         return true;
     }
@@ -388,7 +388,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
     /// </summary>
     public void OnCancelSelect()
     {
-        modelGo.transform.localPosition = Vector3.zero;
+        modelGo.transform.DOLocalMove(Vector3.zero, 2f / 30f);
     }
 
     /// <summary>
@@ -640,7 +640,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             GameCtrl.Instance.control = false;
         }
 
-        OnCancelSelect();
+        //OnCancelSelect();
         other.PlayFillAnim(moveNum, color);
     }
 
@@ -1271,29 +1271,33 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
         if (useColor < 1000)
         {
             topIndex += 1;
-            //瓶身倾斜动画
+            //瓶身倾斜动画(BottleIn开始的Z轴大小要以BottleOut的结束为起点)
+            //移动时长0.3f = 18帧.在19帧开始二次倾斜瓶子(19帧会播放水柱的动画)
             string bottleAnimName = $"BottleOut{topIndex}_{topIndex - numWater}{_dir}";
             bottleAnim.Play(bottleAnimName);
             //Debug.Log(bottleAnimName);
         }
         else
         {
-            bottleAnim.Play("BottleItemOut");
+            bottleAnim.Play($"BottleItemOut{_dir}");
         }
 
-        //modelGo.transform.DOMove(other.leftMovePlace.position, 0.67f).SetEase(Ease.Linear).OnComplete(() =>
-        //移动到目标点位
+        //移动到目标点位(时长为18帧,19帧处开始二次倾斜)
         bottleClickMask.raycastTarget = false;
-        modelGo.transform.DOMove(_targetPos, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
+        modelGo.transform.DOMove(_targetPos, 0.3f).SetEase(Ease.Linear).OnComplete(() =>
         {
             SetDownWaterSp(useColor);
             if (useColor < 1000) ////非道具动画播放
             {
                 PlayWaterDown();
-                ActionKit.Delay(0.62f, () =>
+                // 因为先Play了动画片段在做的DoTween
+                // 等待动画结束时机 = 动画实际播放时长(总帧/60帧s) * Exit Time - 0.3f(上方移动动画时长)
+                // 方案一:修改动画总时长 = 移动时长(0.3f/18帧) + 水流时长(0.384f/23帧) 
+                // 方案二:保持原55帧长度、将Exit Time调整为0.74618(以0.384f结束计算得到、缺点是二次倾斜没完全做完)    
+                ActionKit.Delay(0.384f, () =>
                 {
                     SetNowSpinePos(topIndex - numWater);
-                    //回归原点
+                    //回归原点(瓶子摆正动画需同步0.46f 约等于27帧)
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>
                     {
                         isPlayAnim = false;
@@ -1304,8 +1308,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             }
             else
             {
-                //道具等待时长0.4
-                ActionKit.Delay(0.4f, () =>
+                //采用方案1(要调快调动画长度和等待时长)
+                ActionKit.Delay(0.617f, () =>
                 {
                     //回归原点
                     modelGo.transform.DOLocalMove(Vector3.zero, 0.46f).SetEase(Ease.Linear).OnComplete(() =>

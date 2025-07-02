@@ -5,6 +5,7 @@ using System;
 using GameDefine;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 
 namespace QFramework.Example
 {
@@ -15,6 +16,7 @@ namespace QFramework.Example
 	public partial class UIGameNode : UIPanel ,IController
 	{
         private StageModel stageModel;
+        private const string CLEAR_BWATER_PARTICLE_PATH = "Prefab/BlackMaskItem";
 
         public IArchitecture GetArchitecture()
         {
@@ -210,7 +212,7 @@ namespace QFramework.Example
 
             StringEventSystem.Global.Register("StreakWinItem", (int count) =>
             {
-                ClearBottleBlackWater(count ,useItem:false);
+                ClearBottleBlackWater(count, false);
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
@@ -309,34 +311,55 @@ namespace QFramework.Example
         /// <param name="count">祛除的瓶子数量</param>
         /// <param name="effctNow">是否立即生效</param>
         /// <param name="action">回调(道具使用时传入)</param>
-        private void ClearBottleBlackWater(int count, bool effctNow = false, Action action = null, bool useItem = true)
+        private void ClearBottleBlackWater(int count, bool useItem, Action action = null)
         {
             if (LevelManager.Instance.hideBottleList.Count > 0)
             {
                 var tempList = new List<BottleCtrl>(LevelManager.Instance.hideBottleList);
-
+                 
                 while (tempList.Count > count)
                 {
                     int randIndex = UnityEngine.Random.Range(0, tempList.Count);
                     tempList.RemoveAt(randIndex);
                 }
+
+                if (useItem)
+                    useItemClearBWater(tempList, action);
+                else
+                    StreaWinClearBWater(tempList, action);
+            }
+        }
+
+        private void StreaWinClearBWater(List<BottleCtrl> tempList, Action action)
+        {
+            var _particle = Resources.Load(CLEAR_BWATER_PARTICLE_PATH);
+            var _tempObj = Instantiate(_particle) as GameObject;
+            //UIKit.OpenPanel<UIMask>(UILevel.PopUI);//遮罩
+            _tempObj.transform.DOLocalMoveY(0, 0.8f);
+            _tempObj.transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.8f)
+            .OnComplete(() =>
+            {
                 foreach (var item in tempList)
                 {
-                    if (!useItem)
-                        item.StarSetHideShow();
-                    else
-                    {
-                        for (int i = 0; i < item.hideWaters.Count; i++)
-                        {
-                            item.hideWaters[i] = false;
-                        }
-                        item.SetHideShow(effctNow);
-                    }
-                    LevelManager.Instance.hideBottleList.Remove(item);
+                    item.StarSetHideShow();
                 }
-
                 action?.Invoke();
+                Destroy(_tempObj);
+            });
+        }
+
+        private void useItemClearBWater(List<BottleCtrl> tempList, Action action)
+        {
+            foreach (var item in tempList)
+            {
+                for (int i = 0; i < item.hideWaters.Count; i++)
+                {
+                    item.hideWaters[i] = false;
+                }
+                item.SetHideShow(true);
             }
+
+            action?.Invoke();
         }
 
         /// <summary>

@@ -22,7 +22,7 @@ public class RewardItemManager : MonoSingleton<RewardItemManager>
 
     // 每轮动态传入
     private int slotCount;
-    private const int YAXIS = 800;
+    private const int YAXIS = 0;//800
 
     public override void OnSingletonInit()
     {

@@ -9,8 +9,6 @@ namespace QFramework.Example
 	}
 	public partial class UIRetry : UIPanel, ICanGetUtility, ICanRegisterEvent
     {
-        private const int ADD_BOTTLE_COST = 900;
-
         public IArchitecture GetArchitecture()
         {
             return GameMainArc.Interface;
@@ -61,12 +59,12 @@ namespace QFramework.Example
 
             BtnAddBottle.onClick.AddListener(() =>
             {
-                if (CoinManager.Instance.Coin >= ADD_BOTTLE_COST)
+                if (CoinManager.Instance.Coin >= GameDefine.GameConst.ADD_BOTTLE_COST)
                 {
-                    CoinManager.Instance.CostCoin(ADD_BOTTLE_COST, () =>
+                    //增加管子
+                    LevelManager.Instance.AddBottle(false, () =>
                     {
-                        //增加管子
-                        LevelManager.Instance.AddBottle(false, null);
+                        CoinManager.Instance.CostCoin(GameDefine.GameConst.ADD_BOTTLE_COST);
                     });
                     CloseSelf();
                 }
@@ -92,7 +90,7 @@ namespace QFramework.Example
         {
             var coin = CoinManager.Instance.Coin;
             TxtCoin.text = coin.ToString();
-            TxtCoinCost.color = coin < ADD_BOTTLE_COST ? Color.red : Color.white;
+            TxtCoinCost.color = coin < GameDefine.GameConst.ADD_BOTTLE_COST ? Color.red : Color.white;
         }
     }
 }

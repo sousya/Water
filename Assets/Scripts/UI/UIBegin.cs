@@ -203,6 +203,7 @@ namespace QFramework.Example
             {
                 BottomMenuBtns.Show();
                 HomeNode.Show();
+                AudioKit.ResumeMusic();
                 StartCoroutine(ShowFx());
 
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
@@ -211,6 +212,7 @@ namespace QFramework.Example
             {
                 BottomMenuBtns.Show();
                 HomeNode.Show();
+                AudioKit.ResumeMusic();
 
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
@@ -238,6 +240,7 @@ namespace QFramework.Example
             this.RegisterEvent<GameStartEvent>(e =>
             {
                 UIKit.OpenPanel<UIGameNode>();
+                AudioKit.PauseMusic();
                 LevelManager.Instance.StartGame(saveData.GetLevelClear());
                 BottomMenuBtns.Hide();
                 HomeNode.Hide();

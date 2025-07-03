@@ -478,7 +478,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
             clearList.Remove(color);
         }
 
-        //先获取要移除单色的瓶子列表(用于判断是否都在一个瓶子)
+        //先获取要移除单色的分布的瓶子列表(用于判断瓶子内是否都是该颜色)
         List<BottleCtrl> removeColorBottles = new List<BottleCtrl>();
 
         foreach (var bottle in nowBottles)
@@ -493,7 +493,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
 
         foreach (var bottle in removeColorBottles)
         {
-            bottle.RemoveAllOneColor(color, removeColorBottles.Count == 1);
+            bottle.RemoveAllOneColor(color, bottle.waters.All(w => w == color));
         }
 
         StartCoroutine(WaitCheckFinish());
@@ -813,7 +813,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         BottleLayoutRefresh();
         UpdapeTopLayoutSpcing();
         UpdateButtomLayoutSpcing();
-        //连胜去黑水
+        /*//连胜去黑水(暂时不开启该功能)
         int WinNum = stageModel.CountinueWinNum > GameConst.MAX_GIFT_STREAK_WIN ? GameConst.MAX_GIFT_STREAK_WIN : stageModel.CountinueWinNum;
         if (WinNum > 0)
         {
@@ -823,7 +823,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
             }
             else
                 StringEventSystem.Global.Send("StreakWinItem", WinNum);
-        }
+        }*/
 
         //关卡引导判断
         if (GameDefine.GameConst.GuideLevelInfo.TryGetValue(levelId ,out (string guideText,string guideAnimName) value))
@@ -884,8 +884,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         }
     }
 
-    /// <summary>
-    /// 重置关卡
+    /*/// <summary>
+    /// 重置关卡(暂时保留重置关卡功能代码)
     /// </summary>
     public void RefreshLevel()
     {
@@ -904,7 +904,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         //this.SendEvent<GameStartEvent>();
 
         GameCtrl.Instance.InitGameCtrl();
-    }
+    }*/
 
     /// <summary>
     /// 刷新瓶子布局(根节点)
@@ -1087,7 +1087,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     IEnumerator ShowMahoujinCoroutine()
     {
         AudioKit.PlaySound("resources://Audio/MagicCircle");
-
+        
         isPlayFxAnim = true;
         mahoujinGo.SetActive(true);
         mahoujinSpine.AnimationState.SetEmptyAnimation(0, 0f);

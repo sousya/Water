@@ -10,6 +10,7 @@ namespace GameDefine
         public const int ITEM_COUNT = 8;
         public const int CONTINUE_WIN_NUM_COIN = 10;
         public const int WIN_COINS = 20;
+        public const int ADD_BOTTLE_COST = 900;
 
         //场景建筑
         public const int SCENE_PART_COUNT = 5;
@@ -25,7 +26,7 @@ namespace GameDefine
         {
             { 1, ("Make the water in the water bottle the same color", "GuideAnim_1") },
             { 2, ("Only pour water into the same color", "GuideAnim_2") },
-            { 3, ("Synthesize water of the same color as the blocking gem to lift the blocking cloth", "GuideAnim_3") },
+            { 3, ("Sort the gemstone color to lift the cloth", "GuideAnim_3") },
             { 11, ("Combining two brooms can remove water of the same color", "GuideAnim_11") },
             { 16, ("Combining two potion bottles can change 4 water of the same color", "GuideAnim_16") },
             { 21, ("Combining two magic hats can generate 4 missing water", "GuideAnim_21") },

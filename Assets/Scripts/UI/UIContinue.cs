@@ -9,8 +9,6 @@ namespace QFramework.Example
 	}
 	public partial class UIContinue : UIPanel, ICanGetUtility, ICanRegisterEvent
     {
-        private const int RESTART_COST = 90;
-
         public IArchitecture GetArchitecture()
         {
             return GameMainArc.Interface;
@@ -54,14 +52,12 @@ namespace QFramework.Example
 		{
             BtnContinue.onClick.AddListener(() =>
             {
-                if (CoinManager.Instance.Coin >= RESTART_COST)
+                if (CoinManager.Instance.Coin >= GameDefine.GameConst.ADD_BOTTLE_COST)
                 {
-                    CoinManager.Instance.CostCoin(RESTART_COST, () =>
+                    //增加管子
+                    LevelManager.Instance.AddBottle(false, () =>
                     {
-                        string _del = $"重置关卡:{this.GetUtility<SaveDataUtility>().GetLevelClear()}," +
-                            $"当前关卡进度:{this.GetUtility<SaveDataUtility>().GetLevelClear()}";
-                        AnalyticsManager.Instance.SendLevelEvent(_del);
-                        LevelManager.Instance.RefreshLevel();
+                        CoinManager.Instance.CostCoin(GameDefine.GameConst.ADD_BOTTLE_COST);
                     });
                     CloseSelf();
                 }
@@ -88,7 +84,7 @@ namespace QFramework.Example
             var coin = CoinManager.Instance.Coin;
             TxtCoin.text = coin.ToString();
 
-            TxtCoinCost.color = coin < RESTART_COST ? Color.red : Color.white;
+            TxtCoinCost.color = coin < GameDefine.GameConst.ADD_BOTTLE_COST ? Color.red : Color.white;
         }
     }
 }

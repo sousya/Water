@@ -140,6 +140,8 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
             bottle.waterImg.fillAmount = 1;
         }
 
+        //先移除自身，在重新添加(避免回退道具使用会反复加入瓶子)
+        LevelManager.Instance.iceBottles.RemoveAll(b => b == this);
         for (int i = 0; i < waters.Count; i++)
         {
             var color = waters[i];
@@ -433,8 +435,10 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
 
     public bool CheckMoveIn(int color)
     {
-        if (topIdx < 0 && limitColor == 0)
+        if (topIdx < 0 && limitColor == 0 && !isClearHide)
+        {
             return true;
+        }
 
         var top = GetMoveOutTop();
 
@@ -725,7 +729,7 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                 StartCoroutine(waterImg[i].BreakIce(breakTo));
                 waterItems[i] = WaterItem.None;
                 CheckWaterItem();
-
+                
                 yield return new WaitForSeconds(0.3f);
             }
         }

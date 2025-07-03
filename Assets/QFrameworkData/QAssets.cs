@@ -117,6 +117,11 @@ namespace QAssetBundle
         public const string BundleName = "uishop_prefab";
         public const string UIShop = "UIShop";
     }
+    public class Uistreakwinguide_prefab
+    {
+        public const string BundleName = "uistreakwinguide_prefab";
+        public const string UIStreakWinGuide = "UIStreakWinGuide";
+    }
     public class Uiunlockscene_prefab
     {
         public const string BundleName = "uiunlockscene_prefab";

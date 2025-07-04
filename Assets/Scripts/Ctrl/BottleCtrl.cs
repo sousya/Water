@@ -1085,8 +1085,9 @@ public class BottleCtrl : MonoBehaviour, IController, ICanSendEvent, ICanRegiste
                     waterImg[i].iceGo.SetActive(true);
                     break;
                 case WaterItem.Bomb:
+
                     // 设置时间
-                    waterImg[i].textItem.text = bombCounts[i] - moveNum>0&&hideWaters[i]==false ?(bombCounts[i]- moveNum).ToString() :"";
+                    waterImg[i].textItem.text = bombCounts[i] - moveNum>0 && hideWaters[i]==false ?(bombCounts[i]- moveNum).ToString() :"";
                     break;
                 case WaterItem.BreakIce:
                     waterImg[i].textItem.text = "";

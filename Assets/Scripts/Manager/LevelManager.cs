@@ -49,7 +49,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     //public float speed = 3.0f; // 光带移动速度
 
     public int levelId = 1, bombMaxNum, countDownNum, playingHideAnimCount;
-    //public int moveNum;//步数统计,暂无用
+
+    public int moveNum = 0;
     public float timeCountDown, timeNow;
     public GameObject mahoujinGo, broomBullet;
     public SkeletonGraphic mahoujinSpine;
@@ -94,6 +95,7 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
 
         }).UnRegisterWhenGameObjectDestroyed(gameObject);
 
+     
         emptyBottle.numCake = 4;
         levelId = this.GetUtility<SaveDataUtility>().GetLevelClear();
 
@@ -514,24 +516,23 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
     }
 
     /// <summary>
-    /// 清除炸弹
+    /// 清除炸弹 弃用
     /// </summary>
     public void CancelBomb()
     {
         isBomb = false;
     }
 
-    /*/// <summary>
+    /// <summary>
     /// 移动步数记录
     /// </summary>
     public void AddMoveNum()
     {
         moveNum++;
-        if ((moveNum >= bombMaxNum && isBomb) || (isCountDown && moveNum >= countDownNum))
-        {
-            OnDefeat();
-        }
-    }*/
+    }
+    
+
+    
 
     #region Add Bottle
 
@@ -802,6 +803,8 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
         }
         LevelManagerRecords.Clear();
 
+        // 清空步数 
+        moveNum = 0;
         GameCtrl.Instance.InitPouringCount();
         //重置魔法布统计
         playingHideAnimCount = 0;
@@ -960,6 +963,20 @@ public class LevelManager : MonoBehaviour,IController, ICanSendEvent
             }
         }
     }
+
+    /// <summary>
+    /// 炸弹更新
+    /// </summary>
+    public void BombUpdate()
+    {
+        foreach (var bottle in bottles)
+        {
+            // 先检查，后更新
+            bottle.CheckFailure();
+            bottle.SetBottleColor();
+        }
+    }
+
 
     /// <summary>
     /// 记录所有瓶子

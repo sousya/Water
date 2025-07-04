@@ -22,7 +22,8 @@ MonoBehaviour:
     isClearHide: 1
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 04000000040000000200000002000000
+    isFinish: 0
+  - waterSet: 02000000020000000400000004000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 4
@@ -31,6 +32,7 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
+    isFinish: 0
   - waterSet: 06000000060000000400000004000000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
@@ -40,6 +42,7 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
+    isFinish: 0
   - waterSet: 
     isHide: 
     waterItem: 
@@ -49,6 +52,7 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
+    isFinish: 0
   - waterSet: 
     isHide: 
     waterItem: 
@@ -58,6 +62,7 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
+    isFinish: 0
   gameType: 0
   clearList: 020000000400000006000000
   hideList: 

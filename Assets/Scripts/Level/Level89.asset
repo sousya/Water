@@ -13,7 +13,27 @@ MonoBehaviour:
   m_Name: Level89
   m_EditorClassIdentifier: 
   bottles:
-  - waterSet: 0c000000050000000c00000004000000
+  - waterSet: 05000000bf0b00000500000005000000
+    isHide: 00000000
+    waterItem: 00000000000000000000000000000000
+    numCake: 0
+    limitColor: 0
+    lockType: 7
+    isClearHide: 1
+    isNearHide: 0
+    isFreeze: 0
+    isFinish: 0
+  - waterSet: 04000000050000000600000001000000
+    isHide: 00000000
+    waterItem: 00000000000000000000000000000000
+    numCake: 0
+    limitColor: 0
+    lockType: 7
+    isClearHide: 1
+    isNearHide: 0
+    isFreeze: 0
+    isFinish: 0
+  - waterSet: 0100000003000000bf0b0000d1070000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
@@ -22,53 +42,19 @@ MonoBehaviour:
     isClearHide: 1
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 05000000060000000c000000
-    isHide: 010100
-    waterItem: 000000000000000000000000
-    numCake: 0
-    limitColor: 0
-    lockType: 0
-    isClearHide: 0
-    isNearHide: 0
-    isFreeze: 0
-  - waterSet: 04000000be0b000003000000
-    isHide: 000000
-    waterItem: 000000000000000000000000
-    numCake: 0
-    limitColor: 0
-    lockType: 0
-    isClearHide: 0
-    isNearHide: 0
-    isFreeze: 0
-  - waterSet: 0100000003000000be0b000001000000
-    isHide: 00010100
-    waterItem: 00000000000000000000000000000000
-    numCake: 0
-    limitColor: 0
-    lockType: 0
-    isClearHide: 0
-    isNearHide: 0
-    isFreeze: 0
-  - waterSet: 02000000030000000700000002000000
-    isHide: 00010100
-    waterItem: 00000000000000000000000000000000
-    numCake: 0
-    limitColor: 0
-    lockType: 0
-    isClearHide: 0
-    isNearHide: 0
-    isFreeze: 0
-  - waterSet: 040000000c0000000400000005000000
+    isFinish: 0
+  - waterSet: 030000000c00000003000000d1070000
     isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
     limitColor: 0
-    lockType: 3
+    lockType: 2
     isClearHide: 1
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 07000000060000000700000006000000
-    isHide: 01010100
+    isFinish: 0
+  - waterSet: 0c000000030000000600000006000000
+    isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
     limitColor: 0
@@ -76,8 +62,9 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 01000000050000000700000001000000
-    isHide: 00010100
+    isFinish: 0
+  - waterSet: 04000000070000000c00000007000000
+    isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
     limitColor: 0
@@ -85,8 +72,9 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
-  - waterSet: 02000000030000000600000002000000
-    isHide: 00010100
+    isFinish: 0
+  - waterSet: 02000000010000000200000007000000
+    isHide: 00000000
     waterItem: 00000000000000000000000000000000
     numCake: 0
     limitColor: 0
@@ -94,6 +82,27 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
+    isFinish: 0
+  - waterSet: 02000000060000000c00000007000000
+    isHide: 00000000
+    waterItem: 00000000000000000000000000000000
+    numCake: 0
+    limitColor: 0
+    lockType: 0
+    isClearHide: 0
+    isNearHide: 0
+    isFreeze: 0
+    isFinish: 0
+  - waterSet: 04000000010000000400000002000000
+    isHide: 00000000
+    waterItem: 00000000000000000000000000000000
+    numCake: 0
+    limitColor: 0
+    lockType: 0
+    isClearHide: 0
+    isNearHide: 0
+    isFreeze: 0
+    isFinish: 0
   - waterSet: 
     isHide: 
     waterItem: 
@@ -103,6 +112,7 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
+    isFinish: 0
   - waterSet: 
     isHide: 
     waterItem: 
@@ -112,6 +122,7 @@ MonoBehaviour:
     isClearHide: 0
     isNearHide: 0
     isFreeze: 0
+    isFinish: 0
   gameType: 0
   clearList: 010000000200000003000000040000000500000006000000070000000c000000
   hideList: 
@@ -120,4 +131,6 @@ MonoBehaviour:
   timeCountDown: 0
   topNum: 5
   bottomNum: 6
-  changeList: []
+  changeList:
+  - item: 2001
+    NeedChangeColor: 4

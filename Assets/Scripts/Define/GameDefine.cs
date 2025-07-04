@@ -114,6 +114,7 @@ namespace GameDefine
         
         [WaterColorState(true, false, false, false, "idle_cl", EColorStateSpineType.EBroomSpine)]
         ClearGreen = 3007,
+
     }
 
     public enum LanguageType

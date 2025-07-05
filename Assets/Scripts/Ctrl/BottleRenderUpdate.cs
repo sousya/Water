@@ -17,7 +17,7 @@ public class BottleRenderUpdate : MonoBehaviour
     public Image MaskImage;
 
     public int bottleIndex = 1;
-    public GameObject waterTopSurface;
+    public GameObject[] waterTopSurfaces;
     public Transform fillWaterTransform;
     public Transform fillWaterPosition; // 固定倒水的位置
     public Transform[] corners;
@@ -72,7 +72,8 @@ public class BottleRenderUpdate : MonoBehaviour
     public void LateUpdate()
     {
         // 设置最高水位线
-        var waterHeightClip = waterTopSurface.transform.position.y;
+        Assert.IsTrue(waterTopSurfaces != null && waterTopSurfaces.Length == 2);
+        var waterHeightClip = Mathf.Min(waterTopSurfaces[0].transform.position.y, waterTopSurfaces[1].transform.position.y);
         foreach (var waterRenderUpdater in waterRenders)
         {
             waterRenderUpdater.FillHeightClip = waterHeightClip;

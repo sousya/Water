@@ -201,7 +201,7 @@ public class WaterRenderUpdate : MonoBehaviour
         _iceEffectFilter.mesh = _mesh;
         _blackWaterFilter.mesh = _mesh;
     }
-
+    
     // Update is called once per frame
     void LateUpdate()
     {
@@ -216,15 +216,18 @@ public class WaterRenderUpdate : MonoBehaviour
         rotation.ToAngleAxis(out float angle, out _);
         var oneDivCos = 1.0f / Mathf.Max(Mathf.Cos(angle * Mathf.Deg2Rad), 0.001f);
 
+        // 如果欧拉角大于180，是从右侧往左到。
+        var isPourToLeft = rotation.eulerAngles.z < 180.0f;
+        var mulSigned = isPourToLeft ? -1 : 1;
+
         Vector3 topCenter = waterSurface[1].position;
-        topCenter.y += CORRECT_WATER_SURFACE * Mathf.Sin(angle * Mathf.Deg2Rad);
+        topCenter.y += CORRECT_WATER_SURFACE * Mathf.Abs(Mathf.Sin(angle * Mathf.Deg2Rad));
         Vector3 bottomCenter = waterSurface[0].position;
-
-
+        
         var halfWaterWidth = HALF_WATAER_WIDTH * oneDivCos;
         if (bBottom)
         {
-            Vector3 bottomRight = bottomCenter + transform.right * HALF_WATAER_WIDTH;
+            Vector3 bottomRight = bottomCenter + transform.right * (HALF_WATAER_WIDTH * mulSigned);
             bottomCenter = new Vector3(bottomCenter.x, bottomRight.y, 0);//bottomRight - new Vector3(halfWaterWidth, 0, 0);
         }
 
@@ -233,11 +236,20 @@ public class WaterRenderUpdate : MonoBehaviour
         verts[1] = bottomCenter + new Vector3(halfWaterWidth, 0, 0);
         verts[2] = topCenter + new Vector3(halfWaterWidth, 0, 0);
         verts[3] = topCenter + new Vector3(-halfWaterWidth, 0, 0);
-        verts[1].x = verts[2].x;
-        verts[3].x = verts[0].x;
+
+        if (isPourToLeft)
+        {
+            verts[2].x = verts[1].x;
+            verts[0].x = verts[3].x;
+        }
+        else
+        {
+            verts[1].x = verts[2].x;
+            verts[3].x = verts[0].x;
+        }
         verts[0].y = Mathf.Min(verts[0].y, verts[3].y);
         verts[1].y = Mathf.Min(verts[1].y, verts[2].y);
-
+        
         _mesh.SetVertices(verts);
 
 
@@ -248,7 +260,8 @@ public class WaterRenderUpdate : MonoBehaviour
         }
     }
 
-    /* void LateUpdate()
+    /*
+    void LateUpdate()
     {
         if (waterSurface.Length < 2)
         {
@@ -300,5 +313,6 @@ public class WaterRenderUpdate : MonoBehaviour
         {
             this.FillAmount = _image.fillAmount;
         }
-    }*/
+    }
+    */
 }
